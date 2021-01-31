@@ -43,7 +43,28 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/firebase',
   ],
+
+  firebase: {
+    config: {
+      apiKey: "AIzaSyCmm1NjulrSx0qSyXbTr2gxr6j0Q0LrXZ0",
+      authDomain: "questlog-41105.firebaseapp.com",
+      // databaseURL: '<databaseURL>',
+      projectId: "questlog-41105",
+      storageBucket: "questlog-41105.appspot.com",
+      messagingSenderId: "74040077240",
+      appId: "1:74040077240:web:c529fd977af88dd41c3d4d",
+      measurementId: "G-6TZTKVC4M7"
+    },
+    services: {
+      auth: {
+        initialize: {
+          onAuthStateChangedAction: 'onAuthStateChanged',
+        }
+      }
+    }
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
