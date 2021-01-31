@@ -43,6 +43,7 @@
 import { mapState, mapGetters } from "vuex";
 
 export default {
+  name: 'Home',
   computed: {
     ...mapState({
       authUser: (state) => state.authUser
