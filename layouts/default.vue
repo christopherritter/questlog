@@ -1,88 +1,51 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
+    <v-app-bar :clipped-left="clipped" fixed app>
+      <v-btn plain nuxt to="/">
+        <v-toolbar-title v-text="title" />
       </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
+      <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
+      <v-btn plain nuxt to="/editor">Build your Own!</v-btn>
       <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
+      <v-btn icon nuxt to="/profile/myFavorites">
+        <v-icon>mdi-heart</v-icon>
       </v-btn>
+      <v-btn icon nuxt to="/profile/myQuests">
+        <v-icon>mdi-feather</v-icon>
+      </v-btn>
+      <v-menu close-on-click offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-account-box</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-subheader>PROFILE</v-subheader>
+          <v-list-item-group v-model="selectedItem" color="primary">
+            <v-list-item v-for="(item, i) in profileItems" :key="i">
+              <v-list-item-icon>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
+              <nuxt-link :to="item.to">
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.text"></v-list-item-title>
+                </v-list-item-content>
+              </nuxt-link>
+            </v-list-item>
+            <v-list-item @click="logout">
+              Logout
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-main>
       <v-container>
         <nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :absolute="!fixed"
-      app
-    >
+    <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -90,28 +53,30 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
+      title: "QuestLog",
       clipped: false,
-      drawer: false,
       fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
+      shortcutItems: [
+        { text: "My Favorites", icon: "mdi-heart", to: "/myFavorites" },
+        { text: "My Quests", icon: "mdi-feather", to: "/myQuests" },
       ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+      profileItems: [
+        { text: "Update Profile", icon: "mdi-account", to: "/profile" },
+        { text: "Change Email", icon: "mdi-email", to: "/profile" },
+        { text: "Change Password", icon: "mdi-lock", to: "/profile" }
+      ]
+    };
+  },
+  methods: {
+    async logout() {
+      try {
+        await this.$fire.auth.signOut();
+      } catch (e) {
+        alert(e);
+      }
     }
   }
-}
+};
 </script>

@@ -4,7 +4,7 @@
 
 <script>
   export default {
-    name: 'Quests',
+    name: 'quests',
     middleware: 'authenticated'
   }
 </script>

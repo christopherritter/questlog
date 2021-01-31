@@ -4,7 +4,7 @@
 
 <script>
   export default {
-    name: 'My Favorites',
+    name: 'myFavorites',
     middleware: 'authenticated'
   }
 </script>
