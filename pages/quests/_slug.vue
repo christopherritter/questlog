@@ -13,9 +13,9 @@
                   Featured Quest
                 </h5>
               </div>
-              <h1 class="display-3 mb-3">{{ quests[0].title }}</h1>
+              <h1 class="display-3 mb-3">{{ quests[this.slug].title }}</h1>
               <h3 class="subtitle-1 mb-sm-8 mb-lg-12">
-                by {{ quests[0].author }}
+                by {{ quests[this.slug].author }}
               </h3>
               <v-btn color="primary">Play Quest</v-btn>
               <v-btn outlined>Read Story</v-btn>
@@ -23,7 +23,7 @@
             <v-col cols="6" sm="6" class="pb-0">
               <v-img
                 class="mt-12"
-                :src="require('~/assets/img/' + quests[0].image)"
+                :src="require('~/assets/img/' + quests[this.slug].image)"
                 aspect-ratio="1.4"
               ></v-img>
             </v-col>
