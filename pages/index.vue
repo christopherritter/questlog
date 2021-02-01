@@ -6,13 +6,15 @@
           <v-col cols="6" sm="6" class="my-auto">
             <div class="d-flex flex-row mb-2">
               <v-icon medium color="green darken-2">mdi-crown</v-icon>
-              <h5 class="featured green--text text--darken-2 mt-1 ml-1">
+              <h5 class="featured-quest green--text text--darken-2 mt-1 ml-1">
                 Featured Quest
               </h5>
             </div>
             <h1 class="display-3 mb-3">{{ quests[0].title }}</h1>
-            <h3 class="subtitle-1 mb-sm-8 mb-lg-12">by {{ quests[0].author }}</h3>
-            <v-btn color="primary">More Info</v-btn>
+            <h3 class="subtitle-1 mb-sm-8 mb-lg-12">
+              by {{ quests[0].author }}
+            </h3>
+            <v-btn nuxt color="primary" to="/quests/0">More Info</v-btn>
           </v-col>
           <v-col cols="6" sm="6" class="pb-0">
             <v-img
@@ -36,11 +38,13 @@
             :key="quest.id"
           >
             <v-card>
-              <v-img
-                height="250"
-                :src="require('~/assets/img/' + quest.image)"
-              ></v-img>
-              <v-card-title>{{ quest.title }}</v-card-title>
+              <nuxt-link :to="'/quests/' + quest.id"
+                ><v-img
+                  height="250"
+                  :src="require('~/assets/img/' + quest.image)"
+                ></v-img>
+                <v-card-title>{{ quest.title }}</v-card-title></nuxt-link
+              >
               <v-card-subtitle>by {{ quest.author }}</v-card-subtitle>
               <v-card-text></v-card-text>
               <v-card-actions>
@@ -69,15 +73,15 @@ export default {
   name: "home",
   layout: "fluid",
   computed: {
-    quests () {
-      return this.$store.state.quests
+    quests() {
+      return this.$store.state.quests;
     }
-  },
+  }
 };
 </script>
 
-<style scoped>
-.featured {
+<style>
+.featured-quest {
   font-weight: 500;
   font-size: 0.875rem;
   letter-spacing: 0.1666666667rem;
