@@ -4,7 +4,7 @@ export default () => ({
     {
       id: 0,
       title: "Welcome to the Learning Tree Farm",
-      author: "The Learning Tree Farm",
+      author: "Learning Tree Farm",
       image: "welcome-sign.png",
       categories: ["family-friendly", "outdoor", "educational"],
       favorite: false,
@@ -13,7 +13,7 @@ export default () => ({
     {
       id: 1,
       title: "Celebrate the Spring Equinox",
-      author: "The Learning Tree Farm",
+      author: "Learning Tree Farm",
       image: "baby-goats.png",
       categories: ["family-friendly", "outdoor", "educational"],
       favorite: false,
@@ -22,7 +22,7 @@ export default () => ({
     {
       id: 2,
       title: "How Does Your Garden Grow?",
-      author: "The Learning Tree Farm",
+      author: "Learning Tree Farm",
       image: "garden.png",
       categories: ["family-friendly", "outdoor", "educational"],
       favorite: false,
@@ -31,7 +31,7 @@ export default () => ({
     {
       id: 3,
       title: "The Great Sheep Escape",
-      author: "The Learning Tree Farm",
+      author: "Learning Tree Farm",
       image: "sheep.png",
       categories: ["family-friendly", "outdoor", "adventure"],
       favorite: false,
