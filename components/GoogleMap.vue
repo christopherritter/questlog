@@ -4,6 +4,7 @@
 
 <script>
 const apiKey = process.env.FIREBASE_API_KEY; // Package: @nuxtjs/dotenv
+
 export default {
   mounted() {
     // if (!process.server) {
@@ -21,22 +22,20 @@ export default {
   },
   methods: {
     onScriptLoaded(event = null) {
-      // YOU HAVE ACCESS TO "new google" now, ADD YOUR GOOGLE MAPS FUNCTIONS HERE.
-      // if (event) {
-      //  console.log('Was added')
-      // } else {
-      //  console.log('Already existed')
-      // }
-      // The location of Uluru
-      const uluru = { lat: -25.344, lng: 131.036 };
-      // The map, centered at Uluru
+      // The location of the Learning Tree Farm
+      const learningTreeFarm = {
+        lat: 39.69731517786061,
+        lng: -84.30524990191205
+      };
+      // The map, centered at the Learning Tree Farm
       const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 4,
-        center: uluru
+        zoom: 19,
+        center: learningTreeFarm,
+        mapId: 'b5c77f93da5a90ff',
       });
-      // The marker, positioned at Uluru
+      // The marker, positioned at the Learning Tree Farm
       const marker = new google.maps.Marker({
-        position: uluru,
+        position: learningTreeFarm,
         map: map
       });
     }

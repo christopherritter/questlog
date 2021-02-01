@@ -31,7 +31,7 @@
         </v-container>
       </v-sheet>
     </v-row>
-    <v-row class="fill-height">
+    <v-row style="height:52%">
       <GoogleMap />
     </v-row>
   </v-container>
