@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="fill-height">
-    <v-row>
-      <v-sheet color="dark" elevation="1" width="100%">
+    <v-row style="height:auto">
+      <v-sheet color="dark" elevation="1" height="100%" width="100%">
         <v-container>
           <v-row>
             <v-col cols="6" sm="6" class="my-auto">

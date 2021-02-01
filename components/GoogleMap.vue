@@ -1,9 +1,5 @@
 <template>
-  <v-row class="fill-height">
-    <v-col>
-      <div id="map"></div>
-    </v-col>
-  </v-row>
+  <div id="map"></div>
 </template>
 
 <script>
