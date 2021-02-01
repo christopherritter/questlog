@@ -6,9 +6,7 @@
 const apiKey = process.env.FIREBASE_API_KEY; // Package: @nuxtjs/dotenv
 
 export default {
-  props: [
-    'questId'
-  ],
+  props: ["questId"],
   mounted() {
     // if (!process.server) {
     if (typeof google === "undefined") {
@@ -29,13 +27,38 @@ export default {
       const map = new google.maps.Map(document.getElementById("map"), {
         zoom: this.$store.state.quests[this.questId].region.zoom,
         center: this.$store.state.quests[this.questId].region.position,
-        mapId: 'b5c77f93da5a90ff',
+        mapId: "b5c77f93da5a90ff"
       });
       // The marker, positioned at the Learning Tree Farm
-      const marker = new google.maps.Marker({
-        position: this.$store.state.quests[this.questId].region.position,
-        map: map
-      });
+      // const marker = new google.maps.Marker({
+      //   position: this.$store.state.quests[this.questId].region.position,
+      //   map: map
+      // });
+
+      var locations = this.$store.state.quests[this.questId].locations;
+      var infowindow =  new google.maps.InfoWindow({});
+      var marker, count;
+
+      for (count = 0; count < locations.length; count++) {
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(
+            locations[count].position.lat,
+            locations[count].position.lng
+          ),
+          map: map,
+          title: locations[count].title
+        });
+        google.maps.event.addListener(
+          marker,
+          "click",
+          (function(marker, count) {
+            return function() {
+              infowindow.setContent(locations[count][0]);
+              infowindow.open(map, marker);
+            };
+          })(marker, count)
+        );
+      }
     }
   }
 };
