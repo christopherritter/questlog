@@ -6,6 +6,9 @@
 const apiKey = process.env.FIREBASE_API_KEY; // Package: @nuxtjs/dotenv
 
 export default {
+  props: [
+    'questId'
+  ],
   mounted() {
     // if (!process.server) {
     if (typeof google === "undefined") {
@@ -22,20 +25,15 @@ export default {
   },
   methods: {
     onScriptLoaded(event = null) {
-      // The location of the Learning Tree Farm
-      const learningTreeFarm = {
-        lat: 39.69731517786061,
-        lng: -84.30524990191205
-      };
       // The map, centered at the Learning Tree Farm
       const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 19,
-        center: learningTreeFarm,
+        zoom: this.$store.state.quests[this.questId].region.zoom,
+        center: this.$store.state.quests[this.questId].region.position,
         mapId: 'b5c77f93da5a90ff',
       });
       // The marker, positioned at the Learning Tree Farm
       const marker = new google.maps.Marker({
-        position: learningTreeFarm,
+        position: this.$store.state.quests[this.questId].region.position,
         map: map
       });
     }

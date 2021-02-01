@@ -32,7 +32,7 @@
       </v-sheet>
     </v-row>
     <v-row style="height:52%">
-      <GoogleMap />
+      <GoogleMap :quest-id="this.slug" />
     </v-row>
   </v-container>
 </template>
