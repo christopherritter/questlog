@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <v-container fluid class="pa-0 full-height">
     <v-sheet color="dark" elevation="1" width="100%">
-      <v-container style="height:100%">
+      <v-container>
         <v-row>
           <v-col cols="6" sm="6" class="my-auto">
             <div class="d-flex flex-row mb-2">
@@ -27,16 +27,20 @@
         </v-row>
       </v-container>
     </v-sheet>
-  </div>
+    <GoogleMap class="full-height" />
+  </v-container>
 </template>
 
 <script>
+import GoogleMap from '@/components/GoogleMap.vue';
+
 export default {
   async asyncData({ params }) {
     const slug = params.slug; // When calling /abc the slug will be "abc"
     return { slug };
   },
-  layout: "fluid",
+  layout: "fillHeight",
+  components: { GoogleMap },
   computed: {
     quests() {
       return this.$store.state.quests;
