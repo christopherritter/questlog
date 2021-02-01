@@ -61,6 +61,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/dotenv',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -70,7 +71,7 @@ export default {
 
   firebase: {
     config: {
-      apiKey: "AIzaSyCmm1NjulrSx0qSyXbTr2gxr6j0Q0LrXZ0",
+      apiKey: process.env.FIREBASE_API_KEY,
       authDomain: "questlog-41105.firebaseapp.com",
       // databaseURL: '<databaseURL>',
       projectId: "questlog-41105",
