@@ -304,7 +304,7 @@ var entries = [
   },
   {
     id: 1,
-    title: 'Small field for event parking.',
+    title: 'Overflow parking for large events.',
     location: locations[1], // Event Parking Lot
     text: 'A small field on the side of the driveway that is intended for large event parking.',
     actions: ['Continue up the driveway.'],
@@ -322,10 +322,10 @@ var entries = [
   },
   {
     id: 3,
-    title: '',
+    title: 'Large billboard map of the farm.',
     location: locations[3], // Information
-    text: '',
-    actions: [],
+    text: 'A large billboard sign stands in the middle of the driveway loop. It shows the main locations around the farm.',
+    actions: ['Take a closer look at the map.', 'Head towards the Century House.', 'Continue to the Bank Barn.'],
     requirements: [],
     expiration: []
   },
