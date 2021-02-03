@@ -45,7 +45,10 @@ export default {
             locations[count].position.lat,
             locations[count].position.lng
           ),
-          icon: require('~/assets/img/' + locations[count].marker),
+          icon: {
+            url: require('~/assets/img/' + locations[count].marker),
+            anchor: new google.maps.Point(25, 25),
+          },
           map: map,
           title: locations[count].name
         });
