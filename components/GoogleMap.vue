@@ -45,15 +45,16 @@ export default {
             locations[count].position.lat,
             locations[count].position.lng
           ),
+          icon: require('~/assets/img/' + locations[count].marker),
           map: map,
-          title: locations[count].title
+          title: locations[count].name
         });
         google.maps.event.addListener(
           marker,
           "click",
           (function(marker, count) {
             return function() {
-              infowindow.setContent(locations[count][0]);
+              infowindow.setContent('<h4 class="grey--text text--darken-4">' + locations[count].name + '</h4>');
               infowindow.open(map, marker);
             };
           })(marker, count)

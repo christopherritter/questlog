@@ -5,9 +5,73 @@ var regions = [
     position: {
       lat: 39.697556273873595,
       lng: -84.30619228020171,
-    }
+    },
+    zoom: 18
   }
 ]
+
+var objectives = [
+  {
+    id: 0,
+    name: "Visit the Century House",
+    description: "",
+    isPrimary: true,
+    isComplete: false,
+  },
+  {
+    id: 1,
+    name: "Check out the Play House",
+    description: "",
+    isPrimary: false,
+    isComplete: false,
+  },
+  {
+    id: 2,
+    name: "Enter the Pavilion",
+    description: "",
+    isPrimary: true,
+    isComplete: false,
+  },
+  {
+    id: 3,
+    name: "Walk through the Tobacco Barn",
+    description: "",
+    isPrimary: true,
+    isComplete: false,
+  },
+  {
+    id: 4,
+    name: "Tour the Garden",
+    description: "",
+    isPrimary: true,
+    isComplete: false,
+  },
+  {
+    id: 5,
+    name: "Walk through the Bank Barn",
+    description: "",
+    isPrimary: true,
+    isComplete: false,
+  },
+];
+
+var markers = {
+  default: 'marker.png',
+  barn: 'barn.png',
+  house: 'house.png',
+  school: 'school.png',
+  road: 'road.png',
+  trail: 'trail.png',
+  parking: 'parking.png',
+  corn: 'corn.png',
+  tractor: 'tractor.png',
+  info: 'info.png',
+  restroom: 'restroom.png',
+  smog: 'smog.png',
+  houseOutline: 'house-outline.png',
+  fire: 'fire.png',
+  gate: 'gate.png'
+}
 
 var locations = [
   {
@@ -19,7 +83,7 @@ var locations = [
       lng: -84.30895915916378,
     },
     image: "",
-    marker: "",
+    marker: markers.road,
     entries: [],
   },
   {
@@ -31,7 +95,7 @@ var locations = [
       lng: -84.30802298163705,
     },
     image: "",
-    marker: "",
+    marker: markers.parking,
     entries: [],
   },
   {
@@ -43,7 +107,7 @@ var locations = [
       lng: -84.30663546124721,
     },
     image: "",
-    marker: "",
+    marker: markers.parking,
     entries: [],
   },
   {
@@ -55,7 +119,7 @@ var locations = [
       lng: -84.30554298831034,
     },
     image: "",
-    marker: "",
+    marker: markers.info,
     entries: [],
   },
   {
@@ -67,7 +131,7 @@ var locations = [
       lng: -84.30579653342916,
     },
     image: "",
-    marker: "",
+    marker: markers.house,
     entries: [],
   },
   {
@@ -79,7 +143,7 @@ var locations = [
       lng: -84.3058882373532,
     },
     image: "",
-    marker: "",
+    marker: markers.restroom,
     entries: [],
   },
   {
@@ -91,7 +155,7 @@ var locations = [
       lng: -84.30582683559051,
     },
     image: "",
-    marker: "",
+    marker: markers.smog,
     entries: [],
   },
   {
@@ -103,7 +167,7 @@ var locations = [
       lng: -84.30512614831034,
     },
     image: "",
-    marker: "",
+    marker: markers.barn,
     entries: [],
   },
   {
@@ -115,7 +179,7 @@ var locations = [
       lng: -84.30457802856016,
     },
     image: "",
-    marker: "",
+    marker: markers.barn,
     entries: [],
   },
   {
@@ -127,7 +191,7 @@ var locations = [
       lng: -84.30468044539928,
     },
     image: "",
-    marker: "",
+    marker: markers.gate,
     entries: [],
   },
   {
@@ -139,7 +203,7 @@ var locations = [
       lng: -84.30461785733092,
     },
     image: "",
-    marker: "",
+    marker: markers.corn,
     entries: [],
   },
   {
@@ -151,7 +215,7 @@ var locations = [
       lng: -84.30560789744072,
     },
     image: "",
-    marker: "",
+    marker: markers.tractor,
     entries: [],
   },
   {
@@ -163,7 +227,7 @@ var locations = [
       lng: -84.30520121044576,
     },
     image: "",
-    marker: "",
+    marker: markers.houseOutline,
     entries: [],
   },
   {
@@ -175,7 +239,7 @@ var locations = [
       lng: -84.3049683622055,
     },
     image: "",
-    marker: "",
+    marker: markers.fire,
     entries: [],
   },
   {
@@ -187,7 +251,7 @@ var locations = [
       lng: -84.30554250855133,
     },
     image: "",
-    marker: "",
+    marker: markers.trail,
     entries: [],
   },
   {
@@ -199,7 +263,7 @@ var locations = [
       lng: -84.30776681747716,
     },
     image: "",
-    marker: "",
+    marker: markers.school,
     entries: [],
   },
   {
@@ -211,7 +275,7 @@ var locations = [
       lng: -84.30895976599574,
     },
     image: "",
-    marker: "",
+    marker: markers.road,
     entries: [],
   },
   {
@@ -223,7 +287,7 @@ var locations = [
       lng: -84.30381321074795,
     },
     image: "",
-    marker: "",
+    marker: markers.trail,
     entries: [],
   },
 ]
@@ -262,20 +326,8 @@ export default () => ({
       categories: ["family-friendly", "outdoor", "educational"],
       favorite: true,
       featured: true,
-      region: {
-        name: regions[0].name,
-        position: regions[0].position,
-        zoom: 18
-      },
-      objectives: [
-        {
-          id: 0,
-          name: "",
-          description: "",
-          isPrimary: true,
-          isComplete: false,
-        },
-      ],
+      region: regions[0],
+      objectives: objectives,
       locations: locations,
       entries: entries,
       items: items,
@@ -289,20 +341,8 @@ export default () => ({
       categories: ["family-friendly", "outdoor", "educational"],
       favorite: false,
       featured: true,
-      region: {
-        name: regions[0].name,
-        position: regions[0].position,
-        zoom: 18
-      },
-      objectives: [
-        {
-          id: 0,
-          name: "",
-          description: "",
-          isPrimary: true,
-          isComplete: false,
-        },
-      ],
+      region: regions[0],
+      objectives: objectives,
       locations: locations,
       entries: entries,
       items: items,
@@ -316,20 +356,8 @@ export default () => ({
       categories: ["family-friendly", "outdoor", "educational"],
       favorite: false,
       featured: true,
-      region: {
-        name: regions[0].name,
-        position: regions[0].position,
-        zoom: 18
-      },
-      objectives: [
-        {
-          id: 0,
-          name: "",
-          description: "",
-          isPrimary: true,
-          isComplete: false,
-        },
-      ],
+      region: regions[0],
+      objectives: objectives,
       locations: locations,
       entries: entries,
       items: items,
@@ -343,20 +371,8 @@ export default () => ({
       categories: ["family-friendly", "outdoor", "adventure"],
       favorite: false,
       featured: true,
-      region: {
-        name: regions[0].name,
-        position: regions[0].position,
-        zoom: 18
-      },
-      objectives: [
-        {
-          id: 0,
-          name: "",
-          description: "",
-          isPrimary: true,
-          isComplete: false,
-        },
-      ],
+      region: regions[0],
+      objectives: objectives,
       locations: locations,
       entries: entries,
       items: items,
