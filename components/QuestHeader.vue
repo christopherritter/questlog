@@ -12,8 +12,8 @@
         <h3 class="subtitle-1 mb-sm-8 mb-lg-12">
           by {{ quests[questId].author }}
         </h3>
-        <v-btn color="primary">Play Quest</v-btn>
-        <v-btn outlined>Read Story</v-btn>
+        <v-btn color="primary" @click="$emit('play-quest')">Play Quest</v-btn>
+        <v-btn outlined @click="$emit('read-quest')">Read Story</v-btn>
       </v-col>
       <v-col cols="6" sm="6" class="pb-0">
         <v-img
