@@ -71,7 +71,6 @@ export default {
 <style scoped>
 #map {
   height: 100%;
-  min-height: 400px;
   width: 100%;
 }
 </style>
