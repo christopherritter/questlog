@@ -9,7 +9,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-expansion-panels multiple>
+      <v-expansion-panels accordion flat>
         <v-expansion-panel>
           <v-expansion-panel-header>The name of the first entry.</v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -94,5 +94,3 @@ export default {
   }
 };
 </script>
-
-<style></style>
