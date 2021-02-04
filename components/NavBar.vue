@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar :clipped-left="clipped" fixed app>
+  <v-app-bar app>
     <v-btn plain nuxt to="/">
       <v-toolbar-title v-text="title" />
     </v-btn>
@@ -54,8 +54,6 @@ export default {
   data() {
     return {
       title: "QuestLog",
-      clipped: false,
-      fixed: false,
       shortcutItems: [
         { text: "My Favorites", icon: "mdi-heart", to: "/myFavorites" },
         { text: "My Quests", icon: "mdi-feather", to: "/myQuests" }

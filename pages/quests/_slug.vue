@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="fill-height pa-0">
-    <v-layout column class="fill-height">
+    <v-layout column>
       <v-flex
         v-if="!playQuest && !readQuest"
         class="white--text gray flex shrink darken-3"
@@ -13,9 +13,9 @@
       </v-flex>
       <v-flex class="flex">
         <v-container fluid class="fill-height pa-0">
-          <v-layout class="fill-height">
+          <v-layout>
             <v-flex v-if="playQuest || readQuest" class="flex shrink">
-              <QuestSidebar class="fill-height" :quest-id="this.slug" />
+              <QuestSidebar :quest-id="this.slug" />
             </v-flex>
             <v-flex class="flex">
               <GoogleMap :quest-id="this.slug" />
