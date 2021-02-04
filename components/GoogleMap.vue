@@ -23,10 +23,13 @@ export default {
   },
   methods: {
     onScriptLoaded(event = null) {
+      const quest = this.$store.state.quests[this.questId];
+      const region = this.$store.state.regions[quest.region];
+
       // The map, centered at the Learning Tree Farm
       const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: this.$store.state.quests[this.questId].region.zoom,
-        center: this.$store.state.quests[this.questId].region.position,
+        zoom: region.zoom,
+        center: region.position,
         mapId: "b5c77f93da5a90ff"
       });
       // The marker, positioned at the Learning Tree Farm
@@ -35,7 +38,7 @@ export default {
       //   map: map
       // });
 
-      var locations = this.$store.state.quests[this.questId].locations;
+      const locations = this.$store.state.locations;
       var infowindow =  new google.maps.InfoWindow({});
       var marker, count;
 
