@@ -6,7 +6,7 @@
 const apiKey = process.env.FIREBASE_API_KEY; // Package: @nuxtjs/dotenv
 
 export default {
-  props: ["questId"],
+  props: ["questId", "position", "location", "zoom"],
   mounted() {
     // if (!process.server) {
     if (typeof google === "undefined") {
@@ -66,6 +66,15 @@ export default {
           })(marker, count)
         );
       }
+    }
+  },
+  watch: {
+    position(newVal, oldVal) {
+      // var map = google.maps.Map(document.getElementById("map"));
+      // var latLng = new google.maps.LatLng(newVal.lat, newVal.lng);
+
+      console.log(newVal.lat, newVal.lng)
+      // map.setCenter(latLng);
     }
   }
 };
