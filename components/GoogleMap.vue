@@ -8,6 +8,7 @@
     :options="{ fullscreenControl: false }"
     :zoom="zoom"
     class="fill-height"
+    height="100%"
   >
     <GMapMarker
       v-for="location in locations"
@@ -147,9 +148,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 #map {
   height: 100%;
   width: 100%;
+}
+.GMap__Wrapper {
+  height: 100%;
 }
 </style>
