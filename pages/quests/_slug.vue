@@ -18,7 +18,6 @@
               <GoogleMap
                 :quest-id="this.slug"
                 :position="position"
-                :location="location"
                 :zoom="zoom"
               />
             </v-flex>
@@ -43,13 +42,20 @@ export default {
   data() {
     return {
       mode: null,
-      position: null,
-      location: null,
-      zoom: null
     };
   },
   layout: "fluid",
   components: { QuestHeader, QuestSidebar, GoogleMap },
+  computed: {
+    position() {
+      const regionId = this.$store.state.quests[this.slug].region;
+      return this.$store.state.regions[regionId].position;
+    },
+    zoom() {
+      const regionId = this.$store.state.quests[this.slug].region;
+      return this.$store.state.regions[regionId].zoom;
+    }
+  },
   methods: {
     readQuest() {
       const startingPoint = this.$store.state.quests[this.slug].startingPoint;

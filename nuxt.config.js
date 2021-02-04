@@ -67,6 +67,10 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/firebase',
+    ['nuxt-gmaps', {
+      key: process.env.FIREBASE_API_KEY,
+      //you can use libraries: ['places']
+    }],
   ],
 
   firebase: {
