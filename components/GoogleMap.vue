@@ -12,11 +12,12 @@
     <GMapMarker
       v-for="location in locations"
       :key="location.id"
-      :position="{ lat: location.lat, lng: location.lng }"
+      :position="{ lat: location.position.lat, lng: location.position.lng }"
+      :options="{ icon: require('~/assets/img/' + location.marker) }"
       @click="currentLocation = location"
     >
       <GMapInfoWindow :options="{ maxWidth: 200 }">
-        <code> lat: {{ location.lat }}, lng: {{ location.lng }} </code>
+        <code> lat: {{ location.position.lat }}, lng: {{ location.position.lng }} </code>
       </GMapInfoWindow>
     </GMapMarker>
     <!-- <GMapCircle :options="circleOptions" /> -->
