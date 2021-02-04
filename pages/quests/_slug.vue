@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="fill-height pa-0">
-    <v-layout column>
+    <v-layout column fill-height>
       <v-flex
         v-if="!playQuest && !readQuest"
         class="white--text gray flex shrink darken-3"
@@ -13,11 +13,11 @@
       </v-flex>
       <v-flex class="flex">
         <v-container fluid class="fill-height pa-0">
-          <v-layout>
-            <v-flex v-if="playQuest || readQuest" class="flex shrink">
-              <QuestSidebar :quest-id="this.slug" />
+          <v-layout fill-height>
+            <v-flex v-if="playQuest || readQuest" shrink>
+              <QuestSidebar id="QuestSidebar" class="fill-height" :quest-id="this.slug" />
             </v-flex>
-            <v-flex class="flex">
+            <v-flex>
               <GoogleMap :quest-id="this.slug" />
             </v-flex>
           </v-layout>
@@ -44,6 +44,12 @@ export default {
     };
   },
   layout: "fluid",
-  components: { QuestHeader, QuestSidebar, GoogleMap }
+  components: { QuestHeader, QuestSidebar, GoogleMap },
 };
 </script>
+
+<style>
+#QuestSidebar {
+  max-height: calc(100vh - 100px)
+}
+</style>
