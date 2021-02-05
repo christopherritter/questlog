@@ -15,6 +15,7 @@
             </v-flex>
             <v-flex>
               <GoogleMap
+                ref="gMap"
                 :quest-id="this.slug"
                 :position="position"
                 :zoom="zoom"
@@ -55,11 +56,11 @@ export default {
     },
     position() {
       const regionId = this.$store.state.quests[this.slug].region;
-      if (!this.mode) {
+      // if (!this.mode) {
         return this.$store.state.regions[regionId].position;
-      } else {
-        return this.location.position;
-      }
+      // } else {
+      //   return this.location.position;
+      // }
     },
     zoom() {
       const regionId = this.$store.state.quests[this.slug].region;
@@ -75,7 +76,13 @@ export default {
       this.$store.dispatch('beginQuest', questId);
 
       this.mode = "read";
-      this.location = startingLocation;
+      console.log(startingLocation.position)
+      this.location = startingLocation.position;
+
+      this.$refs.gMap.setCenter({
+        lat: startingLocation.position.lat,
+        lng: startingLocation.position.lng
+      });
     },
     playQuest() {
       this.mode = "play";

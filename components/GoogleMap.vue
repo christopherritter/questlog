@@ -24,13 +24,13 @@
           anchor: { x: 25, y: 25 }
         }
       }"
-      @click="$emit('view-location', location.id)"
+      @click="setCenter(location.position)"
     >
-      <GMapInfoWindow :options="{ maxWidth: 200 }">
+      <!-- <GMapInfoWindow :options="{ maxWidth: 200 }">
         <code class="grey--text text--darken-4">
           lat: {{ location.position.lat }}, lng: {{ location.position.lng }}
         </code>
-      </GMapInfoWindow>
+      </GMapInfoWindow> -->
     </GMapMarker>
   </GMap>
 </template>
@@ -187,7 +187,12 @@ export default {
     locations() {
       return this.$store.state.locations;
     }
-  }
+  },
+   methods: {
+    setCenter(position) {
+      this.$refs.gMap.map.setCenter(position);
+    },
+   }
 };
 </script>
 
