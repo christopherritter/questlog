@@ -8,17 +8,17 @@
             Featured Quest
           </h5>
         </div>
-        <h1 class="display-3 mb-3">{{ quests[questId].title }}</h1>
+        <h1 class="display-3 mb-3">{{ quest.title }}</h1>
         <h3 class="subtitle-1 mb-sm-8 mb-lg-12">
-          by {{ quests[questId].author }}
+          by {{ quest.author }}
         </h3>
-        <v-btn color="primary" @click="$emit('play-quest')">Play Quest</v-btn>
-        <v-btn outlined @click="$emit('read-quest')">Read Story</v-btn>
+        <v-btn color="primary">Play Quest</v-btn>
+        <v-btn outlined @click="$emit('read-quest', quest.id);">Read Story</v-btn>
       </v-col>
       <v-col cols="6" sm="6" class="pb-0">
         <v-img
           class="mt-12"
-          :src="require('~/assets/img/' + quests[questId].image)"
+          :src="require('~/assets/img/' + quest.image)"
           aspect-ratio="1.4"
         ></v-img>
       </v-col>
@@ -31,10 +31,10 @@ export default {
   name: "QuestHeader",
   props: ["questId"],
   computed: {
-    quests() {
-      return this.$store.state.quests;
+    quest() {
+      return this.$store.state.quests[this.questId];
     }
-  }
+  },
 };
 </script>
 

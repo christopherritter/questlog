@@ -45,4 +45,8 @@ export default {
       'Success. Nuxt-fire Objects can be accessed in store actions via this.$fire___'
     )
   },
+
+  beginQuest(quest) {
+    commit('SET_QUEST', quest);
+  }
 }

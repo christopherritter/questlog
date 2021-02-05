@@ -4,8 +4,7 @@
       <v-flex v-if="!mode" class="white--text gray flex shrink darken-3">
         <QuestHeader
           :quest-id="this.slug"
-          @read-quest="readQuest()"
-          @play-quest="playQuest()"
+          @read-quest="readQuest($event)"
         />
       </v-flex>
       <v-flex class="flex">
@@ -43,7 +42,6 @@ export default {
   data() {
     return {
       mode: null,
-      quest: null,
       locations: null,
       location: null,
       entries: null,
@@ -52,6 +50,9 @@ export default {
   layout: "fluid",
   components: { QuestHeader, QuestSidebar, GoogleMap },
   computed: {
+    quest() {
+      return this.$store.state.quests[this.slug];
+    },
     position() {
       const regionId = this.$store.state.quests[this.slug].region;
       if (!this.mode) {
@@ -66,10 +67,11 @@ export default {
     },
   },
   methods: {
-    readQuest() {
-      const startingPoint = this.$store.state.quests[this.slug].startingPoint;
+    readQuest(questId) {
+      const startingPoint = this.$store.state.quests[questId].startingPoint;
       const startingLocation = this.$store.state.locations[startingPoint];
 
+      console.log(questId)
       this.mode = "read";
       this.location = startingLocation;
     },
