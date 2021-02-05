@@ -4,7 +4,12 @@
     language="en"
     :cluster="{ options: { styles: clusterStyle } }"
     :center="{ lat: position.lat, lng: position.lng }"
-    :options="{fullscreenControl: false, styles: mapStyle}"
+    :options="{
+      fullscreenControl: false,
+      mapTypeControl: false,
+      streetViewControl: false,
+      styles: mapStyle
+    }"
     :zoom="zoom"
     class="fill-height"
     height="100%"
@@ -13,7 +18,12 @@
       v-for="location in locations"
       :key="location.id"
       :position="{ lat: location.position.lat, lng: location.position.lng }"
-      :options="{ icon: { url: require('~/assets/img/' + location.marker), anchor: { x: 25, y: 25 } } }"
+      :options="{
+        icon: {
+          url: require('~/assets/img/' + location.marker),
+          anchor: { x: 25, y: 25 }
+        }
+      }"
       @click="$emit('view-location', location.id)"
     >
       <GMapInfoWindow :options="{ maxWidth: 200 }">
@@ -26,7 +36,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -170,7 +179,7 @@ export default {
           height: 56,
           textColor: "#fff"
         }
-      ],
+      ]
     };
   },
   props: ["questId", "position", "location", "zoom"],
@@ -178,7 +187,7 @@ export default {
     locations() {
       return this.$store.state.locations;
     }
-  },
+  }
 };
 </script>
 

@@ -19,6 +19,7 @@
                 :quest-id="this.slug"
                 :position="position"
                 :zoom="zoom"
+                @view-location="viewLocation($event)"
               />
             </v-flex>
           </v-layout>
@@ -42,6 +43,9 @@ export default {
   data() {
     return {
       mode: null,
+      quest: null,
+      locations: null,
+      entries: null,
     };
   },
   layout: "fluid",
@@ -59,15 +63,28 @@ export default {
   methods: {
     readQuest() {
       const startingPoint = this.$store.state.quests[this.slug].startingPoint;
-      const location = this.$store.state.locations[startingPoint];
+      const startingLocation = this.$store.state.locations[startingPoint];
 
       this.mode = "read";
-      this.position = location.position;
-      this.location = location.position;
-      this.zoom = location.zoom;
+      this.position = startingLocation.position;
+      this.location = startingLocation.position;
+      this.zoom = startingLocation.zoom;
     },
     playQuest() {
       this.mode = "play";
+    },
+    viewLocation(locationId) {
+      const location = this.$store.state.locations[locationId];
+
+      var locationEntries = [];
+
+      for (var e = 0; e < location.entries.length; e++) {
+        let entry = this.$store.state.entries[e];
+        locationEntries.push(entry)
+      }
+
+      console.log(locationEntries)
+      this.entries = locationEntries;
     }
   }
 };
