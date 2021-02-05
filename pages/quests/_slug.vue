@@ -72,6 +72,8 @@ export default {
       const startingLocation = this.$store.state.locations[startingPoint];
 
       console.log(questId)
+      this.$store.dispatch('beginQuest', questId);
+
       this.mode = "read";
       this.location = startingLocation;
     },
