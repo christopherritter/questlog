@@ -54,7 +54,11 @@ export default {
   computed: {
     position() {
       const regionId = this.$store.state.quests[this.slug].region;
-      return this.$store.state.regions[regionId].position;
+      if (!this.mode) {
+        return this.$store.state.regions[regionId].position;
+      } else {
+        return this.location.position;
+      }
     },
     zoom() {
       const regionId = this.$store.state.quests[this.slug].region;
@@ -67,9 +71,7 @@ export default {
       const startingLocation = this.$store.state.locations[startingPoint];
 
       this.mode = "read";
-      this.position = startingLocation.position;
-      this.location = startingLocation.position;
-      this.zoom = startingLocation.zoom;
+      this.location = startingLocation;
     },
     playQuest() {
       this.mode = "play";

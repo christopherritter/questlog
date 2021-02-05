@@ -11,11 +11,12 @@
 </template>
 
 <script>
-import NavBar from "@/components/NavBar.vue"
+import NavBar from "@/components/NavBar.vue";
 
 export default {
+  name: "FluidLayout",
   components: {
     NavBar
-  },
+  }
 };
 </script>

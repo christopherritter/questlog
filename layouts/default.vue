@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <nav-bar></nav-bar>
+    <nav-bar @read-quest="consoleLog('wassup')"></nav-bar>
     <v-main>
       <v-container>
         <v-row>
@@ -20,8 +20,19 @@
 import NavBar from "@/components/NavBar.vue";
 
 export default {
+  name: "DefaultLayout",
+  data() {
+    return {
+      mode: null,
+    }
+  },
   components: {
     NavBar
   },
+  methods: {
+    consoleLog(text) {
+      console.log(text);
+    }
+  }
 };
 </script>

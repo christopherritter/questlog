@@ -1,5 +1,10 @@
 export default () => ({
   authUser: null,
+  quest: null,
+  region: null,
+  location: null,
+  entry: null,
+  item: null,
   quests: [{
       id: 0,
       title: "Welcome to the Learning Tree Farm",
