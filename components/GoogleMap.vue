@@ -1,5 +1,4 @@
 <template>
-  <!-- <div id="map"></div> -->
   <GMap
     ref="gMap"
     language="en"
@@ -14,7 +13,7 @@
       v-for="location in locations"
       :key="location.id"
       :position="{ lat: location.position.lat, lng: location.position.lng }"
-      :options="{ icon: require('~/assets/img/' + location.marker) }"
+      :options="{ icon: { url: require('~/assets/img/' + location.marker), anchor: { x: 25, y: 25 } } }"
       @click="currentLocation = location"
     >
       <GMapInfoWindow :options="{ maxWidth: 200 }">
@@ -23,24 +22,15 @@
         </code>
       </GMapInfoWindow>
     </GMapMarker>
-    <!-- <GMapCircle :options="circleOptions" /> -->
   </GMap>
 </template>
 
 <script>
-// const apiKey = process.env.FIREBASE_API_KEY; // Package: @nuxtjs/dotenv
 
 export default {
   data() {
     return {
       currentLocation: {},
-      // circleOptions: {
-      //   ...
-      // },
-      // pins: {
-      //   selected: "data:image/png;base64,iVBORw0KGgo...",
-      //   notSelected: "data:image/png;base64,iVBORw0KGgo..."
-      // },
       mapStyle: [
         {
           featureType: "water",
@@ -180,7 +170,7 @@ export default {
           height: 56,
           textColor: "#fff"
         }
-      ]
+      ],
     };
   },
   props: ["questId", "position", "location", "zoom"],
