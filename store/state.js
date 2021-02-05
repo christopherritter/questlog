@@ -378,7 +378,13 @@ export default () => ({
       title: 'Welcome to the Learning Tree Farm!',
       location: 0, // Main Entrance
       text: 'The large sign on the side of the road says, "Welcome to the Learning Tree Farm."',
-      actions: ['Turn into the driveway.'],
+      actions: [
+        {
+          id: 0,
+          text: 'Turn into the driveway.',
+          icon: 'mdi-image',
+        },
+      ],
       requirements: [],
       expiration: []
     },
@@ -387,7 +393,13 @@ export default () => ({
       title: 'Overflow parking for large events.',
       location: 1, // Event Parking Lot
       text: 'A small field on the side of the driveway that is intended for large event parking.',
-      actions: ['Continue up the driveway.'],
+      actions: [
+        {
+          id: 0,
+          text: 'Continue up the driveway.',
+          icon: 'mdi-image',
+        },
+      ],
       requirements: [],
       expiration: []
     },
@@ -396,7 +408,18 @@ export default () => ({
       title: 'Primary parking for our visitors.',
       location: 2, // Parking Lot
       text: 'The primary parking area is located next to the driveway before the loop.',
-      actions: ['Find a parking spot.', 'Drive around the loop.'],
+      actions: [
+        {
+          id: 0,
+          text: 'Find a parking spot.',
+          icon: 'mdi-image',
+        },
+        {
+          id: 1,
+          text: 'Drive around the loop.',
+          icon: 'mdi-image',
+        },
+      ],
       requirements: [],
       expiration: []
     },
@@ -405,7 +428,23 @@ export default () => ({
       title: 'Large billboard map of the farm.',
       location: 3, // Information
       text: 'A large billboard sign stands in the middle of the driveway loop. It shows the main locations around the farm.',
-      actions: ['Take a closer look at the map.', 'Head towards the Century House.', 'Continue to the Bank Barn.'],
+      actions: [
+        {
+          id: 0,
+          text: 'Take a closer look at the map.',
+          icon: 'mdi-image',
+        },
+        {
+          id: 1,
+          text: 'Head towards the Century House.',
+          icon: 'mdi-image',
+        },
+        {
+          id: 2,
+          text: 'Continue to the Bank Barn.',
+          icon: 'mdi-image',
+        },
+      ],
       requirements: [],
       expiration: []
     },

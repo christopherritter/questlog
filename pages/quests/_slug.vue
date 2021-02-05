@@ -12,7 +12,7 @@
         <v-container fluid class="fill-height pa-0">
           <v-layout fill-height>
             <v-flex v-if="mode" shrink>
-              <QuestSidebar id="QuestSidebar" class="fill-height" />
+              <QuestSidebar id="QuestSidebar" :location="location" :entries="entries" class="fill-height" />
             </v-flex>
             <v-flex>
               <GoogleMap
@@ -45,6 +45,7 @@ export default {
       mode: null,
       quest: null,
       locations: null,
+      location: null,
       entries: null,
     };
   },
@@ -58,7 +59,7 @@ export default {
     zoom() {
       const regionId = this.$store.state.quests[this.slug].region;
       return this.$store.state.regions[regionId].zoom;
-    }
+    },
   },
   methods: {
     readQuest() {
@@ -83,6 +84,10 @@ export default {
         locationEntries.push(entry)
       }
 
+      console.log("Location: " + location.name);
+      this.location = location;
+
+      console.log("View location entries:")
       console.log(locationEntries)
       this.entries = locationEntries;
     }
