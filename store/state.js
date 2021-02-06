@@ -78,10 +78,10 @@ export default () => ({
     id: 0,
     name: "Learning Tree Farm",
     position: {
-      lat: 39.697556273873595,
-      lng: -84.30619228020171,
+      lat: 39.69727620057414,
+      lng: -84.30525609175955,
     },
-    zoom: 18
+    zoom: 19
   }],
   objectives: [{
       id: 0,
@@ -388,7 +388,7 @@ export default () => ({
           id: 0,
           text: 'Turn into the driveway.',
           icon: 'mdi-image',
-          forward: 1,
+          forward: 1, // Event Parking Lot
           back: null,
         },
       ],
@@ -405,8 +405,7 @@ export default () => ({
           id: 0,
           text: 'Continue up the driveway.',
           icon: 'mdi-image',
-          forward: 2,
-          back: 0,
+          forward: 2, // Parking Lot
         },
       ],
       requirements: [],
@@ -418,19 +417,17 @@ export default () => ({
       location: 2, // Parking Lot
       text: 'The primary parking area is located next to the driveway before the loop.',
       actions: [
-        {
-          id: 0,
-          text: 'Find a parking spot.',
-          icon: 'mdi-image',
-          forward: 4,
-          back: 1
-        },
+        // {
+        //   id: 0,
+        //   text: 'Find a parking spot.',
+        //   icon: 'mdi-image',
+        //   forward: 4, // Century House
+        // },
         {
           id: 1,
           text: 'Drive around the loop.',
           icon: 'mdi-image',
-          forward: 3,
-          back: 1
+          forward: 3, // Information
         },
       ],
       requirements: [],
@@ -442,20 +439,22 @@ export default () => ({
       location: 3, // Information
       text: 'A large billboard sign stands in the middle of the driveway loop. It shows the main locations around the farm.',
       actions: [
-        {
-          id: 0,
-          text: 'Take a closer look at the map.',
-          icon: 'mdi-image',
-        },
+        // {
+        //   id: 0,
+        //   text: 'Take a closer look at the map.',
+        //   icon: 'mdi-image',
+        // },
         {
           id: 1,
           text: 'Head towards the Century House.',
           icon: 'mdi-image',
+          forward: 4, // Century House
         },
         {
           id: 2,
           text: 'Continue to the Bank Barn.',
           icon: 'mdi-image',
+          forward: 7, // Century House
         },
       ],
       requirements: [],
@@ -463,9 +462,9 @@ export default () => ({
     },
     {
       id: 4,
-      title: '',
+      title: 'Century House',
       location: 4, // Century House
-      text: '',
+      text: 'Step into the original farmhouse, built in 1829, and into the lives of early Ohio settlers. The Century House is a pioneer museum to be explored when farm staff is on site!',
       actions: [],
       requirements: [],
       expiration: []
