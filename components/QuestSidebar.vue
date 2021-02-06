@@ -10,9 +10,7 @@
       {{ location.name }}
     </v-card-title>
 
-    <v-sheet v-for="entry in entries" :key="entry.id">
-      <v-card-text>{{ entry.text }}</v-card-text>
-    </v-sheet>
+    <v-card-text v-for="entry in entries" :key="entry.id">{{ entry.text }}</v-card-text>
 
     <v-list dense nav>
       <v-list-item

@@ -131,5 +131,6 @@ export default {
 <style>
 #QuestSidebar {
   max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 </style>
