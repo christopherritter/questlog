@@ -41,13 +41,21 @@
               :key="quest.id"
             >
               <v-card>
-                <nuxt-link :to="'/quests/' + quest.id"
-                  ><v-img
+                <nuxt-link :to="'/quests/' + quest.id">
+                  <v-img
                     height="250"
                     :src="require('~/assets/img/' + quest.image)"
                   ></v-img>
-                  <v-card-title>{{ quest.title }}</v-card-title></nuxt-link
+                </nuxt-link>
+
+                <v-card-title class="quest-title"
+                  ><nuxt-link
+                    class="quest-title-link"
+                    :to="'/quests/' + quest.id"
+                    >{{ quest.title }}</nuxt-link
+                  ></v-card-title
                 >
+
                 <v-card-subtitle>by {{ quest.author }}</v-card-subtitle>
                 <v-card-text></v-card-text>
                 <v-card-actions>
@@ -91,5 +99,9 @@ export default {
   letter-spacing: 0.1666666667rem;
   line-height: 2rem;
   text-transform: uppercase;
+}
+.v-application a.quest-title-link {
+  color: #fff;
+  text-decoration: none;
 }
 </style>
