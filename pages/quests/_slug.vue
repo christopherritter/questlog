@@ -50,6 +50,7 @@ export default {
       quest: null,
       locations: null,
       location: null,
+      zoom: null,
       entries: null,
       items: null,
       actions: null
@@ -59,7 +60,11 @@ export default {
   components: { QuestHeader, QuestSidebar, GoogleMap },
   created() {
     const quest = this.$store.state.quests[this.slug];
+    const region = this.$store.state.regions[quest.region];
+
     this.quest = quest;
+    this.region = region;
+    this.zoom = region.zoom;
   },
   computed: {
     position() {
@@ -70,10 +75,6 @@ export default {
       //   return this.location.position;
       // }
     },
-    zoom() {
-      const regionId = this.$store.state.quests[this.slug].region;
-      return this.$store.state.regions[regionId].zoom;
-    }
   },
   methods: {
     readQuest(questId) {
@@ -88,12 +89,12 @@ export default {
       this.mode = "play";
     },
     viewLocation(id) {
-      console.log("View location for id " + id)
+      console.log("View location for id " + id);
       const location = this.$store.state.locations[id];
       const entries = this.$store.state.entries;
 
-      console.log("Location result:")
-      console.log(location)
+      console.log("Location result:");
+      console.log(location);
 
       var locationEntries = [];
       var locationActions = [];
@@ -107,13 +108,14 @@ export default {
         }
       }
 
-      console.log("Location entries:")
-      console.log(locationEntries)
+      console.log("Location entries:");
+      console.log(locationEntries);
 
-      console.log("Location actions:")
-      console.log(locationActions)
+      console.log("Location actions:");
+      console.log(locationActions);
 
       this.location = location;
+      // this.zoom = location.zoom;
       this.entries = locationEntries;
       this.actions = locationActions;
 
@@ -121,7 +123,7 @@ export default {
         lat: location.position.lat,
         lng: location.position.lng
       });
-    },
+    }
   }
 };
 </script>
