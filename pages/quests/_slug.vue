@@ -43,21 +43,47 @@ export default {
   data() {
     return {
       mode: null,
+      quest: null,
       locations: null,
       location: null,
       entries: null,
+      items: null,
     };
   },
   layout: "fluid",
   components: { QuestHeader, QuestSidebar, GoogleMap },
+  created() {
+    const quest = this.$store.state.quests[this.slug];
+    const locations = this.$store.state.locations;
+    const entries = this.$store.state.entries;
+    const items = this.$store.state.items;
+
+    var questLocations = [];
+    var questEntries = [];
+    var questItems = [];
+
+    for (let l = 0; l < quest.locations.length; l++ ) {
+      questLocations.push(locations[l]); // need to associate with IDs
+    }
+
+    for (let e = 0; e < quest.entries.length; e++) {
+      questEntries.push(entries[e]); // need to associate with IDs
+    }
+
+    for (let i = 0; i < quest.items.length; i++) {
+      questItems.push(items[i]); // need to associate with IDs
+    }
+
+    this.quest = quest;
+    this.locations = questLocations;
+    this.entries = questEntries;
+    this.items = questItems;
+  },
   computed: {
-    quest() {
-      return this.$store.state.quests[this.slug];
-    },
     position() {
       const regionId = this.$store.state.quests[this.slug].region;
       // if (!this.mode) {
-        return this.$store.state.regions[regionId].position;
+      return this.$store.state.regions[regionId].position;
       // } else {
       //   return this.location.position;
       // }
@@ -69,15 +95,21 @@ export default {
   },
   methods: {
     readQuest(questId) {
-      const startingPoint = this.$store.state.quests[questId].startingPoint;
+      const quest = this.$store.state.quests[questId];
+      const startingPoint = quest.startingPoint;
       const startingLocation = this.$store.state.locations[startingPoint];
+      const entries = this.$store.state.entries;
 
-      console.log(questId)
+      var locationEntries = [];
+
+      for (let e = 0; e < startingLocation.entries.length; e++) {
+        locationEntries.push(entries[startingLocation.entries[e]]);
+      }
+
       this.$store.dispatch('beginQuest', questId);
-
       this.mode = "read";
-      console.log(startingLocation.position)
-      this.location = startingLocation.position;
+      this.location = startingLocation;
+      this.entries = locationEntries;
 
       this.$refs.gMap.setCenter({
         lat: startingLocation.position.lat,
@@ -97,11 +129,7 @@ export default {
         locationEntries.push(entry)
       }
 
-      console.log("Location: " + location.name);
       this.location = location;
-
-      console.log("View location entries:")
-      console.log(locationEntries)
       this.entries = locationEntries;
     }
   }
