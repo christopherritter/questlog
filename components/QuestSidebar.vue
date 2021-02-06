@@ -1,5 +1,5 @@
 <template>
-  <v-card :width="width" :max-height="maxHeight" light tile elevation="0">
+  <v-card :width="width" :max-height="maxHeight" light tile elevation="20">
     <v-img
       v-if="location.image"
       height="240"
@@ -12,7 +12,7 @@
 
     <v-card-text v-for="entry in entries" :key="entry.id">{{ entry.text }}</v-card-text>
 
-    <v-list dense nav>
+    <v-list>
       <v-list-item
         v-for="action in actions"
         :key="action.id"
