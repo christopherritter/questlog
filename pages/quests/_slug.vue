@@ -13,6 +13,7 @@
                 :location="location"
                 :entries="entries"
                 :actions="actions"
+                :width="sidebarWidth"
                 @view-location="viewLocation($event)"
                 class="fill-height"
               />
@@ -53,7 +54,7 @@ export default {
       zoom: null,
       entries: null,
       items: null,
-      actions: null
+      actions: null,
     };
   },
   layout: "fluid",
@@ -75,6 +76,15 @@ export default {
       //   return this.location.position;
       // }
     },
+    sidebarWidth() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return 220
+        case 'sm': return 400
+        case 'md': return 500
+        case 'lg': return 600
+        case 'xl': return 800
+      }
+    }
   },
   methods: {
     readQuest(questId) {
