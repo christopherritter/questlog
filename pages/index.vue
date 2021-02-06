@@ -16,7 +16,7 @@
                   {{ featuredQuest.title }}
                 </nuxt-link>
               </h1>
-              <h3 class="subtitle-1 mb-sm-8 mb-lg-12">
+              <h3 class="subtitle-1 mb-8 mb-lg-12">
                 by {{ featuredQuest.author }}
               </h3>
               <v-btn nuxt color="primary" to="/quests/0">More Info</v-btn>
