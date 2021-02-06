@@ -388,6 +388,8 @@ export default () => ({
           id: 0,
           text: 'Turn into the driveway.',
           icon: 'mdi-image',
+          forward: 1,
+          back: null,
         },
       ],
       requirements: [],
@@ -403,6 +405,8 @@ export default () => ({
           id: 0,
           text: 'Continue up the driveway.',
           icon: 'mdi-image',
+          forward: 2,
+          back: 0,
         },
       ],
       requirements: [],
@@ -418,11 +422,15 @@ export default () => ({
           id: 0,
           text: 'Find a parking spot.',
           icon: 'mdi-image',
+          forward: 4,
+          back: 1
         },
         {
           id: 1,
           text: 'Drive around the loop.',
           icon: 'mdi-image',
+          forward: 3,
+          back: 1
         },
       ],
       requirements: [],

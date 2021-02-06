@@ -13,6 +13,7 @@
                 :location="location"
                 :entries="entries"
                 :actions="actions"
+                @select-action="selectAction($event)"
                 class="fill-height"
               />
             </v-flex>
@@ -143,6 +144,14 @@ export default {
 
       this.location = location;
       this.entries = locationEntries;
+    },
+    selectAction(locationId) {
+      const location = this.$store.state.locations[locationId];
+
+      this.$refs.gMap.setCenter({
+        lat: location.position.lat,
+        lng: location.position.lng
+      });
     }
   }
 };
