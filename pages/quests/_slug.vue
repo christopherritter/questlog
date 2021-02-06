@@ -6,7 +6,7 @@
       </v-flex>
       <v-flex class="flex">
         <v-container fluid class="fill-height pa-0">
-          <v-layout fill-height>
+          <v-layout :class="sidebarLayout">
             <v-flex v-if="mode" shrink>
               <QuestSidebar
                 id="QuestSidebar"
@@ -20,7 +20,8 @@
             </v-flex>
             <v-flex>
               <QuestMap
-                ref="qMap"
+                id="QuestMap"
+                ref="QuestMap"
                 :quest-id="this.slug"
                 :position="position"
                 :zoom="zoom"
@@ -28,6 +29,28 @@
               />
             </v-flex>
           </v-layout>
+          <!-- <v-layout fill-height>
+            <v-flex v-if="mode" shrink>
+              <QuestSidebar
+                id="QuestSidebar"
+                :location="location"
+                :entries="entries"
+                :actions="actions"
+                :width="sidebarWidth"
+                @view-location="viewLocation($event)"
+                class="fill-height"
+              />
+            </v-flex>
+            <v-flex>
+              <QuestMap
+                ref="QuestMap"
+                :quest-id="this.slug"
+                :position="position"
+                :zoom="zoom"
+                @view-location="viewLocation($event)"
+              />
+            </v-flex>
+          </v-layout> -->
         </v-container>
       </v-flex>
     </v-layout>
@@ -78,11 +101,20 @@ export default {
     },
     sidebarWidth() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return 220
-        case 'sm': return 400
+        case 'xs': return '100%'
+        case 'sm': return '100%'
         case 'md': return 500
         case 'lg': return 600
         case 'xl': return 800
+      }
+    },
+    sidebarLayout() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return 'column'
+        case 'sm': return 'column'
+        case 'md': return 'fill-height'
+        case 'lg': return 'fill-height'
+        case 'xl': return 'fill-height'
       }
     }
   },
@@ -129,7 +161,7 @@ export default {
       this.entries = locationEntries;
       this.actions = locationActions;
 
-      this.$refs.qMap.setCenter({
+      this.$refs.QuestMap.setCenter({
         lat: location.position.lat,
         lng: location.position.lng
       });
@@ -140,7 +172,7 @@ export default {
 
 <style>
 #QuestSidebar {
-  max-height: calc(100vh - 100px);
+  /* max-height: calc(100vh - 100px); */
   overflow-y: auto;
 }
 </style>
