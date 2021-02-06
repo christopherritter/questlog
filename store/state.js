@@ -200,8 +200,8 @@ export default () => ({
       name: "Century House",
       isLandmark: true,
       position: {
-        lat: 39.697199918787966,
-        lng: -84.30579653342916,
+        lat: 39.697184805057965,
+        lng: -84.30578406787144,
       },
       zoom: 19,
       image: null,
@@ -210,32 +210,19 @@ export default () => ({
     },
     {
       id: 5,
-      name: "Restrooms",
-      isLandmark: true,
-      position: {
-        lat: 39.69731220085636,
-        lng: -84.3058882373532,
-      },
-      zoom: 19,
-      image: null,
-      marker: "restroom.png",
-      entries: [5],
-    },
-    {
-      id: 6,
       name: "Smokehouse",
       isLandmark: true,
       position: {
-        lat: 39.69733858404809,
-        lng: -84.30582683559051,
+        lat: 39.69734793440454,
+        lng: -84.30588556356814,
       },
       zoom: 19,
       image: null,
       marker: "smog.png",
-      entries: [6],
+      entries: [5],
     },
     {
-      id: 7,
+      id: 6,
       name: "Bank Barn",
       isLandmark: true,
       position: {
@@ -245,10 +232,10 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "barn.png",
-      entries: [7],
+      entries: [6],
     },
     {
-      id: 8,
+      id: 7,
       name: "Tobacco Barn",
       isLandmark: true,
       position: {
@@ -258,23 +245,10 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "barn.png",
-      entries: [8],
+      entries: [7],
     },
     {
-      id: 9,
-      name: "Chicken Coop",
-      isLandmark: true,
-      position: {
-        lat: 39.69743149695268,
-        lng: -84.30468044539928,
-      },
-      zoom: 19,
-      image: null,
-      marker: "gate.png",
-      entries: [9],
-    },
-    {
-      id: 10,
+      id: 8,
       name: "Garden",
       isLandmark: true,
       position: {
@@ -284,10 +258,10 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "corn.png",
-      entries: [10],
+      entries: [8],
     },
     {
-      id: 11,
+      id: 9,
       name: "Play House & Tractor",
       isLandmark: true,
       position: {
@@ -297,10 +271,10 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "tractor.png",
-      entries: [11],
+      entries: [9],
     },
     {
-      id: 12,
+      id: 10,
       name: "Pavilion",
       isLandmark: true,
       position: {
@@ -310,10 +284,10 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "house-outline.png",
-      entries: [12],
+      entries: [10],
     },
     {
-      id: 13,
+      id: 11,
       name: "Bonfire Pit",
       isLandmark: true,
       position: {
@@ -323,10 +297,10 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "fire.png",
-      entries: [13],
+      entries: [11],
     },
     {
-      id: 14,
+      id: 12,
       name: "Trailhead to Preschool",
       isLandmark: true,
       position: {
@@ -336,10 +310,10 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "trail.png",
-      entries: [14],
+      entries: [12],
     },
     {
-      id: 15,
+      id: 13,
       name: "Nature Preschool",
       isLandmark: true,
       position: {
@@ -349,10 +323,10 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "school.png",
-      entries: [15],
+      entries: [13],
     },
     {
-      id: 16,
+      id: 14,
       name: "Preschool Entrance",
       isLandmark: true,
       position: {
@@ -362,10 +336,10 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "road.png",
-      entries: [16],
+      entries: [14],
     },
     {
-      id: 17,
+      id: 15,
       name: "Trailhead to Tire Swing & Observation Deck",
       isLandmark: true,
       position: {
@@ -375,7 +349,7 @@ export default () => ({
       zoom: 19,
       image: null,
       marker: "trail.png",
-      entries: [17],
+      entries: [15],
     },
   ],
   entries: [{
@@ -454,7 +428,7 @@ export default () => ({
           id: 2,
           text: 'Continue to the Bank Barn.',
           icon: 'mdi-image',
-          forward: 7, // Century House
+          forward: 6, // Bank Barn
         },
       ],
       requirements: [],
@@ -465,123 +439,161 @@ export default () => ({
       title: 'Century House',
       location: 4, // Century House
       text: 'Step into the original farmhouse, built in 1829, and into the lives of early Ohio settlers. The Century House is a pioneer museum to be explored when farm staff is on site!',
-      actions: [],
+      actions: [
+        {
+          id: 0,
+          text: 'Walk to the Smoke House.',
+          icon: 'mdi-image',
+          forward: 5, // Smokehouse
+        },
+      ],
       requirements: [],
       expiration: []
     },
     {
       id: 5,
-      title: '',
-      location: 5, // Restrooms
-      text: '',
-      actions: [],
+      title: 'Smoke House',
+      location: 5, // Smokehouse
+      text: 'The Smoke House was one of the original buildings on site. It currently is closed for the season. ',
+      actions: [
+        {
+          id: 0,
+          text: 'Walk towards the Play House.',
+          icon: 'mdi-image',
+          forward: 9, // Play House & Tractor
+        },
+      ],
       requirements: [],
       expiration: []
     },
     {
       id: 6,
-      title: '',
-      location: 6, // Smokehouse
-      text: '',
-      actions: [],
+      title: 'Bank Barn',
+      location: 6, // Bank Barn
+      text: 'The Bank Barn is an old wooden barn built atop of a 5 ft stone base. A green door on the side leads to the main interior of the barn.',
+      actions: [
+        {
+          id: 0,
+          text: 'Head towards the Garden.',
+          icon: 'mdi-image',
+          forward: 8, // Garden
+        },
+      ],
       requirements: [],
       expiration: []
     },
     {
       id: 7,
-      title: '',
-      location: 7, // Bank Barn
-      text: '',
-      actions: [],
+      title: 'Tobacco Barn',
+      location: 7, // Tobacco Barn
+      text: 'The Tobacco Barn is an elongated barn that houses the smaller farm animals including chickens and other baby animals. It also serves as a nursing area for any animals that require special attention.',
+      actions: [
+        {
+          id: 0,
+          text: 'Head towards the Bonfire Pit.',
+          icon: 'mdi-image',
+          forward: 11, // Bonfire Pit
+        },
+      ],
       requirements: [],
       expiration: []
     },
     {
       id: 8,
-      title: '',
-      location: 8, // Tobacco Barn
-      text: '',
-      actions: [],
+      title: 'The Garden',
+      location: 8, // Garden
+      text: 'The Garden is where we grow most of the food we need to support the animals who live on the farm. It is located next to the Tobacco Barn, which has numerous rain spouts on its roof that lead to a large white container that is used to gather rain water.',
+      actions: [
+        {
+          id: 0,
+          text: 'Head towards the Tobacco Barn.',
+          icon: 'mdi-image',
+          forward: 7, // Tobacco Barn
+        },
+      ],
       requirements: [],
       expiration: []
     },
     {
       id: 9,
-      title: '',
-      location: 9, // Chicken Coop
-      text: '',
-      actions: [],
+      title: 'Play House & Tractor',
+      location: 9, // Play House & Tractor
+      text: 'This area contains a varity of interactive entertainment for the younger visitors. The main feature of the play area is a tractor that is safe enough to climb on. Towards the back is an old Play House with enough room to allow your imagines to run wild.',
+      actions: [
+        {
+          id: 0,
+          text: 'Walk towards the Century House.',
+          icon: 'mdi-image',
+          forward: 4, // Century House
+        },
+      ],
       requirements: [],
       expiration: []
     },
     {
       id: 10,
-      title: '',
-      location: 10, // Garden
-      text: '',
-      actions: [],
+      title: 'The Pavilion',
+      location: 10, // Pavilion
+      text: 'The Pavilion is a large open wooden structure built on top of a concrete base. It largely serves as a gathering spot for our guests to begin their many adventures on the farm.',
+      actions: [
+        {
+          id: 0,
+          text: 'Walk towards the Play House.',
+          icon: 'mdi-image',
+          forward: 9, // Play House & Tractor
+        },
+      ],
       requirements: [],
       expiration: []
     },
     {
       id: 11,
-      title: '',
-      location: 11, // Play House & Tractor
-      text: '',
-      actions: [],
+      title: 'Bonfire Pit',
+      location: 11, // Bonfire Pit
+      text: 'A large circle of stones surrounds the charred circle in the grass that serves as the bon fire pit on cold nights, or whenever a bon fire is in order.',
+      actions: [
+        {
+          id: 0,
+          text: 'Walk into the Pavilion.',
+          icon: 'mdi-image',
+          forward: 10, // Pavilion
+        },
+      ],
       requirements: [],
       expiration: []
     },
     {
       id: 12,
-      title: '',
-      location: 12, // Pavilion
-      text: '',
+      title: 'Trailhead to Preschool',
+      location: 12, // Trailhead to Preschool
+      text: 'The trailhead leads through the grass and trees towards our Nature Preschool.',
       actions: [],
       requirements: [],
       expiration: []
     },
     {
       id: 13,
-      title: '',
-      location: 13, // Bonfire Pit
-      text: '',
+      title: 'Nature Preschool',
+      location: 13, // Nature Preschool
+      text: 'A small house that was somewhoat recently in comparison to the other buildings on the farm. It currently serves as a school house for day care students.',
       actions: [],
       requirements: [],
       expiration: []
     },
     {
       id: 14,
-      title: '',
-      location: 14, // Trailhead to Preschool
-      text: '',
+      title: 'Preschool Entrance',
+      location: 14, // Preschool Entrance
+      text: 'The thick of trees on the side of the road clears to reveal a small sign that says "Preschool Entrance." A driveway just past the sign leads to a small house with a fenced in playground.',
       actions: [],
       requirements: [],
       expiration: []
     },
     {
       id: 15,
-      title: '',
-      location: 15, // Nature Preschool
-      text: '',
-      actions: [],
-      requirements: [],
-      expiration: []
-    },
-    {
-      id: 16,
-      title: '',
-      location: 16, // Preschool Entrance
-      text: '',
-      actions: [],
-      requirements: [],
-      expiration: []
-    },
-    {
-      id: 17,
-      title: '',
-      location: 17, // Trailhead to Tire Swing & Observation Deck
-      text: '',
+      title: 'Trailhead to Tire Swing & Observation Deck',
+      location: 15, // Trailhead to Tire Swing & Observation Deck
+      text: 'On the side of the trail you see a sign that reads, "Trailhead to Tire Swing & Observation Deck." A little further up the trail you see wooden planks laid into the ground to protect your shoes from getting muddy.',
       actions: [],
       requirements: [],
       expiration: []
