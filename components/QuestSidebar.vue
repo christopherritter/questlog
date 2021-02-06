@@ -1,5 +1,5 @@
 <template>
-  <v-card :width="width" light tile elevation="0">
+  <v-card :width="width" :max-height="maxHeight" light tile elevation="0">
     <v-img
       v-if="location.image"
       height="240"
@@ -41,7 +41,7 @@ export default {
   mounted() {
     this.panel = [0];
   },
-  props: ["location", "entries", "actions", "width"],
+  props: ["location", "entries", "actions", "width", "maxHeight"],
   watch: {
     entries(newVal, oldVal) {
       if (newVal != oldVal) {
