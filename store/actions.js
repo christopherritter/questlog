@@ -49,5 +49,15 @@ export default {
   beginQuest({ state, commit }, questId) {
     const quest = state.quests[questId];
     commit('SET_QUEST', quest);
+  },
+
+  viewLocation({ state }, id) {
+    const location = state.locations[id];
+
+    console.log("View location:")
+    console.log(location)
+
+    console.log("SET_LOCATION")
+    commit('SET_LOCATION', location);
   }
 }

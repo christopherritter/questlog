@@ -17,7 +17,7 @@
       </v-expansion-panels>
 
       <v-list dense nav>
-        <v-list-item v-for="action in actions" :key="action.id" @click="$emit('select-action', action.forward)">
+        <v-list-item v-for="action in actions" :key="action.id" @click="$emit('view-location', action.forward)">
           <v-list-item-icon>
             <v-icon>{{ action.icon }}</v-icon>
           </v-list-item-icon>
@@ -35,10 +35,5 @@
 export default {
   name: "QuestSidebar",
   props: ['location', 'entries', 'actions'],
-  methods: {
-    selectAction(Id) {
-      console.log(Id)
-    }
-  }
 };
 </script>
