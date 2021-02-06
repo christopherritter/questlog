@@ -1,5 +1,10 @@
 <template>
-  <v-card :width="width" :max-height="maxHeight" light tile elevation="20">
+  <v-card
+    :width="$vuetify.breakpoint.mdAndUp ? 450 : '100%'"
+    light
+    tile
+    elevation="20"
+  >
     <v-img
       v-if="location.image"
       height="240"
@@ -41,7 +46,7 @@ export default {
   mounted() {
     this.panel = [0];
   },
-  props: ["location", "entries", "actions", "width", "maxHeight"],
+  props: ["location", "entries", "actions"],
   watch: {
     entries(newVal, oldVal) {
       if (newVal != oldVal) {

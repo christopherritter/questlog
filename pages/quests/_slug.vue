@@ -6,15 +6,15 @@
       </v-flex>
       <v-flex class="flex">
         <v-container fluid class="fill-height pa-0">
-          <v-layout :class="$vuetify.breakpoint.mdAndUp ? 'fill-height' : 'column'">
+          <v-layout
+            :class="$vuetify.breakpoint.mdAndUp ? 'fill-height' : 'column'"
+          >
             <v-flex v-if="mode" shrink>
               <QuestSidebar
                 id="QuestSidebar"
                 :location="location"
                 :entries="entries"
                 :actions="actions"
-                :width="$vuetify.breakpoint.mdAndUp ? 450 : '100%'"
-                :maxHeight="$vuetify.breakpoint.mdAndUp ? '100%' : '50%'"
                 @view-location="viewLocation($event)"
                 class="fill-height"
               />
@@ -78,7 +78,7 @@ export default {
       zoom: null,
       entries: null,
       items: null,
-      actions: null,
+      actions: null
     };
   },
   layout: "fluid",
@@ -99,7 +99,7 @@ export default {
       // } else {
       //   return this.location.position;
       // }
-    },
+    }
   },
   methods: {
     readQuest(questId) {
@@ -155,7 +155,12 @@ export default {
 
 <style>
 #QuestSidebar {
-  /* max-height: calc(100vh - 100px); */
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
+}
+@media only screen and (max-width: 960px) {
+  #QuestSidebar {
+    max-height: 65vh;
+  }
 }
 </style>
