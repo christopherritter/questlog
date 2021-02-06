@@ -1,20 +1,13 @@
 <template>
-  <v-card width="480" light tile elevation="0">
-    <v-navigation-drawer permanent width="480">
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="title">
-            {{ location.name }}
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+  <v-card width="360" light tile elevation="0">
 
-      <v-expansion-panels accordion flat v-if="entries">
-        <v-expansion-panel v-for="entry in entries" :key="entry.id">
-          <v-expansion-panel-header>{{ entry.title }}</v-expansion-panel-header>
-          <v-expansion-panel-content>{{ entry.text }}</v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+      <v-card-title>
+        {{ location.name }}
+      </v-card-title>
+
+      <v-sheet v-for="entry in entries" :key="entry.id">
+        <v-card-text>{{ entry.text }}</v-card-text>
+      </v-sheet>
 
       <v-list dense nav>
         <v-list-item v-for="action in actions" :key="action.id" @click="$emit('view-location', action.forward)">
@@ -27,13 +20,28 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+
   </v-card>
 </template>
 
 <script>
 export default {
   name: "QuestSidebar",
+  data() {
+    return {
+      panel: [0],
+    }
+  },
+  mounted() {
+    this.panel = [0];
+  },
   props: ['location', 'entries', 'actions'],
+  watch: {
+    entries(newVal, oldVal){
+      if (newVal != oldVal) {
+        this.panel = [0];
+      }
+    }
+  }
 };
 </script>

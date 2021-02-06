@@ -148,8 +148,8 @@ export default () => ({
       name: "Main Entrance",
       isLandmark: true,
       position: {
-        lat: 39.69705252378522,
-        lng: -84.30895915916378,
+        lat: 39.69718650553957,
+        lng: -84.3090084688364,
       },
       zoom: 19,
       image: null,
@@ -398,7 +398,7 @@ export default () => ({
         //   forward: 4, // Century House
         // },
         {
-          id: 1,
+          id: 0,
           text: 'Drive around the loop.',
           icon: 'mdi-image',
           forward: 3, // Information
@@ -419,13 +419,13 @@ export default () => ({
         //   icon: 'mdi-image',
         // },
         {
-          id: 1,
+          id: 0,
           text: 'Head towards the Century House.',
           icon: 'mdi-image',
           forward: 4, // Century House
         },
         {
-          id: 2,
+          id: 1,
           text: 'Continue to the Bank Barn.',
           icon: 'mdi-image',
           forward: 6, // Bank Barn
