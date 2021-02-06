@@ -4,8 +4,10 @@
     <v-main>
       <nuxt />
     </v-main>
-    <v-footer fixed app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+    <v-footer app>
+      <v-col class="text-center pa-0" cols="12">
+        <span>&copy; {{ new Date().getFullYear() }} Christopher Ritter</span>
+      </v-col>
     </v-footer>
   </v-app>
 </template>

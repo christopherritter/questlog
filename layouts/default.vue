@@ -11,7 +11,9 @@
       </v-container>
     </v-main>
     <v-footer app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <v-col class="text-center" cols="12">
+        <span>&copy; {{ new Date().getFullYear() }} Christopher Ritter</span>
+      </v-col>
     </v-footer>
   </v-app>
 </template>
@@ -23,8 +25,8 @@ export default {
   name: "DefaultLayout",
   data() {
     return {
-      mode: null,
-    }
+      mode: null
+    };
   },
   components: {
     NavBar
