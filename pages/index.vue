@@ -11,18 +11,24 @@
                   Featured Quest
                 </h5>
               </div>
-              <h1 class="display-3 mb-3">{{ quests[0].title }}</h1>
+              <h1 class="quest-title display-3 mb-3">
+                <nuxt-link class="quest-title-link" to="/quests/0">
+                  {{ featuredQuest.title }}
+                </nuxt-link>
+              </h1>
               <h3 class="subtitle-1 mb-sm-8 mb-lg-12">
-                by {{ quests[0].author }}
+                by {{ featuredQuest.author }}
               </h3>
               <v-btn nuxt color="primary" to="/quests/0">More Info</v-btn>
             </v-col>
             <v-col cols="6" sm="6" class="pb-0">
-              <v-img
-                class="mt-12"
-                :src="require('~/assets/img/' + quests[0].image)"
-                aspect-ratio="1.4"
-              ></v-img>
+              <nuxt-link to="/quests/0">
+                <v-img
+                  class="mt-12"
+                  :src="require('~/assets/img/' + featuredQuest.image)"
+                  aspect-ratio="1.4"
+                ></v-img>
+              </nuxt-link>
             </v-col>
           </v-row>
         </v-container>
@@ -37,7 +43,7 @@
               sm="12"
               md="6"
               lg="4"
-              v-for="quest in quests"
+              v-for="quest in featuredQuests"
               :key="quest.id"
             >
               <v-card>
@@ -85,8 +91,17 @@ export default {
   name: "home",
   layout: "fluid",
   computed: {
-    quests() {
-      return this.$store.state.quests;
+    featuredQuest() {
+      return this.$store.state.quests[0];
+    },
+    featuredQuests() {
+      var featuredQuests = [];
+
+      for (let q = 1; q <= 3; q++) {
+        featuredQuests.push(this.$store.state.quests[q]);
+      }
+
+      return featuredQuests;
     }
   }
 };

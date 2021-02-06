@@ -18,8 +18,8 @@
               />
             </v-flex>
             <v-flex>
-              <GoogleMap
-                ref="gMap"
+              <QuestMap
+                ref="qMap"
                 :quest-id="this.slug"
                 :position="position"
                 :zoom="zoom"
@@ -36,7 +36,7 @@
 <script>
 import QuestHeader from "@/components/QuestHeader.vue";
 import QuestSidebar from "@/components/QuestSidebar.vue";
-import GoogleMap from "@/components/GoogleMap.vue";
+import QuestMap from "@/components/QuestMap.vue";
 
 export default {
   name: "Quest",
@@ -57,7 +57,7 @@ export default {
     };
   },
   layout: "fluid",
-  components: { QuestHeader, QuestSidebar, GoogleMap },
+  components: { QuestHeader, QuestSidebar, QuestMap },
   created() {
     const quest = this.$store.state.quests[this.slug];
     const region = this.$store.state.regions[quest.region];
@@ -119,7 +119,7 @@ export default {
       this.entries = locationEntries;
       this.actions = locationActions;
 
-      this.$refs.gMap.setCenter({
+      this.$refs.qMap.setCenter({
         lat: location.position.lat,
         lng: location.position.lng
       });
