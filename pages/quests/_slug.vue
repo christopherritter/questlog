@@ -2,16 +2,19 @@
   <v-container fluid class="fill-height pa-0">
     <v-layout column fill-height>
       <v-flex v-if="!mode" class="white--text gray flex shrink darken-3">
-        <QuestHeader
-          :quest-id="this.slug"
-          @read-quest="readQuest($event)"
-        />
+        <QuestHeader :quest-id="this.slug" @read-quest="readQuest($event)" />
       </v-flex>
       <v-flex class="flex">
         <v-container fluid class="fill-height pa-0">
           <v-layout fill-height>
             <v-flex v-if="mode" shrink>
-              <QuestSidebar id="QuestSidebar" :location="location" :entries="entries" class="fill-height" />
+              <QuestSidebar
+                id="QuestSidebar"
+                :location="location"
+                :entries="entries"
+                :actions="actions"
+                class="fill-height"
+              />
             </v-flex>
             <v-flex>
               <GoogleMap
@@ -48,6 +51,7 @@ export default {
       location: null,
       entries: null,
       items: null,
+      actions: null
     };
   },
   layout: "fluid",
@@ -62,7 +66,7 @@ export default {
     var questEntries = [];
     var questItems = [];
 
-    for (let l = 0; l < quest.locations.length; l++ ) {
+    for (let l = 0; l < quest.locations.length; l++) {
       questLocations.push(locations[l]); // need to associate with IDs
     }
 
@@ -91,7 +95,7 @@ export default {
     zoom() {
       const regionId = this.$store.state.quests[this.slug].region;
       return this.$store.state.regions[regionId].zoom;
-    },
+    }
   },
   methods: {
     readQuest(questId) {
@@ -101,15 +105,23 @@ export default {
       const entries = this.$store.state.entries;
 
       var locationEntries = [];
+      var locationActions = [];
 
       for (let e = 0; e < startingLocation.entries.length; e++) {
-        locationEntries.push(entries[startingLocation.entries[e]]);
+        let startingEntries = entries[startingLocation.entries[e]];
+        locationEntries.push(startingEntries);
+
+        let entryActions = startingEntries.actions;
+        for (let a = 0; a < entryActions.length; a++) {
+          locationActions.push(entryActions[a]);
+        }
       }
 
-      this.$store.dispatch('beginQuest', questId);
+      this.$store.dispatch("beginQuest", questId);
       this.mode = "read";
       this.location = startingLocation;
       this.entries = locationEntries;
+      this.actions = locationActions;
 
       this.$refs.gMap.setCenter({
         lat: startingLocation.position.lat,
@@ -126,7 +138,7 @@ export default {
 
       for (var e = 0; e < location.entries.length; e++) {
         let entry = this.$store.state.entries[e];
-        locationEntries.push(entry)
+        locationEntries.push(entry);
       }
 
       this.location = location;

@@ -16,8 +16,8 @@
         </v-expansion-panel>
       </v-expansion-panels>
 
-      <!-- <v-list dense nav>
-        <v-list-item v-for="action in entry.actions" :key="action.id">
+      <v-list dense nav>
+        <v-list-item v-for="action in actions" :key="action.id">
           <v-list-item-icon>
             <v-icon>{{ action.icon }}</v-icon>
           </v-list-item-icon>
@@ -26,23 +26,14 @@
             <v-list-item-title>{{ action.text }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </v-list> -->
+      </v-list>
     </v-navigation-drawer>
   </v-card>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      items: [
-        { title: "Dashboard", icon: "mdi-view-dashboard" },
-        { title: "Photos", icon: "mdi-image" },
-        { title: "About", icon: "mdi-help-box" }
-      ],
-      right: null
-    };
-  },
-  props: ['location', 'entries']
+  name: "QuestSidebar",
+  props: ['location', 'entries', 'actions']
 };
 </script>
