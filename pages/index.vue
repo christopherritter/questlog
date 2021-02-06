@@ -4,7 +4,7 @@
       <v-sheet color="dark" elevation="1" height="100%" width="100%">
         <v-container style="height:100%">
           <v-row>
-            <v-col cols="6" sm="6" class="my-auto">
+            <v-col cols="12" sm="12" md=6 class="my-auto">
               <div class="d-flex flex-row mb-2">
                 <v-icon medium color="green darken-2">mdi-crown</v-icon>
                 <h5 class="featured-quest green--text text--darken-2 mt-1 ml-1">
@@ -21,7 +21,7 @@
               </h3>
               <v-btn nuxt color="primary" to="/quests/0">More Info</v-btn>
             </v-col>
-            <v-col cols="6" sm="6" class="pb-0">
+            <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down">
               <nuxt-link to="/quests/0">
                 <v-img
                   class="mt-12"
