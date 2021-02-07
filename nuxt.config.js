@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+import ogImage from '@/static/questlog-home.png';
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -50,7 +51,7 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: "/questlog-home.png"
+        content: this.BASE_URL + ogImage,
       },
       {
         hid: "twitter:card",
@@ -75,7 +76,7 @@ export default {
       {
         hid: "twitter:image",
         property: "twitter:image",
-        content: "/questlog-home.png"
+        content: this.BASE_URL + ogImage,
       },
     ],
     link: [{
