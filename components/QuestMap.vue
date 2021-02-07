@@ -30,8 +30,10 @@
           anchor: { x: 25, y: 25 }
         }
       }"
-      @click="$emit('view-location', location.id)"
     >
+    <!-- This was removed from the GMapMarker above: -->
+    <!-- @click="$emit('view-location', location.id)" -->
+
       <!-- <GMapInfoWindow :options="{ maxWidth: 200 }">
         <code class="grey--text text--darken-4">
           lat: {{ location.position.lat }}, lng: {{ location.position.lng }}
