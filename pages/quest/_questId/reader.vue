@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="fill-height pa-0">
-    <v-layout :class="$vuetify.breakpoint.mdAndUp ? 'fill-height' : 'column'">
-      <v-flex shrink>
+    <v-layout>
+      <v-navigation-drawer permanent>
         <QuestSidebar
           id="QuestSidebar"
           :location="location"
@@ -10,11 +10,11 @@
           @view-location="viewLocation($event)"
           class="fill-height"
         />
-      </v-flex>
+      </v-navigation-drawer>
       <v-flex>
         <QuestMap
           id="QuestMap"
-          ref="QuestMap"
+          ref="qMap"
           :quest-id="quest.id"
           :position="position"
           :locations="locations"
@@ -43,6 +43,7 @@ export default {
       location: null,
       region: null,
       zoom: null,
+      startingPoint: null,
       entries: null,
       items: null,
       actions: null
@@ -54,27 +55,35 @@ export default {
     const quest = this.$store.state.quests[this.questId];
     const region = this.$store.state.regions[quest.region];
     const locations = this.$store.state.locations;
+    const location = this.$store.state.locations[0];
+    const startingPoint = locations[quest.startingPoint];
 
     this.quest = quest;
     this.region = region;
     this.zoom = region.zoom;
     this.locations = locations;
-    this.location = locations[0];
-  },
-  computed: {
-    position() {
-      const regionId = this.$store.state.quests[this.questId].region;
-      return this.$store.state.regions[regionId].position;
-    }
+    this.location = location;
+    this.position = startingPoint.position;
+
+    this.gatherEntries(location.id);
   },
   methods: {
     viewLocation(id) {
-      console.log("View location for id " + id);
       const location = this.$store.state.locations[id];
-      const entries = this.$store.state.entries;
 
-      console.log("Location result:");
-      console.log(location);
+      this.gatherEntries(id);
+
+      this.location = location;
+      // this.zoom = location.zoom;
+
+      this.$refs.qMap.setCenter({
+        lat: location.position.lat,
+        lng: location.position.lng
+      });
+    },
+    gatherEntries(locationId) {
+      const location = this.$store.state.locations[locationId];
+      const entries = this.$store.state.entries;
 
       var locationEntries = [];
       var locationActions = [];
@@ -88,21 +97,8 @@ export default {
         }
       }
 
-      console.log("Location entries:");
-      console.log(locationEntries);
-
-      console.log("Location actions:");
-      console.log(locationActions);
-
-      this.location = location;
-      // this.zoom = location.zoom;
       this.entries = locationEntries;
       this.actions = locationActions;
-
-      this.$refs.QuestMap.setCenter({
-        lat: location.position.lat,
-        lng: location.position.lng
-      });
     }
   }
 };

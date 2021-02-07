@@ -6,8 +6,6 @@
       </v-flex>
       <v-flex>
         <QuestMap
-          id="QuestMap"
-          ref="QuestMap"
           :quest-id="this.questId"
           :position="position"
           :locations="locations"
@@ -32,7 +30,6 @@ export default {
     return {
       quest: null,
       locations: null,
-      location: null,
       zoom: null,
       entries: null,
       items: null,
