@@ -47,6 +47,7 @@ export default {
   },
 
   beginQuest({ state, commit }, questId) {
+    console.log("Starting Quest: " + questId)
     const quest = state.quests[questId];
     commit('SET_QUEST', quest);
   },

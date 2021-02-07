@@ -2,13 +2,13 @@
   <v-container fluid class="fill-height pa-0">
     <v-layout column fill-height>
       <v-flex class="white--text gray flex shrink darken-3">
-        <QuestHeader :quest-id="this.slug" />
+        <QuestHeader :quest-id="this.questId" />
       </v-flex>
       <v-flex>
         <QuestMap
           id="QuestMap"
           ref="QuestMap"
-          :quest-id="this.slug"
+          :quest-id="this.questId"
           :position="position"
           :locations="locations"
           :zoom="zoom"
@@ -25,8 +25,8 @@ import QuestMap from "@/components/QuestMap.vue";
 export default {
   name: "quest",
   async asyncData({ params }) {
-    const slug = params.slug; // When calling /abc the slug will be "abc"
-    return { slug };
+    const questId = params.questId; // When calling /abc the questId will be "abc"
+    return { questId };
   },
   data() {
     return {
@@ -42,7 +42,7 @@ export default {
   layout: "fluid",
   components: { QuestHeader, QuestMap },
   created() {
-    const quest = this.$store.state.quests[this.slug];
+    const quest = this.$store.state.quests[this.questId];
     const region = this.$store.state.regions[quest.region];
     const locations = this.$store.state.locations;
 
@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     position() {
-      const regionId = this.$store.state.quests[this.slug].region;
+      const regionId = this.$store.state.quests[this.questId].region;
       return this.$store.state.regions[regionId].position;
     }
   }

@@ -31,12 +31,17 @@ import QuestSidebar from "@/components/QuestSidebar.vue";
 import QuestMap from "@/components/QuestMap.vue";
 
 export default {
-  name: "playQuest",
+  name: "reader",
+  async asyncData({ params }) {
+    const questId = params.questId; // When calling /abc the questId will be "abc"
+    return { questId };
+  },
   data() {
     return {
       quest: null,
       locations: null,
       location: null,
+      region: null,
       zoom: null,
       entries: null,
       items: null,
@@ -46,7 +51,7 @@ export default {
   layout: "fluid",
   components: { QuestSidebar, QuestMap },
   created() {
-    const quest = this.$store.state.quest;
+    const quest = this.$store.state.quests[this.questId];
     const region = this.$store.state.regions[quest.region];
     const locations = this.$store.state.locations;
 
@@ -54,10 +59,11 @@ export default {
     this.region = region;
     this.zoom = region.zoom;
     this.locations = locations;
+    this.location = locations[0];
   },
   computed: {
     position() {
-      const regionId = quest.region;
+      const regionId = this.$store.state.quests[this.questId].region;
       return this.$store.state.regions[regionId].position;
     }
   },

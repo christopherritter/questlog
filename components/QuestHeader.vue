@@ -13,7 +13,7 @@
           by {{ quest.author }}
         </h3>
         <v-btn color="primary" class="mr-2" disabled>Play Quest</v-btn>
-        <v-btn outlined nuxt :to="'/quest/reader'">Read Story</v-btn>
+        <v-btn outlined nuxt :to="'/quest/' + quest.id + '/reader'">Read Story</v-btn>
       </v-col>
       <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down">
         <v-img
@@ -35,6 +35,13 @@ export default {
       return this.$store.state.quests[this.questId];
     }
   },
+  methods: {
+    readQuest(questId) {
+      console.log("Read Quest " + questId);
+      this.$store.dispatch('beginQuest', questId);
+      this.$router.push('/quest/reader');
+    }
+  }
 };
 </script>
 
