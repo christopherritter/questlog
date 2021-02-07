@@ -25,7 +25,7 @@
                 ref="QuestMap"
                 :quest-id="this.slug"
                 :position="position"
-                
+                :locations="locations"
                 :zoom="zoom"
                 @view-location="viewLocation($event)"
               />
@@ -87,10 +87,12 @@ export default {
   created() {
     const quest = this.$store.state.quests[this.slug];
     const region = this.$store.state.regions[quest.region];
+    const locations = this.$store.state.locations;
 
     this.quest = quest;
     this.region = region;
     this.zoom = region.zoom;
+    this.locations = locations;
   },
   computed: {
     position() {

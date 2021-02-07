@@ -8,7 +8,13 @@
       fullscreenControl: false,
       mapTypeControl: false,
       streetViewControl: false,
-      styles: mapStyle
+      styles: mapStyle,
+      disableDefaultUI: true,
+      gestureHandling: 'none',
+      keyboardShortcuts: false,
+      clickableIcons: false,
+      draggableCursor: 'default',// this is for cursor type
+      draggingCursor: 'default', // this is for dragging cursor type
     }"
     :zoom="zoom"
     class="fill-height"
@@ -182,12 +188,7 @@ export default {
       ]
     };
   },
-  props: ["questId", "position", "location", "zoom"],
-  computed: {
-    locations() {
-      return this.$store.state.locations;
-    }
-  },
+  props: ["questId", "position", "locations", "location", "zoom"],
    methods: {
     setCenter(position) {
       this.$refs.gMap.map.setCenter(position);
