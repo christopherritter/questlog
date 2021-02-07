@@ -10,6 +10,7 @@
           :position="position"
           :locations="locations"
           :zoom="zoom"
+          :mapOptions="mapOptions"
         />
       </v-flex>
     </v-layout>
@@ -30,10 +31,19 @@ export default {
     return {
       quest: null,
       locations: null,
+      location: null,
       zoom: null,
       entries: null,
       items: null,
-      actions: null
+      actions: null,
+      mapOptions: {
+        disableDefaultUI: true,
+        gestureHandling: "none",
+        keyboardShortcuts: false,
+        clickableIcons: false,
+        draggableCursor: "default", // this is for cursor type
+        draggingCursor: "default" // this is for dragging cursor type
+      }
     };
   },
   layout: "fluid",

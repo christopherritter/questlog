@@ -4,18 +4,7 @@
     language="en"
     :cluster="{ options: { styles: clusterStyle } }"
     :center="{ lat: position.lat, lng: position.lng }"
-    :options="{
-      fullscreenControl: false,
-      mapTypeControl: false,
-      streetViewControl: false,
-      styles: mapStyle,
-      disableDefaultUI: true,
-      gestureHandling: 'none',
-      keyboardShortcuts: false,
-      clickableIcons: false,
-      draggableCursor: 'default',// this is for cursor type
-      draggingCursor: 'default', // this is for dragging cursor type
-    }"
+    :options="options"
     :zoom="zoom"
     class="fill-height"
     height="100%"
@@ -31,8 +20,8 @@
         }
       }"
     >
-    <!-- This was removed from the GMapMarker above: -->
-    <!-- @click="$emit('view-location', location.id)" -->
+      <!-- This was removed from the GMapMarker above: -->
+      <!-- @click="$emit('view-location', location.id)" -->
 
       <!-- <GMapInfoWindow :options="{ maxWidth: 200 }">
         <code class="grey--text text--darken-4">
@@ -48,6 +37,18 @@ export default {
   data() {
     return {
       currentLocation: {},
+      options: {
+        fullscreenControl: false,
+        mapTypeControl: false,
+        streetViewControl: false,
+        styles: this.mapStyle,
+        disableDefaultUI: this.mapOptions || false,
+        gestureHandling: this.mapOptions || "cooperative",
+        keyboardShortcuts: this.mapOptions || true,
+        clickableIcons: this.mapOptions || true,
+        draggableCursor: this.mapOptions || "grab",
+        draggingCursor: this.mapOptions || "grabbing"
+      },
       mapStyle: [
         {
           featureType: "water",
@@ -190,12 +191,12 @@ export default {
       ]
     };
   },
-  props: ["questId", "position", "locations", "location", "zoom"],
-   methods: {
+  props: ["questId", "position", "locations", "location", "zoom", "mapOptions"],
+  methods: {
     setCenter(position) {
       this.$refs.gMap.map.setCenter(position);
-    },
-   }
+    }
+  }
 };
 </script>
 
