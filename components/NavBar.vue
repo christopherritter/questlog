@@ -65,7 +65,7 @@ export default {
       ]
     };
   },
-  props: ["mode", "quest"],
+  props: ["quest"],
   methods: {
     async logout() {
       try {

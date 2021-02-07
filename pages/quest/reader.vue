@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="fill-height pa-0">
     <v-layout :class="$vuetify.breakpoint.mdAndUp ? 'fill-height' : 'column'">
-      <v-flex v-if="mode" shrink>
+      <v-flex shrink>
         <QuestSidebar
           id="QuestSidebar"
           :location="location"
@@ -58,11 +58,7 @@ export default {
   computed: {
     position() {
       const regionId = quest.region;
-      // if (!this.mode) {
       return this.$store.state.regions[regionId].position;
-      // } else {
-      //   return this.location.position;
-      // }
     }
   },
   methods: {

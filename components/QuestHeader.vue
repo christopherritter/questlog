@@ -13,7 +13,7 @@
           by {{ quest.author }}
         </h3>
         <v-btn color="primary" class="mr-2" disabled>Play Quest</v-btn>
-        <v-btn outlined @click="$emit('read-quest', quest.id);">Read Story</v-btn>
+        <v-btn outlined nuxt :to="'/quest/reader'">Read Story</v-btn>
       </v-col>
       <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down">
         <v-img
