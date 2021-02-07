@@ -25,6 +25,7 @@
                 ref="QuestMap"
                 :quest-id="this.slug"
                 :position="position"
+                
                 :zoom="zoom"
                 @view-location="viewLocation($event)"
               />
