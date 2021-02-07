@@ -24,7 +24,7 @@
           anchor: { x: 25, y: 25 }
         }
       }"
-      @click="setCenter(location.position)"
+      @click="$emit('view-location', location.id)"
     >
       <!-- <GMapInfoWindow :options="{ maxWidth: 200 }">
         <code class="grey--text text--darken-4">
