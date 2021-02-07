@@ -1,10 +1,5 @@
 <template>
-  <v-card
-    :width="$vuetify.breakpoint.mdAndUp ? 450 : '100%'"
-    light
-    tile
-    elevation="20"
-  >
+  <v-sheet>
     <v-img
       v-if="location.image"
       height="240"
@@ -32,7 +27,7 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-  </v-card>
+  </v-sheet>
 </template>
 
 <script>

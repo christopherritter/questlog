@@ -1,7 +1,11 @@
 <template>
   <v-container fluid class="fill-height pa-0">
     <v-layout>
-      <v-navigation-drawer permanent>
+      <v-navigation-drawer
+        class="fill-height" light
+        :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'"
+        permanent
+      >
         <QuestSidebar
           id="QuestSidebar"
           :location="location"
