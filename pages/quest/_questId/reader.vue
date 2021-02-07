@@ -23,6 +23,7 @@
           :position="position"
           :locations="locations"
           :zoom="zoom"
+          :mapOptions="mapOptions"
           @view-location="viewLocation($event)"
         />
       </v-flex>
@@ -50,7 +51,8 @@ export default {
       startingPoint: null,
       entries: null,
       items: null,
-      actions: null
+      actions: null,
+      mapOptions: {},
     };
   },
   layout: "fluid",

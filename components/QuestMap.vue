@@ -19,6 +19,7 @@
           anchor: { x: 25, y: 25 }
         }
       }"
+      @click="$emit('view-location', location.id)"
     >
       <!-- This was removed from the GMapMarker above: -->
       <!-- @click="$emit('view-location', location.id)" -->
@@ -172,12 +173,12 @@ export default {
             ]
           }
         ],
-        disableDefaultUI: this.mapOptions || false,
-        gestureHandling: this.mapOptions || "cooperative",
-        keyboardShortcuts: this.mapOptions || true,
-        clickableIcons: this.mapOptions || true,
-        draggableCursor: this.mapOptions || "grab",
-        draggingCursor: this.mapOptions || "grabbing"
+        disableDefaultUI: this.mapOptions.disableDefaultUI || false,
+        gestureHandling: this.mapOptions.gestureHandling || "cooperative",
+        keyboardShortcuts: this.mapOptions.keyboardShortcuts || true,
+        clickableIcons: this.mapOptions.clickableIcons || true,
+        draggableCursor: this.mapOptions.draggableCursor || "grab",
+        draggingCursor: this.mapOptions.draggingCursor || "grabbing"
       },
       clusterStyle: [
         {
