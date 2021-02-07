@@ -41,16 +41,7 @@ export default {
         fullscreenControl: false,
         mapTypeControl: false,
         streetViewControl: false,
-        styles: this.mapStyle,
-        disableDefaultUI: this.mapOptions || false,
-        gestureHandling: this.mapOptions || "cooperative",
-        keyboardShortcuts: this.mapOptions || true,
-        clickableIcons: this.mapOptions || true,
-        draggableCursor: this.mapOptions || "grab",
-        draggingCursor: this.mapOptions || "grabbing"
-      },
-      mapStyle: [
-        {
+        styles: [{
           featureType: "water",
           stylers: [
             {
@@ -179,7 +170,14 @@ export default {
             }
           ]
         }
-      ],
+        ],
+        disableDefaultUI: this.mapOptions || false,
+        gestureHandling: this.mapOptions || "cooperative",
+        keyboardShortcuts: this.mapOptions || true,
+        clickableIcons: this.mapOptions || true,
+        draggableCursor: this.mapOptions || "grab",
+        draggingCursor: this.mapOptions || "grabbing"
+      },
       clusterStyle: [
         {
           url:
