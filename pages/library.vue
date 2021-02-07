@@ -1,5 +1,5 @@
 <template>
-  <h1>Quests</h1>
+  <h1>Library</h1>
 </template>
 
 <script>

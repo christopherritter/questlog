@@ -12,17 +12,17 @@
                 </h5>
               </div>
               <h1 class="quest-title display-3 mb-3">
-                <nuxt-link class="quest-title-link" to="/quests/0">
+                <nuxt-link class="quest-title-link" to="/quest/0">
                   {{ featuredQuest.title }}
                 </nuxt-link>
               </h1>
               <h3 class="subtitle-1 mb-8 mb-lg-12">
                 by {{ featuredQuest.author }}
               </h3>
-              <v-btn nuxt color="primary" to="/quests/0">More Info</v-btn>
+              <v-btn nuxt color="primary" to="/quest/0">View Quest</v-btn>
             </v-col>
             <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down">
-              <nuxt-link to="/quests/0">
+              <nuxt-link to="/quest/0">
                 <v-img
                   class="mt-12"
                   :src="require('~/assets/img/' + featuredQuest.image)"
@@ -47,7 +47,7 @@
               :key="quest.id"
             >
               <v-card>
-                <nuxt-link :to="'/quests/' + quest.id">
+                <nuxt-link :to="'/quest/' + quest.id">
                   <v-img
                     height="250"
                     :src="require('~/assets/img/' + quest.image)"
@@ -57,7 +57,7 @@
                 <v-card-title class="quest-title"
                   ><nuxt-link
                     class="quest-title-link"
-                    :to="'/quests/' + quest.id"
+                    :to="'/quest/' + quest.id"
                     >{{ quest.title }}</nuxt-link
                   ></v-card-title
                 >
