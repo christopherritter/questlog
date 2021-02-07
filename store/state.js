@@ -361,7 +361,7 @@ export default () => ({
         {
           id: 0,
           text: 'Turn into the driveway.',
-          icon: 'mdi-image',
+          icon: 'mdi-road-variant',
           forward: 1, // Event Parking Lot
           back: null,
         },
@@ -378,7 +378,7 @@ export default () => ({
         {
           id: 0,
           text: 'Continue up the driveway.',
-          icon: 'mdi-image',
+          icon: 'mdi-road-variant',
           forward: 2, // Parking Lot
         },
       ],
@@ -400,7 +400,7 @@ export default () => ({
         {
           id: 0,
           text: 'Drive around the loop.',
-          icon: 'mdi-image',
+          icon: 'mdi-road-variant',
           forward: 3, // Information
         },
       ],
@@ -421,13 +421,13 @@ export default () => ({
         {
           id: 0,
           text: 'Head towards the Century House.',
-          icon: 'mdi-image',
+          icon: 'mdi-home',
           forward: 4, // Century House
         },
         {
           id: 1,
           text: 'Continue to the Bank Barn.',
-          icon: 'mdi-image',
+          icon: 'mdi-barn',
           forward: 6, // Bank Barn
         },
       ],
@@ -443,7 +443,7 @@ export default () => ({
         {
           id: 0,
           text: 'Walk to the Smoke House.',
-          icon: 'mdi-image',
+          icon: 'mdi-smog',
           forward: 5, // Smokehouse
         },
       ],
@@ -459,7 +459,7 @@ export default () => ({
         {
           id: 0,
           text: 'Walk towards the Play House.',
-          icon: 'mdi-image',
+          icon: 'mdi-tractor-variant',
           forward: 9, // Play House & Tractor
         },
       ],
@@ -475,7 +475,7 @@ export default () => ({
         {
           id: 0,
           text: 'Head towards the Garden.',
-          icon: 'mdi-image',
+          icon: 'mdi-corn',
           forward: 8, // Garden
         },
       ],
@@ -491,7 +491,7 @@ export default () => ({
         {
           id: 0,
           text: 'Head towards the Bonfire Pit.',
-          icon: 'mdi-image',
+          icon: 'mdi-fire',
           forward: 11, // Bonfire Pit
         },
       ],
@@ -507,7 +507,7 @@ export default () => ({
         {
           id: 0,
           text: 'Head towards the Tobacco Barn.',
-          icon: 'mdi-image',
+          icon: 'mdi-barn',
           forward: 7, // Tobacco Barn
         },
       ],
@@ -523,7 +523,7 @@ export default () => ({
         {
           id: 0,
           text: 'Walk towards the Century House.',
-          icon: 'mdi-image',
+          icon: 'mdi-home',
           forward: 4, // Century House
         },
       ],
@@ -539,7 +539,7 @@ export default () => ({
         {
           id: 0,
           text: 'Walk towards the Play House.',
-          icon: 'mdi-image',
+          icon: 'mdi-tractor-variant',
           forward: 9, // Play House & Tractor
         },
       ],
@@ -555,7 +555,7 @@ export default () => ({
         {
           id: 0,
           text: 'Walk into the Pavilion.',
-          icon: 'mdi-image',
+          icon: 'mdi-home-outline',
           forward: 10, // Pavilion
         },
       ],
