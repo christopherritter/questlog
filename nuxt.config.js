@@ -10,24 +10,87 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - questlog',
-    title: 'questlog',
+    title: 'QuestLog Location-Based Adventures',
     htmlAttrs: {
       lang: 'en'
     },
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      {
+        charset: 'utf-8'
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'QuestLog is a new project by Christopher Ritter which brings Choose-Your-Own-Adventures into the real world. Stay tuned to this channel for more updates!'
+      },
+      {
+        hid: "og:type",
+        property: "og:type",
+        content: "website"
+      },
+      {
+        hid: "og:url",
+        property: "og:url",
+        content: "https://questlog-nine.vercel.app/"
+      },
+      {
+        hid: "og:title",
+        property: "og:title",
+        content: "QuestLog Location-Based Adventures"
+      },
+      {
+        hid: "og:description",
+        property: "og:description",
+        content: "QuestLog is a new project by Christopher Ritter which brings Choose-Your-Own-Adventures into the real world. Stay tuned to this channel for more updates!"
+      },
+      {
+        hid: "og:image",
+        property: "og:image",
+        content: "~/assets/img/questlog-home.png"
+      },
+      {
+        hid: "twitter:card",
+        property: "twitter:card",
+        content: "summary_large_image"
+      },
+      {
+        hid: "twitter:url",
+        property: "twitter:url",
+        content: "https://questlog-nine.vercel.app/"
+      },
+      {
+        hid: "twitter:title",
+        property: "twitter:title",
+        content: "QuestLog Location-Based Adventures"
+      },
+      {
+        hid: "twitter:description",
+        property: "twitter:description",
+        content: "QuestLog is a new project by Christopher Ritter which brings Choose-Your-Own-Adventures into the real world. Stay tuned to this channel for more updates!"
+      },
+      {
+        hid: "twitter:image",
+        property: "twitter:image",
+        content: "~/assets/img/questlog-home.png"
+      },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: '/favicon.ico'
+    }]
   },
 
   hooks: {
     generate: {
       async before(generator) {
-        const { default:firebase } = await import('firebase/app');
+        const {
+          default: firebase
+        } = await import('firebase/app');
 
         await import('firebase/firestore');
 
@@ -46,12 +109,10 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-  ],
+  css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-  ],
+  plugins: [],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -112,6 +173,5 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
+  build: {}
 }
