@@ -50,7 +50,7 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: "~/assets/img/questlog-home.png"
+        content: "/questlog-home.png"
       },
       {
         hid: "twitter:card",
@@ -75,7 +75,7 @@ export default {
       {
         hid: "twitter:image",
         property: "twitter:image",
-        content: "~/assets/img/questlog-home.png"
+        content: "/questlog-home.png"
       },
     ],
     link: [{
