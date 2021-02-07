@@ -357,15 +357,13 @@ export default () => ({
       title: 'Welcome to the Learning Tree Farm!',
       location: 0, // Main Entrance
       text: 'The large sign on the side of the road says, "Welcome to the Learning Tree Farm."',
-      actions: [
-        {
-          id: 0,
-          text: 'Turn into the driveway.',
-          icon: 'mdi-road-variant',
-          forward: 1, // Event Parking Lot
-          back: null,
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Turn into the driveway.',
+        icon: 'mdi-road-variant',
+        forward: 1, // Event Parking Lot
+        back: null,
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -374,14 +372,12 @@ export default () => ({
       title: 'Overflow parking for large events.',
       location: 1, // Event Parking Lot
       text: 'A small field on the side of the driveway that is intended for large event parking.',
-      actions: [
-        {
-          id: 0,
-          text: 'Continue up the driveway.',
-          icon: 'mdi-road-variant',
-          forward: 2, // Parking Lot
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Continue up the driveway.',
+        icon: 'mdi-road-variant',
+        forward: 2, // Parking Lot
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -439,14 +435,12 @@ export default () => ({
       title: 'Century House',
       location: 4, // Century House
       text: 'Step into the original farmhouse, built in 1829, and into the lives of early Ohio settlers. The Century House is a pioneer museum to be explored when farm staff is on site!',
-      actions: [
-        {
-          id: 0,
-          text: 'Walk to the Smoke House.',
-          icon: 'mdi-smog',
-          forward: 5, // Smokehouse
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Walk to the Smoke House.',
+        icon: 'mdi-smog',
+        forward: 5, // Smokehouse
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -455,14 +449,12 @@ export default () => ({
       title: 'Smoke House',
       location: 5, // Smokehouse
       text: 'The Smoke House was one of the original buildings on site. It currently is closed for the season. ',
-      actions: [
-        {
-          id: 0,
-          text: 'Walk towards the Play House.',
-          icon: 'mdi-tractor-variant',
-          forward: 9, // Play House & Tractor
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Walk towards the Play House.',
+        icon: 'mdi-tractor-variant',
+        forward: 9, // Play House & Tractor
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -471,14 +463,12 @@ export default () => ({
       title: 'Bank Barn',
       location: 6, // Bank Barn
       text: 'The Bank Barn is an old wooden barn built atop of a 5 ft stone base. A green door on the side leads to the main interior of the barn.',
-      actions: [
-        {
-          id: 0,
-          text: 'Head towards the Garden.',
-          icon: 'mdi-corn',
-          forward: 8, // Garden
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Head towards the Garden.',
+        icon: 'mdi-corn',
+        forward: 8, // Garden
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -487,14 +477,12 @@ export default () => ({
       title: 'Tobacco Barn',
       location: 7, // Tobacco Barn
       text: 'The Tobacco Barn is an elongated barn that houses the smaller farm animals including chickens and other baby animals. It also serves as a nursing area for any animals that require special attention.',
-      actions: [
-        {
-          id: 0,
-          text: 'Head towards the Bonfire Pit.',
-          icon: 'mdi-fire',
-          forward: 11, // Bonfire Pit
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Head towards the Bonfire Pit.',
+        icon: 'mdi-fire',
+        forward: 11, // Bonfire Pit
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -503,14 +491,12 @@ export default () => ({
       title: 'The Garden',
       location: 8, // Garden
       text: 'The Garden is where we grow most of the food we need to support the animals who live on the farm. It is located next to the Tobacco Barn, which has numerous rain spouts on its roof that lead to a large white container that is used to gather rain water.',
-      actions: [
-        {
-          id: 0,
-          text: 'Head towards the Tobacco Barn.',
-          icon: 'mdi-barn',
-          forward: 7, // Tobacco Barn
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Head towards the Tobacco Barn.',
+        icon: 'mdi-barn',
+        forward: 7, // Tobacco Barn
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -519,14 +505,12 @@ export default () => ({
       title: 'Play House & Tractor',
       location: 9, // Play House & Tractor
       text: 'This area contains a varity of interactive entertainment for the younger visitors. The main feature of the play area is a tractor that is safe enough to climb on. Towards the back is an old Play House with enough room to allow your imagines to run wild.',
-      actions: [
-        {
-          id: 0,
-          text: 'Walk towards the Century House.',
-          icon: 'mdi-home',
-          forward: 4, // Century House
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Walk towards the Century House.',
+        icon: 'mdi-home',
+        forward: 4, // Century House
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -535,14 +519,12 @@ export default () => ({
       title: 'The Pavilion',
       location: 10, // Pavilion
       text: 'The Pavilion is a large open wooden structure built on top of a concrete base. It largely serves as a gathering spot for our guests to begin their many adventures on the farm.',
-      actions: [
-        {
-          id: 0,
-          text: 'Walk towards the Play House.',
-          icon: 'mdi-tractor-variant',
-          forward: 9, // Play House & Tractor
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Walk towards the Play House.',
+        icon: 'mdi-tractor-variant',
+        forward: 9, // Play House & Tractor
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -551,14 +533,12 @@ export default () => ({
       title: 'Bonfire Pit',
       location: 11, // Bonfire Pit
       text: 'A large circle of stones surrounds the charred circle in the grass that serves as the bon fire pit on cold nights, or whenever a bon fire is in order.',
-      actions: [
-        {
-          id: 0,
-          text: 'Walk into the Pavilion.',
-          icon: 'mdi-home-outline',
-          forward: 10, // Pavilion
-        },
-      ],
+      actions: [{
+        id: 0,
+        text: 'Walk into the Pavilion.',
+        icon: 'mdi-home-outline',
+        forward: 10, // Pavilion
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -567,7 +547,12 @@ export default () => ({
       title: 'Trailhead to Preschool',
       location: 12, // Trailhead to Preschool
       text: 'The trailhead leads through the grass and trees towards our Nature Preschool.',
-      actions: [],
+      actions: [{
+        id: 0,
+        text: 'Walk towards the Preschool.',
+        icon: 'mdi-school',
+        forward: 13, // Nature Preschool
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -576,7 +561,12 @@ export default () => ({
       title: 'Nature Preschool',
       location: 13, // Nature Preschool
       text: 'A small house that was somewhoat recently in comparison to the other buildings on the farm. It currently serves as a school house for day care students.',
-      actions: [],
+      actions: [{
+        id: 0,
+        text: 'Head towards the Enrance.',
+        icon: 'mdi-road-variant',
+        forward: 14, // Preschool Entrance
+      },],
       requirements: [],
       expiration: []
     },
@@ -585,7 +575,12 @@ export default () => ({
       title: 'Preschool Entrance',
       location: 14, // Preschool Entrance
       text: 'The thick of trees on the side of the road clears to reveal a small sign that says "Preschool Entrance." A driveway just past the sign leads to a small house with a fenced in playground.',
-      actions: [],
+      actions: [{
+        id: 0,
+        text: 'Drive back to the Main Entrance.',
+        icon: 'mdi-road-variant',
+        forward: 0, // Main Entrance
+      }, ],
       requirements: [],
       expiration: []
     },
@@ -594,7 +589,12 @@ export default () => ({
       title: 'Trailhead to Tire Swing & Observation Deck',
       location: 15, // Trailhead to Tire Swing & Observation Deck
       text: 'On the side of the trail you see a sign that reads, "Trailhead to Tire Swing & Observation Deck." A little further up the trail you see wooden planks laid into the ground to protect your shoes from getting muddy.',
-      actions: [],
+      actions: [{
+        id: 0,
+        text: 'Head towards the Bonfire Pit.',
+        icon: 'mdi-fire',
+        forward: 11, // Bonfire Pit
+      }, ],
       requirements: [],
       expiration: []
     }
