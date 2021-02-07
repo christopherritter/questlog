@@ -22,7 +22,6 @@ export default {
       categories: quest.categories,
       // favorite: quest.favorite,
       featured: quest.featured,
-      // mode: quest.mode,
       region: quest.region,
       objectives: quest.objectives,
       locations: quest.locations,
