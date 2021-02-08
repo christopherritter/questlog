@@ -4,7 +4,7 @@
       <v-navigation-drawer
         class="fill-height" light
         :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'"
-        permanent
+        :permanent="permanent"
       >
         <QuestSidebar
           id="QuestSidebar"
@@ -17,6 +17,7 @@
       </v-navigation-drawer>
       <v-flex>
         <QuestMap
+          :style="{ width: mapWidth }"
           id="QuestMap"
           ref="qMap"
           :quest-id="quest.id"
@@ -25,6 +26,7 @@
           :zoom="zoom"
           :mapOptions="mapOptions"
           @view-location="viewLocation($event)"
+          @clear-location="permanent = false"
         />
       </v-flex>
     </v-layout>
@@ -53,6 +55,7 @@ export default {
       items: null,
       actions: null,
       mapOptions: {},
+      permanent: true,
     };
   },
   layout: "fluid",
@@ -73,6 +76,15 @@ export default {
 
     this.gatherEntries(location.id);
   },
+  computed: {
+    mapWidth() {
+      if (this.permanent) {
+        return '100%'
+      } else {
+        return '100vw'
+      }
+    }
+  },
   methods: {
     viewLocation(id) {
       const location = this.$store.state.locations[id];
@@ -81,6 +93,8 @@ export default {
 
       this.location = location;
       // this.zoom = location.zoom;
+
+      this.permanent = true;
 
       this.$refs.qMap.setCenter({
         lat: location.position.lat,
@@ -105,7 +119,7 @@ export default {
 
       this.entries = locationEntries;
       this.actions = locationActions;
-    }
+    },
   }
 };
 </script>

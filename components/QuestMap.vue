@@ -2,12 +2,12 @@
   <GMap
     ref="gMap"
     language="en"
+    class="fill-height"
     :cluster="{ options: { styles: clusterStyle } }"
     :center="{ lat: position.lat, lng: position.lng }"
     :options="options"
     :zoom="zoom"
-    class="fill-height"
-    height="100%"
+    @click="$emit('clear-location')"
   >
     <GMapMarker
       v-for="location in locations"
@@ -195,7 +195,7 @@ export default {
   methods: {
     setCenter(position) {
       this.$refs.gMap.map.setCenter(position);
-    }
+    },
   }
 };
 </script>
@@ -203,7 +203,6 @@ export default {
 <style>
 #map {
   height: 100%;
-  width: 100%;
 }
 .GMap__Wrapper {
   height: 100%;
