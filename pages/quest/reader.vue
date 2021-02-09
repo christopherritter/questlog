@@ -19,7 +19,7 @@
           v-if="location"
         />
       </v-navigation-drawer>
-      <ReadQuestDialog :dialog="!quest" />
+      <QuestDialog :dialog="dialog" :quest="quest" :objectives="objectives" />
       <v-flex>
         <QuestMap
           :style="{ width: mapWidth }"
@@ -40,7 +40,7 @@
 <script>
 import QuestSidebar from "@/components/QuestSidebar.vue";
 import QuestMap from "@/components/QuestMap.vue";
-import ReadQuestDialog from "@/components/ReadQuestDialog.vue";
+import QuestDialog from "@/components/QuestDialog.vue";
 
 export default {
   name: "questReader",
@@ -61,7 +61,8 @@ export default {
       items: null,
       actions: null,
       startingPoint: null,
-      mapOptions: {}
+      mapOptions: {},
+      dialog: false,
     };
   },
   created() {
@@ -81,9 +82,11 @@ export default {
 
       this.gatherObjectives(quest.id);
       this.gatherEntries(location.id);
+    } else {
+      this.dialog = true;
     }
   },
-  components: { QuestSidebar, QuestMap, ReadQuestDialog },
+  components: { QuestSidebar, QuestMap, QuestDialog },
   computed: {
     mapWidth() {
       if (!this.quest) {
@@ -109,6 +112,9 @@ export default {
       }
 
       return entriesObjectives;
+    },
+    questComplete() {
+      return false;
     }
   },
   methods: {

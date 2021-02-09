@@ -33,7 +33,7 @@ export default {
       widgets: false
     };
   },
-  props: ["dialog"]
+  props: ["dialog", "quest", "objectives"]
 };
 </script>
 

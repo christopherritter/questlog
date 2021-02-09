@@ -533,7 +533,7 @@ export default () => ({
       }, ],
       requirements: [],
       expiration: [],
-      objectives: null,
+      objectives: [2],
     },
     {
       id: 11,
