@@ -1,10 +1,10 @@
 <template>
-  <h1>Editor</h1>
+  <h1>Quest Editor</h1>
 </template>
 
 <script>
   export default {
-    name: 'editor',
+    name: 'questEditor',
     middleware: 'authenticated'
   }
 </script>

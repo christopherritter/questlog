@@ -1,9 +1,9 @@
 <template>
-  <h1>Library</h1>
+  <h1>Quest Library</h1>
 </template>
 
 <script>
   export default {
-    name: 'quests',
+    name: 'questLibrary',
   }
 </script>

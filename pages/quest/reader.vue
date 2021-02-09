@@ -6,7 +6,7 @@
         class="fill-height"
         light
         :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'"
-        :permanent="location"
+        :permanent="location ? true : false"
       >
         <QuestSidebar
           id="QuestSidebar"
@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       quest: null,
+      objectives: null,
       position: {
         lat: 39.828175,
         lng: -98.5795
@@ -77,6 +78,7 @@ export default {
       this.location = location;
       this.position = startingPoint.position;
 
+      this.gatherObjectives(quest.id);
       this.gatherEntries(location.id);
     }
   },
@@ -105,6 +107,18 @@ export default {
         lat: location.position.lat,
         lng: location.position.lng
       });
+    },
+    gatherObjectives(questId) {
+      const quest = this.$store.state.quests[questId];
+      const objectives = this.$store.state.objectives;
+
+      var questObjectives = [];
+
+      for (var o = 0; o < quest.objectives.length; o++) {
+        questObjectives.push(objectives[quest.objectives[o]]);
+      }
+
+      this.objectives = questObjectives;
     },
     gatherEntries(locationId) {
       const location = this.$store.state.locations[locationId];
