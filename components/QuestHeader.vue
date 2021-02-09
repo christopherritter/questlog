@@ -37,7 +37,6 @@ export default {
   },
   methods: {
     readQuest(questId) {
-      console.log("Read Quest " + questId);
       this.$store.dispatch('beginQuest', questId);
       this.$router.push('/quest/reader');
     }

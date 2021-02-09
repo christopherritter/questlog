@@ -13,6 +13,7 @@
           :location="location"
           :entries="entries"
           :actions="actions"
+          :objectives="entriesObjectives"
           @view-location="viewLocation($event)"
           class="fill-height"
           v-if="location"
@@ -29,7 +30,7 @@
           :zoom="zoom"
           :mapOptions="mapOptions"
           @view-location="viewLocation($event)"
-          @clear-location="location = null"
+          @clear-location="clearLocation()"
         />
       </v-flex>
     </v-layout>
@@ -60,7 +61,7 @@ export default {
       items: null,
       actions: null,
       startingPoint: null,
-      mapOptions: {},
+      mapOptions: {}
     };
   },
   created() {
@@ -91,6 +92,21 @@ export default {
         return "100%";
       } else {
         return "100vw";
+      }
+    },
+    entriesObjectives() {
+      if (!this.entries) {
+        return [];
+      } else {
+        var entriesObjectives = [];
+        for (let e = 0; e < this.entries.length; e++) {
+          if (this.entries[e].objectives) {
+            for (let o = 0; o < this.entries[e].objectives.length; o++) {
+              entriesObjectives.push(this.objectives[o]);
+            }
+          }
+        }
+        return entriesObjectives;
       }
     }
   },
@@ -138,6 +154,12 @@ export default {
 
       this.entries = locationEntries;
       this.actions = locationActions;
+    },
+    clearLocation() {
+      this.location = null;
+      this.entries = null;
+      this.actions = null;
+      this.items = null;
     }
   }
 };
