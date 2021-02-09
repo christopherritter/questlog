@@ -361,7 +361,8 @@ export default () => ({
         back: null,
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 1,
@@ -375,7 +376,8 @@ export default () => ({
         forward: 2, // Parking Lot
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 2,
@@ -397,7 +399,8 @@ export default () => ({
         },
       ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 3,
@@ -424,7 +427,8 @@ export default () => ({
         },
       ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 4,
@@ -438,7 +442,8 @@ export default () => ({
         forward: 5, // Smokehouse
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: [0],
     },
     {
       id: 5,
@@ -452,7 +457,8 @@ export default () => ({
         forward: 9, // Play House & Tractor
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 6,
@@ -466,7 +472,8 @@ export default () => ({
         forward: 8, // Garden
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: [5],
     },
     {
       id: 7,
@@ -480,7 +487,8 @@ export default () => ({
         forward: 11, // Bonfire Pit
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: [3],
     },
     {
       id: 8,
@@ -494,7 +502,8 @@ export default () => ({
         forward: 7, // Tobacco Barn
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: [4],
     },
     {
       id: 9,
@@ -508,7 +517,8 @@ export default () => ({
         forward: 4, // Century House
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: [1],
     },
     {
       id: 10,
@@ -522,7 +532,8 @@ export default () => ({
         forward: 9, // Play House & Tractor
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 11,
@@ -536,7 +547,8 @@ export default () => ({
         forward: 10, // Pavilion
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 12,
@@ -550,7 +562,8 @@ export default () => ({
         forward: 13, // Nature Preschool
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 13,
@@ -564,7 +577,8 @@ export default () => ({
         forward: 14, // Preschool Entrance
       },],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 14,
@@ -578,7 +592,8 @@ export default () => ({
         forward: 0, // Main Entrance
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     },
     {
       id: 15,
@@ -592,7 +607,8 @@ export default () => ({
         forward: 11, // Bonfire Pit
       }, ],
       requirements: [],
-      expiration: []
+      expiration: [],
+      objectives: null,
     }
   ],
   items: [{
