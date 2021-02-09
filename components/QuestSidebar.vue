@@ -12,7 +12,14 @@
 
     <v-layout v-if="objectives.length > 0">
       <v-flex class="px-4">
-        <v-chip class="mr-2 mb-2" color="green" outlined v-for="objective in objectives" :key="objective.id">
+        <v-chip
+          class="mr-2 mb-2"
+          color="green"
+          outlined
+          v-for="objective in objectives"
+          :key="objective.id"
+          @click="$emit('view-objective', objective.id)"
+        >
           <v-icon class="mr-1">mdi-check-bold</v-icon> {{ objective.name }}
         </v-chip>
       </v-flex>

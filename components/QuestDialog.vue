@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-model="dialog" persistent max-width="450">
-    <v-card>
+  <v-dialog v-model="dialog" :persistent="!quest" max-width="450">
+    <v-card v-if="!quest">
       <v-card-title class="headline">
         Looking for a quest to read?
       </v-card-title>
@@ -21,6 +21,11 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <v-card v-else>
+      <v-card-title>{{ quest.name }}</v-card-title>
+      <v-card-subtitles>Objectives</v-card-subtitles>
+      <v-card-text v-for="objective in objectives" :key="objective.id">{{ objectives.name }}</v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 
@@ -36,5 +41,3 @@ export default {
   props: ["dialog", "quest", "objectives"]
 };
 </script>
-
-<style></style>

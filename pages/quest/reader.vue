@@ -9,22 +9,23 @@
         :permanent="location ? true : false"
       >
         <QuestSidebar
+          v-if="location"
           id="QuestSidebar"
+          class="fill-height"
           :location="location"
           :entries="entries"
           :actions="actions"
           :objectives="entriesObjectives"
           @view-location="viewLocation($event)"
-          class="fill-height"
-          v-if="location"
+          @view-objective="dialog = true"
         />
       </v-navigation-drawer>
       <QuestDialog :dialog="dialog" :quest="quest" :objectives="objectives" />
       <v-flex>
         <QuestMap
-          :style="{ width: mapWidth }"
           id="QuestMap"
           ref="qMap"
+          :style="{ width: mapWidth }"
           :position="position"
           :locations="locations"
           :zoom="zoom"
