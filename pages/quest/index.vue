@@ -5,7 +5,7 @@
 <script>
 export default {
   mounted() {
-    window.onNuxtReady(() => { window.$nuxt.$router.push('/library') });
+    window.onNuxtReady(() => { window.$nuxt.$router.push('/quest/library') });
   },
 }
 </script>
