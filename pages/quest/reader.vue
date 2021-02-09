@@ -95,19 +95,20 @@ export default {
       }
     },
     entriesObjectives() {
-      if (!this.entries) {
-        return [];
-      } else {
-        var entriesObjectives = [];
+      var entriesObjectives = [];
+
+      if (this.entries) {
         for (let e = 0; e < this.entries.length; e++) {
           if (this.entries[e].objectives) {
             for (let o = 0; o < this.entries[e].objectives.length; o++) {
-              entriesObjectives.push(this.objectives[o]);
+              this.objectives[this.entries[e].objectives[o]].isComplete = true;
+              entriesObjectives.push(this.objectives[this.entries[e].objectives[o]]);
             }
           }
         }
-        return entriesObjectives;
       }
+
+      return entriesObjectives;
     }
   },
   methods: {
