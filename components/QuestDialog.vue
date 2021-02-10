@@ -51,11 +51,12 @@
       </v-list>
 
       <v-card-actions>
-        <v-btn primary text @click="$emit('close-dialog')">
-          Keep Playing
-        </v-btn>
-        <v-btn color="gray" text @click="$emit('restart-quest')">
+        <v-spacer></v-spacer>
+        <v-btn color="red lighten-3" text @click="$emit('restart-quest')">
           Restart Quest
+        </v-btn>
+        <v-btn color="green darken-3" text @click="$emit('close-dialog')">
+          Keep Playing
         </v-btn>
       </v-card-actions>
     </v-card>
