@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import QuestSidebar from "@/components/QuestSidebar.vue";
 import QuestMap from "@/components/QuestMap.vue";
 import QuestDialog from "@/components/QuestDialog.vue";
@@ -49,7 +50,7 @@ export default {
   data() {
     return {
       quest: null,
-      objectives: null,
+      // objectives: null,
       position: {
         lat: 39.828175,
         lng: -98.5795
@@ -81,7 +82,7 @@ export default {
       this.location = location;
       this.position = startingPoint.position;
 
-      this.gatherObjectives(quest.id);
+      // this.gatherObjectives(quest.id);
       this.gatherEntries(location.id);
     } else {
       this.dialog = true;
@@ -89,6 +90,9 @@ export default {
   },
   components: { QuestSidebar, QuestMap, QuestDialog },
   computed: {
+    ...mapState({
+      objectives: state => state.objectives
+    }),
     mapWidth() {
       if (!this.quest) {
         return "100%";
@@ -105,7 +109,7 @@ export default {
         for (let e = 0; e < this.entries.length; e++) {
           if (this.entries[e].objectives) {
             for (let o = 0; o < this.entries[e].objectives.length; o++) {
-              this.objectives[this.entries[e].objectives[o]].isComplete = true;
+              this.$store.dispatch("completeObjective", this.entries[e].objectives[o])
               entriesObjectives.push(this.objectives[this.entries[e].objectives[o]]);
             }
           }
@@ -129,18 +133,18 @@ export default {
         lng: location.position.lng
       });
     },
-    gatherObjectives(questId) {
-      const quest = this.$store.state.quests[questId];
-      const objectives = this.$store.state.objectives;
+    // gatherObjectives(questId) {
+    //   const quest = this.$store.state.quests[questId];
+    //   const objectives = this.$store.state.objectives;
 
-      var questObjectives = [];
+    //   var questObjectives = [];
 
-      for (var o = 0; o < quest.objectives.length; o++) {
-        questObjectives.push(objectives[quest.objectives[o]]);
-      }
+    //   for (var o = 0; o < quest.objectives.length; o++) {
+    //     questObjectives.push(objectives[quest.objectives[o]]);
+    //   }
 
-      this.objectives = questObjectives;
-    },
+    //   this.objectives = questObjectives;
+    // },
     gatherEntries(locationId) {
       const location = this.$store.state.locations[locationId];
       const entries = this.$store.state.entries;

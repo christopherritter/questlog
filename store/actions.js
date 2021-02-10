@@ -59,5 +59,9 @@ export default {
 
     console.log("SET_LOCATION")
     commit('SET_LOCATION', location);
-  }
+  },
+
+  completeObjective({ commit }, objectiveId) {
+    commit("SET_OBJECTIVE", objectiveId);
+  },
 }

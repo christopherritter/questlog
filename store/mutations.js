@@ -58,4 +58,8 @@ export default {
       entries: location.entries,
     }
   },
+
+  SET_OBJECTIVE: (state, objectiveId) => {
+    state.objectives[objectiveId].isComplete = true;
+  },
 }
