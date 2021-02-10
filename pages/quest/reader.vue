@@ -20,7 +20,13 @@
           @view-objective="dialog = true"
         />
       </v-navigation-drawer>
-      <QuestDialog :dialog="dialog" :quest="quest" :objectives="objectives" @close-dialog="dialog = false" />
+      <QuestDialog
+        :dialog="dialog"
+        :quest="quest"
+        :objectives="objectives"
+        @open-dialog="dialog = true"
+        @close-dialog="dialog = false"
+      />
       <v-flex>
         <QuestMap
           id="QuestMap"
@@ -64,7 +70,7 @@ export default {
       actions: null,
       startingPoint: null,
       mapOptions: {},
-      dialog: false,
+      dialog: false
     };
   },
   created() {
@@ -109,15 +115,20 @@ export default {
         for (let e = 0; e < this.entries.length; e++) {
           if (this.entries[e].objectives) {
             for (let o = 0; o < this.entries[e].objectives.length; o++) {
-              this.$store.dispatch("completeObjective", this.entries[e].objectives[o])
-              entriesObjectives.push(this.objectives[this.entries[e].objectives[o]]);
+              this.$store.dispatch(
+                "completeObjective",
+                this.entries[e].objectives[o]
+              );
+              entriesObjectives.push(
+                this.objectives[this.entries[e].objectives[o]]
+              );
             }
           }
         }
       }
 
       return entriesObjectives;
-    },
+    }
   },
   methods: {
     viewLocation(id) {

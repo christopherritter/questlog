@@ -4,8 +4,9 @@
     :persistent="!quest"
     max-width="450"
     @click:outside="$emit('close-dialog')"
+    light
   >
-    <v-card :dark="false" v-if="!quest">
+    <v-card v-if="!quest">
       <v-card-title class="headline">
         Looking for a quest to read?
       </v-card-title>
@@ -28,7 +29,11 @@
     </v-card>
     <v-card v-else>
       <v-card-title>{{ quest.title }}</v-card-title>
-      <v-card-subtitle>Objectives</v-card-subtitle>
+      <v-card-text v-if="isQuestComplete">
+        Congratulations! You've completed all the objectives and finished
+        the quest. Click the replay button to play again!
+      </v-card-text>
+      <v-card-text><h3>Objectives</h3></v-card-text>
       <v-list>
         <v-list-item v-for="objective in objectives" :key="objective.id">
           <v-list-item-icon>
@@ -59,9 +64,17 @@ export default {
   },
   props: ["dialog", "quest", "objectives"],
   computed: {
-    isComplete() {
-      return "mdi-check-bold";
+    isQuestComplete() {
+      for (var o = 0; o < this.objectives.length; o++) {
+        if (!this.objectives[o].isComplete) return false;
+        return true;
+      }
     }
   },
+  watch: {
+    isQuestComplete() {
+      if (true) this.$emit('open-dialog');
+    }
+  }
 };
 </script>
