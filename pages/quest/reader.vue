@@ -20,7 +20,7 @@
           @view-objective="dialog = true"
         />
       </v-navigation-drawer>
-      <QuestDialog :dialog="dialog" :quest="quest" :objectives="objectives" />
+      <QuestDialog :dialog="dialog" :quest="quest" :objectives="objectives" @close-dialog="dialog = false" />
       <v-flex>
         <QuestMap
           id="QuestMap"
@@ -114,9 +114,6 @@ export default {
 
       return entriesObjectives;
     },
-    questComplete() {
-      return false;
-    }
   },
   methods: {
     viewLocation(id) {
