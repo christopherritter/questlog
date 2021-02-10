@@ -56,7 +56,6 @@ export default {
   data() {
     return {
       quest: null,
-      // objectives: null,
       position: {
         lat: 39.828175,
         lng: -98.5795
@@ -88,8 +87,7 @@ export default {
       this.location = location;
       this.position = startingPoint.position;
 
-      // this.gatherObjectives(quest.id);
-      this.gatherEntries(location.id);
+      this.locationEntries(location.id);
     } else {
       this.dialog = true;
     }
@@ -134,7 +132,7 @@ export default {
     viewLocation(id) {
       const location = this.$store.state.locations[id];
 
-      this.gatherEntries(id);
+      this.locationEntries(id);
 
       this.location = location;
       // this.zoom = location.zoom;
@@ -144,19 +142,7 @@ export default {
         lng: location.position.lng
       });
     },
-    // gatherObjectives(questId) {
-    //   const quest = this.$store.state.quests[questId];
-    //   const objectives = this.$store.state.objectives;
-
-    //   var questObjectives = [];
-
-    //   for (var o = 0; o < quest.objectives.length; o++) {
-    //     questObjectives.push(objectives[quest.objectives[o]]);
-    //   }
-
-    //   this.objectives = questObjectives;
-    // },
-    gatherEntries(locationId) {
+    locationEntries(locationId) {
       const location = this.$store.state.locations[locationId];
       const entries = this.$store.state.entries;
 
