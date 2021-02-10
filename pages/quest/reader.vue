@@ -15,7 +15,7 @@
           :location="location"
           :entries="entries"
           :actions="actions"
-          :objectives="entriesObjectives"
+          :objectives="locationObjectives"
           @view-location="viewLocation($event)"
           @view-objective="dialog = true"
         />
@@ -106,8 +106,8 @@ export default {
         return "100vw";
       }
     },
-    entriesObjectives() {
-      var entriesObjectives = [];
+    locationObjectives() {
+      var locationObjectives = [];
 
       if (this.entries) {
         for (let e = 0; e < this.entries.length; e++) {
@@ -117,7 +117,7 @@ export default {
                 "completeObjective",
                 this.entries[e].objectives[o]
               );
-              entriesObjectives.push(
+              locationObjectives.push(
                 this.objectives[this.entries[e].objectives[o]]
               );
             }
@@ -125,7 +125,7 @@ export default {
         }
       }
 
-      return entriesObjectives;
+      return locationObjectives;
     }
   },
   methods: {
