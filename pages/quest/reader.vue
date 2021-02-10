@@ -26,6 +26,7 @@
         :objectives="objectives"
         @open-dialog="dialog = true"
         @close-dialog="dialog = false"
+        @restart-quest="restartQuest(quest.id)"
       />
       <v-flex>
         <QuestMap
@@ -113,10 +114,10 @@ export default {
         for (let e = 0; e < this.entries.length; e++) {
           if (this.entries[e].objectives) {
             for (let o = 0; o < this.entries[e].objectives.length; o++) {
-              this.$store.dispatch(
-                "completeObjective",
-                this.entries[e].objectives[o]
-              );
+              this.$store.dispatch("updateObjective", {
+                id: this.entries[e].objectives[o],
+                bool: true
+              });
               locationObjectives.push(
                 this.objectives[this.entries[e].objectives[o]]
               );
@@ -166,6 +167,24 @@ export default {
       this.entries = null;
       this.actions = null;
       this.items = null;
+    },
+    restartQuest() {
+      const location = this.$store.state.locations[0];
+      const startingPoint = this.$store.state.locations[this.quest.startingPoint];
+
+      for (let o = 0; o < this.objectives.length; o++) {
+        console.log("Update Objective " + o)
+        this.$store.dispatch("updateObjective", {
+          id: o,
+          bool: false
+        });
+      }
+      this.location = location;
+      this.position = startingPoint.position;
+
+      this.locationEntries(location.id);
+
+      this.dialog = false;
     }
   }
 };

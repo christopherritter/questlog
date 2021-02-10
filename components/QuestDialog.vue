@@ -30,8 +30,8 @@
     <v-card v-else>
       <v-card-title>{{ quest.title }}</v-card-title>
       <v-card-text v-if="isQuestComplete">
-        Congratulations! You've completed all the objectives and finished
-        the quest. Click the replay button to play again!
+        Congratulations! You've completed all the objectives and finished the
+        quest. Click the restart button to play again!
       </v-card-text>
       <v-card-text><h3>Objectives</h3></v-card-text>
       <v-list>
@@ -49,6 +49,15 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
+      <v-card-actions>
+        <v-btn primary text @click="$emit('close-dialog')">
+          Keep Playing
+        </v-btn>
+        <v-btn color="gray" text @click="$emit('restart-quest')">
+          Restart Quest
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -73,7 +82,7 @@ export default {
   },
   watch: {
     isQuestComplete() {
-      if (true) this.$emit('open-dialog');
+      if (true) this.$emit("open-dialog");
     }
   }
 };

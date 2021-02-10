@@ -61,7 +61,7 @@ export default {
     commit('SET_LOCATION', location);
   },
 
-  completeObjective({ commit }, objectiveId) {
-    commit("SET_OBJECTIVE", objectiveId);
+  updateObjective({ commit }, { id, bool } ) {
+    commit("SET_OBJECTIVE", { id, bool } );
   },
 }

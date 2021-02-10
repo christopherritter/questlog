@@ -59,7 +59,7 @@ export default {
     }
   },
 
-  SET_OBJECTIVE: (state, objectiveId) => {
-    state.objectives[objectiveId].isComplete = true;
+  SET_OBJECTIVE: (state, { id, bool }) => {
+    state.objectives[id].isComplete = bool;
   },
 }
