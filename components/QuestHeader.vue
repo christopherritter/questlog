@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" sm="12" md="6" class="my-auto">
-        <div class="d-flex flex-row mb-2">
+      <v-col cols="12" sm="12" md="6" class="my-4">
+        <div class="d-flex flex-row mb-2 mt-4">
           <v-icon medium color="green darken-2">mdi-crown</v-icon>
           <h5 class="featured-quest green--text text--darken-2 mt-1 ml-1">
             Featured Quest
@@ -15,7 +15,7 @@
         <v-btn color="primary" class="mr-2" disabled>Play Quest</v-btn>
         <v-btn outlined @click="readQuest(quest.id)">Read Story</v-btn>
       </v-col>
-      <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down">
+      <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down d-flex align-end">
         <v-img
           class="mt-12"
           :src="require('~/assets/img/' + quest.image)"

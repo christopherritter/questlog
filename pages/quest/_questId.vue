@@ -55,12 +55,13 @@
                     </v-row>
                   </v-col>
                   <v-col cols="12" md="6">
-                    <v-sheet rounded color="grey lighten-4" class="pa-8">
-                      <h3>Objectives</h3>
+                    <v-sheet rounded color="grey lighten-4" class="pa-6">
+                      <h3 class="mb-2">Objectives</h3>
 
                       <v-list-item
                         v-for="objective in objectives"
                         :key="objective.id"
+                        dense
                       >
                         <v-list-item-icon>
                           <v-icon color="green" v-if="objective.isComplete"
