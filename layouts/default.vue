@@ -11,7 +11,7 @@
       </v-container>
     </v-main>
     <v-footer app>
-      <v-col class="text-center" cols="12">
+      <v-col class="text-center pa-0" cols="12">
         <span>&copy; {{ new Date().getFullYear() }} Christopher Ritter</span>
       </v-col>
     </v-footer>
