@@ -17,7 +17,7 @@
                 </nuxt-link>
               </h1>
               <h3 class="subtitle-1 mb-8 mb-lg-12">
-                by {{ featuredQuest.author }}
+                by {{ authors[featuredQuest.author].name }}
               </h3>
               <v-btn nuxt color="primary" to="/quest/0">View Quest</v-btn>
             </v-col>
@@ -62,7 +62,7 @@
                   ></v-card-title
                 >
 
-                <v-card-subtitle>by {{ quest.author }}</v-card-subtitle>
+                <v-card-subtitle>by {{ authors[quest.author].name }}</v-card-subtitle>
                 <v-card-text></v-card-text>
                 <v-card-actions>
                   <v-icon class="mr-2">mdi-tag</v-icon>
@@ -72,7 +72,7 @@
                     :key="category.index"
                     small
                     class="mr-2"
-                    >{{ category }}</v-chip
+                    >{{ categories[category].name }}</v-chip
                   >
                   <v-spacer></v-spacer>
                   <v-icon>mdi-heart-outline</v-icon>
@@ -87,10 +87,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "home",
   layout: "fluid",
   computed: {
+    ...mapState({
+      quests: state => state.quests,
+      authors: state => state.authors,
+      categories: state => state.categories
+    }),
     featuredQuest() {
       return this.$store.state.quests[0];
     },
