@@ -66,16 +66,12 @@ export default {
   name: "quests",
   data() {
     return {
-      // filteredQuests: [],
       questSearch: null,
       sortBy: ["Alphabetically", "Authors", "Categories"],
       sortSelection: null,
       authorSelection: null,
       categorySelection: []
     };
-  },
-  created() {
-    // this.fetchQuests();
   },
   components: {
     QuestCard
@@ -105,20 +101,17 @@ export default {
         );
       }
 
-      if (categorySelection != null) {
-        // console.log(categorySelection)
-        for (let c = 0; c < categorySelection.length; c++) {
-          for (let f = 0; f < filteredQuests.length; f++) {
-            // console.log(filteredQuests[f].categories)
-            // console.log(categorySelection[c])
-            // console.log(categorySelection[c], !filteredQuests[f].categories.includes(categorySelection[c]));
-            if (!filteredQuests[f].categories.includes(categorySelection[c])) {
-              // console.log(filteredQuests[f].title)
-              filteredQuests = filteredQuests.splice(f, 1);
-              // filteredQuests.splice(f, 1);
+      if (categorySelection > 0) {
+        var categoryQuests = [];
+        for (let f = 0; f < filteredQuests.length; f++) {
+          for (let c = 0; c < categorySelection.length; c++) {
+            let checker = (arr, target) => target.every(v => arr.includes(v));
+            if (checker(filteredQuests[f].categories, categorySelection)) {
+              categoryQuests.push(filteredQuests[f]);
             }
           }
         }
+        filteredQuests = categoryQuests;
       }
 
       if (sortSelection == "Alphabetically") {
@@ -136,100 +129,8 @@ export default {
         });
       }
 
-      // console.log(filteredQuests);
       return filteredQuests;
     }
   },
-  watch: {
-    questSearch(newVar) {
-      // this.filterQuests();
-      // if (newVar != null) {
-      //   let results = this.filteredQuests.filter(quest => quest.id == newVar);
-      //   this.filteredQuests = results;
-      // } else {
-      //   this.fetchQuests();
-      // }
-    },
-    authorSelection(newVar) {
-      // this.filterQuests();
-      // if (newVar != null) {
-      //   let results = this.filteredQuests.filter(
-      //     quest => quest.author == newVar
-      //   );
-      //   this.filteredQuests = results;
-      // } else {
-      //   this.fetchQuests();
-      // }
-    },
-    categorySelection(newVar) {
-      // this.filterQuests();
-      // if (newVar != null) {
-      //   let results = [];
-      //   newVar.forEach(category => {
-      //     console.log(category)
-      //   })
-      //   this.filteredQuests = results;
-      // } else {
-      //   this.fetchQuests();
-      // }
-    },
-    sortSelection(newVar) {
-      // this.filterQuests();
-      // let filteredQuests = [];
-      // if (newVar != null) {
-      //   filteredQuests.sort((a, b) => {
-      //     return a.title - b.title;
-      //   });
-      // }
-      // this.filteredQuests = filteredQuests;
-    }
-  },
-  methods: {
-    // fetchQuests() {
-    //   let filteredQuests = [];
-    //   for (let q = 0; q < this.quests.length; q++) {
-    //     filteredQuests.push(this.quests[q]);
-    //   }
-    //   this.filteredQuests = filteredQuests;
-    // },
-    // filterQuests() {
-    //   var filteredQuests = this.filteredQuests.slice();
-    //   if (this.questSearch != null) {
-    //     for (let n = 0; n < this.quests.length; n++) {
-    //       if (this.quests[n].id == this.questSearch) {
-    //         filteredQuests.push(this.quests[n]);
-    //       }
-    //     }
-    //   }
-    //   if (this.authorSelection != null) {
-    //     for (let a = 0; a < this.quests.length; a++) {
-    //       if (this.quests[a].author == this.authorSelection) {
-    //         filteredQuests.push(this.quests[a]);
-    //       }
-    //     }
-    //   }
-    //   if (this.questSearch == null && this.authorSelection == null) {
-    //     for (let q = 0; q < this.quests.length; q++) {
-    //       filteredQuests.push(this.quests[q]);
-    //     }
-    //   }
-    //   if (this.categorySelection.length != 0) {
-    //     for (let f = 0; f < filteredQuests.length; f++) {
-    //       for (let c = 0; c < this.categorySelection.length; c++) {
-    //         console.log(this.categorySelection[c]);
-    //         if (
-    //           !filteredQuests[f].categories.includes(this.categorySelection[c])
-    //         ) {
-    //           filteredQuests.splice(f, 1);
-    //         }
-    //       }
-    //     }
-    //   }
-    //   if (this.sortSelection == "Alphabetically") {
-    //     filteredQuests.sort();
-    //   }
-    //   return filteredQuests;
-    // }
-  }
 };
 </script>
