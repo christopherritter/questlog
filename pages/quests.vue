@@ -85,18 +85,26 @@ export default {
     filteredQuests() {
       var filteredQuests = [];
 
-      if (this.authorSelection != null) {
+      if (this.questSelection != null) {
         for (let q = 0; q < this.quests.length; q++) {
-          if (this.quests[q].author == this.authorSelection) {
+          if (this.quests[q].id == this.questSelection) {
             filteredQuests.push(this.quests[q]);
           }
         }
       }
 
+      if (this.authorSelection != null) {
+        for (let a = 0; a < this.quests.length; a++) {
+          if (this.quests[a].author == this.authorSelection) {
+            filteredQuests.push(this.quests[a]);
+          }
+        }
+      }
+
       if (
+        this.questSelection == null &&
         this.authorSelection == null &&
-        this.categorySelection.length == 0 &&
-        this.questSelection == null
+        this.categorySelection.length == 0
       ) {
         filteredQuests = this.quests;
       }
