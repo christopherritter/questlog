@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <h1>Find a Quest</h1>
+        <h1>Quest Library</h1>
       </v-col>
     </v-row>
     <v-row class="pb-4 pb-md-12">
@@ -57,7 +57,7 @@
       ></v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" md="4" v-for="quest in filteredQuests" :key="quest.id">
+      <v-col cols="12" md="6" lg="4" v-for="quest in filteredQuests" :key="quest.id">
         <QuestCard :quest="quest" :author="authors[quest.author]" />
       </v-col>
     </v-row>
@@ -69,7 +69,7 @@ import { mapState } from "vuex";
 import QuestCard from "@/components/QuestCard.vue";
 
 export default {
-  name: "quests",
+  name: "questLibrary",
   data() {
     return {
       questSearch: null,
