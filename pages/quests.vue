@@ -2,12 +2,14 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <h1>Quests</h1>
+        <h1>Find a Quest</h1>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>
+    <v-row class="pb-4 pb-md-12">
+      <v-col cols="12" md="4" class="pb-0">
         <v-autocomplete
+          append-icon=""
+          prepend-inner-icon="mdi-magnify"
           v-model="questSearch"
           :items="quests"
           item-text="title"
@@ -15,19 +17,11 @@
           label="Search"
           clearable
           solo
+          hide-details
         ></v-autocomplete>
       </v-col>
-      <v-col
-        ><v-combobox
-          v-model="sortSelection"
-          :items="sortBy"
-          label="Sort"
-          clearable
-          solo
-        ></v-combobox
-      ></v-col>
-      <v-col
-        ><v-autocomplete
+      <v-col cols="12" md="3"
+         class="pb-0"><v-autocomplete
           v-model="authorSelection"
           :items="authors"
           item-text="name"
@@ -35,10 +29,11 @@
           label="Authors"
           clearable
           solo
+          hide-details
         ></v-autocomplete
       ></v-col>
-      <v-col
-        ><v-autocomplete
+      <v-col cols="12" md="3"
+         class="pb-0"><v-autocomplete
           v-model="categorySelection"
           :items="categories"
           item-text="name"
@@ -47,11 +42,22 @@
           clearable
           solo
           multiple
+          hide-details
         ></v-autocomplete
+      ></v-col>
+      <v-col cols="12" md="2"
+         class="pb-0"><v-combobox
+          v-model="sortSelection"
+          :items="sortBy"
+          label="Sort"
+          clearable
+          solo
+          hide-details
+        ></v-combobox
       ></v-col>
     </v-row>
     <v-row>
-      <v-col cols="4" v-for="quest in filteredQuests" :key="quest.id">
+      <v-col cols="12" md="4" v-for="quest in filteredQuests" :key="quest.id">
         <QuestCard :quest="quest" :author="authors[quest.author]" />
       </v-col>
     </v-row>
@@ -67,7 +73,7 @@ export default {
   data() {
     return {
       questSearch: null,
-      sortBy: ["Alphabetically", "Authors", "Categories"],
+      sortBy: ["Alphabetical", "Authors", "Categories"],
       sortSelection: null,
       authorSelection: null,
       categorySelection: []
@@ -114,7 +120,7 @@ export default {
         filteredQuests = categoryQuests;
       }
 
-      if (sortSelection == "Alphabetically") {
+      if (sortSelection == "Alphabetical") {
         filteredQuests.sort((a, b) => {
           let qa = a.title.toLowerCase(),
             qb = b.title.toLowerCase();
