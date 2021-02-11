@@ -13,7 +13,7 @@
             <v-row>
               <v-col cols="12">
                 <v-row>
-                  <v-col>
+                  <v-col cols="12" md="6">
                     <h2 class="pt-8 pb-4">Description</h2>
 
                     <p>{{ quest.description }}</p>
@@ -23,54 +23,38 @@
                       v-for="category in quest.categories"
                       :key="category.index"
                       small
-                      class="mr-2"
+                      class="mr-2 mb-2"
                       >{{ category }}</v-chip
                     >
 
-                    <v-form class="pt-4">
-                      <v-col cols="4" sm="4" class="pa-0">
-                        <v-text-field
-                          class="pt-0"
-                          :value="quest.objectives.length"
-                          label="Objectives"
-                          readonly
-                          dense
-                          outlined
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="4" sm="4" class="pa-0">
-                        <v-text-field
-                          class="pt-0"
-                          :value="quest.locations.length"
-                          label="Locations"
-                          readonly
-                          dense
-                          outlined
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="4" sm="4" class="pa-0">
-                        <v-text-field
-                          class="pt-0"
-                          :value="quest.entries.length"
-                          label="Entries"
-                          readonly
-                          dense
-                          outlined
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="4" sm="4" class="pa-0">
-                        <v-text-field
-                          class="pt-0"
-                          :value="quest.items.length"
-                          label="Items"
-                          readonly
-                          dense
-                          outlined
-                        ></v-text-field>
-                      </v-col>
-                    </v-form>
+                    <v-row class="mt-4 mb-1 body-2">
+                      <v-col class="py-1" cols="3" xs="3" md="3"
+                        ><strong>Objectives</strong></v-col
+                      >
+                      <v-col class="py-1" cols="3" xs="3" md="3">{{
+                        quest.locations.length
+                      }}</v-col>
+                      <v-col class="py-1" cols="3" xs="3" md="3"
+                        ><strong>Locations</strong></v-col
+                      >
+                      <v-col class="py-1" cols="3" xs="3" md="3">{{
+                        quest.locations.length
+                      }}</v-col>
+                      <v-col class="py-1" cols="3" xs="3" md="3"
+                        ><strong>Entries</strong></v-col
+                      >
+                      <v-col class="py-1" cols="3" xs="3" md="3">{{
+                        quest.entries.length
+                      }}</v-col>
+                      <v-col class="py-1" cols="3" xs="3" md="3"
+                        ><strong>Items</strong></v-col
+                      >
+                      <v-col class="py-1" cols="3" xs="3" md="3">{{
+                        quest.items.length
+                      }}</v-col>
+                    </v-row>
                   </v-col>
-                  <v-col>
+                  <v-col cols="12" md="6">
                     <v-sheet rounded color="grey lighten-4" class="pa-8">
                       <h3>Objectives</h3>
 
@@ -94,7 +78,7 @@
                   </v-col>
                 </v-row>
 
-                <h2 class="py-4">Starting Point</h2>
+                <h2 class="py-4">Map</h2>
 
                 <QuestMap
                   id="QuestMap"
