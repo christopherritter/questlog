@@ -5,10 +5,38 @@ export default () => ({
   location: null,
   entry: null,
   item: null,
+  authors: [
+    {
+      id: 0,
+      name: "Christopher Ritter"
+    },
+    {
+      id: 1,
+      name: "Learning Tree Farm"
+    }
+  ],
+  categories: [
+    {
+      id: 0,
+      name: "family-friendly",
+    },
+    {
+      id: 1,
+      name: "outdoor",
+    },
+    {
+      id: 2,
+      name: "educational",
+    },
+    {
+      id: 3,
+      name: "adventure",
+    }
+  ],
   quests: [{
       id: 0,
       title: "Welcome to the Learning Tree Farm",
-      author: "Learning Tree Farm",
+      author: 1,
       description: "Come on down to the Learning Tree Farm and we'll show you around all the places you can explore!",
       image: "welcome-sign.png",
       categories: ["family-friendly", "outdoor", "educational"],
@@ -24,7 +52,7 @@ export default () => ({
     {
       id: 1,
       title: "Celebrate the Spring Equinox",
-      author: "Learning Tree Farm",
+      author: 1,
       description: "Celebrate the dawn of a new year by meeting all of the newborn animals and their proud parents.",
       image: "baby-goats.png",
       categories: ["family-friendly", "outdoor", "educational"],
@@ -40,7 +68,7 @@ export default () => ({
     {
       id: 2,
       title: "How Does Your Garden Grow?",
-      author: "Learning Tree Farm",
+      author: 1,
       description: "Find out how the Learning Tree Farm uses centuries old techniques to help the garden thrive.",
       image: "garden.png",
       categories: ["family-friendly", "outdoor", "educational"],
@@ -56,7 +84,7 @@ export default () => ({
     {
       id: 3,
       title: "The Great Sheep Escape",
-      author: "Learning Tree Farm",
+      author: 1,
       description: "Help the Learning Tree find all the missing sheep which are freely roaming around the farm.",
       image: "sheep.png",
       categories: ["family-friendly", "outdoor", "adventure"],
