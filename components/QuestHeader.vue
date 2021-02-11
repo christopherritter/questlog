@@ -15,7 +15,7 @@
         <v-btn color="primary" class="mr-2" disabled>Play Quest</v-btn>
         <v-btn outlined @click="readQuest(quest.id)">Read Story</v-btn>
       </v-col>
-      <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down d-flex align-end">
+      <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down">
         <v-img
           class="mt-12"
           :src="require('~/assets/img/' + quest.image)"
