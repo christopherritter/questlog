@@ -86,9 +86,9 @@ export default {
       var filteredQuests = [];
 
       if (this.questSelection != null) {
-        for (let q = 0; q < this.quests.length; q++) {
-          if (this.quests[q].id == this.questSelection) {
-            filteredQuests.push(this.quests[q]);
+        for (let n = 0; n < this.quests.length; n++) {
+          if (this.quests[n].id == this.questSelection) {
+            filteredQuests.push(this.quests[n]);
           }
         }
       }
@@ -101,12 +101,21 @@ export default {
         }
       }
 
-      if (
-        this.questSelection == null &&
-        this.authorSelection == null &&
-        this.categorySelection.length == 0
-      ) {
-        filteredQuests = this.quests;
+      if (this.questSelection == null && this.authorSelection == null) {
+        for (let q = 0; q < this.quests.length; q++) {
+          filteredQuests.push(this.quests[q]);
+        }
+      }
+
+      if (this.categorySelection.length != 0) {
+        for (let f = 0; f < filteredQuests.length; f++) {
+          for (let c = 0; c < this.categorySelection.length; c++) {
+            console.log(this.categorySelection[c])
+            if (!filteredQuests[f].categories.includes(this.categorySelection[c]) ) {
+              filteredQuests.splice(f, 1);
+            }
+          }
+        }
       }
 
       return filteredQuests;

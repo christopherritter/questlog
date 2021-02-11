@@ -10,17 +10,17 @@
       }}</nuxt-link></v-card-title
     >
 
-    <v-card-subtitle>by {{ author.name }}</v-card-subtitle>
+    <v-card-subtitle>by {{ authors[quest.author].name }}</v-card-subtitle>
     <v-card-text></v-card-text>
     <v-card-actions>
       <v-icon class="mr-2">mdi-tag</v-icon>
       <v-chip
         label
         v-for="category in quest.categories"
-        :key="category.index"
+        :key="category"
         small
         class="mr-2"
-        >{{ category }}</v-chip
+        >{{ categories[category].name }}</v-chip
       >
       <v-spacer></v-spacer>
       <v-icon>mdi-heart-outline</v-icon>
@@ -29,9 +29,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "QuestCard",
-  props: [ 'quest', 'author' ]
+  props: [ 'quest' ],
+    computed: {
+    ...mapState({
+      authors: state => state.authors,
+      categories: state => state.categories
+    }),
+  }
 };
 </script>
 
