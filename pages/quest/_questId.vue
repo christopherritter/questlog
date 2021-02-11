@@ -24,7 +24,7 @@
                       :key="category.index"
                       small
                       class="mr-2 mb-2"
-                      >{{ category }}</v-chip
+                      >{{ categories[category].name }}</v-chip
                     >
 
                     <v-row class="mt-4 mb-1 body-2">
@@ -143,7 +143,8 @@ export default {
   },
   computed: {
     ...mapState({
-      objectives: state => state.objectives
+      objectives: state => state.objectives,
+      categories: state => state.categories,
     }),
     position() {
       const regionId = this.$store.state.quests[this.questId].region;

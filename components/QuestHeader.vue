@@ -10,7 +10,7 @@
         </div>
         <h1 class="display-3 mb-3">{{ quest.title }}</h1>
         <h3 class="subtitle-1 mb-8 mb-lg-12">
-          by {{ quest.author }}
+          by {{ authors[quest.author].name }}
         </h3>
         <v-btn color="primary" class="mr-2" disabled>Play Quest</v-btn>
         <v-btn outlined @click="readQuest(quest.id)">Read Story</v-btn>
@@ -27,10 +27,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "QuestHeader",
   props: ["questId"],
   computed: {
+    ...mapState({
+      authors: state => state.authors,
+      objectives: state => state.objectives,
+      categories: state => state.categories,
+    }),
     quest() {
       return this.$store.state.quests[this.questId];
     }
