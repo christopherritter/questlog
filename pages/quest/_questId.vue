@@ -98,6 +98,7 @@
 
                 <QuestMap
                   id="QuestMap"
+                  class="mb-16"
                   :quest-id="this.questId"
                   :position="position"
                   :locations="locations"
