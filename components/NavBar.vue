@@ -13,7 +13,10 @@
       <v-btn icon nuxt to="/profile/myQuests">
         <v-icon>mdi-feather</v-icon>
       </v-btn>
-      <v-menu close-on-click offset-y>
+      <v-btn icon nuxt to="/profile">
+        <v-icon>mdi-account-box</v-icon>
+      </v-btn>
+      <!-- <v-menu close-on-click offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-account-box</v-icon>
@@ -38,7 +41,7 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-      </v-menu>
+      </v-menu> -->
     </span>
     <span v-else>
       <v-btn plain nuxt to="/login">
