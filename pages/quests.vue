@@ -23,7 +23,7 @@
       <v-col cols="12" md="3"
          class="pb-0"><v-autocomplete
           v-model="authorSelection"
-          :items="authors"
+          :items="authorList"
           item-text="name"
           item-value="id"
           label="Authors"
@@ -85,7 +85,7 @@ export default {
   computed: {
     ...mapState({
       quests: state => state.quests,
-      authors: state => state.users,
+      authors: state => state.authors,
       categories: state => state.categories
     }),
     filteredQuests() {
@@ -136,7 +136,32 @@ export default {
       }
 
       return filteredQuests;
+    },
+    authorList() {
+      var authors = Object.entries(this.authors);
+      var authorList = []
+
+      for (let a = 0; a < authors.length; a++) {
+
+        let author = {
+          id: authors[a][0],
+          name: authors[a][1].name,
+          isAnonymous: authors[a][1].isAnonymous,
+        }
+
+        authorList.push(author);
+      }
+
+      return authorList;
     }
   },
+  methods: {
+    objectKeys(obj) {
+      return Object.keys(obj)
+    },
+    objectEntries(obj) {
+      return Object.entries(obj)
+    }
+  }
 };
 </script>

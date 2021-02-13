@@ -17,7 +17,7 @@
                 </nuxt-link>
               </h1>
               <h3 class="subtitle-1 mb-8 mb-lg-12">
-                by {{ users[featuredQuest.author].name }}
+                by {{ authors[featuredQuest.author].name }}
               </h3>
               <v-btn nuxt color="primary" to="/quest/0">View Quest</v-btn>
             </v-col>
@@ -62,7 +62,7 @@
                   ></v-card-title
                 >
 
-                <v-card-subtitle>by {{ users[quest.author].name }}</v-card-subtitle>
+                <v-card-subtitle>by {{ authors[quest.author].name }}</v-card-subtitle>
                 <v-card-text></v-card-text>
                 <v-card-actions>
                   <v-icon class="mr-2">mdi-tag</v-icon>
@@ -94,8 +94,8 @@ export default {
   computed: {
     ...mapState({
       quests: state => state.quests,
-      authors: state => state.users,
       users: state => state.users,
+      authors: state => state.authors,
       categories: state => state.categories
     }),
     featuredQuest() {
