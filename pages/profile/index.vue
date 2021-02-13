@@ -3,9 +3,15 @@
 </template>
 
 <script>
-  export default {
-    name: 'profile',
-    middleware: 'authenticated',
+import { mapState } from "vuex";
 
+export default {
+  name: "profile",
+  middleware: "authenticated",
+  computed: {
+    ...mapState({
+      authUser: state => state.authUser
+    })
   }
+};
 </script>

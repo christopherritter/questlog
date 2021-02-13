@@ -53,11 +53,6 @@ export default {
 
   viewLocation({ state }, id) {
     const location = state.locations[id];
-
-    console.log("View location:")
-    console.log(location)
-
-    console.log("SET_LOCATION")
     commit('SET_LOCATION', location);
   },
 
