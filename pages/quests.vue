@@ -107,7 +107,7 @@ export default {
         );
       }
 
-      if (categorySelection > 0) {
+      if (categorySelection.length > 0) {
         var categoryQuests = [];
         for (let f = 0; f < filteredQuests.length; f++) {
           for (let c = 0; c < categorySelection.length; c++) {
@@ -155,13 +155,5 @@ export default {
       return authorList;
     }
   },
-  methods: {
-    objectKeys(obj) {
-      return Object.keys(obj)
-    },
-    objectEntries(obj) {
-      return Object.entries(obj)
-    }
-  }
 };
 </script>

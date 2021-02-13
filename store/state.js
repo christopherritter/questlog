@@ -8,12 +8,12 @@ export default () => ({
   users: {
     'W8INchB9HLWxMHfgNVQ4mWE5P8v1': {
       name: "Christopher Ritter",
-      favorites: [0, 1, 2, 3],
+      favorites: [0, 1, 2],
       authorId: "christopherritter",
     },
     'a': {
       name: "Learning Tree Farm",
-      favorites: [0, 1, 2, 3],
+      favorites: [3],
       authorId: "learning-tree-farm",
     }
   },
@@ -21,12 +21,12 @@ export default () => ({
     'christopherritter': {
       name: "Christopher Ritter",
       isAnonymous: false,
-      quests: [],
+      quests: [3],
     },
     'learning-tree-farm': {
       name: "Learning Tree Farm",
       isAnonymous: false,
-      quests: [0, 1, 2, 3],
+      quests: [0, 1, 2],
     }
   },
   categories: [{
@@ -97,7 +97,7 @@ export default () => ({
     {
       id: 3,
       title: "The Great Sheep Escape",
-      author: "learning-tree-farm",
+      author: "christopherritter",
       description: "Help the Learning Tree find all the missing sheep which are freely roaming around the farm.",
       image: "sheep.png",
       categories: [0, 1, 3],

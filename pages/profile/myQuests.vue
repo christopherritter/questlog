@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <h1>Quest Library</h1>
+        <h1>Custom Quests</h1>
       </v-col>
     </v-row>
     <v-row class="pb-4 pb-md-12">
@@ -26,8 +26,8 @@
           :items="authorList"
           item-text="name"
           item-value="id"
-          label="Authors"
-          clearable
+          :label="authors[users[authUser.uid].authorId].name"
+          disabled
           solo
           hide-details
         ></v-autocomplete
@@ -85,6 +85,8 @@ export default {
   },
   computed: {
     ...mapState({
+      authUser: state => state.authUser,
+      users: state => state.users,
       quests: state => state.quests,
       authors: state => state.authors,
       categories: state => state.categories
@@ -92,7 +94,6 @@ export default {
     filteredQuests() {
       var filteredQuests = this.quests.slice();
       var questSearch = this.questSearch;
-      var authorSelection = this.authorSelection;
       var categorySelection = this.categorySelection;
       var sortSelection = this.sortSelection;
 
@@ -102,13 +103,11 @@ export default {
         );
       }
 
-      if (authorSelection != null) {
-        filteredQuests = filteredQuests.filter(
-          quest => quest.author == authorSelection
-        );
-      }
+      filteredQuests = filteredQuests.filter(
+        quest => quest.author == this.users[this.authUser.uid].authorId
+      );
 
-      if (categorySelection > 0) {
+      if (categorySelection.length > 0) {
         var categoryQuests = [];
         for (let f = 0; f < filteredQuests.length; f++) {
           for (let c = 0; c < categorySelection.length; c++) {
@@ -156,13 +155,5 @@ export default {
       return authorList;
     }
   },
-  methods: {
-    objectKeys(obj) {
-      return Object.keys(obj)
-    },
-    objectEntries(obj) {
-      return Object.entries(obj)
-    }
-  }
 };
 </script>

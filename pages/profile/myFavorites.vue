@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <h1>Quest Library</h1>
+        <h1>Favorites</h1>
       </v-col>
     </v-row>
     <v-row class="pb-4 pb-md-12">
@@ -20,8 +20,8 @@
           hide-details
         ></v-autocomplete>
       </v-col>
-      <v-col cols="12" md="3"
-         class="pb-0"><v-autocomplete
+      <v-col cols="12" md="3" class="pb-0"
+        ><v-autocomplete
           v-model="authorSelection"
           :items="authorList"
           item-text="name"
@@ -32,8 +32,8 @@
           hide-details
         ></v-autocomplete
       ></v-col>
-      <v-col cols="12" md="3"
-         class="pb-0"><v-autocomplete
+      <v-col cols="12" md="3" class="pb-0"
+        ><v-autocomplete
           v-model="categorySelection"
           :items="categories"
           item-text="name"
@@ -45,8 +45,8 @@
           hide-details
         ></v-autocomplete
       ></v-col>
-      <v-col cols="12" md="2"
-         class="pb-0"><v-combobox
+      <v-col cols="12" md="2" class="pb-0"
+        ><v-combobox
           v-model="sortSelection"
           :items="sortBy"
           label="Sort"
@@ -57,7 +57,13 @@
       ></v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" md="6" lg="4" v-for="quest in filteredQuests" :key="quest.id">
+      <v-col
+        cols="12"
+        md="6"
+        lg="4"
+        v-for="quest in filteredQuests"
+        :key="quest.id"
+      >
         <QuestCard :quest="quest" :author="authors[quest.author]" />
       </v-col>
     </v-row>
@@ -85,44 +91,53 @@ export default {
   },
   computed: {
     ...mapState({
+      authUser: state => state.authUser,
+      users: state => state.users,
       quests: state => state.quests,
       authors: state => state.authors,
       categories: state => state.categories
     }),
     filteredQuests() {
-      var filteredQuests = this.quests.slice();
+      const userFavorites = this.users[this.authUser.uid].favorites;
+
       var questSearch = this.questSearch;
       var authorSelection = this.authorSelection;
       var categorySelection = this.categorySelection;
       var sortSelection = this.sortSelection;
 
+      var favoriteQuests = [];
+
+      for (let u = 0; u < userFavorites.length; u++) {
+        favoriteQuests.push(this.quests[u]);
+      }
+
       if (questSearch != null) {
-        filteredQuests = filteredQuests.filter(
+        favoriteQuests = favoriteQuests.filter(
           quest => quest.id == questSearch
         );
       }
 
       if (authorSelection != null) {
-        filteredQuests = filteredQuests.filter(
+        favoriteQuests = favoriteQuests.filter(
           quest => quest.author == authorSelection
         );
       }
 
-      if (categorySelection > 0) {
+      if (categorySelection.length > 0) {
         var categoryQuests = [];
-        for (let f = 0; f < filteredQuests.length; f++) {
+        for (let f = 0; f < favoriteQuests.length; f++) {
           for (let c = 0; c < categorySelection.length; c++) {
             let checker = (arr, target) => target.every(v => arr.includes(v));
-            if (checker(filteredQuests[f].categories, categorySelection)) {
-              categoryQuests.push(filteredQuests[f]);
+            if (checker(favoriteQuests[f].categories, categorySelection)) {
+              categoryQuests.push(favoriteQuests[f]);
             }
           }
         }
-        filteredQuests = categoryQuests;
+        favoriteQuests = categoryQuests;
       }
 
       if (sortSelection == "Alphabetical") {
-        filteredQuests.sort((a, b) => {
+        favoriteQuests.sort((a, b) => {
           let qa = a.title.toLowerCase(),
             qb = b.title.toLowerCase();
 
@@ -136,32 +151,23 @@ export default {
         });
       }
 
-      return filteredQuests;
+      return favoriteQuests;
     },
     authorList() {
       var authors = Object.entries(this.authors);
-      var authorList = []
+      var authorList = [];
 
       for (let a = 0; a < authors.length; a++) {
-
         let author = {
           id: authors[a][0],
           name: authors[a][1].name,
-          isAnonymous: authors[a][1].isAnonymous,
-        }
+          isAnonymous: authors[a][1].isAnonymous
+        };
 
         authorList.push(author);
       }
 
       return authorList;
-    }
-  },
-  methods: {
-    objectKeys(obj) {
-      return Object.keys(obj)
-    },
-    objectEntries(obj) {
-      return Object.entries(obj)
     }
   }
 };
