@@ -113,7 +113,10 @@ export default {
           for (let c = 0; c < categorySelection.length; c++) {
             let checker = (arr, target) => target.every(v => arr.includes(v));
             if (checker(filteredQuests[f].categories, categorySelection)) {
-              categoryQuests.push(filteredQuests[f]);
+              let exists = this.containsObject(filteredQuests[f], categoryQuests);
+              if (!exists) {
+                categoryQuests.push(filteredQuests[f]);
+              }
             }
           }
         }
@@ -153,6 +156,18 @@ export default {
       }
 
       return authorList;
+    }
+  },
+  methods: {
+    containsObject(obj, list) {
+      var i;
+      for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+          return true;
+        }
+      }
+
+      return false;
     }
   },
 };
