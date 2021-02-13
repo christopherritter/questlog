@@ -4,7 +4,7 @@
       <v-toolbar-title v-text="title" />
     </v-btn>
     <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
-    <!-- <v-btn plain nuxt to="/editor">Build your Own!</v-btn>
+    <!-- <v-btn plain nuxt to="/editor">Build your Own!</v-btn> -->
     <v-spacer />
     <span v-if="$store.state.authUser">
       <v-btn icon nuxt to="/profile/myFavorites">
@@ -44,7 +44,7 @@
       <v-btn plain nuxt to="/login">
         SignUp / LogIn
       </v-btn>
-    </span> -->
+    </span>
   </v-app-bar>
 </template>
 

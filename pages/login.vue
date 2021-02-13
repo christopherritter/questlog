@@ -1,33 +1,42 @@
 <template>
   <v-container>
-    <v-card>
-      <v-card-title class="headline">
-        SignUp / LogIn
-      </v-card-title>
-      <v-card-text>
-        <v-form onsubmit="return false;">
-          <v-text-field
-            v-model="formData.email"
-            label="Email Address"
-            type="email"
-          ></v-text-field>
-          <v-text-field
-            v-model="formData.password"
-            label="Password"
-            type="password"
-          ></v-text-field>
-        </v-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn @click="createUser">
-          Register
-        </v-btn>
-        <v-btn color="primary" @click="signInUser">
-          Sign In
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+    <v-row>
+      <v-col
+        cols="12"
+        sm="8"
+        md="6"
+        class="offset-sm-2 offset-md-3"
+      >
+        <v-card>
+          <v-card-title class="headline">
+            SignUp / LogIn
+          </v-card-title>
+          <v-card-text>
+            <v-form onsubmit="return false;">
+              <v-text-field
+                v-model="formData.email"
+                label="Email Address"
+                type="email"
+              ></v-text-field>
+              <v-text-field
+                v-model="formData.password"
+                label="Password"
+                type="password"
+              ></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn @click="createUser">
+              Register
+            </v-btn>
+            <v-btn color="primary" @click="signInUser">
+              Sign In
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
