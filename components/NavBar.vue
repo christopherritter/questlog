@@ -3,8 +3,14 @@
     <v-btn plain nuxt to="/">
       <v-toolbar-title v-text="title" />
     </v-btn>
-    <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
-    <!-- <v-btn plain nuxt to="/editor">Build your Own!</v-btn> -->
+    <span v-if="quest && (this.$route.name == 'quest-reader' || this.$route.name == 'quest-player')">
+      <v-btn plain nuxt :to="'/quest/' + quest.id ">{{ quest.title }}</v-btn>
+    </span>
+    <span v-else>
+      <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
+      <!-- <v-btn plain nuxt to="/editor">Build your Own!</v-btn> -->
+    </span>
+
     <v-spacer />
     <span v-if="$store.state.authUser">
       <v-btn icon nuxt to="/profile/myFavorites">
@@ -52,6 +58,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "navBar",
   data() {
@@ -68,7 +76,11 @@ export default {
       ]
     };
   },
-  props: ["quest"],
+  computed: {
+    ...mapState({
+      quest: state => state.quest,
+    })
+  },
   methods: {
     async logout() {
       try {
