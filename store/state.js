@@ -39,7 +39,7 @@ export default () => ({
   quests: [{
       id: 0,
       title: "Welcome to the Learning Tree Farm",
-      author: 1,
+      author: "a",
       description: "Come on down to the Learning Tree Farm and we'll show you around all the places you can explore!",
       image: "welcome-sign.png",
       categories: [0, 1, 2],
@@ -55,7 +55,7 @@ export default () => ({
     {
       id: 1,
       title: "Celebrate the Spring Equinox",
-      author: 1,
+      author: "a",
       description: "Celebrate the dawn of a new year by meeting all of the newborn animals and their proud parents.",
       image: "baby-goats.png",
       categories: [0, 1, 2],
@@ -71,7 +71,7 @@ export default () => ({
     {
       id: 2,
       title: "How Does Your Garden Grow?",
-      author: 1,
+      author: "a",
       description: "Find out how the Learning Tree Farm uses centuries old techniques to help the garden thrive.",
       image: "garden.png",
       categories: [0, 1, 2],
@@ -87,7 +87,7 @@ export default () => ({
     {
       id: 3,
       title: "The Great Sheep Escape",
-      author: 1,
+      author: "a",
       description: "Help the Learning Tree find all the missing sheep which are freely roaming around the farm.",
       image: "sheep.png",
       categories: [0, 1, 3],
