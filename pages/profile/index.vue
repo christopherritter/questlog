@@ -10,8 +10,13 @@ export default {
   middleware: "authenticated",
   computed: {
     ...mapState({
-      authUser: state => state.authUser
-    })
+      authUser: state => state.authUser,
+      users: state => state.users,
+    }),
+    user() {
+      const user = this.authUser;
+      return this.users[user.uid];
+    }
   }
 };
 </script>

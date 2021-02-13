@@ -5,21 +5,20 @@ export default () => ({
   location: null,
   entry: null,
   item: null,
-  users: [{
-      id: 0,
+  users: {
+    'W8INchB9HLWxMHfgNVQ4mWE5P8v1': {
       name: "Christopher Ritter",
       role: "Administrator",
       favorites: [0, 1, 2, 3],
       authored: []
     },
-    {
-      id: 1,
+    'a': {
       name: "Learning Tree Farm",
       role: "Author",
       favorites: [0, 1, 2, 3],
       authored: [0, 1, 2, 3]
     }
-  ],
+  },
   categories: [{
       id: 0,
       name: "family-friendly",
