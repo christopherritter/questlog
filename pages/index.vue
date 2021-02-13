@@ -94,7 +94,7 @@ export default {
   computed: {
     ...mapState({
       quests: state => state.quests,
-      authors: state => state.authors,
+      authors: state => state.users,
       categories: state => state.categories
     }),
     featuredQuest() {

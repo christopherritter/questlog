@@ -1,12 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col
-        cols="12"
-        sm="8"
-        md="6"
-        class="offset-sm-2 offset-md-3"
-      >
+      <v-col cols="12" sm="8" md="6" class="offset-sm-2 offset-md-3">
         <v-card>
           <v-card-title class="headline">
             SignUp / LogIn
@@ -78,10 +73,14 @@ export default {
     },
     async signInUser() {
       try {
-        await this.$fire.auth.signInWithEmailAndPassword(
-          this.formData.email,
-          this.formData.password
-        );
+        await this.$fire.auth
+          .signInWithEmailAndPassword(
+            this.formData.email,
+            this.formData.password
+          )
+          .then(() => {
+            this.$router.push({ name: 'profile' });
+          });
       } catch (e) {
         alert(e);
       }

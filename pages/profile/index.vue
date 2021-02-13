@@ -5,6 +5,7 @@
 <script>
   export default {
     name: 'profile',
-    middleware: 'authenticated'
+    middleware: 'authenticated',
+
   }
 </script>

@@ -5,18 +5,22 @@ export default () => ({
   location: null,
   entry: null,
   item: null,
-  authors: [
-    {
+  users: [{
       id: 0,
-      name: "Christopher Ritter"
+      name: "Christopher Ritter",
+      role: "Administrator",
+      favorites: [0, 1, 2, 3],
+      authored: []
     },
     {
       id: 1,
-      name: "Learning Tree Farm"
+      name: "Learning Tree Farm",
+      role: "Author",
+      favorites: [0, 1, 2, 3],
+      authored: [0, 1, 2, 3]
     }
   ],
-  categories: [
-    {
+  categories: [{
       id: 0,
       name: "family-friendly",
     },
@@ -603,7 +607,7 @@ export default () => ({
         text: 'Head towards the Enrance.',
         icon: 'mdi-road-variant',
         forward: 14, // Preschool Entrance
-      },],
+      }, ],
       requirements: [],
       expiration: [],
       objectives: null,

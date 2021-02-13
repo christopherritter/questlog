@@ -35,7 +35,7 @@ export default {
   props: [ 'quest' ],
     computed: {
     ...mapState({
-      authors: state => state.authors,
+      authors: state => state.users,
       categories: state => state.categories
     }),
   }
