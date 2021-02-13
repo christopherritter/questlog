@@ -8,15 +8,25 @@ export default () => ({
   users: {
     'W8INchB9HLWxMHfgNVQ4mWE5P8v1': {
       name: "Christopher Ritter",
-      role: "Administrator",
       favorites: [0, 1, 2, 3],
-      authored: []
+      authorId: "christopherritter",
     },
     'a': {
       name: "Learning Tree Farm",
-      role: "Author",
       favorites: [0, 1, 2, 3],
-      authored: [0, 1, 2, 3]
+      authorId: "learning-tree-farm",
+    }
+  },
+  authors: {
+    'christopherritter': {
+      name: "Christopher Ritter",
+      isAnonymous: false,
+      quests: [],
+    },
+    'learning-tree-farm': {
+      name: "Learning Tree Farm",
+      isAnonymous: false,
+      quests: [0, 1, 2, 3],
     }
   },
   categories: [{
