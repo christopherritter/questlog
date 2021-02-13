@@ -173,7 +173,6 @@ export default {
       const startingPoint = this.$store.state.locations[this.quest.startingPoint];
 
       for (let o = 0; o < this.objectives.length; o++) {
-        console.log("Update Objective " + o)
         this.$store.dispatch("updateObjective", {
           id: o,
           bool: false
