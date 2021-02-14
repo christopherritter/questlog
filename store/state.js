@@ -662,6 +662,34 @@ export default () => ({
       objectives: null,
     }
   ],
+  actions: [
+    {
+      id: 0,
+      name: "Drive to the market.",
+      type: 1, // Go
+      icon: "mdi-car",
+      location: null,
+
+    }
+  ],
+  activities: [
+    {
+      id: 0,
+      name: "Look",
+    },
+    {
+      id: 1,
+      name: "Go",
+    },
+    {
+      id: 2,
+      name: "Put",
+    },
+    {
+      id: 3,
+      name: "Take",
+    },
+  ],
   items: [{
     id: 0,
     name: "",

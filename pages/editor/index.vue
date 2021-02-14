@@ -28,6 +28,9 @@
             <v-tab href="#entries">
               Entries
             </v-tab>
+            <v-tab href="#actions">
+              Actions
+            </v-tab>
             <v-tab href="#items">
               Items
             </v-tab>
@@ -81,6 +84,13 @@
                 @add-item="addItem($event)"
               />
             </v-tab-item>
+            <v-tab-item value="actions">
+              <ActionsEditor
+                :actions="actions"
+                @change-tab="changeTab($event)"
+                @add-action="addAction($event)"
+              />
+            </v-tab-item>
           </v-tabs>
         </v-form>
       </v-col>
@@ -95,6 +105,7 @@ import RegionEditor from "@/components/RegionEditor.vue";
 import ObjectivesEditor from "@/components/ObjectivesEditor.vue";
 import LocationsEditor from "@/components/LocationsEditor.vue";
 import EntriesEditor from "@/components/EntriesEditor.vue";
+import ActionsEditor from "@/components/ActionsEditor.vue";
 import ItemsEditor from "@/components/ItemsEditor.vue";
 
 export default {
@@ -107,6 +118,7 @@ export default {
     ObjectivesEditor,
     LocationsEditor,
     EntriesEditor,
+    ActionsEditor,
     ItemsEditor
   },
   data() {
@@ -156,10 +168,13 @@ export default {
       this.locations.push(location);
     },
     addEntry(entry){
-      this.entry.push(entry);
+      this.entries.push(entry);
+    },
+    addAction(action){
+      this.actions.push(action);
     },
     addItem(item){
-      this.location.push(item);
+      this.items.push(item);
     },
   }
 };
