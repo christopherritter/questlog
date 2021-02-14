@@ -42,13 +42,18 @@
               <ObjectivesEditor />
             </v-tab-item>
             <v-tab-item>
-              <LocationsEditor />
+              <LocationsEditor :entries="entries" />
             </v-tab-item>
             <v-tab-item>
-              <EntriesEditor />
+              <EntriesEditor
+                :locations="locations"
+                :actions="actions"
+                :requirements="objectives"
+                :expiration="objectives"
+              />
             </v-tab-item>
             <v-tab-item>
-              <ItemsEditor />
+              <ItemsEditor :entries="entries" />
             </v-tab-item>
           </v-tabs>
         </v-form>
@@ -69,7 +74,14 @@ export default {
   name: "questEditor",
   layout: "fluid",
   middleware: "authenticated",
-  components: { AboutEditor, RegionEditor, ObjectivesEditor, LocationsEditor, EntriesEditor, ItemsEditor },
+  components: {
+    AboutEditor,
+    RegionEditor,
+    ObjectivesEditor,
+    LocationsEditor,
+    EntriesEditor,
+    ItemsEditor
+  },
   data() {
     return {
       quest: {
@@ -90,11 +102,12 @@ export default {
           lng: -98.5795
         },
         zoom: 18,
-        mapOptions: {},
+        mapOptions: {}
       },
       objectives: [],
       locations: [],
       entries: [],
+      actions: [],
       items: []
     };
   }
