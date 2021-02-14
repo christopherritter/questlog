@@ -33,7 +33,7 @@
             </v-tab>
 
             <v-tab-item value="about">
-              <AboutEditor :quest="quest" @change-tab="changeTab($event)" />
+              <AboutEditor :quest="quest" :categories="categories" @change-tab="changeTab($event)" />
             </v-tab-item>
             <v-tab-item value="region">
               <RegionEditor
@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import AboutEditor from "@/components/AboutEditor.vue";
 import RegionEditor from "@/components/RegionEditor.vue";
 import ObjectivesEditor from "@/components/ObjectivesEditor.vue";
@@ -120,9 +121,14 @@ export default {
       items: []
     };
   },
+  computed: {
+    ...mapState({
+      categories: state => state.categories
+    })
+  },
   methods: {
     changeTab(tab) {
-      console.log(tab)
+      console.log(tab);
       this.tab = tab;
     }
   }

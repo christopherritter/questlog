@@ -11,16 +11,26 @@
         outlined
       ></v-textarea>
       <v-text-field v-model="quest.image" label="Image" outlined></v-text-field>
-      <v-text-field
-        v-model="quest.categories"
+      <v-autocomplete
+        v-model="categorySearch"
+        :items="categories"
         label="Categories"
+        item-text="name"
+        item-value="id"
+        clearable
+        multiple
         outlined
-      ></v-text-field>
+      ></v-autocomplete>
       <div class="d-flex">
         <v-btn outlined dark disabled>
           Back
         </v-btn>
-        <v-btn outlined dark class="ml-2" @click="$emit('change-tab', 'region')">
+        <v-btn
+          outlined
+          dark
+          class="ml-2"
+          @click="$emit('change-tab', 'region')"
+        >
           Next
         </v-btn>
         <v-spacer></v-spacer>
@@ -35,7 +45,18 @@
 <script>
 export default {
   name: "AboutEditor",
-  props: ["quest"]
+  data() {
+    return {
+      newQuest: {
+        title: "",
+        description: "",
+        image: "",
+        categories: []
+      },
+      categorySearch: null
+    };
+  },
+  props: ["quest", "categories"]
 };
 </script>
 
