@@ -33,7 +33,11 @@
             </v-tab>
 
             <v-tab-item value="about">
-              <AboutEditor :quest="quest" :categories="categories" @change-tab="changeTab($event)" />
+              <AboutEditor
+                :quest="quest"
+                :categories="categories"
+                @change-tab="changeTab($event)"
+              />
             </v-tab-item>
             <v-tab-item value="region">
               <RegionEditor
@@ -43,25 +47,39 @@
               />
             </v-tab-item>
             <v-tab-item value="objectives">
-              <ObjectivesEditor @change-tab="changeTab($event)" />
+              <ObjectivesEditor
+                :objectives="objectives"
+                @change-tab="changeTab($event)"
+                @add-objective="addObjective($event)"
+              />
             </v-tab-item>
             <v-tab-item value="locations">
               <LocationsEditor
+                :locations="locations"
                 :entries="entries"
                 @change-tab="changeTab($event)"
+                @add-location="addLocation($event)"
               />
             </v-tab-item>
             <v-tab-item value="entries">
               <EntriesEditor
                 :locations="locations"
+                :entries="entries"
                 :actions="actions"
                 :requirements="objectives"
                 :expiration="objectives"
+                :objectives="objectives"
                 @change-tab="changeTab($event)"
+                @add-entry="addEntry($event)"
               />
             </v-tab-item>
             <v-tab-item value="items">
-              <ItemsEditor :entries="entries" @change-tab="changeTab($event)" />
+              <ItemsEditor
+                :entries="entries"
+                :items="items"
+                @change-tab="changeTab($event)"
+                @add-item="addItem($event)"
+              />
             </v-tab-item>
           </v-tabs>
         </v-form>
@@ -130,7 +148,19 @@ export default {
     changeTab(tab) {
       console.log(tab);
       this.tab = tab;
-    }
+    },
+    addObjective(objective){
+      this.objectives.push(objective);
+    },
+    addLocation(location){
+      this.locations.push(location);
+    },
+    addEntry(entry){
+      this.entry.push(entry);
+    },
+    addItem(item){
+      this.location.push(item);
+    },
   }
 };
 </script>

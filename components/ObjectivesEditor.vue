@@ -103,10 +103,10 @@ export default {
         description: "",
         isPrimary: false
       },
-      objectives: [],
       radioGroup: null
     };
   },
+  props: ['objectives'],
   computed: {
     isSelected() {
       if (this.objective == this.objectives[this.radioGroup]) return true;
@@ -116,7 +116,8 @@ export default {
   methods: {
     addObjective() {
       let newObjective = JSON.parse(JSON.stringify(this.objective));
-      this.objectives.push(newObjective);
+      // this.objectives.push(newObjective);
+      this.$emit('add-objective', newObjective);
       this.radioGroup = this.objectives.length;
     },
     selectObjective(index) {

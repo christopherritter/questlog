@@ -6,7 +6,7 @@
       <v-textarea
         name="input-7-1"
         label="Description"
-        :value="quest.description"
+        v-model="quest.description"
         hint="Describe your quest."
         outlined
       ></v-textarea>

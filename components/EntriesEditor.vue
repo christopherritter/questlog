@@ -27,16 +27,36 @@
                 outlined
               ></v-textarea>
               <v-select :items="actions" label="Actions" outlined></v-select>
-              <v-select
+              <v-autocomplete
+                v-model="entry.requirements"
                 :items="objectives"
                 label="Requirements"
+                item-text="name"
+                item-value="id"
+                clearable
+                multiple
                 outlined
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
+                v-model="entry.expiration"
                 :items="objectives"
                 label="Expiration"
+                item-text="name"
+                item-value="id"
+                clearable
+                multiple
                 outlined
-              ></v-select>
+              ></v-autocomplete>
+              <v-autocomplete
+                v-model="entry.objectives"
+                :items="objectives"
+                label="Objectives"
+                item-text="name"
+                item-value="id"
+                clearable
+                multiple
+                outlined
+              ></v-autocomplete>
               <div class="d-flex justify-end">
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>
@@ -109,13 +129,15 @@ export default {
     return {
       entry: {
         title: "",
-        text: ""
+        text: "",
+        requirements: [],
+        expiration: [],
+        objectives: [],
       },
-      entries: [],
       radioGroup: null
     };
   },
-  props: ["locations", "actions", "objectives"],
+  props: ["locations", "entries", "actions", "objectives"],
   computed: {
     isSelected() {
       if (this.entry == this.entries[this.radioGroup]) return true;
@@ -125,7 +147,7 @@ export default {
   methods: {
     addEntry() {
       let newEntry = JSON.parse(JSON.stringify(this.entry));
-      this.entries.push(newEntry);
+      this.$emit("add-entry", newEntry);
       this.radioGroup = this.entries.length;
     },
     selectEntry(index) {

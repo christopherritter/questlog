@@ -132,12 +132,11 @@ export default {
         isLandmark: false,
         mapOptions: {}
       },
-      locations: [],
       actions: [],
       markers: []
     };
   },
-  props: ["entries"],
+  props: ["locations", "entries"],
   components: { QuestMap },
 };
 </script>
