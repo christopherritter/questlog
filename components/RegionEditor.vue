@@ -13,16 +13,14 @@
               ></v-text-field>
               <h4 class="mt-1 mb-6">Coordinates</h4>
               <v-row>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="region.coordinates.lat"
                     label="Latitude"
                     outlined
                   ></v-text-field>
                 </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="region.coordinates.lng"
                     label="Longitude"

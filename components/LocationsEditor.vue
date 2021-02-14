@@ -26,14 +26,14 @@
               ></v-checkbox>
               <h4 class="mt-1 mb-6">Coordinates</h4>
               <v-row>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="location.position.lat"
                     label="Latitude"
                     outlined
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="location.position.lng"
                     label="Longitude"
@@ -55,13 +55,12 @@
                   <v-btn dark outlined disabled>Reset</v-btn>
                   <v-spacer></v-spacer>
                   <v-btn
-                    v-if="!isSelected"
                     dark
                     outlined
                     @click="addObjective()"
                     >Add</v-btn
                   >
-                  <v-btn v-else dark outlined color="primary">Update</v-btn>
+                  <!-- <v-btn v-else dark outlined color="primary">Update</v-btn> -->
                 </v-col>
               </v-row>
             </v-col>
@@ -69,13 +68,13 @@
         </v-col>
         <v-col>
           <div class="mt-5 mb-4 align-center">
-            <v-btn text dark :disabled="!isSelected">
+            <v-btn text dark disabled>
               <v-icon class="mr-2">
                 mdi-pencil
               </v-icon>
               Edit
             </v-btn>
-            <v-btn text dark :disabled="!isSelected">
+            <v-btn text dark disabled>
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
@@ -139,7 +138,7 @@ export default {
     };
   },
   props: ["entries"],
-  components: { QuestMap }
+  components: { QuestMap },
 };
 </script>
 

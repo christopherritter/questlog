@@ -70,14 +70,14 @@
             ></v-radio>
           </v-radio-group>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
-            <v-btn outlined dark @click="$emit('change-tab', 'locations')">
+            <v-btn outlined dark @click="$emit('change-tab', 'entries')">
               Back
             </v-btn>
             <v-btn
               outlined
               dark
               class="ml-2"
-              @click="$emit('change-tab', 'items')"
+              disabled
             >
               Next
             </v-btn>
