@@ -5,7 +5,7 @@
         <v-col cols="12" md="5" lg="4">
           <v-row>
             <v-col>
-              <div class="d-flex my-6 align-center">
+              <div class="d-flex mt-5 mb-4 align-center">
                 <h1>Objectives</h1>
                 <v-spacer></v-spacer>
                 <v-btn text>
@@ -45,7 +45,7 @@
           </v-row>
         </v-col>
         <v-col cols="12" md="7" lg="8" class="d-flex flex-column">
-          <div class="d-flex flex-shrink-0 my-6 align-center">
+          <div class="d-flex flex-shrink-0 mt-5 mb-4 align-center">
             <v-btn text dark :disabled="!isSelected">
               <v-icon class="mr-2">
                 mdi-pencil

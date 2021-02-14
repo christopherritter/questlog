@@ -5,23 +5,31 @@
         <v-col cols="4">
           <v-row>
             <v-col>
-              <h1 class="my-6">Region</h1>
+              <h1 class="mt-5 mb-4">Region</h1>
               <v-text-field
                 v-model="region.name"
                 label="Name"
                 outlined
               ></v-text-field>
               <h4 class="mt-1 mb-6">Coordinates</h4>
-              <v-text-field
-                v-model="region.coordinates.lat"
-                label="Latitude"
-                outlined
-              ></v-text-field>
-              <v-text-field
-                v-model="region.coordinates.lng"
-                label="Longitude"
-                outlined
-              ></v-text-field>
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="region.coordinates.lat"
+                    label="Latitude"
+                    outlined
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="region.coordinates.lng"
+                    label="Longitude"
+                    outlined
+                  ></v-text-field>
+                </v-col>
+              </v-row>
               <h4 class="mt-1 mb-6">Zoom</h4>
               <v-range-slider max="18" min="4"></v-range-slider>
             </v-col>
