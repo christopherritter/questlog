@@ -8,7 +8,7 @@
     </span>
     <span v-else>
       <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
-      <!-- <v-btn plain nuxt to="/editor">Build your Own!</v-btn> -->
+      <v-btn plain nuxt to="/editor">Build your Own!</v-btn>
     </span>
 
     <v-spacer />
