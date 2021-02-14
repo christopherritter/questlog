@@ -39,12 +39,21 @@
           />
         </v-col>
       </v-row>
+      <v-row>
+        <v-col cols="12" class="d-flex pt-1">
+          <v-btn outlined dark @click="$emit('change-tab', 'about')">
+            Back
+          </v-btn>
+          <v-btn outlined dark class="ml-2" @click="$emit('change-tab', 'objectives')">
+            Next
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn dark disabled color="primary">
+            Save
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-card-text>
-    <v-card-actions>
-      <v-btn text color="grey" @click="clearChanges()">Clear Changes</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn text color="primary">Apply Changes</v-btn>
-    </v-card-actions>
   </v-card>
 </template>
 
@@ -53,7 +62,7 @@ import QuestMap from "@/components/QuestMap.vue";
 export default {
   name: "RegionEditor",
   components: { QuestMap },
-  props: ['region', 'locations']
+  props: ["region", "locations"]
 };
 </script>
 

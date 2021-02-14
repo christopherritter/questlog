@@ -12,48 +12,56 @@
     <v-row>
       <v-col cols="12">
         <v-form>
-          <v-tabs vertical>
-            <v-tab>
+          <v-tabs vertical v-model="tab">
+            <v-tab href="#about">
               About
             </v-tab>
-            <v-tab>
+            <v-tab href="#region">
               Region
             </v-tab>
-            <v-tab>
+            <v-tab href="#objectives">
               Objectives
             </v-tab>
-            <v-tab>
+            <v-tab href="#locations">
               Locations
             </v-tab>
-            <v-tab>
+            <v-tab href="#entries">
               Entries
             </v-tab>
-            <v-tab>
+            <v-tab href="#items">
               Items
             </v-tab>
 
-            <v-tab-item>
-              <AboutEditor :quest="quest" />
+            <v-tab-item value="about">
+              <AboutEditor :quest="quest" @change-tab="changeTab($event)" />
             </v-tab-item>
-            <v-tab-item>
-              <RegionEditor :region="region" :locations="locations" />
+            <v-tab-item value="region">
+              <RegionEditor
+                :region="region"
+                :locations="locations"
+                @change-tab="changeTab($event)"
+              />
             </v-tab-item>
-            <v-tab-item>
-              <ObjectivesEditor />
+            <v-tab-item value="objectives">
+              <ObjectivesEditor @change-tab="changeTab($event)" />
             </v-tab-item>
-            <v-tab-item>
-              <LocationsEditor :entries="entries" />
+            <v-tab-item value="locations">
+              <LocationsEditor
+                :entries="entries"
+                @change-tab="changeTab($event)"
+              />
             </v-tab-item>
-            <v-tab-item>
+            <v-tab-item value="entries">
               <EntriesEditor
                 :locations="locations"
                 :actions="actions"
                 :requirements="objectives"
                 :expiration="objectives"
+                @change-tab="changeTab($event)"
               />
             </v-tab-item>
-            <v-tab-item>
-              <ItemsEditor :entries="entries" />
+            <v-tab-item value="items">
+              <ItemsEditor :entries="entries" @change-tab="changeTab($event)" />
             </v-tab-item>
           </v-tabs>
         </v-form>
@@ -84,6 +92,7 @@ export default {
   },
   data() {
     return {
+      tab: "about",
       quest: {
         title: "",
         description: "",
@@ -110,6 +119,12 @@ export default {
       actions: [],
       items: []
     };
+  },
+  methods: {
+    changeTab(tab) {
+      console.log(tab)
+      this.tab = tab;
+    }
   }
 };
 </script>

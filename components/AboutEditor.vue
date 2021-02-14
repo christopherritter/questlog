@@ -16,19 +16,26 @@
         label="Categories"
         outlined
       ></v-text-field>
+      <div class="d-flex">
+        <v-btn outlined dark disabled>
+          Back
+        </v-btn>
+        <v-btn outlined dark class="ml-2" @click="$emit('change-tab', 'region')">
+          Next
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn dark disabled color="primary" class="ml-2">
+          Save
+        </v-btn>
+      </div>
     </v-card-text>
-    <v-card-actions>
-      <v-btn text color="grey" @click="clearChanges()">Clear Changes</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn text color="primary">Apply Changes</v-btn>
-    </v-card-actions>
   </v-card>
 </template>
 
 <script>
 export default {
   name: "AboutEditor",
-  props: ['quest']
+  props: ["quest"]
 };
 </script>
 

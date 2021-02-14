@@ -76,12 +76,13 @@
             ></v-radio>
           </v-radio-group>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
-            <v-btn outlined dark>
+            <v-btn outlined dark @click="$emit('change-tab', 'region')">
               Back
             </v-btn>
-            <v-btn outlined dark class="ml-2">
+            <v-btn outlined dark class="ml-2" @click="$emit('change-tab', 'locations')">
               Next
             </v-btn>
+            <v-spacer></v-spacer>
             <v-btn dark disabled color="primary" class="ml-2">
               Save
             </v-btn>
