@@ -12,7 +12,7 @@
       ></v-textarea>
       <v-text-field v-model="quest.image" label="Image" outlined></v-text-field>
       <v-autocomplete
-        v-model="categorySearch"
+        v-model="quest.categories"
         :items="categories"
         label="Categories"
         item-text="name"
@@ -47,16 +47,10 @@ export default {
   name: "AboutEditor",
   data() {
     return {
-      newQuest: {
-        title: "",
-        description: "",
-        image: "",
-        categories: []
-      },
       categorySearch: null
     };
   },
-  props: ["quest", "categories"]
+  props: ["quest", "categories"],
 };
 </script>
 
