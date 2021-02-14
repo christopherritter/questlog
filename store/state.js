@@ -15,6 +15,11 @@ export default () => ({
       name: "Learning Tree Farm",
       favorites: [3],
       authorId: "learning-tree-farm",
+    },
+    'KRM5xFtPQ7bDKYSqterhnaB58fT2': {
+      name: "Kathy Jo Pickett",
+      favorite: [0, 1],
+      authorId: "mama-bear"
     }
   },
   authors: {
@@ -27,6 +32,11 @@ export default () => ({
       name: "Learning Tree Farm",
       isAnonymous: false,
       quests: [0, 1, 2],
+    },
+    'mama-bear': {
+      name: "Mama Bear",
+      isAnonymous: true,
+      quests: []
     }
   },
   categories: [{
