@@ -20,7 +20,15 @@
                 label="Title"
                 outlined
               ></v-text-field>
-              <v-select :items="locations" label="Location" outlined></v-select>
+              <v-autocomplete
+                v-model="entry.location"
+                :items="locations"
+                label="Location"
+                item-text="name"
+                item-value="id"
+                clearable
+                outlined
+              ></v-autocomplete>
               <v-textarea
                 v-model="entry.text"
                 label="Text"
@@ -129,6 +137,7 @@ export default {
     return {
       entry: {
         title: "",
+        location: {},
         text: "",
         requirements: [],
         expiration: [],
