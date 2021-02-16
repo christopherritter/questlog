@@ -45,8 +45,8 @@
             <v-tab-item value="region">
               <RegionEditor
                 :region="region"
-                :locations="locations"
                 @change-tab="changeTab($event)"
+                @update-region="updateRegion($event)"
               />
             </v-tab-item>
             <v-tab-item value="objectives">
@@ -160,6 +160,10 @@ export default {
     changeTab(tab) {
       console.log(tab);
       this.tab = tab;
+    },
+    updateRegion(region) {
+      this.region.coordinates = region.coordinates;
+      this.region.marker = "marker.png"
     },
     addObjective(objective){
       this.objectives.push(objective);

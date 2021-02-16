@@ -679,7 +679,7 @@ export default () => ({
     },
     {
       id: 1,
-      name: "Go",
+      name: "Move",
     },
     {
       id: 2,

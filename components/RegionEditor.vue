@@ -42,6 +42,8 @@
             :locations="locations"
             :zoom="region.zoom"
             :mapOptions="region.mapOptions"
+            :region="region"
+            @mark-location="markLocation($event)"
           />
         </v-col>
       </v-row>
@@ -50,7 +52,12 @@
           <v-btn outlined dark @click="$emit('change-tab', 'about')">
             Back
           </v-btn>
-          <v-btn outlined dark class="ml-2" @click="$emit('change-tab', 'objectives')">
+          <v-btn
+            outlined
+            dark
+            class="ml-2"
+            @click="$emit('change-tab', 'objectives')"
+          >
             Next
           </v-btn>
           <v-spacer></v-spacer>
@@ -68,7 +75,57 @@ import QuestMap from "@/components/QuestMap.vue";
 export default {
   name: "RegionEditor",
   components: { QuestMap },
-  props: ["region", "locations"]
+  // data() {
+  //   return {
+  //     locations: [
+  //       {
+  //         position: {
+  //           lat: this.region.coordinates.lat,
+  //           lng: this.region.coordinates.lng
+  //         }
+  //       }
+  //     ]
+  //   };
+  // },
+  props: ["region"],
+  computed: {
+    locations() {
+      console.log("New locations");
+      var locationsArr = [
+        {
+          position: {
+            lat: this.region.coordinates.lat,
+            lng: this.region.coordinates.lng
+          }
+        }
+      ]
+      // locationsArr.push({
+      //   position: {
+      //     lat: 0,
+      //     lng: 0
+      //   }
+      // });
+      console.log(locationsArr)
+      return locationsArr;
+
+    }
+  },
+  methods: {
+    markLocation(gMap) {
+      this.$emit('update-region', {
+        coordinates: {
+          lat: gMap.event.latLng.lat(),
+          lng: gMap.event.latLng.lng(),
+        }
+      });
+
+      // for (let i = 0; i < gmarkers.length; i++) {
+      //   gmarkers[i].setMap(null);
+      //   console.log(gmarkers[i])
+      // }
+
+    }
+  }
 };
 </script>
 

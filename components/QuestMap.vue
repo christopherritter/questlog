@@ -7,22 +7,23 @@
     :center="{ lat: position.lat, lng: position.lng }"
     :options="options"
     :zoom="zoom"
-    @click="$emit('clear-location')"
+    @click="markLocation($event)"
   >
     <GMapMarker
       v-for="location in locations"
       :key="location.id"
       :position="{ lat: location.position.lat, lng: location.position.lng }"
-      :options="{
-        icon: {
-          url: require('~/assets/img/' + location.marker),
-          anchor: { x: 25, y: 25 }
-        }
-      }"
-      @click="$emit('view-location', location.id)"
+      :options="{}"
+      @click="consoleLog($event)"
     >
       <!-- This was removed from the GMapMarker above: -->
       <!-- @click="$emit('view-location', location.id)" -->
+
+      <!-- This was removed from the options in GMapMarker: -->
+      <!-- icon: {
+          url: require('~/assets/img/' + location.marker),
+          anchor: { x: 25, y: 25 }
+        } -->
 
       <!-- <GMapInfoWindow :options="{ maxWidth: 200 }">
         <code class="grey--text text--darken-4">
@@ -191,11 +192,57 @@ export default {
       ]
     };
   },
-  props: ["questId", "position", "locations", "location", "zoom", "mapOptions"],
+  props: ["questId", "position", "locations", "zoom", "mapOptions"],
+  watch: {
+    locations() {
+      console.log("Location updated!");
+      this.toggleMarkers();
+    }
+  },
   methods: {
+    markLocation(event) {
+
+      console.log("Mark Location:")
+      console.log(event)
+      // this.$emit("mark-location", event);
+      // this.setCenter(event.event.latLng);
+
+      let marker = new this.$refs.gMap.Marker({
+        map: this.$refs.gMap.map,
+        position: event.event.latLng,
+        draggable: true
+      });
+
+      this.$refs.gMap.markers.push(marker);
+    },
     setCenter(position) {
       this.$refs.gMap.map.setCenter(position);
     },
+    toggleMarkers() {
+      // var gmarkers = this.$refs.gMap.markers;
+      // console.log("Toggle Markers:")
+      // console.log(gmarkers)
+      // for (let i = 0; i < gmarkers.length; i++) {
+      //   console.log("Setting map for:")
+      //   gmarkers[i].setMap(this.$refs.gMap.map);
+      //   console.log(gmarkers[i])
+      // }
+    },
+    consoleLog(event) {
+      console.log(event);
+    },
+    checkForMarkers() {
+      this.locations.forEach((location, i) => {
+        location.visible = this.$refs.gMap.map
+          .getBounds()
+          .contains(this.$refs.gMap.markers[i].getPosition());
+      });
+
+      this.locationsVisibleOnMap = this.locations
+        .filter(l => l.visible)
+        .map(l => l.name)
+        .join(", ");
+    }
   }
 };
 </script>
