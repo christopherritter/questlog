@@ -60,10 +60,14 @@
             <v-tab-item value="locations">
               <LocationsEditor
                 :region="region"
+                :location="location"
                 :locations="locations"
                 :entries="entries"
+                :markers="markers"
                 @change-tab="changeTab($event)"
+                @select-location="selectLocation($event)"
                 @mark-location="addLocation($event)"
+                @update-location="updateLocation($event)"
               />
             </v-tab-item>
             <v-tab-item value="entries">
@@ -144,10 +148,25 @@ export default {
           lng: -98.5795
         },
         zoom: 18,
+        draggable: true,
         mapOptions: {}
+      },
+      location: {
+        name: "",
+        isLandmark: true,
+        coordinates: {
+          lat: 39.828175,
+          lng: -98.5795
+        },
+        zoom: 19,
+        image: "",
+        isLandmark: false,
+        mapOptions: {},
+        draggable: true
       },
       objectives: [],
       locations: [],
+      markers: [],
       entries: [],
       actions: [],
       items: []
@@ -166,19 +185,35 @@ export default {
     updateRegion(region) {
       this.region.coordinates = region;
     },
-    addObjective(objective){
+    addObjective(objective) {
       this.objectives.push(objective);
     },
-    addLocation(location){
-      this.locations.push({ coordinates: location });
+    addLocation(location) {
+      this.locations.push({ coordinates: location, draggable: true });
     },
-    addEntry(entry){
+    selectLocation(location) {
+      console.log("Select location")
+      console.log(location)
+    },
+    updateLocation(location) {
+      var position = location.oldMarker.coordinates;
+      for (let l = 0; l < this.locations.length; l++) {
+        var currentPosition = this.locations[l].coordinates;
+        if (position.lat == currentPosition.lat) {
+          var newPosition = location.newMarker.getLatLng()
+          this.locations[l].coordinates = newPosition;
+        }
+      }
+
+      // this.locations.push(location.newMarker)
+    },
+    addEntry(entry) {
       this.entries.push(entry);
     },
-    addAction(action){
+    addAction(action) {
       this.actions.push(action);
     },
-    addItem(item){
+    addItem(item) {
       this.items.push(item);
     },
   }

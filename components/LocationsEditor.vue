@@ -54,7 +54,7 @@
                 <v-col cols="12" class="d-flex pt-1">
                   <v-btn dark outlined disabled>Reset</v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn dark outlined @click="addObjective()">Add</v-btn>
+                  <v-btn dark outlined @click="addLocation()">Add</v-btn>
                   <!-- <v-btn v-else dark outlined color="primary">Update</v-btn> -->
                 </v-col>
               </v-row>
@@ -83,6 +83,8 @@
             :zoom="location.zoom"
             :locations="locations"
             @mark-location="$emit('mark-location', $event)"
+            @select-location="$emit('select-location', $event)"
+            @update-location="updateLocation($event)"
           />
           <div class="d-flex">
             <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
@@ -111,31 +113,28 @@
 import LeafletMap from "@/components/LeafletMap.vue";
 export default {
   name: "LocationsEditor",
-  data() {
-    return {
-      location: {
-        name: "",
-        isLandmark: true,
-        coordinates: {
-          lat: 39.828175,
-          lng: -98.5795
-        },
-        zoom: 19,
-        image: "",
-        isLandmark: false,
-        mapOptions: {}
-      },
-      actions: [],
-      markers: []
-    };
-  },
-  props: ["region", "locations", "entries"],
+  props: ["region", "location", "locations", "entries", "markers"],
   created() {
     if (this.location.coordinates != this.region.coordinates) {
       this.location.coordinates = this.region.coordinates;
     }
   },
   components: { LeafletMap },
+  methods: {
+    consoleLog(event) {
+      console.log("Triggered console log:")
+      console.log(event);
+    },
+    addLocation() {
+      console.log("Adding Location")
+      this.$emit('mark-location', this.location.coordinates);
+    },
+    updateLocation(location) {
+      console.log("Update Location on Location Editor")
+      this.location.coordinates = location.newMarker.getLatLng();
+      this.$emit('update-location', { newMarker: location.newMarker, oldMarker: location.oldMarker });
+    }
+  }
 };
 </script>
 
