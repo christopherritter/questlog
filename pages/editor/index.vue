@@ -199,6 +199,7 @@ export default {
         mapOptions: this.location.mapOptions,
         draggable: true
       }
+      this.location = newLocation;
       this.locations.push(newLocation);
     },
     selectLocation(location) {
