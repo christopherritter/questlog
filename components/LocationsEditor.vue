@@ -54,7 +54,7 @@
                 outlined
               ></v-text-field>
               <v-select :items="markers" label="Marker" outlined></v-select>
-              <v-select :items="entries" label="Entries" outlined></v-select>
+              <!-- <v-select :items="entries" label="Entries" outlined></v-select> -->
               <v-row>
                 <v-col cols="12" class="d-flex pt-1">
                   <v-btn dark color="red" outlined disabled>Remove</v-btn>
@@ -118,7 +118,7 @@
 import LeafletMap from "@/components/LeafletMap.vue";
 export default {
   name: "LocationsEditor",
-  props: ["region", "location", "locations", "entries", "markers"],
+  props: ["region", "location", "locations", "markers"],
   components: { LeafletMap },
   computed: {
     centerPoint() {
