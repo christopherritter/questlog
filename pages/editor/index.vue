@@ -155,10 +155,10 @@ export default {
         name: "",
         isLandmark: true,
         coordinates: {
-          lat: 39.828175,
-          lng: -98.5795
+          lat: null,
+          lng: null
         },
-        zoom: 19,
+        zoom: 18,
         image: "",
         isLandmark: false,
         mapOptions: {},
@@ -175,7 +175,7 @@ export default {
   computed: {
     ...mapState({
       categories: state => state.categories
-    })
+    }),
   },
   methods: {
     changeTab(tab) {
@@ -189,23 +189,42 @@ export default {
       this.objectives.push(objective);
     },
     addLocation(location) {
-      this.locations.push({ coordinates: location, draggable: true });
+      var newLocation = {
+        name: this.location.name || "Untitled",
+        isLandmark: this.location.isLandmark,
+        coordinates: location,
+        zoom: this.location.zoom,
+        image: this.location.image,
+        isLandmark: this.location.isLandmark,
+        mapOptions: this.location.mapOptions,
+        draggable: true
+      }
+      this.locations.push(newLocation);
     },
     selectLocation(location) {
-      console.log("Select location")
-      console.log(location)
+      var position = location.target.getLatLng();
+      for (let l = 0; l < this.locations.length; l++) {
+        var currentPosition = this.locations[l].coordinates;
+        if (
+          position.lat === currentPosition.lat &&
+          position.lng === currentPosition.lng
+        ) {
+          this.location = this.locations[l];
+        }
+      }
     },
     updateLocation(location) {
       var position = location.oldMarker.coordinates;
       for (let l = 0; l < this.locations.length; l++) {
         var currentPosition = this.locations[l].coordinates;
-        if (position.lat == currentPosition.lat) {
-          var newPosition = location.newMarker.getLatLng()
+        if (
+          position.lat === currentPosition.lat &&
+          position.lng === currentPosition.lng
+        ) {
+          var newPosition = location.newMarker.getLatLng();
           this.locations[l].coordinates = newPosition;
         }
       }
-
-      // this.locations.push(location.newMarker)
     },
     addEntry(entry) {
       this.entries.push(entry);
@@ -215,7 +234,7 @@ export default {
     },
     addItem(item) {
       this.items.push(item);
-    },
+    }
   }
 };
 </script>

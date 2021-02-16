@@ -42,7 +42,12 @@
                 </v-col>
               </v-row>
               <h4 class="mt-1 mb-6">Zoom</h4>
-              <v-range-slider max="18" min="4"></v-range-slider>
+              <v-slider
+                v-model="location.zoom"
+                min="0"
+                max="18"
+                thumb-label
+              ></v-slider>
               <v-text-field
                 v-model="location.image"
                 label="Image"
@@ -52,7 +57,7 @@
               <v-select :items="entries" label="Entries" outlined></v-select>
               <v-row>
                 <v-col cols="12" class="d-flex pt-1">
-                  <v-btn dark outlined disabled>Reset</v-btn>
+                  <v-btn dark color="red" outlined disabled>Remove</v-btn>
                   <v-spacer></v-spacer>
                   <v-btn dark outlined @click="addLocation()">Add</v-btn>
                   <!-- <v-btn v-else dark outlined color="primary">Update</v-btn> -->
@@ -79,7 +84,7 @@
           <LeafletMap
             id="LocationMap"
             class="mb-5"
-            :center="location.coordinates"
+            :center="centerPoint"
             :zoom="location.zoom"
             :locations="locations"
             @mark-location="$emit('mark-location', $event)"
@@ -114,25 +119,20 @@ import LeafletMap from "@/components/LeafletMap.vue";
 export default {
   name: "LocationsEditor",
   props: ["region", "location", "locations", "entries", "markers"],
-  created() {
-    if (this.location.coordinates != this.region.coordinates) {
-      this.location.coordinates = this.region.coordinates;
-    }
-  },
   components: { LeafletMap },
+  computed: {
+    centerPoint() {
+      if (this.location.coordinates.lat == null) return this.region.coordinates;
+      return this.location.coordinates;
+    },
+  },
   methods: {
-    consoleLog(event) {
-      console.log("Triggered console log:")
-      console.log(event);
-    },
-    addLocation() {
-      console.log("Adding Location")
-      this.$emit('mark-location', this.location.coordinates);
-    },
     updateLocation(location) {
-      console.log("Update Location on Location Editor")
       this.location.coordinates = location.newMarker.getLatLng();
-      this.$emit('update-location', { newMarker: location.newMarker, oldMarker: location.oldMarker });
+      this.$emit("update-location", {
+        newMarker: location.newMarker,
+        oldMarker: location.oldMarker
+      });
     }
   }
 };
