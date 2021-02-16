@@ -17,11 +17,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      center: [39.56429074598017, -84.23503124009979]
-    };
-  },
   props: ["center", "zoom", "locations"],
   methods: {
     markLocation(event) {
@@ -30,5 +25,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

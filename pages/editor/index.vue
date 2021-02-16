@@ -62,7 +62,7 @@
                 :locations="locations"
                 :entries="entries"
                 @change-tab="changeTab($event)"
-                @add-location="addLocation($event)"
+                @mark-location="addLocation($event)"
               />
             </v-tab-item>
             <v-tab-item value="entries">
@@ -169,7 +169,7 @@ export default {
       this.objectives.push(objective);
     },
     addLocation(location){
-      this.locations.push(location);
+      this.locations.push({ coordinates: location });
     },
     addEntry(entry){
       this.entries.push(entry);

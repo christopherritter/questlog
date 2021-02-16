@@ -28,14 +28,14 @@
               <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="location.position.lat"
+                    v-model="location.coordinates.lat"
                     label="Latitude"
                     outlined
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="location.position.lng"
+                    v-model="location.coordinates.lng"
                     label="Longitude"
                     outlined
                   ></v-text-field>
@@ -77,21 +77,11 @@
             </v-btn>
           </div>
           <LeafletMap
-            :center="location.position"
+            :center="location.coordinates"
             :zoom="location.zoom"
             :locations="locations"
             @mark-location="$emit('mark-location', $event)"
           />
-          <!-- <QuestMap
-            id="LocationMap"
-            ref="locationMap"
-            style="width: 100%"
-            class="mb-5"
-            :position="location.position"
-            :locations="locations"
-            :zoom="location.zoom"
-            :mapOptions="location.mapOptions"
-          /> -->
           <div class="d-flex">
             <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
               Back
@@ -124,7 +114,7 @@ export default {
       location: {
         name: "",
         isLandmark: true,
-        position: {
+        coordinates: {
           lat: 39.828175,
           lng: -98.5795
         },
