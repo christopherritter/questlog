@@ -1,7 +1,7 @@
 <template>
   <div id="map-wrap" style="height: 100%">
     <client-only>
-      <l-map :zoom="region.zoom" :center="regionCenter" @click="markLocation($event)">
+      <l-map :zoom="zoom" :center="center" @click="markLocation($event)">
         <l-tile-layer
           url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
         ></l-tile-layer>
@@ -22,12 +22,7 @@ export default {
       center: [39.56429074598017, -84.23503124009979]
     };
   },
-  props: ["region", "locations"],
-  computed: {
-    regionCenter() {
-      return [this.region.coordinates.lat, this.region.coordinates.lng];
-    }
-  },
+  props: ["center", "zoom", "locations"],
   methods: {
     markLocation(event) {
       this.$emit('mark-location', event.latlng);

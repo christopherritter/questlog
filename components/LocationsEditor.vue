@@ -54,12 +54,7 @@
                 <v-col cols="12" class="d-flex pt-1">
                   <v-btn dark outlined disabled>Reset</v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn
-                    dark
-                    outlined
-                    @click="addObjective()"
-                    >Add</v-btn
-                  >
+                  <v-btn dark outlined @click="addObjective()">Add</v-btn>
                   <!-- <v-btn v-else dark outlined color="primary">Update</v-btn> -->
                 </v-col>
               </v-row>
@@ -81,7 +76,13 @@
               Remove
             </v-btn>
           </div>
-          <QuestMap
+          <LeafletMap
+            :center="location.position"
+            :zoom="location.zoom"
+            :locations="locations"
+            @mark-location="$emit('mark-location', $event)"
+          />
+          <!-- <QuestMap
             id="LocationMap"
             ref="locationMap"
             style="width: 100%"
@@ -90,7 +91,7 @@
             :locations="locations"
             :zoom="location.zoom"
             :mapOptions="location.mapOptions"
-          />
+          /> -->
           <div class="d-flex">
             <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
               Back
@@ -115,7 +116,7 @@
 </template>
 
 <script>
-import QuestMap from "@/components/QuestMap.vue";
+import LeafletMap from "@/components/LeafletMap.vue";
 export default {
   name: "LocationsEditor",
   data() {
@@ -127,7 +128,7 @@ export default {
           lat: 39.828175,
           lng: -98.5795
         },
-        zoom: 18,
+        zoom: 19,
         image: "",
         isLandmark: false,
         mapOptions: {}
@@ -137,7 +138,7 @@ export default {
     };
   },
   props: ["locations", "entries"],
-  components: { QuestMap },
+  components: { LeafletMap }
 };
 </script>
 

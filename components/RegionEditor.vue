@@ -29,23 +29,22 @@
                 </v-col>
               </v-row>
               <h4 class="mt-1 mb-6">Zoom</h4>
-              <v-slider v-model="region.zoom" min="0" max="18" thumb-label></v-slider>
+              <v-slider
+                v-model="region.zoom"
+                min="0"
+                max="18"
+                thumb-label
+              ></v-slider>
             </v-col>
           </v-row>
         </v-col>
         <v-col>
-          <LeafletMap :region="region" :locations="[region]" @mark-location="$emit('mark-location', $event)" />
-          <!-- <QuestMap
-            id="QuestMap"
-            ref="qMap"
-            style="width: 100%"
-            :position="region.coordinates"
-            :locations="locations"
+          <LeafletMap
+            :center="region.coordinates"
             :zoom="region.zoom"
-            :mapOptions="region.mapOptions"
-            :region="region"
-            @mark-location="markLocation($event)"
-          /> -->
+            :locations="[region]"
+            @mark-location="$emit('mark-location', $event)"
+          />
         </v-col>
       </v-row>
       <v-row>
@@ -76,58 +75,7 @@ import LeafletMap from "@/components/LeafletMap.vue";
 export default {
   name: "RegionEditor",
   components: { LeafletMap },
-  // data() {
-  //   return {
-  //     locations: [
-  //       {
-  //         position: {
-  //           lat: this.region.coordinates.lat,
-  //           lng: this.region.coordinates.lng
-  //         }
-  //       }
-  //     ]
-  //   };
-  // },
-  props: ["region"],
-  computed: {
-    locations() {
-      console.log("New locations");
-      var locationsArr = [
-        {
-          position: {
-            lat: this.region.coordinates.lat,
-            lng: this.region.coordinates.lng
-          }
-        }
-      ]
-      // locationsArr.push({
-      //   position: {
-      //     lat: 0,
-      //     lng: 0
-      //   }
-      // });
-      console.log(locationsArr)
-      return locationsArr;
-
-    }
-  },
-  methods: {
-    markLocation(event) {
-      console.log(event)
-      // this.$emit('update-region', {
-      //   coordinates: {
-      //     lat: gMap.event.latLng.lat(),
-      //     lng: gMap.event.latLng.lng(),
-      //   }
-      // });
-
-      // for (let i = 0; i < gmarkers.length; i++) {
-      //   gmarkers[i].setMap(null);
-      //   console.log(gmarkers[i])
-      // }
-
-    }
-  }
+  props: ["region"]
 };
 </script>
 
