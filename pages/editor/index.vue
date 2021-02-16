@@ -59,6 +59,7 @@
             </v-tab-item>
             <v-tab-item value="locations">
               <LocationsEditor
+                :region="region"
                 :locations="locations"
                 :entries="entries"
                 @change-tab="changeTab($event)"

@@ -1,5 +1,5 @@
 <template>
-  <div id="map-wrap" style="height: 100%">
+  <div id="map-wrap">
     <client-only>
       <l-map :zoom="zoom" :center="center" @click="markLocation($event)">
         <l-tile-layer

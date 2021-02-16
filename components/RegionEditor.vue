@@ -40,6 +40,7 @@
         </v-col>
         <v-col>
           <LeafletMap
+            style="height: 100%"
             :center="region.coordinates"
             :zoom="region.zoom"
             :locations="[region]"

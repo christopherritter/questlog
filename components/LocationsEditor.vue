@@ -77,6 +77,8 @@
             </v-btn>
           </div>
           <LeafletMap
+            id="LocationMap"
+            class="mb-5"
             :center="location.coordinates"
             :zoom="location.zoom"
             :locations="locations"
@@ -127,8 +129,13 @@ export default {
       markers: []
     };
   },
-  props: ["locations", "entries"],
-  components: { LeafletMap }
+  props: ["region", "locations", "entries"],
+  created() {
+    if (this.location.coordinates != this.region.coordinates) {
+      this.location.coordinates = this.region.coordinates;
+    }
+  },
+  components: { LeafletMap },
 };
 </script>
 
