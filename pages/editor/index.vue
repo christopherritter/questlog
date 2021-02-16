@@ -47,6 +47,7 @@
                 :region="region"
                 @change-tab="changeTab($event)"
                 @update-region="updateRegion($event)"
+                @mark-location="updateRegion($event)"
               />
             </v-tab-item>
             <v-tab-item value="objectives">
@@ -162,8 +163,7 @@ export default {
       this.tab = tab;
     },
     updateRegion(region) {
-      this.region.coordinates = region.coordinates;
-      this.region.marker = "marker.png"
+      this.region.coordinates = region;
     },
     addObjective(objective){
       this.objectives.push(objective);

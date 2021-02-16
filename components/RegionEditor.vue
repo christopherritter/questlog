@@ -29,12 +29,13 @@
                 </v-col>
               </v-row>
               <h4 class="mt-1 mb-6">Zoom</h4>
-              <v-range-slider max="18" min="4"></v-range-slider>
+              <v-slider v-model="region.zoom" min="0" max="18" thumb-label></v-slider>
             </v-col>
           </v-row>
         </v-col>
         <v-col>
-          <QuestMap
+          <LeafletMap :region="region" :locations="[region]" @mark-location="$emit('mark-location', $event)" />
+          <!-- <QuestMap
             id="QuestMap"
             ref="qMap"
             style="width: 100%"
@@ -44,7 +45,7 @@
             :mapOptions="region.mapOptions"
             :region="region"
             @mark-location="markLocation($event)"
-          />
+          /> -->
         </v-col>
       </v-row>
       <v-row>
@@ -71,10 +72,10 @@
 </template>
 
 <script>
-import QuestMap from "@/components/QuestMap.vue";
+import LeafletMap from "@/components/LeafletMap.vue";
 export default {
   name: "RegionEditor",
-  components: { QuestMap },
+  components: { LeafletMap },
   // data() {
   //   return {
   //     locations: [
@@ -111,13 +112,14 @@ export default {
     }
   },
   methods: {
-    markLocation(gMap) {
-      this.$emit('update-region', {
-        coordinates: {
-          lat: gMap.event.latLng.lat(),
-          lng: gMap.event.latLng.lng(),
-        }
-      });
+    markLocation(event) {
+      console.log(event)
+      // this.$emit('update-region', {
+      //   coordinates: {
+      //     lat: gMap.event.latLng.lat(),
+      //     lng: gMap.event.latLng.lng(),
+      //   }
+      // });
 
       // for (let i = 0; i < gmarkers.length; i++) {
       //   gmarkers[i].setMap(null);

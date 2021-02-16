@@ -132,6 +132,7 @@ export default {
       key: process.env.FIREBASE_API_KEY,
       //you can use libraries: ['places']
     }],
+    'nuxt-leaflet',
   ],
 
   googleAnalytics: {
