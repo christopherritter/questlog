@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
     <v-card-text>
-      <h1 class="mt-5 mb-4">About</h1>
+      <h1 class="mt-5 mb-4">Quest</h1>
       <v-text-field v-model="quest.title" label="Title" outlined></v-text-field>
       <v-textarea
         name="input-7-1"
@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  name: "AboutEditor",
+  name: "QuestEditor",
   data() {
     return {
       categorySearch: null

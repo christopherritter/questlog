@@ -13,8 +13,8 @@
       <v-col cols="12">
         <v-form>
           <v-tabs vertical v-model="tab">
-            <v-tab href="#about">
-              About
+            <v-tab href="#quest">
+              Quest
             </v-tab>
             <v-tab href="#region">
               Region
@@ -28,15 +28,16 @@
             <v-tab href="#entries">
               Entries
             </v-tab>
-            <v-tab href="#actions">
-              Actions
-            </v-tab>
             <v-tab href="#items">
               Items
             </v-tab>
+            <v-tab href="#actions">
+              Actions
+            </v-tab>
 
-            <v-tab-item value="about">
-              <AboutEditor
+
+            <v-tab-item value="quest">
+              <QuestEditor
                 :quest="quest"
                 :categories="categories"
                 @change-tab="changeTab($event)"
@@ -103,20 +104,20 @@
 
 <script>
 import { mapState } from "vuex";
-import AboutEditor from "@/components/AboutEditor.vue";
-import RegionEditor from "@/components/RegionEditor.vue";
-import ObjectivesEditor from "@/components/ObjectivesEditor.vue";
-import LocationsEditor from "@/components/LocationsEditor.vue";
-import EntriesEditor from "@/components/EntriesEditor.vue";
-import ActionsEditor from "@/components/ActionsEditor.vue";
-import ItemsEditor from "@/components/ItemsEditor.vue";
+import QuestEditor from "@/components/editor/QuestEditor.vue";
+import RegionEditor from "@/components/editor/RegionEditor.vue";
+import ObjectivesEditor from "@/components/editor/ObjectivesEditor.vue";
+import LocationsEditor from "@/components/editor/LocationsEditor.vue";
+import EntriesEditor from "@/components/editor/EntriesEditor.vue";
+import ActionsEditor from "@/components/editor/ActionsEditor.vue";
+import ItemsEditor from "@/components/editor/ItemsEditor.vue";
 
 export default {
   name: "questEditor",
   layout: "fluid",
   middleware: "authenticated",
   components: {
-    AboutEditor,
+    QuestEditor,
     RegionEditor,
     ObjectivesEditor,
     LocationsEditor,
@@ -126,7 +127,7 @@ export default {
   },
   data() {
     return {
-      tab: "about",
+      tab: "quest",
       quest: {
         title: "",
         description: "",
