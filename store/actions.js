@@ -59,4 +59,10 @@ export default {
   updateObjective({ commit }, { id, bool } ) {
     commit("SET_OBJECTIVE", { id, bool } );
   },
+
+  selectEntry({ commit }, index) {
+    console.log(index)
+    // commit('SET_ENTRY', index);
+  },
+
 }

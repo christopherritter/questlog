@@ -5,6 +5,21 @@ export default () => ({
   location: null,
   entry: null,
   item: null,
+  editor: {
+    quest: null,
+    author: null,
+    region: null,
+    location: null,
+    entry: null,
+    action: null,
+    item: null,
+    objectives: [],
+    locations: [],
+    markers: [],
+    entries: [],
+    actions: [],
+    items: []
+  },
   users: {
     'W8INchB9HLWxMHfgNVQ4mWE5P8v1': {
       name: "Christopher Ritter",

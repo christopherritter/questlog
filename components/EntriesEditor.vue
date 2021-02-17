@@ -98,7 +98,36 @@
               </v-card-text>
             </v-card>
           </div>
-          <v-radio-group class="flex-shrink-0" v-model="radioGroup">
+          <v-list v-else subheader two-line>
+            <span>
+              <v-subheader inset>Location</v-subheader>
+              <v-list-item-group v-model="selectedEntry" color="green">
+                <v-list-item v-for="(entry, index) in entries" :key="index" @click="$store.dispatch('selectEntry', index)">
+                  <v-list-item-avatar>
+                    <v-icon class="grey lighten-1" dark>
+                      mdi-feather
+                    </v-icon>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <v-list-item-title v-text="entry.title"></v-list-item-title>
+
+                    <v-list-item-subtitle
+                      v-text="entry.text"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
+
+                  <v-list-item-action>
+                    <v-btn icon>
+                      <v-icon color="grey lighten-1">mdi-information</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list-item-group>
+              <v-divider inset></v-divider>
+            </span>
+          </v-list>
+          <!-- <v-radio-group class="flex-shrink-0" v-model="radioGroup">
             <v-radio
               v-for="(entry, index) in entries"
               :key="index"
@@ -106,7 +135,7 @@
               :value="index"
               @click="selectEntry(index)"
             ></v-radio>
-          </v-radio-group>
+          </v-radio-group> -->
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
             <v-btn outlined dark @click="$emit('change-tab', 'locations')">
               Back
@@ -141,9 +170,9 @@ export default {
         text: "",
         requirements: [],
         expiration: [],
-        objectives: [],
+        objectives: []
       },
-      radioGroup: null
+      selectedEntry: {}
     };
   },
   props: ["locations", "entries", "actions", "objectives"],

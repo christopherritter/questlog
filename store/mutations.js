@@ -62,4 +62,8 @@ export default {
   SET_OBJECTIVE: (state, { id, bool }) => {
     state.objectives[id].isComplete = bool;
   },
+
+  SET_ENTRY: (state, { index }) => {
+    state.editor.entry = state.editor.entries[index];
+  },
 }
