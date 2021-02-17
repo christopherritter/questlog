@@ -62,7 +62,6 @@
                 :region="region"
                 :location="location"
                 :locations="locations"
-                :entries="entries"
                 :markers="markers"
                 @change-tab="changeTab($event)"
                 @select-location="selectLocation($event)"
@@ -73,7 +72,6 @@
             <v-tab-item value="entries">
               <EntriesEditor
                 :locations="locations"
-                :entries="entries"
                 :actions="actions"
                 :requirements="objectives"
                 :expiration="objectives"
@@ -84,7 +82,6 @@
             </v-tab-item>
             <v-tab-item value="items">
               <ItemsEditor
-                :entries="entries"
                 :items="items"
                 @change-tab="changeTab($event)"
                 @add-item="addItem($event)"
@@ -167,7 +164,6 @@ export default {
       objectives: [],
       locations: [],
       markers: [],
-      entries: [],
       actions: [],
       items: []
     };

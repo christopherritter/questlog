@@ -93,6 +93,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "ItemsEditor",
   data() {
@@ -105,8 +107,11 @@ export default {
       radioGroup: null
     };
   },
-  props: ['locations', 'entries'],
+  props: ['locations'],
   computed: {
+    ...mapState({
+      entries: state => state.editor.entries,
+    }),
     isSelected() {
       if (this.item == this.items[this.radioGroup]) return true;
       return false;

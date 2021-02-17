@@ -8,7 +8,7 @@
               <div class="d-flex mt-5 mb-4 align-center">
                 <h1>Entries</h1>
                 <v-spacer></v-spacer>
-                <v-btn text>
+                <v-btn text @click="clearEntry()">
                   <v-icon class="mr-2" dark>
                     mdi-plus-circle
                   </v-icon>
@@ -16,12 +16,12 @@
                 </v-btn>
               </div>
               <v-text-field
-                v-model="entry.title"
+                v-model="newEntry.title"
                 label="Title"
                 outlined
               ></v-text-field>
               <v-autocomplete
-                v-model="entry.location"
+                v-model="newEntry.location"
                 :items="locations"
                 label="Location"
                 item-text="name"
@@ -30,13 +30,13 @@
                 outlined
               ></v-autocomplete>
               <v-textarea
-                v-model="entry.text"
+                v-model="newEntry.text"
                 label="Text"
                 outlined
               ></v-textarea>
               <v-select :items="actions" label="Actions" outlined></v-select>
               <v-autocomplete
-                v-model="entry.requirements"
+                v-model="newEntry.requirements"
                 :items="objectives"
                 label="Requirements"
                 item-text="name"
@@ -46,7 +46,7 @@
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="entry.expiration"
+                v-model="newEntry.expiration"
                 :items="objectives"
                 label="Expiration"
                 item-text="name"
@@ -56,7 +56,7 @@
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="entry.objectives"
+                v-model="newEntry.objectives"
                 :items="objectives"
                 label="Objectives"
                 item-text="name"
@@ -68,23 +68,29 @@
               <div class="d-flex justify-end">
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn v-if="!isSelected" dark outlined @click="addEntry()"
+                <v-btn v-if="!entry" dark outlined @click="addEntry()"
                   >Add</v-btn
                 >
-                <v-btn v-else dark outlined color="primary">Update</v-btn>
+                <v-btn
+                  v-else
+                  dark
+                  outlined
+                  color="primary"
+                  @click="updateEntry()"
+                  >Update</v-btn
+                >
               </div>
             </v-col>
           </v-row>
         </v-col>
         <v-col cols="12" md="7" lg="8" class="d-flex flex-column">
           <div class="d-flex flex-shrink-0 mt-5 mb-4 align-center">
-            <v-btn text dark :disabled="!isSelected">
-              <v-icon class="mr-2">
-                mdi-pencil
-              </v-icon>
-              Edit
-            </v-btn>
-            <v-btn text dark :disabled="!isSelected">
+            <v-btn
+              text
+              dark
+              :disabled="selectedEntry == 'undefined'"
+              @click="removeEntry()"
+            >
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
@@ -102,7 +108,11 @@
             <span>
               <v-subheader inset>Location</v-subheader>
               <v-list-item-group v-model="selectedEntry" color="green">
-                <v-list-item v-for="(entry, index) in entries" :key="index" @click="$store.dispatch('selectEntry', index)">
+                <v-list-item
+                  v-for="(entry, index) in entries"
+                  :key="index"
+                  @click="selectEntry(index)"
+                >
                   <v-list-item-avatar>
                     <v-icon class="grey lighten-1" dark>
                       mdi-feather
@@ -127,15 +137,6 @@
               <v-divider inset></v-divider>
             </span>
           </v-list>
-          <!-- <v-radio-group class="flex-shrink-0" v-model="radioGroup">
-            <v-radio
-              v-for="(entry, index) in entries"
-              :key="index"
-              :label="entry.title"
-              :value="index"
-              @click="selectEntry(index)"
-            ></v-radio>
-          </v-radio-group> -->
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
             <v-btn outlined dark @click="$emit('change-tab', 'locations')">
               Back
@@ -160,11 +161,13 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "EntriesEditor",
   data() {
     return {
-      entry: {
+      newEntry: {
         title: "",
         location: {},
         text: "",
@@ -172,24 +175,54 @@ export default {
         expiration: [],
         objectives: []
       },
-      selectedEntry: {}
+      selectedEntry: "undefined"
     };
   },
-  props: ["locations", "entries", "actions", "objectives"],
   computed: {
-    isSelected() {
-      if (this.entry == this.entries[this.radioGroup]) return true;
-      return false;
-    }
+    ...mapState({
+      objectives: state => state.editor.objectives,
+      locations: state => state.editor.locations,
+      entry: state => state.editor.entry,
+      entries: state => state.editor.entries,
+      actions: state => state.editor.actions
+    })
   },
   methods: {
     addEntry() {
-      let newEntry = JSON.parse(JSON.stringify(this.entry));
-      this.$emit("add-entry", newEntry);
-      this.radioGroup = this.entries.length;
+      this.$store.dispatch("addEntry", this.newEntry);
+      this.clearEntry();
     },
     selectEntry(index) {
-      this.entry = this.entries[index];
+      this.$store.dispatch("selectEntry", index);
+      this.newEntry = {
+        title: this.entries[index].title,
+        location: this.entries[index].location,
+        text: this.entries[index].text,
+        requirements: this.entries[index].requirements,
+        expiration: this.entries[index].expiration,
+        objectives: this.entries[index].objectives
+      };
+    },
+    updateEntry() {
+      this.$store.dispatch('updateEntry', { selectedEntry: this.selectedEntry, newEntry: this.newEntry });
+    },
+    removeEntry() {
+      var entries = this.entries.map(e => e);
+      entries.splice(this.selectedEntry, 1);
+      this.$store.dispatch("updateEntries", entries);
+      this.clearEntry();
+    },
+    clearEntry() {
+      this.$store.dispatch("clearEntry");
+      this.selectedEntry = null;
+      this.newEntry = {
+        title: "",
+        location: {},
+        text: "",
+        requirements: [],
+        expiration: [],
+        objectives: []
+      };
     }
   }
 };

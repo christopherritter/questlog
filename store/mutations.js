@@ -63,7 +63,32 @@ export default {
     state.objectives[id].isComplete = bool;
   },
 
-  SET_ENTRY: (state, { index }) => {
-    state.editor.entry = state.editor.entries[index];
+  ADD_ENTRY: (state, entry) => {
+    state.editor.entries.push(entry);
   },
+
+  SET_ENTRY: (state, entry) => {
+    state.editor.entry = entry;
+  },
+
+  UPDATE_ENTRY: (state, entry) => {
+    console.log(entry)
+    state.editor.entries[entry.selectedEntry] = {
+      title: entry.newEntry.title,
+      location: entry.newEntry.location,
+      text: entry.newEntry.text,
+      requirements: entry.newEntry.requirements,
+      expiration: entry.newEntry.expiration,
+      objectives: entry.newEntry.objectives
+    };
+    state.editor.entry = state.editor.entries[entry.selectedEntry];
+  },
+
+  CLEAR_ENTRY: (state) => {
+    state.editor.entry = null
+  },
+
+  SET_ENTRIES: (state, entries) => {
+    state.editor.entries = entries;
+  }
 }

@@ -116,6 +116,7 @@
 
 <script>
 import LeafletMap from "@/components/LeafletMap.vue";
+
 export default {
   name: "LocationsEditor",
   props: ["region", "location", "locations", "markers"],

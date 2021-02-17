@@ -60,9 +60,35 @@ export default {
     commit("SET_OBJECTIVE", { id, bool } );
   },
 
-  selectEntry({ commit }, index) {
-    console.log(index)
-    // commit('SET_ENTRY', index);
+  addEntry({ commit }, entry ) {
+    commit('ADD_ENTRY', entry)
+  },
+
+  selectEntry({ state, commit }, index) {
+    const entry = state.editor.entries[index];
+    commit('SET_ENTRY', entry);
+  },
+
+  clearEntry({ commit }) {
+    commit('CLEAR_ENTRY');
+  },
+
+  removeEntry({ state, commit}, index) {
+    console.log("Remove Entry No. " + index)
+    var entries = state.editor.entries;
+    var newEntries = entries.slice(index, 1)
+    console.log(newEntries)
+    commit('SET_ENTRIES', newEntries)
+  },
+
+  updateEntry({ commit }, { selectedEntry, newEntry }) {
+    console.log("Updating Entry")
+    commit('UPDATE_ENTRY', { selectedEntry, newEntry })
+  },
+
+  updateEntries({ commit }, entries) {
+    console.log("Updating Entries")
+    commit('SET_ENTRIES', entries)
   },
 
 }
