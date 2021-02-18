@@ -49,8 +49,8 @@ export default {
       name: location.name,
       isLandmark: location.isLandmark,
       position: {
-        lat: location.position.lat,
-        lng: location.position.lng,
+        lat: location.coordinates.lat,
+        lng: location.coordinates.lng,
       },
       zoom: location.zoom,
       image: location.image,
@@ -59,20 +59,60 @@ export default {
     }
   },
 
-  SET_OBJECTIVE: (state, { id, bool }) => {
-    state.objectives[id].isComplete = bool;
+  ADD_LOCATION: (state, location) => {
+    state.editor.locations.push(location);
   },
 
-  ADD_ENTRY: (state, entry) => {
-    state.editor.entries.push(entry);
+  UPDATE_LOCATION: (state, location) => {
+    state.editor.locations[entry.selectedLocation] = {
+      id: location.newLocation.id,
+      name: location.newLocation.name,
+      isLandmark: location.newLocation.isLandmark,
+      position: {
+        lat: location.newLocation.coordinates.lat,
+        lng: location.newLocation.coordinates.lng,
+      },
+      zoom: location.newLocation.zoom,
+      image: location.newLocation.image,
+      marker: location.newLocation.marker,
+      entries: location.newLocation.entries,
+    },
+    state.editor.location = state.editor.locations[location.selectedLocation];
+  },
+
+  CLEAR_LOCATION: (state) => {
+    state.editor.location = {
+      name: "Untitled",
+      isLandmark: true,
+      coordinates: {
+        lat: null,
+        lng: null
+      },
+      zoom: 18,
+      image: "",
+      isLandmark: false,
+      mapOptions: {},
+      draggable: true
+    }
+  },
+
+  SET_LOCATIONS: (state, locations) => {
+    state.editor.locations = locations;
+  },
+
+  SET_OBJECTIVE: (state, { id, bool }) => {
+    state.objectives[id].isComplete = bool;
   },
 
   SET_ENTRY: (state, entry) => {
     state.editor.entry = entry;
   },
 
+  ADD_ENTRY: (state, entry) => {
+    state.editor.entries.push(entry);
+  },
+
   UPDATE_ENTRY: (state, entry) => {
-    console.log(entry)
     state.editor.entries[entry.selectedEntry] = {
       title: entry.newEntry.title,
       location: entry.newEntry.location,

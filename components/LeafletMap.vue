@@ -1,7 +1,7 @@
 <template>
   <div id="map-wrap">
     <client-only>
-      <l-map ref="lMap" :zoom="zoom" :center="center" @click="$emit('mark-location', $event.latlng)">
+      <l-map ref="lMap" :zoom="zoom" :center="center" @click="$emit('mark-location', $event)">
         <l-tile-layer
           url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
         ></l-tile-layer>

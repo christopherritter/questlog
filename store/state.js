@@ -6,10 +6,36 @@ export default () => ({
   entry: null,
   item: null,
   editor: {
-    quest: null,
+    quest: {
+      title: "",
+      description: "",
+      image: "",
+      categories: []
+    },
     author: null,
-    region: null,
-    location: null,
+    region: {
+      name: "",
+      coordinates: {
+        lat: 39.828175,
+        lng: -98.5795
+      },
+      zoom: 18,
+      draggable: true,
+      mapOptions: {}
+    },
+    location: {
+      name: "",
+      isLandmark: true,
+      coordinates: {
+        lat: 39.828175,
+        lng: -98.5795
+      },
+      zoom: 18,
+      image: "",
+      isLandmark: false,
+      mapOptions: {},
+      draggable: true
+    },
     entry: null,
     action: null,
     item: null,

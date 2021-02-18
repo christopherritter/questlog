@@ -78,7 +78,6 @@
                 :expiration="objectives"
                 :objectives="objectives"
                 @change-tab="changeTab($event)"
-                @add-entry="addEntry($event)"
               />
             </v-tab-item>
             <v-tab-item value="items">
@@ -128,50 +127,24 @@ export default {
   data() {
     return {
       tab: "quest",
-      quest: {
-        title: "",
-        description: "",
-        image: "",
-        categories: []
-      },
       author: {
         authorId: this.$store.state.users[this.$store.state.authUser.uid]
           .authorId,
         isAnonyous: false
       },
-      region: {
-        name: "",
-        coordinates: {
-          lat: 39.828175,
-          lng: -98.5795
-        },
-        zoom: 18,
-        draggable: true,
-        mapOptions: {}
-      },
-      location: {
-        name: "",
-        isLandmark: true,
-        coordinates: {
-          lat: null,
-          lng: null
-        },
-        zoom: 18,
-        image: "",
-        isLandmark: false,
-        mapOptions: {},
-        draggable: true
-      },
-      objectives: [],
-      locations: [],
-      markers: [],
-      actions: [],
-      items: []
     };
   },
   computed: {
     ...mapState({
       categories: state => state.categories,
+      quest: state => state.editor.quest,
+      region: state => state.editor.region,
+      location: state => state.editor.location,
+      objectives: state => state.editor.objectives,
+      locations: state => state.editor.locations,
+      markers: state => state.editor.markers,
+      actions: state => state.editor.actions,
+      items: state => state.editor.items,
     }),
   },
   methods: {
@@ -185,54 +158,6 @@ export default {
     addObjective(objective) {
       this.objectives.push(objective);
     },
-    addLocation(location) {
-      var newLocation = {
-        name: this.location.name || "Untitled",
-        isLandmark: this.location.isLandmark,
-        coordinates: location,
-        zoom: this.location.zoom,
-        image: this.location.image,
-        isLandmark: this.location.isLandmark,
-        mapOptions: this.location.mapOptions,
-        draggable: true
-      }
-      this.location = newLocation;
-      this.locations.push(newLocation);
-    },
-    selectLocation(location) {
-      var position = location.target.getLatLng();
-      for (let l = 0; l < this.locations.length; l++) {
-        var currentPosition = this.locations[l].coordinates;
-        if (
-          position.lat === currentPosition.lat &&
-          position.lng === currentPosition.lng
-        ) {
-          this.location = this.locations[l];
-        }
-      }
-    },
-    updateLocation(location) {
-      var position = location.oldMarker.coordinates;
-      for (let l = 0; l < this.locations.length; l++) {
-        var currentPosition = this.locations[l].coordinates;
-        if (
-          position.lat === currentPosition.lat &&
-          position.lng === currentPosition.lng
-        ) {
-          var newPosition = location.newMarker.getLatLng();
-          this.locations[l].coordinates = newPosition;
-        }
-      }
-    },
-    addEntry(entry) {
-      this.entries.push(entry);
-    },
-    addAction(action) {
-      this.actions.push(action);
-    },
-    addItem(item) {
-      this.items.push(item);
-    }
   }
 };
 </script>

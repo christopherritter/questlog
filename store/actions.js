@@ -51,9 +51,31 @@ export default {
     commit('SET_QUEST', quest);
   },
 
-  viewLocation({ state }, id) {
-    const location = state.locations[id];
-    commit('SET_LOCATION', location);
+  addLocation({ commit }, location) {
+    commit('ADD_LOCATION', location)
+  },
+
+  selectLocation({ state, commit }, location) {
+    const locations = state.editor.locations;
+    var position = location.target.getLatLng();
+    var selectedLocation;
+
+    for (let i = 0; i < locations.length; i++) {
+      var currentPosition = locations[i].coordinates;
+      if (
+        position.lat === currentPosition.lat &&
+        position.lng === currentPosition.lng
+      ) {
+        selectedLocation = locations[i];
+      }
+    }
+
+    commit('SET_LOCATION', selectedLocation);
+    return selectedLocation;
+  },
+
+  clearLocation({ commit }) {
+    commit('CLEAR_LOCATION');
   },
 
   updateObjective({ commit }, { id, bool } ) {
