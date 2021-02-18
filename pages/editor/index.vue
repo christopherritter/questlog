@@ -19,11 +19,11 @@
             <v-tab href="#region">
               Region
             </v-tab>
-            <v-tab href="#objectives">
-              Objectives
-            </v-tab>
             <v-tab href="#locations">
               Locations
+            </v-tab>
+            <v-tab href="#objectives">
+              Objectives
             </v-tab>
             <v-tab href="#entries">
               Entries
@@ -51,13 +51,6 @@
                 @mark-location="updateRegion($event)"
               />
             </v-tab-item>
-            <v-tab-item value="objectives">
-              <ObjectivesEditor
-                :objectives="objectives"
-                @change-tab="changeTab($event)"
-                @add-objective="addObjective($event)"
-              />
-            </v-tab-item>
             <v-tab-item value="locations">
               <LocationsEditor
                 :region="region"
@@ -68,6 +61,13 @@
                 @select-location="selectLocation($event)"
                 @mark-location="addLocation($event)"
                 @update-location="updateLocation($event)"
+              />
+            </v-tab-item>
+            <v-tab-item value="objectives">
+              <ObjectivesEditor
+                :objectives="objectives"
+                @change-tab="changeTab($event)"
+                @add-objective="addObjective($event)"
               />
             </v-tab-item>
             <v-tab-item value="entries">

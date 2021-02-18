@@ -45,7 +45,6 @@ export default {
 
   SET_LOCATION: (state, location) => {
     state.location = {
-      id: location.id,
       name: location.name,
       isLandmark: location.isLandmark,
       coordinates: {
@@ -55,7 +54,7 @@ export default {
       zoom: location.zoom,
       image: location.image,
       marker: location.marker,
-      entries: location.entries,
+      draggable: location.draggable,
     }
   },
 
@@ -65,7 +64,6 @@ export default {
 
   UPDATE_LOCATION: (state, location) => {
     state.editor.locations[location.selectedLocation] = {
-      id: location.newLocation.id,
       name: location.newLocation.name,
       isLandmark: location.newLocation.isLandmark,
       coordinates: {
@@ -75,7 +73,7 @@ export default {
       zoom: location.newLocation.zoom,
       image: location.newLocation.image,
       marker: location.newLocation.marker,
-      entries: location.newLocation.entries,
+      draggable: location.newLocation.draggable,
     },
     state.editor.location = state.editor.locations[location.selectedLocation];
   },

@@ -16,17 +16,17 @@
                 </v-btn>
               </div>
               <v-text-field
-                v-model="objective.name"
+                v-model="newObjective.name"
                 label="Name"
                 outlined
               ></v-text-field>
               <v-textarea
-                v-model="objective.description"
+                v-model="newObjective.description"
                 label="Description"
                 outlined
               ></v-textarea>
               <v-checkbox
-                v-model="objective.isPrimary"
+                v-model="newObjective.isPrimary"
                 label="Primary Objective"
               ></v-checkbox>
               <div class="d-flex justify-end">
@@ -94,11 +94,13 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "ObjectivesEditor",
   data() {
     return {
-      objective: {
+      newObjective: {
         name: "",
         description: "",
         isPrimary: false
@@ -106,8 +108,10 @@ export default {
       radioGroup: null
     };
   },
-  props: ['objectives'],
   computed: {
+    ...mapState({
+      objectives: state => state.editor.objectives
+    }),
     isSelected() {
       if (this.objective == this.objectives[this.radioGroup]) return true;
       return false;
@@ -115,13 +119,13 @@ export default {
   },
   methods: {
     addObjective() {
-      let newObjective = JSON.parse(JSON.stringify(this.objective));
+      let newObjective = JSON.parse(JSON.stringify(this.newObjective));
       // this.objectives.push(newObjective);
       this.$emit('add-objective', newObjective);
       this.radioGroup = this.objectives.length;
     },
     selectObjective(index) {
-      this.objective = this.objectives[index];
+      this.newObjective = this.objectives[index];
     }
   }
 };

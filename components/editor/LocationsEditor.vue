@@ -130,15 +130,14 @@ export default {
     return {
       newLocation: {
         name: "Untitled",
-        isLandmark: true,
+        isLandmark: false,
         coordinates: {
           lat: null,
           lng: null
         },
         zoom: 18,
         image: "",
-        isLandmark: false,
-        mapOptions: {},
+        marker: null,
         draggable: true
       },
       selectedLocation: null
@@ -170,9 +169,8 @@ export default {
           },
           zoom: this.locations[index].zoom,
           image: this.locations[index].image,
-          isLandmark: this.locations[index].isLandmark,
-          mapOptions: this.locations[index].mapOptions,
-          draggable: this.locations[index].draggable
+          marker: this.locations[index].marker,
+          draggable: true
         };
         this.selectedLocation = index;
       });
@@ -199,8 +197,7 @@ export default {
         },
         zoom: 18,
         image: "",
-        isLandmark: false,
-        mapOptions: {},
+        marker: null,
         draggable: true
       };
       this.selectedLocation = null;

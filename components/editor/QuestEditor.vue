@@ -2,17 +2,17 @@
   <v-card flat>
     <v-card-text>
       <h1 class="mt-5 mb-4">Quest</h1>
-      <v-text-field v-model="quest.title" label="Title" outlined></v-text-field>
+      <v-text-field v-model="newQuest.title" label="Title" outlined></v-text-field>
       <v-textarea
         name="input-7-1"
         label="Description"
-        v-model="quest.description"
+        v-model="newQuest.description"
         hint="Describe your quest."
         outlined
       ></v-textarea>
-      <v-text-field v-model="quest.image" label="Image" outlined></v-text-field>
+      <v-text-field v-model="newQuest.image" label="Image" outlined></v-text-field>
       <v-autocomplete
-        v-model="quest.categories"
+        v-model="newQuest.categories"
         :items="categories"
         label="Categories"
         item-text="name"
@@ -43,14 +43,26 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "QuestEditor",
   data() {
     return {
-      categorySearch: null
+      newQuest: {
+        title: "",
+        description: "",
+        image: "",
+        categories: []
+      },
     };
   },
-  props: ["quest", "categories"],
+  computed: {
+    ...mapState({
+      quest: state => state.editor.quest,
+      categories: state => state.categories
+    })
+  }
 };
 </script>
 

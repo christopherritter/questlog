@@ -7,7 +7,7 @@
             <v-col>
               <h1 class="mt-5 mb-4">Region</h1>
               <v-text-field
-                v-model="region.name"
+                v-model="newRegion.name"
                 label="Name"
                 outlined
               ></v-text-field>
@@ -15,14 +15,14 @@
               <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="region.coordinates.lat"
+                    v-model="newRegion.coordinates.lat"
                     label="Latitude"
                     outlined
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="region.coordinates.lng"
+                    v-model="newRegion.coordinates.lng"
                     label="Longitude"
                     outlined
                   ></v-text-field>
@@ -30,7 +30,7 @@
               </v-row>
               <h4 class="mt-1 mb-6">Zoom</h4>
               <v-slider
-                v-model="region.zoom"
+                v-model="newRegion.zoom"
                 min="0"
                 max="18"
                 thumb-label
@@ -41,10 +41,11 @@
         <v-col>
           <LeafletMap
             style="height: 100%"
-            :center="region.coordinates"
-            :zoom="region.zoom"
-            :locations="[region]"
-            @mark-location="$emit('mark-location', $event)"
+            :center="newRegion.coordinates"
+            :zoom="newRegion.zoom"
+            :locations="[newRegion]"
+            @mark-location="markLocation($event)"
+            @move-location="moveLocation($event)"
           />
         </v-col>
       </v-row>
@@ -72,11 +73,39 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
+
 export default {
   name: "RegionEditor",
+  data() {
+    return {
+      newRegion: {
+        name: "",
+        coordinates: {
+          lat: 39.828175,
+          lng: -98.5795
+        },
+        zoom: 18,
+        draggable: true,
+        mapOptions: {}
+      }
+    };
+  },
   components: { LeafletMap },
-  props: ["region"]
+  computed: {
+    ...mapState({
+      region: state => state.editor.region
+    })
+  },
+  methods: {
+    markLocation(event) {
+      this.newRegion.coordinates = event.latlng;
+    },
+    moveLocation(event) {
+      this.newRegion.coordinates = event.target.getLatLng();
+    },
+  }
 };
 </script>
 

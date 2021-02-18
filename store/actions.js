@@ -80,8 +80,6 @@ export default {
   },
 
   updateCoordinates({ commit }, location) {
-    console.log("Update coordinates:")
-    console.log(location)
     commit('SET_COORDINATES', { index: location.index, coordinates: location.coordinates  });
   },
 
