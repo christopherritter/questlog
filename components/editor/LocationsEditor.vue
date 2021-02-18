@@ -63,7 +63,7 @@
                     dark
                     outlined
                     :disabled="!newLocation.coordinates == null"
-                    @click="addLocation()"
+                    @click="updateLocation()"
                     >Update</v-btn
                   >
                   <!-- <v-btn v-else dark outlined color="primary">Update</v-btn> -->
@@ -95,7 +95,7 @@
             :locations="locations"
             @mark-location="markLocation($event)"
             @select-location="selectLocation($event)"
-            @update-location="updateLocation($event)"
+            @move-location="moveLocation($event)"
           />
           <div class="d-flex">
             <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
@@ -160,42 +160,35 @@ export default {
       this.$store.dispatch("addLocation", this.newLocation);
     },
     async selectLocation(location) {
-      this.$store.dispatch("selectLocation", location).then((result) => {
+      this.$store.dispatch("selectLocation", location).then((index) => {
         this.newLocation = {
-          name: result.name,
-          isLandmark: result.isLandmark,
+          name: this.locations[index].name,
+          isLandmark: this.locations[index].isLandmark,
           coordinates: {
-            lat: result.coordinates.lat,
-            lng: result.coordinates.lng
+            lat: this.locations[index].coordinates.lat,
+            lng: this.locations[index].coordinates.lng
           },
-          zoom: result.zoom,
-          image: result.image,
-          isLandmark: result.isLandmark,
-          mapOptions: result.mapOptions,
-          draggable: result.draggable
+          zoom: this.locations[index].zoom,
+          image: this.locations[index].image,
+          isLandmark: this.locations[index].isLandmark,
+          mapOptions: this.locations[index].mapOptions,
+          draggable: this.locations[index].draggable
         };
+        this.selectedLocation = index;
       });
     },
-    updateLocation(location) {
-      var position = location.oldMarker.coordinates;
-      for (let l = 0; l < this.locations.length; l++) {
-        var currentPosition = this.locations[l].coordinates;
-        if (
-          position.lat === currentPosition.lat &&
-          position.lng === currentPosition.lng
-        ) {
-          var newPosition = location.newMarker.getLatLng();
-          this.locations[l].coordinates = newPosition;
-        }
-      }
+    moveLocation(location) {
+      var coordinates = location.target.getLatLng();
+      var index = this.selectedLocation;
+      this.newLocation.coordinates = coordinates
+      this.$store.dispatch('updateCoordinates', { coordinates, index });
     },
-    // updateLocation(location) {
-    //   this.location.coordinates = location.newMarker.getLatLng();
-    //   this.$emit("update-location", {
-    //     newMarker: location.newMarker,
-    //     oldMarker: location.oldMarker
-    //   });
-    // },
+    updateLocation() {
+      this.$store.dispatch('updateLocation', {
+        selectedLocation: this.selectedLocation,
+        newLocation: this.newLocation
+      });
+    },
     clearLocation() {
       this.newLocation = {
         name: "Untitled",

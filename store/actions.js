@@ -57,8 +57,8 @@ export default {
 
   selectLocation({ state, commit }, location) {
     const locations = state.editor.locations;
-    var position = location.target.getLatLng();
-    var selectedLocation;
+    var position = location.sourceTarget.getLatLng();
+    var newLocation, selectedLocation;
 
     for (let i = 0; i < locations.length; i++) {
       var currentPosition = locations[i].coordinates;
@@ -66,16 +66,27 @@ export default {
         position.lat === currentPosition.lat &&
         position.lng === currentPosition.lng
       ) {
-        selectedLocation = locations[i];
+        newLocation = locations[i];
+        selectedLocation = i;
       }
     }
 
-    commit('SET_LOCATION', selectedLocation);
+    commit('SET_LOCATION', newLocation);
     return selectedLocation;
   },
 
   clearLocation({ commit }) {
     commit('CLEAR_LOCATION');
+  },
+
+  updateCoordinates({ commit }, location) {
+    console.log("Update coordinates:")
+    console.log(location)
+    commit('SET_COORDINATES', { index: location.index, coordinates: location.coordinates  });
+  },
+
+  updateLocation({ commit }, { selectedLocation, newLocation }) {
+    commit('UPDATE_LOCATION', { selectedLocation, newLocation })
   },
 
   updateObjective({ commit }, { id, bool } ) {

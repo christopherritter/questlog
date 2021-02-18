@@ -48,7 +48,7 @@ export default {
       id: location.id,
       name: location.name,
       isLandmark: location.isLandmark,
-      position: {
+      coordinates: {
         lat: location.coordinates.lat,
         lng: location.coordinates.lng,
       },
@@ -64,11 +64,11 @@ export default {
   },
 
   UPDATE_LOCATION: (state, location) => {
-    state.editor.locations[entry.selectedLocation] = {
+    state.editor.locations[location.selectedLocation] = {
       id: location.newLocation.id,
       name: location.newLocation.name,
       isLandmark: location.newLocation.isLandmark,
-      position: {
+      coordinates: {
         lat: location.newLocation.coordinates.lat,
         lng: location.newLocation.coordinates.lng,
       },
@@ -78,6 +78,10 @@ export default {
       entries: location.newLocation.entries,
     },
     state.editor.location = state.editor.locations[location.selectedLocation];
+  },
+
+  SET_COORDINATES: (state, location) => {
+    state.editor.locations[location.index].coordinates = location.coordinates;
   },
 
   CLEAR_LOCATION: (state) => {

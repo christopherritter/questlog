@@ -11,8 +11,8 @@
           :lat-lng="[location.coordinates.lat, location.coordinates.lng]"
           :draggable="location.draggable ? true : false"
           @click="$emit('select-location', $event)"
-          @dragstart="dragMarker($event)"
-          @dragend="releaseMarker($event)"
+          @dragstart="$emit('select-location', $event)"
+          @dragend="$emit('move-location', $event)"
         ></l-marker>
       </l-map>
     </client-only>
@@ -21,31 +21,6 @@
 
 <script>
 export default {
-  props: ["center", "zoom", "locations"],
-  data() {
-    return {
-      grabbedMarker: {
-        coordinates: {
-          lat: null,
-          lng: null
-        }
-      },
-    }
-  },
-  methods: {
-    releaseMarker(event) {
-      var oldMarker = this.grabbedMarker, newMarker = event.target;
-      var position = newMarker.getLatLng();
-
-      newMarker.setLatLng(new L.LatLng(position.lat, position.lng),{draggable:'true'});
-
-      this.$refs.lMap.setCenter(new L.LatLng(position.lat, position.lng))
-      this.$emit('update-location', { oldMarker, newMarker });
-    },
-    dragMarker(event) {
-      var coordinates = event.target.getLatLng();
-      this.grabbedMarker = { coordinates }
-    }
-  }
+  props: ["center", "zoom", "locations"]
 };
 </script>
