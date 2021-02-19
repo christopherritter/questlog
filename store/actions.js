@@ -51,6 +51,8 @@ export default {
     commit('SET_QUEST', quest);
   },
 
+  // Editor Locations
+
   addLocation({ commit }, location) {
     commit('ADD_LOCATION', location)
   },
@@ -87,6 +89,8 @@ export default {
     commit('UPDATE_LOCATION', { selectedLocation, newLocation })
   },
 
+  // Editor Objectives
+
   addObjective({ commit }, objective) {
     commit('ADD_OBJECTIVE', objective)
   },
@@ -105,6 +109,8 @@ export default {
     console.log("Updating Objectives")
     commit('SET_OBJECTIVES', objectives)
   },
+
+  // Editor Entries
 
   addEntry({ commit }, entry ) {
     commit('ADD_ENTRY', entry)
@@ -133,6 +139,37 @@ export default {
 
   updateEntries({ commit }, entries) {
     commit('SET_ENTRIES', entries)
+  },
+
+// Editor Items
+
+  addItem({ commit }, item ) {
+    commit('ADD_ITEM', item)
+  },
+
+  selectItem({ state, commit }, index) {
+    const item = state.editor.items[index];
+    commit('SET_ITEM', item);
+  },
+
+  clearItem({ commit }) {
+    commit('CLEAR_ITEM');
+  },
+
+  removeItem({ state, commit}, index) {
+    console.log("Remove Item No. " + index)
+    var items = state.editor.items;
+    var newItems = items.slice(index, 1)
+    console.log(newItems)
+    commit('SET_ITEMS', newItems)
+  },
+
+  updateItem({ commit }, { selectedItem, newItem }) {
+    commit('UPDATE_ITEM', { selectedItem, newItem })
+  },
+
+  updateItems({ commit }, items) {
+    commit('SET_ITEMS', items)
   },
 
 }

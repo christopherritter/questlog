@@ -43,6 +43,10 @@ export default {
     }
   },
 
+  ADD_LOCATION: (state, location) => {
+    state.editor.locations.push(location);
+  },
+
   SET_LOCATION: (state, location) => {
     state.location = {
       name: location.name,
@@ -56,10 +60,6 @@ export default {
       marker: location.marker,
       draggable: location.draggable,
     }
-  },
-
-  ADD_LOCATION: (state, location) => {
-    state.editor.locations.push(location);
   },
 
   UPDATE_LOCATION: (state, location) => {
@@ -123,12 +123,12 @@ export default {
     state.editor.objectives = objectives;
   },
 
-  SET_ENTRY: (state, entry) => {
-    state.editor.entry = entry;
-  },
-
   ADD_ENTRY: (state, entry) => {
     state.editor.entries.push(entry);
+  },
+
+  SET_ENTRY: (state, entry) => {
+    state.editor.entry = entry;
   },
 
   UPDATE_ENTRY: (state, entry) => {
@@ -149,5 +149,33 @@ export default {
 
   SET_ENTRIES: (state, entries) => {
     state.editor.entries = entries;
+  },
+
+  ADD_ITEM: (state, item) => {
+    state.editor.items.push(item);
+  },
+
+  SET_ITEM: (state, item) => {
+    state.editor.item = item;
+  },
+
+  UPDATE_ITEM: (state, item) => {
+    state.editor.items[item.selectedItem] = {
+      name: item.newItem.name,
+      location: item.newItem.location,
+      text: item.newItem.text,
+      requirements: item.newItem.requirements,
+      expiration: item.newItem.expiration,
+      objectives: item.newItem.objectives
+    };
+    state.editor.item = state.editor.items[item.selectedItem];
+  },
+
+  CLEAR_ITEM: (state) => {
+    state.editor.item = null
+  },
+
+  SET_ITEMS: (state, items) => {
+    state.editor.items = items;
   }
 }
