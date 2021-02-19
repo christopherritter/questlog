@@ -8,7 +8,11 @@
               <div class="d-flex mt-5 mb-4 align-center">
                 <h1>Objectives</h1>
                 <v-spacer></v-spacer>
-                <v-btn text>
+                <v-btn
+                  text
+                  @click="clearObjective()"
+                  :disabled="currentObjective == null"
+                >
                   <v-icon class="mr-2" dark>
                     mdi-plus-circle
                   </v-icon>
@@ -33,13 +37,21 @@
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn
-                  v-if="!isSelected"
+                  v-if="currentObjective == null"
                   dark
                   outlined
+                  color="primary"
                   @click="addObjective()"
                   >Add</v-btn
                 >
-                <v-btn v-else dark outlined color="primary">Update</v-btn>
+                <v-btn
+                  v-else
+                  dark
+                  outlined
+                  @click="updateObjective()"
+                  color="primary"
+                  >Update</v-btn
+                >
               </div>
             </v-col>
           </v-row>
@@ -66,7 +78,7 @@
               </v-card-text>
             </v-card>
           </div>
-          <v-radio-group class="flex-shrink-0" v-model="radioGroup">
+          <v-radio-group class="flex-shrink-0" v-model="currentObjective">
             <v-radio
               v-for="(objective, index) in objectives"
               :key="index"
@@ -79,7 +91,12 @@
             <v-btn outlined dark @click="$emit('change-tab', 'region')">
               Back
             </v-btn>
-            <v-btn outlined dark class="ml-2" @click="$emit('change-tab', 'locations')">
+            <v-btn
+              outlined
+              dark
+              class="ml-2"
+              @click="$emit('change-tab', 'locations')"
+            >
               Next
             </v-btn>
             <v-spacer></v-spacer>
@@ -105,7 +122,7 @@ export default {
         description: "",
         isPrimary: false
       },
-      radioGroup: null
+      currentObjective: null
     };
   },
   computed: {
@@ -113,19 +130,38 @@ export default {
       objectives: state => state.editor.objectives
     }),
     isSelected() {
-      if (this.objective == this.objectives[this.radioGroup]) return true;
+      if (this.newObjective == this.currentObjective) return true;
       return false;
     }
   },
   methods: {
     addObjective() {
-      let newObjective = JSON.parse(JSON.stringify(this.newObjective));
+      // let newObjective = JSON.parse(JSON.stringify(this.newObjective));
       // this.objectives.push(newObjective);
-      this.$emit('add-objective', newObjective);
-      this.radioGroup = this.objectives.length;
+      this.$store.dispatch("addObjective", this.newObjective);
+      this.clearObjective();
     },
     selectObjective(index) {
-      this.newObjective = this.objectives[index];
+      // this.$store.dispatch("selectObjective", index);
+      this.newObjective = {
+        name: this.objectives[index].name,
+        description: this.objectives[index].description,
+        isPrimary: this.objectives[index].isPrimary
+      };
+    },
+    updateObjective() {
+      this.$store.dispatch("updateObjective", {
+        currentObjective: this.currentObjective,
+        newObjective: this.newObjective
+      });
+    },
+    clearObjective() {
+      this.newObjective = {
+        name: "",
+        description: "",
+        isPrimary: false
+      };
+      this.currentObjective = null;
     }
   }
 };

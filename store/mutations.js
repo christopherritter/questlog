@@ -106,6 +106,19 @@ export default {
     state.objectives[id].isComplete = bool;
   },
 
+  ADD_OBJECTIVE: (state, objective) => {
+    state.editor.objectives.push(objective);
+  },
+
+  UPDATE_OBJECTIVE: (state, objective) => {
+    state.editor.objectives[objective.currentObjective] = {
+      name: objective.newObjective.name,
+      description: objective.newObjective.description,
+      isPrimary: objective.newObjective.isPrimary,
+    };
+    // state.editor.entry = state.editor.entries[entry.selectedEntry];
+  },
+
   SET_ENTRY: (state, entry) => {
     state.editor.entry = entry;
   },

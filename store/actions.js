@@ -87,8 +87,18 @@ export default {
     commit('UPDATE_LOCATION', { selectedLocation, newLocation })
   },
 
-  updateObjective({ commit }, { id, bool } ) {
-    commit("SET_OBJECTIVE", { id, bool } );
+  addObjective({ commit }, objective) {
+    commit('ADD_OBJECTIVE', objective)
+  },
+
+  updateObjective({ commit }, objective ) {
+    console.log(objective)
+    console.log("Objective No. " + objective.currentObjective)
+    console.log(objective.newObjective)
+    commit('UPDATE_OBJECTIVE', {
+      currentObjective: objective.currentObjective,
+      newObjective: objective.newObjective
+    })
   },
 
   addEntry({ commit }, entry ) {
