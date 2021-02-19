@@ -25,7 +25,10 @@
                 outlined
               ></v-text-field>
               <v-select :items="actionTypes" label="Type" outlined></v-select>
-              <v-select v-if="newAction.type='Move'" :items="locations" label="Locations" outlined></v-select>
+              <v-select v-if="newAction.type='Look'" :items="locations" label="Locations" outlined></v-select>
+              <v-select v-else-if="newAction.type='Move'" :items="locations" label="Locations" outlined></v-select>
+              <v-select v-else-if="newAction.type='Put'" :items="items" label="Items" outlined></v-select>
+              <v-select v-else :items="items" label="Items" outlined></v-select>
               <div class="d-flex justify-end">
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>

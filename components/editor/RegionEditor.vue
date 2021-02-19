@@ -35,37 +35,49 @@
                 max="18"
                 thumb-label
               ></v-slider>
+              <v-row>
+                <v-col cols="12" class="d-flex pt-1">
+                  <v-btn dark color="red" outlined disabled>Remove</v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    dark
+                    outlined
+                    :disabled="!newRegion.coordinates == null"
+                    @click="updateRegion()"
+                    >Update</v-btn
+                  >
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
         </v-col>
         <v-col>
           <LeafletMap
-            style="height: 100%"
+            id="RegionMap"
+            class="mb-5"
             :center="newRegion.coordinates"
             :zoom="newRegion.zoom"
             :locations="[newRegion]"
             @mark-location="markLocation($event)"
             @move-location="moveLocation($event)"
           />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" class="d-flex pt-1">
-          <v-btn outlined dark @click="$emit('change-tab', 'about')">
-            Back
-          </v-btn>
-          <v-btn
-            outlined
-            dark
-            class="ml-2"
-            @click="$emit('change-tab', 'objectives')"
-          >
-            Next
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn dark disabled color="primary">
-            Save
-          </v-btn>
+          <div class="d-flex">
+            <v-btn outlined dark @click="$emit('change-tab', 'about')">
+              Back
+            </v-btn>
+            <v-btn
+              outlined
+              dark
+              class="ml-2"
+              @click="$emit('change-tab', 'objectives')"
+            >
+              Next
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn dark disabled color="primary">
+              Save
+            </v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-card-text>
@@ -104,9 +116,13 @@ export default {
     },
     moveLocation(event) {
       this.newRegion.coordinates = event.target.getLatLng();
-    },
+    }
   }
 };
 </script>
 
-<style></style>
+<style>
+#RegionMap {
+  height: calc(100% - 56px);
+}
+</style>

@@ -66,7 +66,6 @@
                     @click="updateLocation()"
                     >Update</v-btn
                   >
-                  <!-- <v-btn v-else dark outlined color="primary">Update</v-btn> -->
                 </v-col>
               </v-row>
             </v-col>
