@@ -172,4 +172,25 @@ export default {
     commit('SET_ITEMS', items)
   },
 
+  // Editor Actions
+
+  addAction({ commit }, action) {
+    commit('ADD_ACTION', action)
+  },
+
+  updateAction({ commit }, action ) {
+    console.log(action)
+    console.log("Action No. " + action.currentAction)
+    console.log(action.newAction)
+    commit('UPDATE_ACTION', {
+      currentAction: action.currentAction,
+      newAction: action.newAction
+    })
+  },
+
+  updateActions({ commit }, actions) {
+    console.log("Updating Actions")
+    commit('SET_ACTIONS', actions)
+  },
+
 }

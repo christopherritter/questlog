@@ -177,5 +177,21 @@ export default {
 
   SET_ITEMS: (state, items) => {
     state.editor.items = items;
-  }
+  },
+
+  ADD_ACTION: (state, action) => {
+    state.editor.actions.push(action);
+  },
+
+  UPDATE_ACTION: (state, action) => {
+    state.editor.actions[action.currentAction] = {
+      name: action.newAction.name,
+      type: action.newAction.type,
+      target: action.newAction.target,
+    };
+  },
+
+  SET_ACTIONS: (state, actions) => {
+    state.editor.actions = actions;
+  },
 }
