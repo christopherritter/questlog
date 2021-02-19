@@ -81,7 +81,7 @@
                   dark
                   outlined
                   color="primary"
-                  @click="updateEntry()"
+                  @click="updateEntry(newEntry)"
                   >Update</v-btn
                 >
               </div>
@@ -94,7 +94,7 @@
               text
               dark
               :disabled="selectedEntry == 'undefined'"
-              @click="removeEntry()"
+              @click="removeEntry(newEntry)"
             >
               <v-icon class="mr-2">
                 mdi-delete
@@ -110,36 +110,38 @@
             </v-card>
           </div>
           <v-list v-else subheader two-line>
-            <span>
-              <v-subheader inset>Location</v-subheader>
-              <v-list-item-group v-model="selectedEntry" color="green">
-                <v-list-item
-                  v-for="(entry, index) in entries"
-                  :key="index"
-                  @click="selectEntry(index)"
-                >
-                  <v-list-item-avatar>
-                    <v-icon class="grey lighten-1" dark>
-                      mdi-feather
-                    </v-icon>
-                  </v-list-item-avatar>
+            <span v-for="(location, l) in locations" :key="l">
+              <v-subheader inset>{{ location.name }}</v-subheader>
+              <v-list-item-group v-model="selectedEntry" :group="location[l]" color="green">
+                <template v-for="(entry, e) in sortedEntries(location)">
+                  <v-list-item
+                    :key="`entry-${l}-${e}`"
+                    :value="`entry-${l}-${e}`"
+                    @click="selectEntry(entry)"
+                  >
+                    <v-list-item-avatar>
+                      <v-icon class="grey lighten-1">
+                        mdi-feather
+                      </v-icon>
+                    </v-list-item-avatar>
 
-                  <v-list-item-content>
-                    <v-list-item-title v-text="entry.title"></v-list-item-title>
+                    <v-list-item-content>
+                      <v-list-item-title v-text="entry.title"></v-list-item-title>
 
-                    <v-list-item-subtitle
-                      v-text="entry.text"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
+                      <v-list-item-subtitle
+                        v-text="entry.text"
+                      ></v-list-item-subtitle>
+                    </v-list-item-content>
 
-                  <v-list-item-action>
-                    <v-btn icon>
-                      <v-icon color="grey lighten-1">mdi-information</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
+                    <v-list-item-action>
+                      <v-btn icon>
+                        <v-icon color="grey lighten-1">mdi-information</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </template>
               </v-list-item-group>
-              <v-divider inset></v-divider>
+              <v-divider inset class="mt-4 mb-2"></v-divider>
             </span>
           </v-list>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
@@ -190,34 +192,37 @@ export default {
       entry: state => state.editor.entry,
       entries: state => state.editor.entries,
       actions: state => state.editor.actions
-    })
+    }),
   },
   methods: {
     addEntry() {
       this.$store.dispatch("addEntry", this.newEntry);
       this.clearEntry();
     },
-    selectEntry(index) {
-      this.$store.dispatch("selectEntry", index);
+    selectEntry(entry) {
+      this.$store.dispatch("selectEntry", entry.entryIndex);
       this.newEntry = {
-        title: this.entries[index].title,
-        location: this.entries[index].location,
-        text: this.entries[index].text,
-        requirements: this.entries[index].requirements,
-        expiration: this.entries[index].expiration,
-        objectives: this.entries[index].objectives
+        title: entry.title,
+        location: entry.location,
+        text: entry.text,
+        requirements: entry.requirements,
+        expiration: entry.expiration,
+        objectives: entry.objectives,
+        entryIndex: entry.entryIndex,
       };
     },
-    updateEntry() {
+    updateEntry(entry) {
+      var index = entry.entryIndex;
       this.$store.dispatch("updateEntry", {
-        selectedEntry: this.selectedEntry,
+        selectedEntry: index,
         newEntry: this.newEntry
       });
       this.clearEntry();
     },
-    removeEntry() {
+    removeEntry(entry) {
+      var index = entry.entryIndex;
       var entries = this.entries.map(e => e);
-      entries.splice(this.selectedEntry, 1);
+      entries.splice(index, 1);
       this.$store.dispatch("updateEntries", entries);
       this.clearEntry();
     },
@@ -230,8 +235,22 @@ export default {
         text: "",
         requirements: [],
         expiration: [],
-        objectives: []
+        objectives: [],
+        entryIndex: entry.entryIndex,
       };
+    },
+    sortedEntries(location) {
+      const entries = this.entries;
+      var sortedEntries = [];
+
+      for (let e = 0; e < entries.length; e++ ) {
+        if (location.name == entries[e].location) {
+          entries[e].entryIndex = e;
+          sortedEntries.push(entries[e])
+        }
+      }
+
+      return sortedEntries;
     }
   }
 };
