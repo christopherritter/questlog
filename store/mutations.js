@@ -119,6 +119,10 @@ export default {
     // state.editor.entry = state.editor.entries[entry.selectedEntry];
   },
 
+  SET_OBJECTIVES: (state, objectives) => {
+    state.editor.objectives = objectives;
+  },
+
   SET_ENTRY: (state, entry) => {
     state.editor.entry = entry;
   },

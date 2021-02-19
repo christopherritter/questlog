@@ -101,6 +101,11 @@ export default {
     })
   },
 
+  updateObjectives({ commit }, objectives) {
+    console.log("Updating Objectives")
+    commit('SET_OBJECTIVES', objectives)
+  },
+
   addEntry({ commit }, entry ) {
     commit('ADD_ENTRY', entry)
   },
@@ -123,12 +128,10 @@ export default {
   },
 
   updateEntry({ commit }, { selectedEntry, newEntry }) {
-    console.log("Updating Entry")
     commit('UPDATE_ENTRY', { selectedEntry, newEntry })
   },
 
   updateEntries({ commit }, entries) {
-    console.log("Updating Entries")
     commit('SET_ENTRIES', entries)
   },
 

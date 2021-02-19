@@ -38,6 +38,7 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   v-if="currentObjective == null"
+                  :disabled="newObjective.name.length <= 0"
                   dark
                   outlined
                   color="primary"
@@ -58,13 +59,12 @@
         </v-col>
         <v-col cols="12" md="7" lg="8" class="d-flex flex-column">
           <div class="d-flex flex-shrink-0 mt-5 mb-4 align-center">
-            <v-btn text dark :disabled="!isSelected">
-              <v-icon class="mr-2">
-                mdi-pencil
-              </v-icon>
-              Edit
-            </v-btn>
-            <v-btn text dark :disabled="!isSelected">
+            <v-btn
+              text
+              dark
+              :disabled="!currentObjective"
+              @click="removeObjective()"
+            >
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
@@ -128,21 +128,14 @@ export default {
   computed: {
     ...mapState({
       objectives: state => state.editor.objectives
-    }),
-    isSelected() {
-      if (this.newObjective == this.currentObjective) return true;
-      return false;
-    }
+    })
   },
   methods: {
     addObjective() {
-      // let newObjective = JSON.parse(JSON.stringify(this.newObjective));
-      // this.objectives.push(newObjective);
       this.$store.dispatch("addObjective", this.newObjective);
       this.clearObjective();
     },
     selectObjective(index) {
-      // this.$store.dispatch("selectObjective", index);
       this.newObjective = {
         name: this.objectives[index].name,
         description: this.objectives[index].description,
@@ -154,6 +147,15 @@ export default {
         currentObjective: this.currentObjective,
         newObjective: this.newObjective
       });
+      this.clearObjective();
+    },
+    removeObjective() {
+      console.log("Removing Selected Objective No. " + this.currentObjective);
+      var objectives = this.objectives.map(e => e);
+      objectives.splice(this.currentObjective, 1);
+      console.log(objectives);
+      this.$store.dispatch("updateObjectives", objectives);
+      this.clearObjective();
     },
     clearObjective() {
       this.newObjective = {

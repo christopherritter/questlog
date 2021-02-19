@@ -68,7 +68,12 @@
               <div class="d-flex justify-end">
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn v-if="!entry" dark outlined @click="addEntry()"
+                <v-btn
+                  v-if="!entry"
+                  :disable="newEntry.title.length <= 0"
+                  dark
+                  outlined
+                  @click="addEntry()"
                   >Add</v-btn
                 >
                 <v-btn
@@ -204,7 +209,11 @@ export default {
       };
     },
     updateEntry() {
-      this.$store.dispatch('updateEntry', { selectedEntry: this.selectedEntry, newEntry: this.newEntry });
+      this.$store.dispatch("updateEntry", {
+        selectedEntry: this.selectedEntry,
+        newEntry: this.newEntry
+      });
+      this.clearEntry();
     },
     removeEntry() {
       var entries = this.entries.map(e => e);
