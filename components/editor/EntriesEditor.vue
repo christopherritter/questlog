@@ -236,7 +236,6 @@ export default {
         requirements: [],
         expiration: [],
         objectives: [],
-        entryIndex: entry.entryIndex,
       };
     },
     sortedEntries(location) {
