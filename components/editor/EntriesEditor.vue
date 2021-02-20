@@ -192,7 +192,6 @@ export default {
         expiration: [],
         objectives: []
       },
-      sortedEntries: [],
       selectedEntry: "undefined"
     };
   },
@@ -200,17 +199,37 @@ export default {
     ...mapState({
       objectives: state => state.editor.objectives,
       locations: state => state.editor.locations,
-      entries: state => state.editor.entries,
-      actions: state => state.editor.actions
-    }),
-  },
-  created() {
-    // this.sortEntries();
-  },
-  watch: {
-    entries(newVal, oldVal) {
-      console.log(newVal);
-    }
+      actions: state => state.editor.actions,
+      sortedEntries(state) {
+        const entries = state.editor.entries;
+        const locations = state.editor.locations;
+        var sortedEntries = [],
+          sortedLocations = [];
+
+        for (let e = 0; e < entries.length; e++) {
+          var sortedEntry = entries[e];
+          sortedEntry.entryId = e;
+
+          sortedEntries.push(sortedEntry);
+        }
+
+        for (let l = 0; l < locations.length; l++) {
+          var sortedLocation = {};
+          sortedLocation.name = locations[l].name;
+          sortedLocation.entries = [];
+
+          for (let s = 0; s < sortedEntries.length; s++) {
+            if (sortedEntries[s].location == locations[l].name) {
+              sortedLocation.entries.push(sortedEntries[s]);
+            }
+          }
+
+          sortedLocations.push(sortedLocation);
+        }
+
+        return sortedLocations;
+      }
+    })
   },
   methods: {
     ...mapMutations([
@@ -260,8 +279,7 @@ export default {
         expiration: [],
         objectives: []
       };
-    },
-
+    }
   }
 };
 </script>
