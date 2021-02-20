@@ -5,7 +5,9 @@ export default {
     Object.assign(state, initialState())
   },
 
-  SET_AUTH_USER: (state, { authUser }) => {
+  SET_AUTH_USER: (state, {
+    authUser
+  }) => {
     state.authUser = {
       uid: authUser.uid,
       email: authUser.email
@@ -35,8 +37,11 @@ export default {
     state.region = region;
   },
 
-  ADD_LOCATION: (state, location) => {
-    state.editor.locations.push(location);
+  SET_OBJECTIVE: (state, {
+    id,
+    bool
+  }) => {
+    state.objectives[id].isComplete = bool;
   },
 
   SET_LOCATION: (state, location) => {
@@ -54,7 +59,58 @@ export default {
     }
   },
 
-  UPDATE_LOCATION: (state, location) => {
+  // _EDITOR
+
+  SET_QUEST_EDITOR: (state, quest) => {
+    state.editor.quest = {
+      title: quest.title,
+      description: quest.description,
+      image: quest.image,
+      categories: quest.categories,
+    }
+  },
+
+  SET_REGION_EDITOR: (state, region) => {
+    state.editor.region = region;
+  },
+
+  ADD_OBJECTIVE_EDITOR: (state, objective) => {
+    state.editor.objectives.push(objective);
+  },
+
+  UPDATE_OBJECTIVE_EDITOR: (state, objective) => {
+    state.editor.objectives[objective.currentObjective] = {
+      name: objective.newObjective.name,
+      description: objective.newObjective.description,
+      isPrimary: objective.newObjective.isPrimary,
+    };
+    // state.editor.entry = state.editor.entries[entry.selectedEntry];
+  },
+
+  SET_OBJECTIVES_EDITOR: (state, objectives) => {
+    state.editor.objectives = objectives;
+  },
+
+  ADD_LOCATION_EDITOR: (state, location) => {
+    state.editor.locations.push(location);
+  },
+
+  SET_LOCATION_EDITOR: (state, location) => {
+    state.editor.location = {
+      name: location.name,
+      isLandmark: location.isLandmark,
+      coordinates: {
+        lat: location.coordinates.lat,
+        lng: location.coordinates.lng,
+      },
+      zoom: location.zoom,
+      image: location.image,
+      marker: location.marker,
+      draggable: location.draggable,
+    }
+  },
+
+  UPDATE_LOCATION_EDITOR: (state, location) => {
     state.editor.locations[location.selectedLocation] = {
       name: location.newLocation.name,
       isLandmark: location.newLocation.isLandmark,
@@ -66,15 +122,14 @@ export default {
       image: location.newLocation.image,
       marker: location.newLocation.marker,
       draggable: location.newLocation.draggable,
-    },
-    state.editor.location = state.editor.locations[location.selectedLocation];
+    }
   },
 
-  SET_COORDINATES: (state, location) => {
+  SET_COORDINATES_EDITOR: (state, location) => {
     state.editor.locations[location.index].coordinates = location.coordinates;
   },
 
-  CLEAR_LOCATION: (state) => {
+  CLEAR_LOCATION_EDITOR: (state) => {
     state.editor.location = {
       name: "Untitled",
       isLandmark: true,
@@ -92,27 +147,6 @@ export default {
 
   SET_LOCATIONS: (state, locations) => {
     state.editor.locations = locations;
-  },
-
-  SET_OBJECTIVE: (state, { id, bool }) => {
-    state.objectives[id].isComplete = bool;
-  },
-
-  ADD_OBJECTIVE: (state, objective) => {
-    state.editor.objectives.push(objective);
-  },
-
-  UPDATE_OBJECTIVE: (state, objective) => {
-    state.editor.objectives[objective.currentObjective] = {
-      name: objective.newObjective.name,
-      description: objective.newObjective.description,
-      isPrimary: objective.newObjective.isPrimary,
-    };
-    // state.editor.entry = state.editor.entries[entry.selectedEntry];
-  },
-
-  SET_OBJECTIVES: (state, objectives) => {
-    state.editor.objectives = objectives;
   },
 
   ADD_ENTRY: (state, entry) => {

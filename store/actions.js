@@ -77,12 +77,6 @@ export default {
 
   // Editor Locations
 
-  addLocation({
-    commit
-  }, location) {
-    commit('ADD_LOCATION', location)
-  },
-
   selectLocation({
     state,
     commit
@@ -102,62 +96,8 @@ export default {
       }
     }
 
-    commit('SET_LOCATION', newLocation);
+    commit('SET_LOCATION_EDITOR', newLocation);
     return selectedLocation;
-  },
-
-  clearLocation({
-    commit
-  }) {
-    commit('CLEAR_LOCATION');
-  },
-
-  updateCoordinates({
-    commit
-  }, location) {
-    commit('SET_COORDINATES', {
-      index: location.index,
-      coordinates: location.coordinates
-    });
-  },
-
-  updateLocation({
-    commit
-  }, {
-    selectedLocation,
-    newLocation
-  }) {
-    commit('UPDATE_LOCATION', {
-      selectedLocation,
-      newLocation
-    })
-  },
-
-  // Editor Objectives
-
-  addObjective({
-    commit
-  }, objective) {
-    commit('ADD_OBJECTIVE', objective)
-  },
-
-  updateObjective({
-    commit
-  }, objective) {
-    console.log(objective)
-    console.log("Objective No. " + objective.currentObjective)
-    console.log(objective.newObjective)
-    commit('UPDATE_OBJECTIVE', {
-      currentObjective: objective.currentObjective,
-      newObjective: objective.newObjective
-    })
-  },
-
-  updateObjectives({
-    commit
-  }, objectives) {
-    console.log("Updating Objectives")
-    commit('SET_OBJECTIVES', objectives)
   },
 
   // Editor Entries

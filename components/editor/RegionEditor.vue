@@ -7,7 +7,7 @@
             <v-col>
               <h1 class="mt-5 mb-4">Region</h1>
               <v-text-field
-                v-model="newRegion.name"
+                v-model="region.name"
                 label="Name"
                 outlined
               ></v-text-field>
@@ -15,14 +15,14 @@
               <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="newRegion.coordinates.lat"
+                    v-model="region.coordinates.lat"
                     label="Latitude"
                     outlined
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="newRegion.coordinates.lng"
+                    v-model="region.coordinates.lng"
                     label="Longitude"
                     outlined
                   ></v-text-field>
@@ -30,7 +30,7 @@
               </v-row>
               <h4 class="mt-1 mb-6">Zoom</h4>
               <v-slider
-                v-model="newRegion.zoom"
+                v-model="region.zoom"
                 min="0"
                 max="18"
                 thumb-label
@@ -42,7 +42,7 @@
                   <v-btn
                     dark
                     outlined
-                    :disabled="!newRegion.coordinates == null"
+                    :disabled="!region.coordinates == null"
                     @click="updateRegion()"
                     >Update</v-btn
                   >
@@ -55,9 +55,9 @@
           <LeafletMap
             id="RegionMap"
             class="mb-5"
-            :center="newRegion.coordinates"
-            :zoom="newRegion.zoom"
-            :locations="[newRegion]"
+            :center="region.coordinates"
+            :zoom="region.zoom"
+            :locations="[region]"
             @mark-location="markLocation($event)"
             @move-location="moveLocation($event)"
           />
@@ -85,14 +85,14 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
   name: "RegionEditor",
   data() {
     return {
-      newRegion: {
+      region: {
         name: "",
         coordinates: {
           lat: 39.828175,
@@ -106,20 +106,17 @@ export default {
   },
   components: { LeafletMap },
   computed: {
-    ...mapState({
-      region: state => state.editor.region
-    }),
-    ...mapMutations(['SET_REGION']),
+    ...mapMutations(['SET_REGION_EDITOR']),
   },
   methods: {
     markLocation(event) {
-      this.newRegion.coordinates = event.latlng;
+      this.region.coordinates = event.latlng;
     },
     moveLocation(event) {
-      this.newRegion.coordinates = event.target.getLatLng();
+      this.region.coordinates = event.target.getLatLng();
     },
     updateRegion() {
-      this.$store.commit("SET_REGION", this.newRegion);
+      this.$store.commit("SET_REGION_EDITOR", this.region);
     }
   }
 };

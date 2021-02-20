@@ -38,61 +38,38 @@
 
             <v-tab-item value="quest">
               <QuestEditor
-                :quest="quest"
-                :categories="categories"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="region">
               <RegionEditor
-                :region="region"
                 @change-tab="changeTab($event)"
-                @update-region="updateRegion($event)"
-                @mark-location="updateRegion($event)"
               />
             </v-tab-item>
             <v-tab-item value="objectives">
               <ObjectivesEditor
-                :objectives="objectives"
                 @change-tab="changeTab($event)"
-                @add-objective="addObjective($event)"
               />
             </v-tab-item>
             <v-tab-item value="locations">
               <LocationsEditor
-                :region="region"
-                :location="location"
-                :locations="locations"
-                :markers="markers"
                 @change-tab="changeTab($event)"
-                @select-location="selectLocation($event)"
-                @mark-location="addLocation($event)"
-                @update-location="updateLocation($event)"
               />
             </v-tab-item>
 
             <v-tab-item value="entries">
               <EntriesEditor
-                :locations="locations"
-                :actions="actions"
-                :requirements="objectives"
-                :expiration="objectives"
-                :objectives="objectives"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="items">
               <ItemsEditor
-                :items="items"
                 @change-tab="changeTab($event)"
-                @add-item="addItem($event)"
               />
             </v-tab-item>
             <v-tab-item value="actions">
               <ActionsEditor
-                :actions="actions"
                 @change-tab="changeTab($event)"
-                @add-action="addAction($event)"
               />
             </v-tab-item>
           </v-tabs>
@@ -103,7 +80,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import QuestEditor from "@/components/editor/QuestEditor.vue";
 import RegionEditor from "@/components/editor/RegionEditor.vue";
 import ObjectivesEditor from "@/components/editor/ObjectivesEditor.vue";
@@ -130,29 +106,10 @@ export default {
       tab: "quest"
     };
   },
-  computed: {
-    ...mapState({
-      categories: state => state.categories,
-      quest: state => state.editor.quest,
-      region: state => state.editor.region,
-      location: state => state.editor.location,
-      objectives: state => state.editor.objectives,
-      locations: state => state.editor.locations,
-      markers: state => state.editor.markers,
-      actions: state => state.editor.actions,
-      items: state => state.editor.items,
-    }),
-  },
   methods: {
     changeTab(tab) {
       console.log(tab);
       this.tab = tab;
-    },
-    updateRegion(region) {
-      this.region.coordinates = region;
-    },
-    addObjective(objective) {
-      this.objectives.push(objective);
     },
   }
 };

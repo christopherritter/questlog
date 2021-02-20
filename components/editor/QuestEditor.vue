@@ -2,17 +2,17 @@
   <v-card flat>
     <v-card-text>
       <h1 class="mt-5 mb-4">Quest</h1>
-      <v-text-field v-model="newQuest.title" label="Title" outlined></v-text-field>
+      <v-text-field v-model="quest.title" label="Title" outlined></v-text-field>
       <v-textarea
         name="input-7-1"
         label="Description"
-        v-model="newQuest.description"
+        v-model="quest.description"
         hint="Describe your quest."
         outlined
       ></v-textarea>
-      <v-text-field v-model="newQuest.image" label="Image" outlined></v-text-field>
+      <v-text-field v-model="quest.image" label="Image" outlined></v-text-field>
       <v-autocomplete
-        v-model="newQuest.categories"
+        v-model="quest.categories"
         :items="categories"
         label="Categories"
         item-text="name"
@@ -49,7 +49,7 @@ export default {
   name: "QuestEditor",
   data() {
     return {
-      newQuest: {
+      quest: {
         title: "",
         description: "",
         image: "",
@@ -59,10 +59,9 @@ export default {
   },
   computed: {
     ...mapState({
-      quest: state => state.editor.quest,
       categories: state => state.categories
-    })
-  }
+    }),
+  },
 };
 </script>
 
