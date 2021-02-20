@@ -71,21 +71,21 @@
               Remove
             </v-btn>
           </div>
-          <div v-if="objectives.length <= 0">
+          <!-- <div v-if="objectives.length <= 0">
             <v-card outlined>
               <v-card-text>
                 Add objectives to your quest with the form on the left.
               </v-card-text>
             </v-card>
-          </div>
+          </div> -->
           <v-radio-group class="flex-shrink-0" v-model="currentObjective">
-            <v-radio
+            <!-- <v-radio
               v-for="(objective, index) in objectives"
               :key="index"
               :label="objective.name"
               :value="index"
               @click="selectObjective(index)"
-            ></v-radio>
+            ></v-radio> -->
           </v-radio-group>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
             <v-btn outlined dark @click="$emit('change-tab', 'region')">
@@ -125,28 +125,23 @@ export default {
       currentObjective: null
     };
   },
-  computed: {
-    ...mapState({
-      objectives: state => state.editor.objectives
-    }),
+  methods: {
     ...mapMutations([
       "ADD_OBJECTIVE_EDITOR",
       "UPDATE_OBJECTIVE_EDITOR",
       "SET_OBJECTIVES_EDITOR"
-    ])
-  },
-  methods: {
+    ]),
     addObjective() {
       this.$store.commit("ADD_OBJECTIVE_EDITOR", this.objective);
       this.clearObjective();
     },
-    selectObjective(index) {
-      this.objective = {
-        name: this.objectives[index].name,
-        description: this.objectives[index].description,
-        isPrimary: this.objectives[index].isPrimary
-      };
-    },
+    // selectObjective(index) {
+    //   this.objective = {
+    //     name: this.objectives[index].name,
+    //     description: this.objectives[index].description,
+    //     isPrimary: this.objectives[index].isPrimary
+    //   };
+    // },
     updateObjective() {
       this.$store.commit("UPDATE_OBJECTIVE_EDITOR", {
         currentObjective: this.currentObjective,
@@ -154,13 +149,13 @@ export default {
       });
       this.clearObjective();
     },
-    removeObjective() {
-      var objectives = this.objectives.map(e => e);
-      objectives.splice(this.currentObjective, 1);
+    // removeObjective() {
+    //   var objectives = this.objectives.map(e => e);
+    //   objectives.splice(this.currentObjective, 1);
 
-      this.$store.commit("SET_OBJECTIVES_EDITOR", objectives);
-      this.clearObjective();
-    },
+    //   this.$store.commit("SET_OBJECTIVES_EDITOR", objectives);
+    //   this.clearObjective();
+    // },
     clearObjective() {
       this.objective = {
         name: "",

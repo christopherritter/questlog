@@ -105,10 +105,8 @@ export default {
     };
   },
   components: { LeafletMap },
-  computed: {
-    ...mapMutations(['SET_REGION_EDITOR']),
-  },
   methods: {
+    ...mapMutations(['SET_REGION_EDITOR']),
     markLocation(event) {
       this.region.coordinates = event.latlng;
     },

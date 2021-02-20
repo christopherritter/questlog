@@ -129,35 +129,11 @@ export default {
     state.editor.locations[location.index].coordinates = location.coordinates;
   },
 
-  CLEAR_LOCATION_EDITOR: (state) => {
-    state.editor.location = {
-      name: "Untitled",
-      isLandmark: true,
-      coordinates: {
-        lat: null,
-        lng: null
-      },
-      zoom: 18,
-      image: "",
-      isLandmark: false,
-      mapOptions: {},
-      draggable: true
-    }
-  },
-
-  SET_LOCATIONS: (state, locations) => {
-    state.editor.locations = locations;
-  },
-
-  ADD_ENTRY: (state, entry) => {
+  ADD_ENTRY_EDITOR: (state, entry) => {
     state.editor.entries.push(entry);
   },
 
-  SET_ENTRY: (state, entry) => {
-    state.editor.entry = entry;
-  },
-
-  UPDATE_ENTRY: (state, entry) => {
+  UPDATE_ENTRY_EDITOR: (state, entry) => {
     state.editor.entries[entry.selectedEntry] = {
       title: entry.newEntry.title,
       location: entry.newEntry.location,
@@ -166,14 +142,9 @@ export default {
       expiration: entry.newEntry.expiration,
       objectives: entry.newEntry.objectives
     };
-    state.editor.entry = state.editor.entries[entry.selectedEntry];
   },
 
-  CLEAR_ENTRY: (state) => {
-    state.editor.entry = null
-  },
-
-  SET_ENTRIES: (state, entries) => {
+  SET_ENTRIES_EDITOR: (state, entries) => {
     state.editor.entries = entries;
   },
 

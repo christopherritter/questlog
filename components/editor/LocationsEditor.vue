@@ -53,7 +53,7 @@
                 label="Image"
                 outlined
               ></v-text-field>
-              <v-select :items="markers" label="Marker" outlined></v-select>
+              <!-- <v-select :items="markers" label="Marker" outlined></v-select> -->
               <!-- <v-select :items="entries" label="Entries" outlined></v-select> -->
               <v-row>
                 <v-col cols="12" class="d-flex pt-1">
@@ -149,13 +149,12 @@ export default {
       locations: state => state.editor.locations,
       markers: state => state.markers
     }),
+  },
+  methods: {
     ...mapMutations([
       "ADD_LOCATION_EDITOR",
       "SET_COORDINATES_EDITOR",
-      "CLEAR_LOCATION_EDITOR"
-    ])
-  },
-  methods: {
+    ]),
     markLocation(location) {
       this.clearLocation();
       this.location.coordinates = location.latlng;
@@ -204,7 +203,6 @@ export default {
         draggable: true
       };
       this.selectedLocation = null;
-      this.$store.commit("CLEAR_LOCATION_EDITOR");
     }
   }
 };

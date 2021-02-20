@@ -100,57 +100,6 @@ export default {
     return selectedLocation;
   },
 
-  // Editor Entries
-
-  addEntry({
-    commit
-  }, entry) {
-    commit('ADD_ENTRY', entry)
-  },
-
-  selectEntry({
-    state,
-    commit
-  }, index) {
-    const entry = state.editor.entries[index];
-    commit('SET_ENTRY', entry);
-  },
-
-  clearEntry({
-    commit
-  }) {
-    commit('CLEAR_ENTRY');
-  },
-
-  removeEntry({
-    state,
-    commit
-  }, index) {
-    console.log("Remove Entry No. " + index)
-    var entries = state.editor.entries;
-    var newEntries = entries.slice(index, 1)
-    console.log(newEntries)
-    commit('SET_ENTRIES', newEntries)
-  },
-
-  updateEntry({
-    commit
-  }, {
-    selectedEntry,
-    newEntry
-  }) {
-    commit('UPDATE_ENTRY', {
-      selectedEntry,
-      newEntry
-    })
-  },
-
-  updateEntries({
-    commit
-  }, entries) {
-    commit('SET_ENTRIES', entries)
-  },
-
   // Editor Items
 
   addItem({

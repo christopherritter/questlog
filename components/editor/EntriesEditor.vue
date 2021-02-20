@@ -16,12 +16,12 @@
                 </v-btn>
               </div>
               <v-text-field
-                v-model="newEntry.title"
+                v-model="entry.title"
                 label="Title"
                 outlined
               ></v-text-field>
               <v-autocomplete
-                v-model="newEntry.location"
+                v-model="entry.location"
                 :items="locations"
                 label="Location"
                 item-text="name"
@@ -30,13 +30,13 @@
                 outlined
               ></v-autocomplete>
               <v-textarea
-                v-model="newEntry.text"
+                v-model="entry.text"
                 label="Text"
                 outlined
               ></v-textarea>
               <v-select :items="actions" label="Actions" outlined></v-select>
               <v-autocomplete
-                v-model="newEntry.requirements"
+                v-model="entry.requirements"
                 :items="objectives"
                 label="Requirements"
                 item-text="name"
@@ -46,7 +46,7 @@
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="newEntry.expiration"
+                v-model="entry.expiration"
                 :items="objectives"
                 label="Expiration"
                 item-text="name"
@@ -56,7 +56,7 @@
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="newEntry.objectives"
+                v-model="entry.objectives"
                 :items="objectives"
                 label="Objectives"
                 item-text="name"
@@ -69,8 +69,8 @@
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn
-                  v-if="!entry"
-                  :disable="newEntry.title.length <= 0"
+                  v-if="selectedEntry == 'undefined'"
+                  :disable="entry.title.length <= 0"
                   dark
                   outlined
                   @click="addEntry()"
@@ -81,7 +81,7 @@
                   dark
                   outlined
                   color="primary"
-                  @click="updateEntry(newEntry)"
+                  @click="updateEntry(entry)"
                   >Update</v-btn
                 >
               </div>
@@ -93,8 +93,8 @@
             <v-btn
               text
               dark
-              :disabled="selectedEntry == 'undefined'"
-              @click="removeEntry(newEntry)"
+              :disabled="!selectedEntry"
+              @click="removeEntry(entry)"
             >
               <v-icon class="mr-2">
                 mdi-delete
@@ -102,7 +102,7 @@
               Remove
             </v-btn>
           </div>
-          <div v-if="entries.length <= 0">
+          <div v-if="sortedEntries.length <= 0">
             <v-card outlined>
               <v-card-text>
                 Add entries to your quest with the form on the left.
@@ -110,10 +110,14 @@
             </v-card>
           </div>
           <v-list v-else subheader two-line>
-            <span v-for="(location, l) in locations" :key="l">
+            <span v-for="(location, l) in sortedEntries" :key="l">
               <v-subheader inset>{{ location.name }}</v-subheader>
-              <v-list-item-group v-model="selectedEntry" :group="location[l]" color="green">
-                <template v-for="(entry, e) in sortedEntries(location)">
+              <v-list-item-group
+                v-model="selectedEntry"
+                :group="location[l]"
+                color="green"
+              >
+                <template v-for="(entry, e) in location.entries">
                   <v-list-item
                     :key="`entry-${l}-${e}`"
                     :value="`entry-${l}-${e}`"
@@ -126,7 +130,9 @@
                     </v-list-item-avatar>
 
                     <v-list-item-content>
-                      <v-list-item-title v-text="entry.title"></v-list-item-title>
+                      <v-list-item-title
+                        v-text="entry.title"
+                      ></v-list-item-title>
 
                       <v-list-item-subtitle
                         v-text="entry.text"
@@ -141,7 +147,11 @@
                   </v-list-item>
                 </template>
               </v-list-item-group>
-              <v-divider inset class="mt-4 mb-2"></v-divider>
+              <v-divider
+                inset
+                class="mt-4 mb-2"
+                v-if="sortedEntries.length > 1"
+              ></v-divider>
             </span>
           </v-list>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
@@ -168,13 +178,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "EntriesEditor",
   data() {
     return {
-      newEntry: {
+      entry: {
         title: "",
         location: {},
         text: "",
@@ -182,6 +192,7 @@ export default {
         expiration: [],
         objectives: []
       },
+      sortedEntries: [],
       selectedEntry: "undefined"
     };
   },
@@ -189,33 +200,46 @@ export default {
     ...mapState({
       objectives: state => state.editor.objectives,
       locations: state => state.editor.locations,
-      entry: state => state.editor.entry,
       entries: state => state.editor.entries,
       actions: state => state.editor.actions
     }),
   },
+  created() {
+    // this.sortEntries();
+  },
+  watch: {
+    entries(newVal, oldVal) {
+      console.log(newVal);
+    }
+  },
   methods: {
+    ...mapMutations([
+      "ADD_ENTRY_EDITOR",
+      "UPDATE_ENTRY_EDITOR",
+      "SET_ENTRIES_EDITOR"
+    ]),
     addEntry() {
-      this.$store.dispatch("addEntry", this.newEntry);
+      this.$store.commit("ADD_ENTRY_EDITOR", this.entry);
       this.clearEntry();
     },
     selectEntry(entry) {
-      this.$store.dispatch("selectEntry", entry.entryIndex);
-      this.newEntry = {
+      this.entry = {
         title: entry.title,
         location: entry.location,
         text: entry.text,
         requirements: entry.requirements,
         expiration: entry.expiration,
         objectives: entry.objectives,
-        entryIndex: entry.entryIndex,
+        entryIndex: entry.entryIndex
       };
+      console.log(this.entry);
     },
     updateEntry(entry) {
+      console.log(entry);
       var index = entry.entryIndex;
-      this.$store.dispatch("updateEntry", {
+      this.$store.commit("UPDATE_ENTRY_EDITOR", {
         selectedEntry: index,
-        newEntry: this.newEntry
+        newEntry: this.entry
       });
       this.clearEntry();
     },
@@ -223,34 +247,21 @@ export default {
       var index = entry.entryIndex;
       var entries = this.entries.map(e => e);
       entries.splice(index, 1);
-      this.$store.dispatch("updateEntries", entries);
+      this.$store.commit("SET_ENTRIES_EDITOR", entries);
       this.clearEntry();
     },
     clearEntry() {
-      this.$store.dispatch("clearEntry");
-      this.selectedEntry = null;
-      this.newEntry = {
+      this.selectedEntry = "undefined";
+      this.entry = {
         title: "",
         location: {},
         text: "",
         requirements: [],
         expiration: [],
-        objectives: [],
+        objectives: []
       };
     },
-    sortedEntries(location) {
-      const entries = this.entries;
-      var sortedEntries = [];
 
-      for (let e = 0; e < entries.length; e++ ) {
-        if (location.name == entries[e].location) {
-          entries[e].entryIndex = e;
-          sortedEntries.push(entries[e])
-        }
-      }
-
-      return sortedEntries;
-    }
   }
 };
 </script>
