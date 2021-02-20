@@ -32,15 +32,7 @@ export default {
   },
 
   SET_REGION: (state, region) => {
-    state.region = {
-      id: region.id,
-      name: region.name,
-      position: {
-        lat: region.position.lat,
-        lng: region.position.lng,
-      },
-      zoom: region.zoom
-    }
+    state.region = region;
   },
 
   ADD_LOCATION: (state, location) => {

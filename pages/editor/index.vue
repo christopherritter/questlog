@@ -127,12 +127,7 @@ export default {
   },
   data() {
     return {
-      tab: "quest",
-      author: {
-        authorId: this.$store.state.users[this.$store.state.authUser.uid]
-          .authorId,
-        isAnonyous: false
-      },
+      tab: "quest"
     };
   },
   computed: {

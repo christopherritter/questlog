@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
@@ -108,7 +108,8 @@ export default {
   computed: {
     ...mapState({
       region: state => state.editor.region
-    })
+    }),
+    ...mapMutations(['SET_REGION']),
   },
   methods: {
     markLocation(event) {
@@ -116,6 +117,9 @@ export default {
     },
     moveLocation(event) {
       this.newRegion.coordinates = event.target.getLatLng();
+    },
+    updateRegion() {
+      this.$store.commit("SET_REGION", this.newRegion);
     }
   }
 };
