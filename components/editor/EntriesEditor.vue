@@ -81,7 +81,7 @@
                   dark
                   outlined
                   color="primary"
-                  @click="updateEntry(entry)"
+                  @click="updateEntry()"
                   >Update</v-btn
                 >
               </div>
@@ -90,12 +90,7 @@
         </v-col>
         <v-col cols="12" md="7" lg="8" class="d-flex flex-column">
           <div class="d-flex flex-shrink-0 mt-5 mb-4 align-center">
-            <v-btn
-              text
-              dark
-              :disabled="!selectedEntry"
-              @click="removeEntry(entry)"
-            >
+            <v-btn text dark :disabled="!selectedEntry" @click="removeEntry()">
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
@@ -110,48 +105,38 @@
             </v-card>
           </div>
           <v-list v-else subheader two-line>
-            <span v-for="(location, l) in sortedEntries" :key="l">
+            <span v-for="(location, s) in sortedEntries" :key="s">
               <v-subheader inset>{{ location.name }}</v-subheader>
-              <v-list-item-group
-                v-model="selectedEntry"
-                :group="location[l]"
-                color="green"
-              >
-                <template v-for="(entry, e) in location.entries">
-                  <v-list-item
-                    :key="`entry-${l}-${e}`"
-                    :value="`entry-${l}-${e}`"
-                    @click="selectEntry(entry)"
-                  >
-                    <v-list-item-avatar>
-                      <v-icon class="grey lighten-1">
-                        mdi-feather
-                      </v-icon>
-                    </v-list-item-avatar>
+            <v-list-item-group v-model="selectedEntry" color="green">
+              <template v-for="(entry, e) in location.entries">
+                <v-list-item :key="`item-${s}-${e}`" :value="`item-${s}-${e}`" @click="selectEntry(entry)">
+                  <v-list-item-avatar>
+                    <v-icon class="grey lighten-1">
+                      mdi-feather
+                    </v-icon>
+                  </v-list-item-avatar>
 
-                    <v-list-item-content>
-                      <v-list-item-title
-                        v-text="entry.title"
-                      ></v-list-item-title>
+                  <v-list-item-content>
+                    <v-list-item-title v-text="entry.title"></v-list-item-title>
 
-                      <v-list-item-subtitle
-                        v-text="entry.text"
-                      ></v-list-item-subtitle>
-                    </v-list-item-content>
+                    <v-list-item-subtitle
+                      v-text="entry.text"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
 
-                    <v-list-item-action>
-                      <v-btn icon>
-                        <v-icon color="grey lighten-1">mdi-information</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
-                </template>
-              </v-list-item-group>
-              <v-divider
-                inset
-                class="mt-4 mb-2"
-                v-if="sortedEntries.length > 1"
-              ></v-divider>
+                  <v-list-item-action>
+                    <v-btn icon>
+                      <v-icon color="grey lighten-1">mdi-information</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list-item-group>
+            <v-divider
+              inset
+              class="mt-4 mb-2"
+              v-if="sortedEntries.length > 1"
+            ></v-divider>
             </span>
           </v-list>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
@@ -190,8 +175,10 @@ export default {
         text: "",
         requirements: [],
         expiration: [],
-        objectives: []
+        objectives: [],
+        entryIndex: null
       },
+      sortedEntries: [],
       selectedEntry: "undefined"
     };
   },
@@ -200,36 +187,24 @@ export default {
       objectives: state => state.editor.objectives,
       locations: state => state.editor.locations,
       actions: state => state.editor.actions,
-      sortedEntries(state) {
-        const entries = state.editor.entries;
-        const locations = state.editor.locations;
-        var sortedEntries = [],
-          sortedLocations = [];
-
-        for (let e = 0; e < entries.length; e++) {
-          var sortedEntry = entries[e];
-          sortedEntry.entryId = e;
-
-          sortedEntries.push(sortedEntry);
-        }
-
-        for (let l = 0; l < locations.length; l++) {
-          var sortedLocation = {};
-          sortedLocation.name = locations[l].name;
-          sortedLocation.entries = [];
-
-          for (let s = 0; s < sortedEntries.length; s++) {
-            if (sortedEntries[s].location == locations[l].name) {
-              sortedLocation.entries.push(sortedEntries[s]);
-            }
-          }
-
-          sortedLocations.push(sortedLocation);
-        }
-
-        return sortedLocations;
-      }
+      entries: state => state.editor.entries
     })
+  },
+  mounted() {
+    this.sortEntries();
+  },
+  watch: {
+    entries: {
+      handler(val, oldVal){
+        if (oldVal != val) {
+          console.log('Item Changed')
+          console.log(val)
+          console.log(oldVal)
+        }
+        // this.sortEntries();
+      },
+      deep: true
+    }
   },
   methods: {
     ...mapMutations([
@@ -251,19 +226,20 @@ export default {
         objectives: entry.objectives,
         entryIndex: entry.entryIndex
       };
-      console.log(this.entry);
+      // console.log(this.entry);
     },
-    updateEntry(entry) {
-      console.log(entry);
-      var index = entry.entryIndex;
+    updateEntry() {
+      console.log("Update Entry No. " + this.entry.entryIndex);
+      console.log(this.entry);
+      var index = this.entry.entryIndex;
       this.$store.commit("UPDATE_ENTRY_EDITOR", {
         selectedEntry: index,
         newEntry: this.entry
       });
       this.clearEntry();
     },
-    removeEntry(entry) {
-      var index = entry.entryIndex;
+    removeEntry() {
+      var index = this.entry.entryIndex;
       var entries = this.entries.map(e => e);
       entries.splice(index, 1);
       this.$store.commit("SET_ENTRIES_EDITOR", entries);
@@ -279,6 +255,35 @@ export default {
         expiration: [],
         objectives: []
       };
+    },
+    sortEntries() {
+      var entries = [],
+        sortedEntries = [];
+
+      for (let e = 0; e < this.entries.length; e++) {
+        var entry = this.entries[e];
+        entry.entryIndex = e;
+        this.$set(this.entries, e, entry);
+      }
+
+      for (let l = 0; l < this.locations.length; l++) {
+        var sortedLocation = {};
+        sortedLocation.name = this.locations[l].name;
+        sortedLocation.entries = [];
+
+        for (let s = 0; s < this.entries.length; s++) {
+          if (this.entries[s].location == this.locations[l].name) {
+            sortedLocation.entries.push(this.entries[s]);
+          }
+        }
+
+        if (sortedLocation.entries.length > 0) {
+          sortedEntries.push(sortedLocation);
+        }
+      }
+
+      this.sortedEntries = sortedEntries;
+      // return entries;
     }
   }
 };

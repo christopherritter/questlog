@@ -134,6 +134,8 @@ export default {
   },
 
   UPDATE_ENTRY_EDITOR: (state, entry) => {
+    console.log("UPDATE ENTRY EDITOR NO. " + entry.selectedEntry);
+
     state.editor.entries[entry.selectedEntry] = {
       title: entry.newEntry.title,
       location: entry.newEntry.location,
@@ -142,6 +144,8 @@ export default {
       expiration: entry.newEntry.expiration,
       objectives: entry.newEntry.objectives
     };
+
+    console.log(state.editor.entries[entry.selectedEntry])
   },
 
   SET_ENTRIES_EDITOR: (state, entries) => {
