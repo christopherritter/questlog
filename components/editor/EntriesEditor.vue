@@ -193,19 +193,6 @@ export default {
   mounted() {
     this.sortEntries();
   },
-  watch: {
-    entries: {
-      handler(val, oldVal){
-        if (oldVal != val) {
-          console.log('Item Changed')
-          console.log(val)
-          console.log(oldVal)
-        }
-        // this.sortEntries();
-      },
-      deep: true
-    }
-  },
   methods: {
     ...mapMutations([
       "ADD_ENTRY_EDITOR",
@@ -255,15 +242,15 @@ export default {
         expiration: [],
         objectives: []
       };
+      this.sortEntries();
     },
     sortEntries() {
-      var entries = [],
-        sortedEntries = [];
+      var entries = [], sortedEntries = [];
 
       for (let e = 0; e < this.entries.length; e++) {
         var entry = this.entries[e];
         entry.entryIndex = e;
-        this.$set(this.entries, e, entry);
+        entries.push(entry);
       }
 
       for (let l = 0; l < this.locations.length; l++) {
@@ -271,9 +258,9 @@ export default {
         sortedLocation.name = this.locations[l].name;
         sortedLocation.entries = [];
 
-        for (let s = 0; s < this.entries.length; s++) {
-          if (this.entries[s].location == this.locations[l].name) {
-            sortedLocation.entries.push(this.entries[s]);
+        for (let s = 0; s < entries.length; s++) {
+          if (entries[s].location == this.locations[l].name) {
+            sortedLocation.entries.push(entries[s]);
           }
         }
 
