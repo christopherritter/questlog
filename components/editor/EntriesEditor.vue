@@ -213,14 +213,10 @@ export default {
         objectives: entry.objectives,
         entryIndex: entry.entryIndex
       };
-      // console.log(this.entry);
     },
     updateEntry() {
-      console.log("Update Entry No. " + this.entry.entryIndex);
-      console.log(this.entry);
-      var index = this.entry.entryIndex;
       this.$store.commit("UPDATE_ENTRY_EDITOR", {
-        selectedEntry: index,
+        selectedEntry: this.entry.entryIndex,
         newEntry: this.entry
       });
       this.clearEntry();
@@ -270,7 +266,6 @@ export default {
       }
 
       this.sortedEntries = sortedEntries;
-      // return entries;
     }
   }
 };

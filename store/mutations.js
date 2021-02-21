@@ -134,8 +134,6 @@ export default {
   },
 
   UPDATE_ENTRY_EDITOR: (state, entry) => {
-    console.log("UPDATE ENTRY EDITOR NO. " + entry.selectedEntry);
-
     state.editor.entries[entry.selectedEntry] = {
       title: entry.newEntry.title,
       location: entry.newEntry.location,
@@ -144,27 +142,21 @@ export default {
       expiration: entry.newEntry.expiration,
       objectives: entry.newEntry.objectives
     };
-
-    console.log(state.editor.entries[entry.selectedEntry])
   },
 
   SET_ENTRIES_EDITOR: (state, entries) => {
     state.editor.entries = entries;
   },
 
-  ADD_ITEM: (state, item) => {
+  ADD_ITEM_EDITOR: (state, item) => {
     state.editor.items.push(item);
   },
 
-  SET_ITEM: (state, item) => {
-    state.editor.item = item;
-  },
-
-  UPDATE_ITEM: (state, item) => {
+  UPDATE_ITEM_EDITOR: (state, item) => {
     state.editor.items[item.selectedItem] = {
       name: item.newItem.name,
       location: item.newItem.location,
-      text: item.newItem.text,
+      description: item.newItem.text,
       requirements: item.newItem.requirements,
       expiration: item.newItem.expiration,
       objectives: item.newItem.objectives
@@ -172,11 +164,7 @@ export default {
     state.editor.item = state.editor.items[item.selectedItem];
   },
 
-  CLEAR_ITEM: (state) => {
-    state.editor.item = null
-  },
-
-  SET_ITEMS: (state, items) => {
+  SET_ITEMS_EDITOR: (state, items) => {
     state.editor.items = items;
   },
 

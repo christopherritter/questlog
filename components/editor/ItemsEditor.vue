@@ -16,12 +16,12 @@
                 </v-btn>
               </div>
               <v-text-field
-                v-model="newItem.name"
+                v-model="item.name"
                 label="Name"
                 outlined
               ></v-text-field>
               <v-autocomplete
-                v-model="newItem.location"
+                v-model="item.location"
                 :items="locations"
                 label="Location"
                 item-text="name"
@@ -30,13 +30,13 @@
                 outlined
               ></v-autocomplete>
               <v-textarea
-                v-model="newItem.description"
+                v-model="item.description"
                 label="Description"
                 outlined
               ></v-textarea>
               <v-select :items="actions" label="Actions" outlined></v-select>
               <v-autocomplete
-                v-model="newItem.requirements"
+                v-model="item.requirements"
                 :items="objectives"
                 label="Requirements"
                 item-text="name"
@@ -46,7 +46,7 @@
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="newItem.expiration"
+                v-model="item.expiration"
                 :items="objectives"
                 label="Expiration"
                 item-text="name"
@@ -56,7 +56,7 @@
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="newItem.objectives"
+                v-model="item.objectives"
                 :items="objectives"
                 label="Objectives"
                 item-text="name"
@@ -69,8 +69,8 @@
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn
-                  v-if="!item"
-                  :disable="newItem.name.length <= 0"
+                  v-if="selectedItem == 'undefined'"
+                  :disable="item.name.length <= 0"
                   dark
                   outlined
                   @click="addItem()"
@@ -81,7 +81,7 @@
                   dark
                   outlined
                   color="primary"
-                  @click="updateItem(newItem)"
+                  @click="updateItem()"
                   >Update</v-btn
                 >
               </div>
@@ -90,19 +90,14 @@
         </v-col>
         <v-col cols="12" md="7" lg="8" class="d-flex flex-column">
           <div class="d-flex flex-shrink-0 mt-5 mb-4 align-center">
-            <v-btn
-              text
-              dark
-              :disabled="selectedItem == 'undefined'"
-              @click="removeItem(newItem)"
-            >
+            <v-btn text dark :disabled="!selectedItem" @click="removeItem()">
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
               Remove
             </v-btn>
           </div>
-          <div v-if="items.length <= 0">
+          <div v-if="sortedItems.length <= 0">
             <v-card outlined>
               <v-card-text>
                 Add items to your quest with the form on the left.
@@ -110,38 +105,38 @@
             </v-card>
           </div>
           <v-list v-else subheader two-line>
-            <span v-for="(location, l) in locations" :key="l">
+            <span v-for="(location, s) in sortedItems" :key="s">
               <v-subheader inset>{{ location.name }}</v-subheader>
-              <v-list-item-group v-model="selectedItem" :group="location[l]" color="green">
-                <template v-for="(item, i) in sortedItems(location)">
-                  <v-list-item
-                    :key="`item-${l}-${i}`"
-                    :value="`item-${l}-${i}`"
-                    @click="selectItem(item)"
-                  >
-                    <v-list-item-avatar>
-                      <v-icon class="grey lighten-1">
-                        mdi-feather
-                      </v-icon>
-                    </v-list-item-avatar>
+            <v-list-item-group v-model="selectedItem" color="green">
+              <template v-for="(item, e) in location.items">
+                <v-list-item :key="`item-${s}-${e}`" :value="`item-${s}-${e}`" @click="selectItem(item)">
+                  <v-list-item-avatar>
+                    <v-icon class="grey lighten-1">
+                      mdi-feather
+                    </v-icon>
+                  </v-list-item-avatar>
 
-                    <v-list-item-content>
-                      <v-list-item-title v-text="item.name"></v-list-item-title>
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.name"></v-list-item-title>
 
-                      <v-list-item-subtitle
-                        v-text="item.description"
-                      ></v-list-item-subtitle>
-                    </v-list-item-content>
+                    <v-list-item-subtitle
+                      v-text="item.description"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
 
-                    <v-list-item-action>
-                      <v-btn icon>
-                        <v-icon color="grey lighten-1">mdi-information</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
-                </template>
-              </v-list-item-group>
-              <v-divider inset class="mt-4 mb-2"></v-divider>
+                  <v-list-item-action>
+                    <v-btn icon>
+                      <v-icon color="grey lighten-1">mdi-information</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list-item-group>
+            <v-divider
+              inset
+              class="mt-4 mb-2"
+              v-if="sortedItems.length > 1"
+            ></v-divider>
             </span>
           </v-list>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
@@ -168,20 +163,22 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "ItemsEditor",
   data() {
     return {
-      newItem: {
+      item: {
         name: "",
         location: {},
         description: "",
         requirements: [],
         expiration: [],
-        objectives: []
+        objectives: [],
+        itemIndex: null
       },
+      sortedItems: [],
       selectedItem: "undefined"
     };
   },
@@ -189,68 +186,86 @@ export default {
     ...mapState({
       objectives: state => state.editor.objectives,
       locations: state => state.editor.locations,
-      item: state => state.editor.item,
-      items: state => state.editor.items,
-      actions: state => state.editor.actions
-    }),
+      actions: state => state.editor.actions,
+      items: state => state.editor.items
+    })
+  },
+  mounted() {
+    this.sortItems();
   },
   methods: {
+    ...mapMutations([
+      "ADD_ITEM_EDITOR",
+      "UPDATE_ITEM_EDITOR",
+      "SET_ITEMS_EDITOR"
+    ]),
     addItem() {
-      console.log("Add item.")
-      this.$store.dispatch("addItem", this.newItem);
+      this.$store.commit("ADD_ITEM_EDITOR", this.item);
       this.clearItem();
     },
     selectItem(item) {
-      this.$store.dispatch("selectItem", item.itemIndex);
-      this.newItem = {
+      this.item = {
         name: item.name,
         location: item.location,
         description: item.description,
         requirements: item.requirements,
         expiration: item.expiration,
         objectives: item.objectives,
-        itemIndex: item.itemIndex,
+        itemIndex: item.itemIndex
       };
     },
-    updateItem(item) {
-      var index = item.itemIndex;
-      this.$store.dispatch("updateItem", {
-        selectedItem: index,
-        newItem: this.newItem
+    updateItem() {
+      this.$store.commit("UPDATE_ITEM_EDITOR", {
+        selectedItem: this.item.itemIndex,
+        newItem: this.item
       });
       this.clearItem();
     },
-    removeItem(item) {
-      var index = item.itemIndex;
+    removeItem() {
+      var index = this.item.itemIndex;
       var items = this.items.map(e => e);
       items.splice(index, 1);
-      this.$store.dispatch("updateItems", items);
+      this.$store.commit("SET_ITEMS_EDITOR", items);
       this.clearItem();
     },
     clearItem() {
-      this.$store.dispatch("clearItem");
-      this.selectedItem = null;
-      this.newItem = {
+      this.selectedItem = "undefined";
+      this.item = {
         name: "",
         location: {},
         description: "",
         requirements: [],
         expiration: [],
-        objectives: [],
+        objectives: []
       };
+      this.sortItems();
     },
-    sortedItems(location) {
-      const items = this.items;
-      var sortedItems = [];
+    sortItems() {
+      var items = [], sortedItems = [];
 
-      for (let i = 0; i < items.length; i++ ) {
-        if (location.name == items[i].location) {
-          items[i].itemIndex = i;
-          sortedItems.push(items[i])
+      for (let e = 0; e < this.items.length; e++) {
+        var item = this.items[e];
+        item.itemIndex = e;
+        items.push(item);
+      }
+
+      for (let l = 0; l < this.locations.length; l++) {
+        var sortedLocation = {};
+        sortedLocation.name = this.locations[l].name;
+        sortedLocation.items = [];
+
+        for (let s = 0; s < items.length; s++) {
+          if (items[s].location == this.locations[l].name) {
+            sortedLocation.items.push(items[s]);
+          }
+        }
+
+        if (sortedLocation.items.length > 0) {
+          sortedItems.push(sortedLocation);
         }
       }
 
-      return sortedItems;
+      this.sortedItems = sortedItems;
     }
   }
 };
