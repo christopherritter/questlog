@@ -20,21 +20,21 @@
                 </v-btn>
               </div>
               <v-text-field
-                v-model="newAction.name"
+                v-model="action.name"
                 label="Name"
                 outlined
               ></v-text-field>
               <v-select :items="actionTypes" label="Type" outlined></v-select>
-              <v-select v-if="newAction.type='Look'" :items="locations" label="Locations" outlined></v-select>
-              <v-select v-else-if="newAction.type='Move'" :items="locations" label="Locations" outlined></v-select>
-              <v-select v-else-if="newAction.type='Put'" :items="items" label="Items" outlined></v-select>
+              <v-select v-if="action.type='Look'" :items="locations" label="Locations" outlined></v-select>
+              <v-select v-else-if="action.type='Move'" :items="locations" label="Locations" outlined></v-select>
+              <v-select v-else-if="action.type='Put'" :items="items" label="Items" outlined></v-select>
               <v-select v-else :items="items" label="Items" outlined></v-select>
               <div class="d-flex justify-end">
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn
                   v-if="currentAction == null"
-                  :disabled="newAction.name.length <= 0"
+                  :disabled="action.name.length <= 0"
                   dark
                   outlined
                   color="primary"
@@ -107,13 +107,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "ActionsEditor",
   data() {
     return {
-      newAction: {
+      action: {
         name: "",
         type: "",
         target: ""
@@ -130,21 +130,27 @@ export default {
     })
   },
   methods: {
+    ...mapMutations([
+      "ADD_ACTION_EDITOR",
+      "UPDATE_ACTION_EDITOR",
+      "SET_ACTIONS_EDITOR"
+    ]),
     addAction() {
-      this.$store.dispatch("addAction", this.newAction);
+      this.$store.commit("ADD_ACTION_EDITOR", this.action);
       this.clearAction();
     },
     selectAction(index) {
-      this.newAction = {
-        name: this.actions[index].name,
-        type: this.actions[index].type,
-        target: this.actions[index].target
+      const action = this.actions[index];
+      this.action = {
+        name: actions.name,
+        type: actions.type,
+        target: actions.target
       };
     },
     updateAction() {
-      this.$store.dispatch("updateAction", {
-        currentAction: this.currentAction,
-        newAction: this.newAction
+      this.$store.commit("UPDATE_ACTION_EDITOR", {
+        currentObjective: this.currentAction,
+        newObjective: this.action
       });
       this.clearAction();
     },
@@ -155,7 +161,7 @@ export default {
       this.clearAction();
     },
     clearAction() {
-      this.newAction = {
+      this.action = {
         name: "",
         type: "",
         target: ""

@@ -168,11 +168,11 @@ export default {
     state.editor.items = items;
   },
 
-  ADD_ACTION: (state, action) => {
+  ADD_ACTION_EDITOR: (state, action) => {
     state.editor.actions.push(action);
   },
 
-  UPDATE_ACTION: (state, action) => {
+  UPDATE_ACTION_EDITOR: (state, action) => {
     state.editor.actions[action.currentAction] = {
       name: action.newAction.name,
       type: action.newAction.type,
@@ -180,7 +180,7 @@ export default {
     };
   },
 
-  SET_ACTIONS: (state, actions) => {
+  SET_ACTIONS_EDITOR: (state, actions) => {
     state.editor.actions = actions;
   },
 }
