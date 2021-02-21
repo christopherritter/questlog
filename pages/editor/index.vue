@@ -31,9 +31,6 @@
             <v-tab href="#items">
               Items
             </v-tab>
-            <v-tab href="#actions">
-              Actions
-            </v-tab>
 
 
             <v-tab-item value="quest">
@@ -64,11 +61,6 @@
             </v-tab-item>
             <v-tab-item value="items">
               <ItemsEditor
-                @change-tab="changeTab($event)"
-              />
-            </v-tab-item>
-            <v-tab-item value="actions">
-              <ActionsEditor
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>

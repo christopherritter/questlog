@@ -32,9 +32,10 @@
               <v-textarea
                 v-model="entry.text"
                 label="Text"
+                hide-details="auto"
                 outlined
               ></v-textarea>
-              <v-select :items="actions" label="Actions" outlined></v-select>
+              <ActionsPanel />
               <v-autocomplete
                 v-model="entry.requirements"
                 :items="objectives"
@@ -164,6 +165,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import ActionsPanel from "@/components/editor/ActionsPanel.vue";
 
 export default {
   name: "EntriesEditor",
@@ -182,6 +184,7 @@ export default {
       selectedEntry: "undefined"
     };
   },
+  components: { ActionsPanel },
   computed: {
     ...mapState({
       objectives: state => state.editor.objectives,
