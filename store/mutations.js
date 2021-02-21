@@ -156,7 +156,7 @@ export default {
     state.editor.items[item.selectedItem] = {
       name: item.newItem.name,
       location: item.newItem.location,
-      description: item.newItem.text,
+      description: item.newItem.description,
       requirements: item.newItem.requirements,
       expiration: item.newItem.expiration,
       objectives: item.newItem.objectives
