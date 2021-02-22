@@ -105,9 +105,10 @@
 
 <script>
 export default {
+  name: "actionsPanel",
   data() {
     return {
-      actions: [
+      demoActions: [
         {
           text: "Take a right turn",
           type: "Move",
@@ -123,7 +124,7 @@ export default {
           color: "green",
         }
       ],
-      editedIndex: null,
+      editedIndex: -1,
       editedAction: {
         text: "",
         type: "",
@@ -135,6 +136,7 @@ export default {
       dialogDelete: false
     };
   },
+  props: ['actions'],
   methods: {
     editAction(action) {
       this.editedIndex = this.actions.indexOf(action);
@@ -171,9 +173,11 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.actions[this.editedIndex], this.editedAction);
+        // Object.assign(this.actions[this.editedIndex], this.editedAction);
+        this.$emit('edit-action', { action: this.editedAction, index: this.editedIndex })
       } else {
-        this.actions.push(this.editedAction);
+        // this.actions.push(this.editedAction);
+        this.$emit('add-action', { action: this.editedAction })
       }
       this.close();
     }

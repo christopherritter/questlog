@@ -35,7 +35,11 @@
                 hide-details="auto"
                 outlined
               ></v-textarea>
-              <ActionsPanel />
+              <ActionsPanel
+                :actions="entry.actions"
+                @add-action="addAction($event)"
+                @edit-action="editAction($event)"
+              />
               <v-autocomplete
                 v-model="entry.requirements"
                 :items="objectives"
@@ -108,36 +112,42 @@
           <v-list v-else subheader two-line>
             <span v-for="(location, s) in sortedEntries" :key="s">
               <v-subheader inset>{{ location.name }}</v-subheader>
-            <v-list-item-group v-model="selectedEntry" color="green">
-              <template v-for="(entry, e) in location.entries">
-                <v-list-item :key="`item-${s}-${e}`" :value="`item-${s}-${e}`" @click="selectEntry(entry)">
-                  <v-list-item-avatar>
-                    <v-icon dark color="grey darken-3" class="grey lighten-1">
-                      mdi-feather
-                    </v-icon>
-                  </v-list-item-avatar>
+              <v-list-item-group v-model="selectedEntry" color="green">
+                <template v-for="(entry, e) in location.entries">
+                  <v-list-item
+                    :key="`item-${s}-${e}`"
+                    :value="`item-${s}-${e}`"
+                    @click="selectEntry(entry)"
+                  >
+                    <v-list-item-avatar>
+                      <v-icon dark color="grey darken-3" class="grey lighten-1">
+                        mdi-feather
+                      </v-icon>
+                    </v-list-item-avatar>
 
-                  <v-list-item-content>
-                    <v-list-item-title v-text="entry.title"></v-list-item-title>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="entry.title"
+                      ></v-list-item-title>
 
-                    <v-list-item-subtitle
-                      v-text="entry.text"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
+                      <v-list-item-subtitle
+                        v-text="entry.text"
+                      ></v-list-item-subtitle>
+                    </v-list-item-content>
 
-                  <v-list-item-action>
-                    <v-btn icon>
-                      <v-icon color="grey lighten-1">mdi-information</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </template>
-            </v-list-item-group>
-            <v-divider
-              inset
-              class="mt-4 mb-2"
-              v-if="sortedEntries.length > 1"
-            ></v-divider>
+                    <v-list-item-action>
+                      <v-btn icon>
+                        <v-icon color="grey lighten-1">mdi-information</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </template>
+              </v-list-item-group>
+              <v-divider
+                inset
+                class="mt-4 mb-2"
+                v-if="sortedEntries.length > 1"
+              ></v-divider>
             </span>
           </v-list>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
@@ -175,6 +185,7 @@ export default {
         title: "",
         location: {},
         text: "",
+        actions: [],
         requirements: [],
         expiration: [],
         objectives: [],
@@ -189,7 +200,6 @@ export default {
     ...mapState({
       objectives: state => state.editor.objectives,
       locations: state => state.editor.locations,
-      actions: state => state.editor.actions,
       entries: state => state.editor.entries
     })
   },
@@ -211,6 +221,7 @@ export default {
         title: entry.title,
         location: entry.location,
         text: entry.text,
+        actions: entry.actions,
         requirements: entry.requirements,
         expiration: entry.expiration,
         objectives: entry.objectives,
@@ -237,6 +248,7 @@ export default {
         title: "",
         location: {},
         text: "",
+        actions: [],
         requirements: [],
         expiration: [],
         objectives: []
@@ -244,7 +256,8 @@ export default {
       this.sortEntries();
     },
     sortEntries() {
-      var entries = [], sortedEntries = [];
+      var entries = [],
+        sortedEntries = [];
 
       for (let e = 0; e < this.entries.length; e++) {
         var entry = this.entries[e];
@@ -269,6 +282,12 @@ export default {
       }
 
       this.sortedEntries = sortedEntries;
+    },
+    addAction(event) {
+      this.entry.actions.push(event.action);
+    },
+    editAction(event) {
+      Object.assign(this.entry.actions[event.index], event.action)
     }
   }
 };
