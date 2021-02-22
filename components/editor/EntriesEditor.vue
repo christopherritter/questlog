@@ -112,7 +112,7 @@
               <template v-for="(entry, e) in location.entries">
                 <v-list-item :key="`item-${s}-${e}`" :value="`item-${s}-${e}`" @click="selectEntry(entry)">
                   <v-list-item-avatar>
-                    <v-icon class="grey lighten-1">
+                    <v-icon dark color="grey darken-3" class="grey lighten-1">
                       mdi-feather
                     </v-icon>
                   </v-list-item-avatar>

@@ -83,7 +83,38 @@ export default () => ({
   actionTypes: [
     "Look",
     "Move",
-    "Put",
+    "Place",
     "Take",
+    "Use",
   ],
+  icons: [
+    'mdi-car-side',
+    'mdi-directions-fork',
+    'mdi-door',
+    'mdi-eye',
+    'mdi-hand-right',
+    'mdi-run'
+  ],
+  colors: [
+    'red',
+    'pink',
+    'purple',
+    'deep-purple',
+    'indigo',
+    'blue',
+    'light-blue',
+    'cyan',
+    'teal',
+    'green',
+    'light-green',
+    'lime',
+    'yellow',
+    'amber',
+    'orange',
+    'deep-orange',
+    'brown',
+    'blue-grey',
+    'grey',
+    'black'
+  ]
 })
