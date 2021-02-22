@@ -144,8 +144,6 @@ export default {
     },
 
     deleteAction() {
-      // this.editedIndex = this.actions.indexOf(action);
-      // this.editedAction = Object.assign({}, action);
       this.dialog = false;
       this.dialogDelete = true;
     },
@@ -173,10 +171,8 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        // Object.assign(this.actions[this.editedIndex], this.editedAction);
         this.$emit('edit-action', { action: this.editedAction, index: this.editedIndex })
       } else {
-        // this.actions.push(this.editedAction);
         this.$emit('add-action', { action: this.editedAction })
       }
       this.close();

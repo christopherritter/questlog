@@ -34,7 +34,12 @@
                 label="Description"
                 outlined
               ></v-textarea>
-              <v-select :items="actions" label="Actions" outlined></v-select>
+              <ActionsPanel
+                :actions="item.actions"
+                @add-action="addAction($event)"
+                @edit-action="editAction($event)"
+                @delete-action="deleteAction($event)"
+              />
               <v-autocomplete
                 v-model="item.requirements"
                 :items="objectives"
@@ -164,6 +169,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import ActionsPanel from "@/components/editor/ActionsPanel.vue";
 
 export default {
   name: "ItemsEditor",
@@ -173,6 +179,7 @@ export default {
         name: "",
         location: {},
         description: "",
+        actions: [],
         requirements: [],
         expiration: [],
         objectives: [],
@@ -182,11 +189,11 @@ export default {
       selectedItem: "undefined"
     };
   },
+  components: { ActionsPanel },
   computed: {
     ...mapState({
       objectives: state => state.editor.objectives,
       locations: state => state.editor.locations,
-      actions: state => state.editor.actions,
       items: state => state.editor.items
     })
   },
@@ -208,6 +215,7 @@ export default {
         name: item.name,
         location: item.location,
         description: item.description,
+        actions: item.actions,
         requirements: item.requirements,
         expiration: item.expiration,
         objectives: item.objectives,
@@ -234,6 +242,7 @@ export default {
         name: "",
         location: {},
         description: "",
+        actions: [],
         requirements: [],
         expiration: [],
         objectives: []
@@ -266,6 +275,16 @@ export default {
       }
 
       this.sortedItems = sortedItems;
+    },
+    addAction(event) {
+      this.item.actions.push(event.action);
+    },
+    editAction(event) {
+      Object.assign(this.item.actions[event.index], event.action)
+    },
+    deleteAction(index) {
+      // console.log("Delete action no. " + index)
+      this.item.actions.splice(index, 1);
     }
   }
 };
