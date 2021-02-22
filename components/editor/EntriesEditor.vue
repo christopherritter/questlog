@@ -39,6 +39,7 @@
                 :actions="entry.actions"
                 @add-action="addAction($event)"
                 @edit-action="editAction($event)"
+                @delete-action="deleteAction($event)"
               />
               <v-autocomplete
                 v-model="entry.requirements"
@@ -288,6 +289,10 @@ export default {
     },
     editAction(event) {
       Object.assign(this.entry.actions[event.index], event.action)
+    },
+    deleteAction(index) {
+      // console.log("Delete action no. " + index)
+      this.entry.actions.splice(index, 1);
     }
   }
 };

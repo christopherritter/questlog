@@ -1,7 +1,6 @@
 <template>
   <v-list subheader two-line class="my-4">
     <v-subheader class="px-0">Actions</v-subheader>
-
     <v-list-item class="px-0" v-for="action in actions" :key="action.text">
       <v-list-item-avatar>
         <v-icon :class="action.color" dark v-text="action.icon"></v-icon>
@@ -70,14 +69,14 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="deleteAction(action)">
+            <v-btn color="red darken-1" text @click="deleteAction">
               Delete
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="close">
+            <v-btn text @click="close">
               Cancel
             </v-btn>
-            <v-btn color="blue darken-1" text @click="save">
+            <v-btn color="green darken-1" text @click="save">
               Save
             </v-btn>
           </v-card-actions>
@@ -144,14 +143,15 @@ export default {
       this.dialog = true;
     },
 
-    deleteAction(action) {
-      this.editedIndex = this.actions.indexOf(action);
-      this.editedAction = Object.assign({}, action);
+    deleteAction() {
+      // this.editedIndex = this.actions.indexOf(action);
+      // this.editedAction = Object.assign({}, action);
+      this.dialog = false;
       this.dialogDelete = true;
     },
 
     deleteActionConfirm() {
-      this.actions.splice(this.editedIndex, 1);
+      this.$emit('delete-action', this.editedIndex );
       this.closeDelete();
     },
 
