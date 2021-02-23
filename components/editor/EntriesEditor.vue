@@ -121,7 +121,7 @@
             subheader
             two-line
           >
-            <v-subheader inset>{{ location.name }}</v-subheader>
+            <v-subheader>{{ location.name }}</v-subheader>
             <v-list-item-group v-model="selectedEntry" color="green">
               <template v-for="(entry, e) in location.entries">
                 <v-list-item
@@ -196,7 +196,6 @@ export default {
     return {
       entry: {
         title: "",
-        // location: {},
         text: "",
         actions: [],
         requirements: [],
@@ -221,7 +220,7 @@ export default {
     ...mapMutations([
       "ADD_ENTRY_EDITOR",
       "UPDATE_ENTRY_EDITOR",
-      "SET_ENTRIES_EDITOR"
+      "REMOVE_ENTRY_EDITOR",
     ]),
     addEntry() {
       var index = this.locations.indexOf(this.selectedLocation);
@@ -246,9 +245,6 @@ export default {
       this.clearEntry();
     },
     removeEntry() {
-      // var index = this.entryIndex;
-      // var entries = this.locations[this.locationIndex].entries.map(e => e);
-      // entries.splice(index, 1);
       this.$store.commit("REMOVE_ENTRY_EDITOR", {
         locationIndex: this.locationIndex,
         entryIndex: this.entryIndex
@@ -280,7 +276,6 @@ export default {
       Object.assign(this.entry.actions[event.index], event.action);
     },
     deleteAction(index) {
-      // console.log("Delete action no. " + index)
       this.entry.actions.splice(index, 1);
     }
   }

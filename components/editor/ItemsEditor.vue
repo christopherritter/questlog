@@ -21,17 +21,19 @@
                 outlined
               ></v-text-field>
               <v-autocomplete
-                v-model="item.location"
+                v-model="selectedLocation"
                 :items="locations"
                 label="Location"
                 item-text="name"
-                item-value="id"
                 clearable
                 outlined
+                no-filter
+                return-object
               ></v-autocomplete>
               <v-textarea
                 v-model="item.description"
                 label="Description"
+                hide-details="auto"
                 outlined
               ></v-textarea>
               <ActionsPanel
@@ -49,6 +51,7 @@
                 clearable
                 multiple
                 outlined
+                no-filter
               ></v-autocomplete>
               <v-autocomplete
                 v-model="item.expiration"
@@ -59,6 +62,7 @@
                 clearable
                 multiple
                 outlined
+                no-filter
               ></v-autocomplete>
               <v-autocomplete
                 v-model="item.objectives"
@@ -69,13 +73,14 @@
                 clearable
                 multiple
                 outlined
+                no-filter
               ></v-autocomplete>
               <div class="d-flex justify-end">
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn
                   v-if="selectedItem == 'undefined'"
-                  :disable="item.name.length <= 0"
+                  :disable="!selectedLocation"
                   dark
                   outlined
                   @click="addItem()"
@@ -102,21 +107,36 @@
               Remove
             </v-btn>
           </div>
-          <div v-if="sortedItems.length <= 0">
+          <!-- <div v-if="sortedItems.length <= 0">
             <v-card outlined>
               <v-card-text>
                 Add items to your quest with the form on the left.
               </v-card-text>
             </v-card>
-          </div>
-          <v-list v-else subheader two-line>
-            <span v-for="(location, s) in sortedItems" :key="s">
-              <v-subheader inset>{{ location.name }}</v-subheader>
+          </div> -->
+          <v-list
+            span
+            v-for="(location, l) in locations"
+            :key="l"
+            subheader
+            two-line
+          >
+            <v-subheader>{{ location.name }}</v-subheader>
             <v-list-item-group v-model="selectedItem" color="green">
               <template v-for="(item, e) in location.items">
-                <v-list-item :key="`item-${s}-${e}`" :value="`item-${s}-${e}`" @click="selectItem(item)">
+                <v-list-item
+                  :key="`item-${l}-${e}`"
+                  :value="`item-${l}-${e}`"
+                  @click="
+                    selectItem({
+                      locationIndex: l,
+                      itemIndex: e,
+                      item: item
+                    })
+                  "
+                >
                   <v-list-item-avatar>
-                    <v-icon class="grey lighten-1">
+                    <v-icon dark color="grey darken-3" class="grey lighten-1">
                       mdi-feather
                     </v-icon>
                   </v-list-item-avatar>
@@ -142,17 +162,16 @@
               class="mt-4 mb-2"
               v-if="sortedItems.length > 1"
             ></v-divider>
-            </span>
           </v-list>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
-            <v-btn outlined dark @click="$emit('change-tab', 'entries')">
+            <v-btn outlined dark @click="$emit('change-tab', 'locations')">
               Back
             </v-btn>
             <v-btn
               outlined
               dark
               class="ml-2"
-              disabled
+              @click="$emit('change-tab', 'items')"
             >
               Next
             </v-btn>
@@ -177,67 +196,64 @@ export default {
     return {
       item: {
         name: "",
-        location: {},
         description: "",
         actions: [],
         requirements: [],
         expiration: [],
-        objectives: [],
-        itemIndex: null
+        objectives: []
       },
       sortedItems: [],
-      selectedItem: "undefined"
+      selectedItem: "undefined",
+      selectedLocation: null,
+      locationIndex: null,
+      itemIndex: null
     };
   },
   components: { ActionsPanel },
   computed: {
     ...mapState({
-      objectives: state => state.editor.objectives,
-      locations: state => state.editor.locations,
-      items: state => state.editor.items
+      objectives: state => state.editor.quest.objectives,
+      locations: state => state.editor.quest.locations
     })
-  },
-  mounted() {
-    this.sortItems();
   },
   methods: {
     ...mapMutations([
       "ADD_ITEM_EDITOR",
       "UPDATE_ITEM_EDITOR",
-      "SET_ITEMS_EDITOR"
+      "REMOVE_ITEM_EDITOR"
     ]),
     addItem() {
-      this.$store.commit("ADD_ITEM_EDITOR", this.item);
+      var index = this.locations.indexOf(this.selectedLocation);
+      this.$store.commit("ADD_ITEM_EDITOR", {
+        selectedLocation: index,
+        item: this.item
+      });
       this.clearItem();
     },
-    selectItem(item) {
-      this.item = {
-        name: item.name,
-        location: item.location,
-        description: item.description,
-        actions: item.actions,
-        requirements: item.requirements,
-        expiration: item.expiration,
-        objectives: item.objectives,
-        itemIndex: item.itemIndex
-      };
+    selectItem(obj) {
+      Object.assign(this.item, obj.item);
+      this.selectedLocation = this.locations[obj.locationIndex];
+      this.locationIndex = obj.locationIndex;
+      this.itemIndex = obj.itemIndex;
     },
     updateItem() {
       this.$store.commit("UPDATE_ITEM_EDITOR", {
-        selectedItem: this.item.itemIndex,
-        newItem: this.item
+        selectedLocation: this.locationIndex,
+        selectedItem: this.itemIndex,
+        item: this.item
       });
       this.clearItem();
     },
     removeItem() {
-      var index = this.item.itemIndex;
-      var items = this.items.map(e => e);
-      items.splice(index, 1);
-      this.$store.commit("SET_ITEMS_EDITOR", items);
+      this.$store.commit("REMOVE_ITEM_EDITOR", {
+        locationIndex: this.locationIndex,
+        itemIndex: this.itemIndex
+      });
       this.clearItem();
     },
     clearItem() {
       this.selectedItem = "undefined";
+      this.selectedLocation = null;
       this.item = {
         name: "",
         location: {},
@@ -247,43 +263,19 @@ export default {
         expiration: [],
         objectives: []
       };
-      this.sortItems();
-    },
-    sortItems() {
-      var items = [], sortedItems = [];
 
-      for (let e = 0; e < this.items.length; e++) {
-        var item = this.items[e];
-        item.itemIndex = e;
-        items.push(item);
-      }
-
-      for (let l = 0; l < this.locations.length; l++) {
-        var sortedLocation = {};
-        sortedLocation.name = this.locations[l].name;
-        sortedLocation.items = [];
-
-        for (let s = 0; s < items.length; s++) {
-          if (items[s].location == this.locations[l].name) {
-            sortedLocation.items.push(items[s]);
-          }
-        }
-
-        if (sortedLocation.items.length > 0) {
-          sortedItems.push(sortedLocation);
-        }
-      }
-
-      this.sortedItems = sortedItems;
+      this.selectedItem = "undefined";
+      this.selectedLocation = null;
+      this.locationIndex = null;
+      this.itemIndex = null;
     },
     addAction(event) {
       this.item.actions.push(event.action);
     },
     editAction(event) {
-      Object.assign(this.item.actions[event.index], event.action)
+      Object.assign(this.item.actions[event.index], event.action);
     },
     deleteAction(index) {
-      // console.log("Delete action no. " + index)
       this.item.actions.splice(index, 1);
     }
   }

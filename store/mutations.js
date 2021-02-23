@@ -94,38 +94,9 @@ export default {
     state.editor.quest.locations.push(location);
   },
 
-  // SET_LOCATION_EDITOR: (state, location) => {
-  //   state.editor.quest.location = {
-  //     name: location.name,
-  //     isLandmark: location.isLandmark,
-  //     coordinates: {
-  //       lat: location.coordinates.lat,
-  //       lng: location.coordinates.lng,
-  //     },
-  //     zoom: location.zoom,
-  //     image: location.image,
-  //     marker: location.marker,
-  //     draggable: location.draggable,
-  //   }
-  // },
-
   UPDATE_LOCATION_EDITOR: (state, location) => {
     Object.assign(state.editor.quest.locations[location.selectedLocation],
       location.newLocation);
-    // state.editor.quest.locations[location.selectedLocation] = {
-    //   name: location.newLocation.name,
-    //   isLandmark: location.newLocation.isLandmark,
-    //   coordinates: {
-    //     lat: location.newLocation.coordinates.lat,
-    //     lng: location.newLocation.coordinates.lng,
-    //   },
-    //   zoom: location.newLocation.zoom,
-    //   image: location.newLocation.image,
-    //   marker: location.newLocation.marker,
-    //   draggable: location.newLocation.draggable,
-    //   entries: [],
-    //   items: [],
-    // }
   },
 
   SET_COORDINATES_EDITOR: (state, location) => {
@@ -145,28 +116,17 @@ export default {
     state.editor.quest.locations[obj.locationIndex].entries.splice(obj.entryIndex, 1);
   },
 
-  SET_ENTRIES_EDITOR: (state, entries) => {
-    state.editor.entries = entries;
+  ADD_ITEM_EDITOR: (state, obj) => {
+    state.editor.quest.locations[obj.selectedLocation].items.push(obj.item);
   },
 
-  ADD_ITEM_EDITOR: (state, item) => {
-    state.editor.items.push(item);
+  UPDATE_ITEM_EDITOR: (state, obj) => {
+    Object.assign(state.editor.quest.locations[obj.selectedLocation].items[obj.selectedItem],
+      obj.item);
   },
 
-  UPDATE_ITEM_EDITOR: (state, item) => {
-    state.editor.items[item.selectedItem] = {
-      name: item.newItem.name,
-      location: item.newItem.location,
-      description: item.newItem.description,
-      requirements: item.newItem.requirements,
-      expiration: item.newItem.expiration,
-      objectives: item.newItem.objectives
-    };
-    state.editor.item = state.editor.items[item.selectedItem];
-  },
-
-  SET_ITEMS_EDITOR: (state, items) => {
-    state.editor.items = items;
+  REMOVE_ITEM_EDITOR: (state, obj) => {
+    state.editor.quest.locations[obj.locationIndex].entries.splice(obj.itemIndex, 1);
   },
 
   ADD_ACTION_EDITOR: (state, action) => {
