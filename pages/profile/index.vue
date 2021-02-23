@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12" md="10" lg="8" class="offset-md-1 offset-lg-2">
       <v-form>
-        <v-tabs vertical>
+        <v-tabs vertical v-model="$route.params.id">
           <v-tab>
             <v-icon left>
               mdi-account
@@ -37,7 +37,9 @@
                 ></v-text-field>
               </v-card-text>
               <v-card-actions>
-                <v-btn text color="grey" @click="clearChanges()">Clear Changes</v-btn>
+                <v-btn text color="grey" @click="clearChanges()"
+                  >Clear Changes</v-btn
+                >
                 <v-spacer></v-spacer>
                 <v-btn text color="primary">Update Profile</v-btn>
               </v-card-actions>
@@ -60,7 +62,9 @@
                 ></v-text-field>
               </v-card-text>
               <v-card-actions>
-                <v-btn text color="grey" @click="clearChanges()">Clear Changes</v-btn>
+                <v-btn text color="grey" @click="clearChanges()"
+                  >Clear Changes</v-btn
+                >
                 <v-spacer></v-spacer>
                 <v-btn text color="primary">Update Profile</v-btn>
               </v-card-actions>
@@ -86,7 +90,9 @@
                 ></v-text-field>
               </v-card-text>
               <v-card-actions>
-                <v-btn text color="grey" @click="clearChanges()">Clear Changes</v-btn>
+                <v-btn text color="grey" @click="clearChanges()"
+                  >Clear Changes</v-btn
+                >
                 <v-spacer></v-spacer>
                 <v-btn text color="primary">Update Profile</v-btn>
               </v-card-actions>
@@ -109,8 +115,12 @@ export default {
       newUserName: null,
       newEmailAddress: null,
       newPassword: null,
-      show: false,
+      show: false
     };
+  },
+  beforeRouteUpdate (to, from, next) {
+    console.log(to)
+    next()
   },
   computed: {
     ...mapState({
@@ -124,10 +134,10 @@ export default {
   },
   methods: {
     clearChanges() {
-      this.newUserName = null
-      this.newEmailAddress = null
-      this.newPassword = null
-      this.show = false
+      this.newUserName = null;
+      this.newEmailAddress = null;
+      this.newPassword = null;
+      this.show = false;
     }
   }
 };

@@ -54,13 +54,9 @@
                   ></v-img>
                 </nuxt-link>
 
-                <v-card-title class="quest-title"
-                  ><nuxt-link
-                    class="quest-title-link"
-                    :to="'/quest/' + quest.id"
-                    >{{ quest.title }}</nuxt-link
-                  ></v-card-title
-                >
+                <v-card-title class="quest-title" nuxt :to="'/quest/' + quest.id">
+                  {{ quest.title }}
+                </v-card-title>
 
                 <v-card-subtitle>by {{ authors[quest.author].name }}</v-card-subtitle>
                 <v-card-text></v-card-text>

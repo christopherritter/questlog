@@ -3,8 +3,14 @@
     <v-btn plain nuxt to="/">
       <v-toolbar-title v-text="title" />
     </v-btn>
-    <span v-if="quest && (this.$route.name == 'quest-reader' || this.$route.name == 'quest-player')">
-      <v-btn plain nuxt :to="'/quest/' + quest.id ">{{ quest.title }}</v-btn>
+    <span
+      v-if="
+        quest &&
+          (this.$route.name == 'quest-reader' ||
+            this.$route.name == 'quest-player')
+      "
+    >
+      <v-btn plain nuxt :to="'/quest/' + quest.id">{{ quest.title }}</v-btn>
     </span>
     <span v-else>
       <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
@@ -19,10 +25,10 @@
       <v-btn icon nuxt to="/profile/myQuests">
         <v-icon>mdi-feather</v-icon>
       </v-btn>
-      <v-btn icon nuxt to="/profile">
+      <!-- <v-btn icon nuxt to="/profile">
         <v-icon>mdi-account-box</v-icon>
-      </v-btn>
-      <!-- <v-menu close-on-click offset-y>
+      </v-btn> -->
+      <v-menu close-on-click offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-account-box</v-icon>
@@ -30,24 +36,39 @@
         </template>
 
         <v-list>
-          <v-subheader>PROFILE</v-subheader>
           <v-list-item-group color="primary">
-            <v-list-item v-for="(item, i) in profileItems" :key="i">
+            <!-- <v-list-item
+              v-for="(item, i) in profileItems"
+              :key="i"
+              nuxt
+              :to="{ name: 'profile', params: { stuff: item.id }}"
+            >
               <v-list-item-icon>
                 <v-icon v-text="item.icon"></v-icon>
               </v-list-item-icon>
-              <nuxt-link :to="item.to">
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.text"></v-list-item-title>
-                </v-list-item-content>
-              </nuxt-link>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.text"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item> -->
+            <v-list-item :to="{ name: 'profile'}">
+              <v-list-item-icon>
+                <v-icon>mdi-account</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Profile</v-list-item-title>
+              </v-list-item-content>
             </v-list-item>
             <v-list-item @click="logout">
-              Logout
+              <v-list-item-icon>
+                <v-icon>mdi-logout</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Logout</v-list-item-title>
+              </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
         </v-list>
-      </v-menu> -->
+      </v-menu>
     </span>
     <span v-else>
       <v-btn plain nuxt to="/login">
@@ -70,15 +91,15 @@ export default {
         { text: "My Quests", icon: "mdi-feather", to: "/myQuests" }
       ],
       profileItems: [
-        { text: "Update Profile", icon: "mdi-account", to: "/profile" },
-        { text: "Change Email", icon: "mdi-email", to: "/profile" },
-        { text: "Change Password", icon: "mdi-lock", to: "/profile" }
+        { id: 0, text: "Update Profile", icon: "mdi-account", to: "/profile" },
+        { id: 1, text: "Change Email", icon: "mdi-email", to: "/profile" },
+        { id: 0, text: "Change Password", icon: "mdi-lock", to: "/profile" }
       ]
     };
   },
   computed: {
     ...mapState({
-      quest: state => state.quest,
+      quest: state => state.quest
     })
   },
   methods: {
