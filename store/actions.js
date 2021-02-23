@@ -81,7 +81,7 @@ export default {
     state,
     commit
   }, location) {
-    const locations = state.editor.locations;
+    const locations = state.editor.quest.locations;
     var position = location.sourceTarget.getLatLng();
     var newLocation, selectedLocation;
 
@@ -96,7 +96,7 @@ export default {
       }
     }
 
-    commit('SET_LOCATION_EDITOR', newLocation);
+    // commit('SET_LOCATION_EDITOR', newLocation);
     return selectedLocation;
   },
 
@@ -112,7 +112,7 @@ export default {
     state,
     commit
   }, index) {
-    const item = state.editor.items[index];
+    const item = state.editor.quest.items[index];
     commit('SET_ITEM', item);
   },
 
@@ -127,7 +127,7 @@ export default {
     commit
   }, index) {
     console.log("Remove Item No. " + index)
-    var items = state.editor.items;
+    var items = state.editor.quest.items;
     var newItems = items.slice(index, 1)
     console.log(newItems)
     commit('SET_ITEMS', newItems)

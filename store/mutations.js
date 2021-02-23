@@ -71,77 +71,78 @@ export default {
   },
 
   SET_REGION_EDITOR: (state, region) => {
-    state.editor.region = region;
+    state.editor.quest.region = region;
   },
 
   ADD_OBJECTIVE_EDITOR: (state, objective) => {
-    state.editor.objectives.push(objective);
+    state.editor.quest.objectives.push(objective);
   },
 
   UPDATE_OBJECTIVE_EDITOR: (state, objective) => {
-    state.editor.objectives[objective.currentObjective] = {
+    state.editor.quest.objectives[objective.currentObjective] = {
       name: objective.newObjective.name,
       description: objective.newObjective.description,
       isPrimary: objective.newObjective.isPrimary,
     };
-    // state.editor.entry = state.editor.entries[entry.selectedEntry];
   },
 
   SET_OBJECTIVES_EDITOR: (state, objectives) => {
-    state.editor.objectives = objectives;
+    state.editor.quest.objectives = objectives;
   },
 
   ADD_LOCATION_EDITOR: (state, location) => {
-    state.editor.locations.push(location);
+    state.editor.quest.locations.push(location);
   },
 
-  SET_LOCATION_EDITOR: (state, location) => {
-    state.editor.location = {
-      name: location.name,
-      isLandmark: location.isLandmark,
-      coordinates: {
-        lat: location.coordinates.lat,
-        lng: location.coordinates.lng,
-      },
-      zoom: location.zoom,
-      image: location.image,
-      marker: location.marker,
-      draggable: location.draggable,
-    }
-  },
+  // SET_LOCATION_EDITOR: (state, location) => {
+  //   state.editor.quest.location = {
+  //     name: location.name,
+  //     isLandmark: location.isLandmark,
+  //     coordinates: {
+  //       lat: location.coordinates.lat,
+  //       lng: location.coordinates.lng,
+  //     },
+  //     zoom: location.zoom,
+  //     image: location.image,
+  //     marker: location.marker,
+  //     draggable: location.draggable,
+  //   }
+  // },
 
   UPDATE_LOCATION_EDITOR: (state, location) => {
-    state.editor.locations[location.selectedLocation] = {
-      name: location.newLocation.name,
-      isLandmark: location.newLocation.isLandmark,
-      coordinates: {
-        lat: location.newLocation.coordinates.lat,
-        lng: location.newLocation.coordinates.lng,
-      },
-      zoom: location.newLocation.zoom,
-      image: location.newLocation.image,
-      marker: location.newLocation.marker,
-      draggable: location.newLocation.draggable,
-    }
+    Object.assign(state.editor.quest.locations[location.selectedLocation],
+      location.newLocation);
+    // state.editor.quest.locations[location.selectedLocation] = {
+    //   name: location.newLocation.name,
+    //   isLandmark: location.newLocation.isLandmark,
+    //   coordinates: {
+    //     lat: location.newLocation.coordinates.lat,
+    //     lng: location.newLocation.coordinates.lng,
+    //   },
+    //   zoom: location.newLocation.zoom,
+    //   image: location.newLocation.image,
+    //   marker: location.newLocation.marker,
+    //   draggable: location.newLocation.draggable,
+    //   entries: [],
+    //   items: [],
+    // }
   },
 
   SET_COORDINATES_EDITOR: (state, location) => {
-    state.editor.locations[location.index].coordinates = location.coordinates;
+    state.editor.quest.locations[location.index].coordinates = location.coordinates;
   },
 
-  ADD_ENTRY_EDITOR: (state, entry) => {
-    state.editor.entries.push(entry);
+  ADD_ENTRY_EDITOR: (state, obj) => {
+    state.editor.quest.locations[obj.selectedLocation].entries.push(obj.entry);
   },
 
-  UPDATE_ENTRY_EDITOR: (state, entry) => {
-    state.editor.entries[entry.selectedEntry] = {
-      title: entry.newEntry.title,
-      location: entry.newEntry.location,
-      text: entry.newEntry.text,
-      requirements: entry.newEntry.requirements,
-      expiration: entry.newEntry.expiration,
-      objectives: entry.newEntry.objectives
-    };
+  UPDATE_ENTRY_EDITOR: (state, obj) => {
+    Object.assign(state.editor.quest.locations[obj.selectedLocation].entries[obj.selectedEntry],
+      obj.entry);
+  },
+
+  REMOVE_ENTRY_EDITOR: (state, obj) => {
+    state.editor.quest.locations[obj.locationIndex].entries.splice(obj.entryIndex, 1);
   },
 
   SET_ENTRIES_EDITOR: (state, entries) => {

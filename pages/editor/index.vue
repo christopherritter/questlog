@@ -16,11 +16,11 @@
             <v-tab href="#quest">
               Quest
             </v-tab>
-            <v-tab href="#objectives">
-              Objectives
-            </v-tab>
             <v-tab href="#region">
               Region
+            </v-tab>
+            <v-tab href="#objectives">
+              Objectives
             </v-tab>
             <v-tab href="#locations">
               Locations
@@ -38,13 +38,13 @@
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
-            <v-tab-item value="objectives">
-              <ObjectivesEditor
+            <v-tab-item value="region">
+              <RegionEditor
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
-            <v-tab-item value="region">
-              <RegionEditor
+            <v-tab-item value="objectives">
+              <ObjectivesEditor
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>

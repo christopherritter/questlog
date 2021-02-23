@@ -107,24 +107,15 @@ export default {
   name: "actionsPanel",
   data() {
     return {
-      demoActions: [
-        {
-          text: "Take a right turn",
-          type: "Move",
-          target: "Location 2",
-          icon: "mdi-directions-fork",
-          color: "blue",
-        },
-        {
-          text: "Open the door",
-          type: "Use",
-          target: "Kitchen Door",
-          icon: "mdi-door",
-          color: "green",
-        }
-      ],
       editedIndex: -1,
       editedAction: {
+        text: "",
+        type: "",
+        target: "",
+        icon: "",
+        color: "",
+      },
+      defaultAction: {
         text: "",
         type: "",
         target: "",

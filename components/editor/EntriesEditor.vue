@@ -21,13 +21,14 @@
                 outlined
               ></v-text-field>
               <v-autocomplete
-                v-model="entry.location"
+                v-model="selectedLocation"
                 :items="locations"
                 label="Location"
                 item-text="name"
-                item-value="id"
                 clearable
                 outlined
+                no-filter
+                return-object
               ></v-autocomplete>
               <v-textarea
                 v-model="entry.text"
@@ -50,6 +51,7 @@
                 clearable
                 multiple
                 outlined
+                no-filter
               ></v-autocomplete>
               <v-autocomplete
                 v-model="entry.expiration"
@@ -60,6 +62,7 @@
                 clearable
                 multiple
                 outlined
+                no-filter
               ></v-autocomplete>
               <v-autocomplete
                 v-model="entry.objectives"
@@ -70,13 +73,14 @@
                 clearable
                 multiple
                 outlined
+                no-filter
               ></v-autocomplete>
               <div class="d-flex justify-end">
                 <v-btn dark outlined disabled>Reset</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn
                   v-if="selectedEntry == 'undefined'"
-                  :disable="entry.title.length <= 0"
+                  :disable="!selectedLocation"
                   dark
                   outlined
                   @click="addEntry()"
@@ -103,53 +107,61 @@
               Remove
             </v-btn>
           </div>
-          <div v-if="sortedEntries.length <= 0">
+          <!-- <div v-if="sortedEntries.length <= 0">
             <v-card outlined>
               <v-card-text>
                 Add entries to your quest with the form on the left.
               </v-card-text>
             </v-card>
-          </div>
-          <v-list v-else subheader two-line>
-            <span v-for="(location, s) in sortedEntries" :key="s">
-              <v-subheader inset>{{ location.name }}</v-subheader>
-              <v-list-item-group v-model="selectedEntry" color="green">
-                <template v-for="(entry, e) in location.entries">
-                  <v-list-item
-                    :key="`item-${s}-${e}`"
-                    :value="`item-${s}-${e}`"
-                    @click="selectEntry(entry)"
-                  >
-                    <v-list-item-avatar>
-                      <v-icon dark color="grey darken-3" class="grey lighten-1">
-                        mdi-feather
-                      </v-icon>
-                    </v-list-item-avatar>
+          </div> -->
+          <v-list
+            span
+            v-for="(location, l) in locations"
+            :key="l"
+            subheader
+            two-line
+          >
+            <v-subheader inset>{{ location.name }}</v-subheader>
+            <v-list-item-group v-model="selectedEntry" color="green">
+              <template v-for="(entry, e) in location.entries">
+                <v-list-item
+                  :key="`item-${l}-${e}`"
+                  :value="`item-${l}-${e}`"
+                  @click="
+                    selectEntry({
+                      locationIndex: l,
+                      entryIndex: e,
+                      entry: entry
+                    })
+                  "
+                >
+                  <v-list-item-avatar>
+                    <v-icon dark color="grey darken-3" class="grey lighten-1">
+                      mdi-feather
+                    </v-icon>
+                  </v-list-item-avatar>
 
-                    <v-list-item-content>
-                      <v-list-item-title
-                        v-text="entry.title"
-                      ></v-list-item-title>
+                  <v-list-item-content>
+                    <v-list-item-title v-text="entry.title"></v-list-item-title>
 
-                      <v-list-item-subtitle
-                        v-text="entry.text"
-                      ></v-list-item-subtitle>
-                    </v-list-item-content>
+                    <v-list-item-subtitle
+                      v-text="entry.text"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
 
-                    <v-list-item-action>
-                      <v-btn icon>
-                        <v-icon color="grey lighten-1">mdi-information</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
-                </template>
-              </v-list-item-group>
-              <v-divider
-                inset
-                class="mt-4 mb-2"
-                v-if="sortedEntries.length > 1"
-              ></v-divider>
-            </span>
+                  <v-list-item-action>
+                    <v-btn icon>
+                      <v-icon color="grey lighten-1">mdi-information</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list-item-group>
+            <v-divider
+              inset
+              class="mt-4 mb-2"
+              v-if="sortedEntries.length > 1"
+            ></v-divider>
           </v-list>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
             <v-btn outlined dark @click="$emit('change-tab', 'locations')">
@@ -184,28 +196,26 @@ export default {
     return {
       entry: {
         title: "",
-        location: {},
+        // location: {},
         text: "",
         actions: [],
         requirements: [],
         expiration: [],
-        objectives: [],
-        entryIndex: null
+        objectives: []
       },
       sortedEntries: [],
-      selectedEntry: "undefined"
+      selectedEntry: "undefined",
+      selectedLocation: null,
+      locationIndex: null,
+      entryIndex: null
     };
   },
   components: { ActionsPanel },
   computed: {
     ...mapState({
-      objectives: state => state.editor.objectives,
-      locations: state => state.editor.locations,
-      entries: state => state.editor.entries
+      objectives: state => state.editor.quest.objectives,
+      locations: state => state.editor.quest.locations
     })
-  },
-  mounted() {
-    this.sortEntries();
   },
   methods: {
     ...mapMutations([
@@ -214,37 +224,37 @@ export default {
       "SET_ENTRIES_EDITOR"
     ]),
     addEntry() {
-      this.$store.commit("ADD_ENTRY_EDITOR", this.entry);
+      var index = this.locations.indexOf(this.selectedLocation);
+      this.$store.commit("ADD_ENTRY_EDITOR", {
+        selectedLocation: index,
+        entry: this.entry
+      });
       this.clearEntry();
     },
-    selectEntry(entry) {
-      this.entry = {
-        title: entry.title,
-        location: entry.location,
-        text: entry.text,
-        actions: entry.actions,
-        requirements: entry.requirements,
-        expiration: entry.expiration,
-        objectives: entry.objectives,
-        entryIndex: entry.entryIndex
-      };
+    selectEntry(obj) {
+      Object.assign(this.entry, obj.entry);
+      this.selectedLocation = this.locations[obj.locationIndex];
+      this.locationIndex = obj.locationIndex;
+      this.entryIndex = obj.entryIndex;
     },
     updateEntry() {
       this.$store.commit("UPDATE_ENTRY_EDITOR", {
-        selectedEntry: this.entry.entryIndex,
-        newEntry: this.entry
+        selectedLocation: this.locationIndex,
+        selectedEntry: this.entryIndex,
+        entry: this.entry
       });
       this.clearEntry();
     },
     removeEntry() {
       var index = this.entry.entryIndex;
-      var entries = this.entries.map(e => e);
+      var entries = this.locations[this.locationIndex].entries.map(e => e);
       entries.splice(index, 1);
       this.$store.commit("SET_ENTRIES_EDITOR", entries);
       this.clearEntry();
     },
     clearEntry() {
       this.selectedEntry = "undefined";
+      this.selectedLocation = null;
       this.entry = {
         title: "",
         location: {},
@@ -254,41 +264,17 @@ export default {
         expiration: [],
         objectives: []
       };
-      this.sortEntries();
-    },
-    sortEntries() {
-      var entries = [],
-        sortedEntries = [];
 
-      for (let e = 0; e < this.entries.length; e++) {
-        var entry = this.entries[e];
-        entry.entryIndex = e;
-        entries.push(entry);
-      }
-
-      for (let l = 0; l < this.locations.length; l++) {
-        var sortedLocation = {};
-        sortedLocation.name = this.locations[l].name;
-        sortedLocation.entries = [];
-
-        for (let s = 0; s < entries.length; s++) {
-          if (entries[s].location == this.locations[l].name) {
-            sortedLocation.entries.push(entries[s]);
-          }
-        }
-
-        if (sortedLocation.entries.length > 0) {
-          sortedEntries.push(sortedLocation);
-        }
-      }
-
-      this.sortedEntries = sortedEntries;
+      this.selectedEntry = "undefined";
+      this.selectedLocation = null;
+      this.locationIndex = null;
+      this.entryIndex = null;
     },
     addAction(event) {
       this.entry.actions.push(event.action);
     },
     editAction(event) {
-      Object.assign(this.entry.actions[event.index], event.action)
+      Object.assign(this.entry.actions[event.index], event.action);
     },
     deleteAction(index) {
       // console.log("Delete action no. " + index)

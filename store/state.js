@@ -10,41 +10,21 @@ export default () => ({
       title: "",
       description: "",
       image: "",
-      categories: []
-    },
-    author: null,
-    region: {
-      name: "",
-      coordinates: {
-        lat: 39.828175,
-        lng: -98.5795
+      categories: [],
+      author: null,
+      region: {
+        name: "",
+        coordinates: {
+          lat: 39.828175,
+          lng: -98.5795
+        },
+        zoom: 18,
+        draggable: true,
+        mapOptions: {}
       },
-      zoom: 18,
-      draggable: true,
-      mapOptions: {}
+      objectives: [],
+      locations: [],
     },
-    location: {
-      name: "",
-      isLandmark: true,
-      coordinates: {
-        lat: 39.828175,
-        lng: -98.5795
-      },
-      zoom: 18,
-      image: "",
-      isLandmark: false,
-      mapOptions: {},
-      draggable: true
-    },
-    entry: null,
-    action: null,
-    item: null,
-    objectives: [],
-    locations: [],
-    markers: [],
-    entries: [],
-    actions: [],
-    items: []
   },
   categories: [{
       id: 0,

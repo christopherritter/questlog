@@ -137,7 +137,9 @@ export default {
         zoom: 18,
         image: "",
         marker: null,
-        draggable: true
+        draggable: true,
+        entries: [],
+        items: []
       },
       selectedLocation: null
     };
@@ -145,8 +147,8 @@ export default {
   components: { LeafletMap },
   computed: {
     ...mapState({
-      region: state => state.editor.region,
-      locations: state => state.editor.locations,
+      region: state => state.editor.quest.region,
+      locations: state => state.editor.quest.locations,
       markers: state => state.markers
     }),
   },
@@ -172,7 +174,9 @@ export default {
           zoom: this.locations[index].zoom,
           image: this.locations[index].image,
           marker: this.locations[index].marker,
-          draggable: true
+          draggable: true,
+          entries: this.locations[index].entries,
+          items: this.locations[index].items,
         };
         this.selectedLocation = index;
       });
@@ -200,7 +204,9 @@ export default {
         zoom: 18,
         image: "",
         marker: null,
-        draggable: true
+        draggable: true,
+        entries: [],
+        items: []
       };
       this.selectedLocation = null;
     }

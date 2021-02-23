@@ -127,7 +127,7 @@ export default {
   },
   computed: {
     ...mapState({
-      objectives: state => state.editor.objectives,
+      objectives: state => state.editor.quest.objectives,
     })
   },
   methods: {
