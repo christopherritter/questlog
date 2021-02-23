@@ -246,10 +246,13 @@ export default {
       this.clearEntry();
     },
     removeEntry() {
-      var index = this.entry.entryIndex;
-      var entries = this.locations[this.locationIndex].entries.map(e => e);
-      entries.splice(index, 1);
-      this.$store.commit("SET_ENTRIES_EDITOR", entries);
+      // var index = this.entryIndex;
+      // var entries = this.locations[this.locationIndex].entries.map(e => e);
+      // entries.splice(index, 1);
+      this.$store.commit("REMOVE_ENTRY_EDITOR", {
+        locationIndex: this.locationIndex,
+        entryIndex: this.entryIndex
+      });
       this.clearEntry();
     },
     clearEntry() {
