@@ -76,9 +76,9 @@ export default {
   created() {
     const quest = this.$store.state.quest;
     if (quest) {
-      const region = this.$store.state.regions[quest.region];
-      const locations = this.$store.state.locations;
-      const location = this.$store.state.locations[0];
+      const region = this.$store.state.demoData.regions[quest.region];
+      const locations = this.$store.state.demoData.locations;
+      const location = this.$store.state.demoData.locations[0];
       const startingPoint = locations[quest.startingPoint];
 
       this.quest = quest;
@@ -96,7 +96,7 @@ export default {
   components: { QuestSidebar, QuestMap, QuestDialog },
   computed: {
     ...mapState({
-      objectives: state => state.objectives
+      objectives: state => state.demoData.objectives
     }),
     mapWidth() {
       if (!this.quest) {
@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     viewLocation(id) {
-      const location = this.$store.state.locations[id];
+      const location = this.$store.state.demoData.locations[id];
 
       this.locationEntries(id);
 
@@ -144,8 +144,8 @@ export default {
       });
     },
     locationEntries(locationId) {
-      const location = this.$store.state.locations[locationId];
-      const entries = this.$store.state.entries;
+      const location = this.$store.state.demoData.locations[locationId];
+      const entries = this.$store.state.demoData.entries;
 
       var locationEntries = [];
       var locationActions = [];
@@ -169,8 +169,8 @@ export default {
       this.items = null;
     },
     restartQuest() {
-      const location = this.$store.state.locations[0];
-      const startingPoint = this.$store.state.locations[this.quest.startingPoint];
+      const location = this.$store.state.demoData.locations[0];
+      const startingPoint = this.$store.state.demoData.locations[this.quest.startingPoint];
 
       for (let o = 0; o < this.objectives.length; o++) {
         this.$store.dispatch("updateObjective", {

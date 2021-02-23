@@ -115,7 +115,7 @@ export default {
   computed: {
     ...mapState({
       authUser: state => state.authUser,
-      users: state => state.users
+      users: state => state.demoData.users
     }),
     user() {
       const user = this.authUser;

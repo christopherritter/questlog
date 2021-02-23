@@ -71,7 +71,7 @@ export default {
     state,
     commit
   }, questId) {
-    const quest = state.quests[questId];
+    const quest = state.demoData.quests[questId];
     commit('SET_QUEST', quest);
   },
 

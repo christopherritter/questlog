@@ -84,8 +84,8 @@ export default {
   },
   computed: {
     ...mapState({
-      quests: state => state.quests,
-      authors: state => state.authors,
+      quests: state => state.demoData.quests,
+      authors: state => state.demoData.authors,
       categories: state => state.categories
     }),
     filteredQuests() {

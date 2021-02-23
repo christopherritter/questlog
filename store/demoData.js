@@ -1,4 +1,4 @@
-export default () => ({
+export const state = () => ({
   users: {
     'W8INchB9HLWxMHfgNVQ4mWE5P8v1': {
       name: "Christopher Ritter",

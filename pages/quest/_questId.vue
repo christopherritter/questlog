@@ -132,9 +132,9 @@ export default {
   },
   components: { QuestHeader, QuestMap },
   created() {
-    const quest = this.$store.state.quests[this.questId];
-    const region = this.$store.state.regions[quest.region];
-    const locations = this.$store.state.locations;
+    const quest = this.$store.state.demoData.quests[this.questId];
+    const region = this.$store.state.demoData.regions[quest.region];
+    const locations = this.$store.state.demoData.locations;
 
     this.quest = quest;
     this.region = region;
@@ -143,12 +143,12 @@ export default {
   },
   computed: {
     ...mapState({
-      objectives: state => state.objectives,
+      objectives: state => state.demoData.objectives,
       categories: state => state.categories,
     }),
     position() {
-      const regionId = this.$store.state.quests[this.questId].region;
-      return this.$store.state.regions[regionId].position;
+      const regionId = this.$store.state.demoData.quests[this.questId].region;
+      return this.$store.state.demoData.regions[regionId].position;
     }
   }
 };

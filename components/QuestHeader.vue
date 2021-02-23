@@ -33,12 +33,12 @@ export default {
   props: ["questId"],
   computed: {
     ...mapState({
-      authors: state => state.authors,
-      objectives: state => state.objectives,
+      authors: state => state.demoData.authors,
+      objectives: state => state.demoData.objectives,
       categories: state => state.categories,
     }),
     quest() {
-      return this.$store.state.quests[this.questId];
+      return this.$store.state.demoData.quests[this.questId];
     }
   },
   methods: {

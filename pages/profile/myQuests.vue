@@ -86,9 +86,9 @@ export default {
   computed: {
     ...mapState({
       authUser: state => state.authUser,
-      users: state => state.users,
-      quests: state => state.quests,
-      authors: state => state.authors,
+      users: state => state.demoData.users,
+      quests: state => state.demoData.quests,
+      authors: state => state.demoData.authors,
       categories: state => state.categories
     }),
     filteredQuests() {

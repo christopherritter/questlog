@@ -93,19 +93,19 @@ export default {
   layout: "fluid",
   computed: {
     ...mapState({
-      quests: state => state.quests,
-      users: state => state.users,
-      authors: state => state.authors,
+      quests: state => state.demoData.quests,
+      users: state => state.demoData.users,
+      authors: state => state.demoData.authors,
       categories: state => state.categories
     }),
     featuredQuest() {
-      return this.$store.state.quests[0];
+      return this.$store.state.demoData.quests[0];
     },
     featuredQuests() {
       var featuredQuests = [];
 
       for (let q = 1; q <= 3; q++) {
-        featuredQuests.push(this.$store.state.quests[q]);
+        featuredQuests.push(this.$store.state.demoData.quests[q]);
       }
 
       return featuredQuests;

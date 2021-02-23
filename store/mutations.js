@@ -41,7 +41,7 @@ export default {
     id,
     bool
   }) => {
-    state.objectives[id].isComplete = bool;
+    state.demoData.objectives[id].isComplete = bool;
   },
 
   SET_LOCATION: (state, location) => {
