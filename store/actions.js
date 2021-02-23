@@ -45,32 +45,48 @@ export default {
     commit('SET_AUTH_USER', {
       authUser
     })
-    dispatch('fetchUserProfile', { userId: authUser.uid, email: authUser.email });
+    dispatch('fetchUserProfile', authUser.uid);
   },
 
-  async fetchUserProfile(ctx, user) {
-    const userRef = this.$fire.firestore.collection('users').doc(user.userId);
+  async fetchUserProfile({
+    commit
+  }, uid) {
+    const userRef = this.$fire.firestore.collection('users').doc(uid);
 
-    userRef.get()
-      .then((docSnapshot) => {
-        if (docSnapshot.exists) {
-          userRef.onSnapshot((doc) => {
-            if (!doc.name) this.$router.push({ name: 'profile' });
-          });
-        } else {
-          userRef.set({
-            userId: user.userId,
-            name: user.name,
-            email: user.email,
-          })
-        }
+    const doc = await userRef.get();
+    if (!doc.exists) {
+      console.log('No such document!');
+    } else {
+      var profile = doc.data();
+      if (profile.name.length <= 0) this.$router.push({
+        name: 'profile'
       });
+      commit("SET_USER", profile);
+      this.$router.back();
+    }
+
+    // userRef.get()
+    //   .then((docSnapshot) => {
+    //     if (docSnapshot.exists) {
+    //       console.log(docSnapshot)
+    //       userRef.onSnapshot((doc) => {
+    //         console.log(doc.data)
+    //         if (!doc.data.name) this.$router.push({ name: 'profile' });
+    //       });
+    //     } else {
+    //       this.$router.back();
+    //     }
+    //   });
 
   },
 
-  async updateUserName({ state }, name) {
+  async updateUserName({
+    state
+  }, name) {
     const userRef = this.$fire.firestore.collection('users').doc(state.authUser.uid);
-    const res = await userRef.update({ name: name });
+    const res = await userRef.update({
+      name: name
+    });
   },
 
   beginQuest({

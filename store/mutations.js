@@ -14,6 +14,10 @@ export default {
     }
   },
 
+  SET_USER: ( state, user) => {
+    state.user = user
+  },
+
   SET_QUEST: (state, quest) => {
     state.quest = {
       id: quest.id,

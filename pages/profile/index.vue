@@ -31,6 +31,7 @@
 
                 <v-text-field
                   v-model="newUserName"
+                  :placeholder="user.name"
                   maxlength="25"
                   label="New Name"
                   outlined
@@ -57,6 +58,7 @@
 
                 <v-text-field
                   v-model="newEmailAddress"
+                  :placeholder="user.email"
                   label="New Email Address"
                   outlined
                 ></v-text-field>
@@ -125,12 +127,8 @@ export default {
   computed: {
     ...mapState({
       authUser: state => state.authUser,
-      users: state => state.demoData.users
-    }),
-    user() {
-      const user = this.authUser;
-      return this.users[user.uid];
-    }
+      user: state => state.user
+    })
   },
   methods: {
     updateUserName() {

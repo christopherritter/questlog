@@ -1,5 +1,6 @@
 export default () => ({
   authUser: null,
+  user: null,
   quest: null,
   region: null,
   location: null,
