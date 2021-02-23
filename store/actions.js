@@ -60,11 +60,17 @@ export default {
         } else {
           userRef.set({
             userId: user.userId,
+            name: user.name,
             email: user.email,
           })
         }
       });
 
+  },
+
+  async updateUserName({ state }, name) {
+    const userRef = this.$fire.firestore.collection('users').doc(state.authUser.uid);
+    const res = await userRef.update({ name: name });
   },
 
   beginQuest({

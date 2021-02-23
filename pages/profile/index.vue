@@ -41,7 +41,7 @@
                   >Clear Changes</v-btn
                 >
                 <v-spacer></v-spacer>
-                <v-btn text color="primary">Update Profile</v-btn>
+                <v-btn text color="primary" @click="updateUserName()">Update Profile</v-btn>
               </v-card-actions>
             </v-card>
           </v-tab-item>
@@ -133,6 +133,9 @@ export default {
     }
   },
   methods: {
+    updateUserName() {
+      this.$store.dispatch('updateUserName', this.newUserName);
+    },
     clearChanges() {
       this.newUserName = null;
       this.newEmailAddress = null;
