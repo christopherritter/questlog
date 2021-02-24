@@ -3,6 +3,12 @@
     <v-card-text>
       <h1 class="mt-5 mb-4">Quest</h1>
       <v-text-field v-model="quest.title" label="Title" outlined></v-text-field>
+      <v-text-field v-model="quest.author" label="Author" readonly outlined filled hide-details></v-text-field>
+      <v-checkbox
+        v-model="isAnonymous"
+        label="Publish anonymously"
+        value="true"
+      ></v-checkbox>
       <v-textarea
         name="input-7-1"
         label="Description"
@@ -16,7 +22,7 @@
         :items="categories"
         label="Categories"
         item-text="name"
-        item-value="id"
+        item-value="name"
         clearable
         multiple
         outlined
@@ -56,6 +62,8 @@ export default {
     return {
       quest: {
         title: "",
+        author: "Anonymous",
+        isAnonymous: true,
         description: "",
         image: "",
         categories: []

@@ -62,7 +62,7 @@ export default {
         name: 'profile'
       });
       commit("SET_USER", profile);
-      this.$router.back();
+      // this.$router.back();
     }
 
     // userRef.get()
@@ -89,6 +89,10 @@ export default {
     });
   },
 
+  // Quest
+
+  // There is no 'BEGIN QUEST'
+
   beginQuest({
     state,
     commit
@@ -96,6 +100,11 @@ export default {
     const quest = state.demoData.quests[questId];
     commit('SET_QUEST', { quest, questId });
   },
+
+  // There is only:
+  // 'READ QUEST'
+  // 'PLAY QUEST'
+  // 'EDIT QUEST'
 
   // Editor
 
