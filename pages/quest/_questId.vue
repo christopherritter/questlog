@@ -2,7 +2,7 @@
   <v-container fluid class="pa-0">
     <v-row>
       <v-col class="py-0">
-        <QuestHeader :quest-id="this.questId" />
+        <QuestHeader :quest="quest" />
       </v-col>
     </v-row>
 
@@ -18,16 +18,16 @@
 
                     <p>{{ quest.description }}</p>
 
-                    <v-chip
+                    <!-- <v-chip
                       label
                       v-for="category in quest.categories"
                       :key="category.index"
                       small
                       class="mr-2 mb-2"
                       >{{ categories[category].name }}</v-chip
-                    >
+                    > -->
 
-                    <v-row class="mt-4 mb-1 body-2">
+                    <!-- <v-row class="mt-4 mb-1 body-2">
                       <v-col class="py-1" cols="3" xs="3" md="3"
                         ><strong>Objectives</strong></v-col
                       >
@@ -52,14 +52,14 @@
                       <v-col class="py-1" cols="3" xs="3" md="3">{{
                         quest.items.length
                       }}</v-col>
-                    </v-row>
+                    </v-row> -->
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-sheet rounded color="grey lighten-4" class="pa-6">
                       <h3 class="mb-2">Objectives</h3>
 
-                      <v-list-item
-                        v-for="objective in objectives"
+                      <!-- <v-list-item
+                        v-for="objective in quest.objectives"
                         :key="objective.id"
                         dense
                       >
@@ -74,22 +74,22 @@
                             objective.name
                           }}</v-list-item-title>
                         </v-list-item-content>
-                      </v-list-item>
+                      </v-list-item> -->
                     </v-sheet>
                   </v-col>
                 </v-row>
 
                 <h2 class="py-4">Map</h2>
 
-                <QuestMap
+                <!-- <QuestMap
                   id="QuestMap"
                   class="mb-16"
                   :quest-id="this.questId"
-                  :position="position"
-                  :locations="locations"
+                  :position="quest.region.coordinates"
+                  :locations="quest.locations"
                   :zoom="zoom"
                   :mapOptions="mapOptions"
-                />
+                /> -->
               </v-col>
             </v-row>
           </v-container>
@@ -113,42 +113,46 @@ export default {
   },
   data() {
     return {
-      quest: null,
-      locations: null,
-      location: null,
-      zoom: null,
-      entries: null,
-      items: null,
-      actions: null,
-      mapOptions: {
-        disableDefaultUI: true,
-        gestureHandling: "none",
-        keyboardShortcuts: false,
-        clickableIcons: false,
-        draggableCursor: "default", // this is for cursor type
-        draggingCursor: "default" // this is for dragging cursor type
+      quest: {
+        title: "",
+        description: "",
+        image: "",
+        categories: [],
+        author: null,
+        region: {
+          name: "",
+          coordinates: {
+            lat: 39.828175,
+            lng: -98.5795
+          },
+          zoom: 18,
+          draggable: true,
+          mapOptions: {}
+        },
+        objectives: [],
+        locations: []
       }
     };
   },
   components: { QuestHeader, QuestMap },
   created() {
-    const quest = this.$store.state.demoData.quests[this.questId];
-    const region = this.$store.state.demoData.regions[quest.region];
-    const locations = this.$store.state.demoData.locations;
-
-    this.quest = quest;
-    this.region = region;
-    this.zoom = region.zoom;
-    this.locations = locations;
+    this.fetchQuest();
   },
   computed: {
     ...mapState({
-      objectives: state => state.demoData.objectives,
-      categories: state => state.categories,
-    }),
-    position() {
-      const regionId = this.$store.state.demoData.quests[this.questId].region;
-      return this.$store.state.demoData.regions[regionId].position;
+      categories: state => state.categories
+    })
+  },
+  methods: {
+    async fetchQuest() {
+      const db = this.$fire.firestore;
+      const questRef = db.collection("quests").doc(this.questId);
+      const doc = await questRef.get();
+      if (!doc.exists) {
+        console.log("No such document!");
+      } else {
+        this.quest = doc.data();
+      }
     }
   }
 };

@@ -9,18 +9,12 @@
           </h5>
         </div>
         <h1 class="display-3 mb-3">{{ quest.title }}</h1>
-        <h3 class="subtitle-1 mb-8 mb-lg-12">
-          by {{ authors[quest.author].name }}
-        </h3>
+        <h3 class="subtitle-1 mb-8 mb-lg-12">by {{ quest.author }}</h3>
         <v-btn color="primary" class="mr-2" disabled>Play Quest</v-btn>
         <v-btn outlined @click="readQuest(quest.id)">Read Story</v-btn>
       </v-col>
       <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down">
-        <v-img
-          class="mt-12"
-          :src="require('~/assets/img/' + quest.image)"
-          aspect-ratio="1.4"
-        ></v-img>
+        <v-img class="mt-12" :src="quest.image" aspect-ratio="1.4"></v-img>
       </v-col>
     </v-row>
   </v-container>
@@ -30,21 +24,16 @@
 import { mapState } from "vuex";
 export default {
   name: "QuestHeader",
-  props: ["questId"],
+  props: ["quest"],
   computed: {
     ...mapState({
-      authors: state => state.demoData.authors,
-      objectives: state => state.demoData.objectives,
-      categories: state => state.categories,
+      categories: state => state.categories
     }),
-    quest() {
-      return this.$store.state.demoData.quests[this.questId];
-    }
   },
   methods: {
     readQuest(questId) {
-      this.$store.dispatch('beginQuest', questId);
-      this.$router.push('/quest/reader');
+      this.$store.dispatch("beginQuest", questId);
+      this.$router.push("/quest/reader");
     }
   }
 };
