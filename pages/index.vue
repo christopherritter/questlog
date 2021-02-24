@@ -115,7 +115,11 @@ export default {
   methods: {
     async fetchQuests() {
       const snapshot = await this.$fire.firestore.collection('quests').get();
-      this.quests = snapshot.docs.map(doc => doc.data());
+      this.quests = snapshot.docs.map(doc => {
+        var newDoc = doc.data();
+        newDoc.id = doc.id;
+        return newDoc;
+      });
     }
   }
 };
