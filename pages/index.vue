@@ -47,18 +47,18 @@
               :key="quest.id"
             >
               <v-card>
-                <!-- <nuxt-link :to="'/quest/' + quest.id">
+                <nuxt-link :to="'/quest/' + quest.id">
                   <v-img
                     height="250"
-                    :src="require('~/assets/img/' + quest.image)"
+                    :src="quest.image"
                   ></v-img>
-                </nuxt-link> -->
+                </nuxt-link>
 
                 <v-card-title class="quest-title" nuxt :to="'/quest/' + quest.id">
                   {{ quest.title }}
                 </v-card-title>
 
-                <!-- <v-card-subtitle>by {{ authors[quest.author].name }}</v-card-subtitle> -->
+                <v-card-subtitle>by {{ quest.author }}</v-card-subtitle>
 
                 <!-- <v-card-actions>
                   <v-icon class="mr-2">mdi-tag</v-icon>
