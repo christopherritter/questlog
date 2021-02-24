@@ -84,7 +84,7 @@ export default {
     state
   }, name) {
     const userRef = this.$fire.firestore.collection('users').doc(state.authUser.uid);
-    const res = await userRef.update({
+    const result = await userRef.update({
       name: name
     });
   },
@@ -94,7 +94,24 @@ export default {
     commit
   }, questId) {
     const quest = state.demoData.quests[questId];
-    commit('SET_QUEST', quest);
+    commit('SET_QUEST', { quest, questId });
+  },
+
+  // Editor
+
+  async saveQuest({ state, commit }, quest) {
+    if (state.quest == null) {
+      const result = await this.$fire.firestore.collection('quests').add(quest);
+      commit('SET_QUEST', { quest: quest, questId: result.id })
+      console.log("The following quest has been set:");
+      console.log(result);
+    } else {
+      const questId = state.quest.questId;
+      const questRef = this.$fire.firestore.collection('quests').doc(questId);
+      const result = await questRef.update(quest);
+      console.log("Quest ID " + questId + " has been updated.");
+      console.log(result);
+    }
   },
 
   // Editor Locations

@@ -34,7 +34,12 @@
           Next
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn dark disabled color="primary" class="ml-2">
+        <v-btn
+          dark
+          color="primary"
+          class="ml-2"
+          @click="$store.dispatch('saveQuest', quest)"
+        >
           Save
         </v-btn>
       </div>
@@ -54,14 +59,14 @@ export default {
         description: "",
         image: "",
         categories: []
-      },
+      }
     };
   },
   computed: {
     ...mapState({
       categories: state => state.categories
-    }),
-  },
+    })
+  }
 };
 </script>
 

@@ -3,34 +3,14 @@ export const state = () => ({
     'W8INchB9HLWxMHfgNVQ4mWE5P8v1': {
       name: "Christopher Ritter",
       favorites: [0, 1, 2],
-      authorId: "christopherritter",
     },
-    'a': {
+    'learning-tree-farm': {
       name: "Learning Tree Farm",
       favorites: [3],
-      authorId: "learning-tree-farm",
     },
     'KRM5xFtPQ7bDKYSqterhnaB58fT2': {
       name: "Kathy Jo Pickett",
       favorite: [0, 1],
-      authorId: "mama-bear"
-    }
-  },
-  authors: {
-    'christopherritter': {
-      name: "Christopher Ritter",
-      isAnonymous: false,
-      quests: [3],
-    },
-    'learning-tree-farm': {
-      name: "Learning Tree Farm",
-      isAnonymous: false,
-      quests: [0, 1, 2],
-    },
-    'mama-bear': {
-      name: "Mama Bear",
-      isAnonymous: true,
-      quests: []
     }
   },
   quests: [{
@@ -84,7 +64,7 @@ export const state = () => ({
     {
       id: 3,
       title: "The Great Sheep Escape",
-      author: "christopherritter",
+      author: "W8INchB9HLWxMHfgNVQ4mWE5P8v1",
       description: "Help the Learning Tree find all the missing sheep which are freely roaming around the farm.",
       image: "sheep.png",
       categories: [0, 1, 3],
@@ -203,7 +183,7 @@ export const state = () => ({
       entries: [3],
     },
     {
-      id: 4,
+      id: '3Dt1xa31yMLknHaqgvNi',
       name: "Century House",
       isLandmark: true,
       position: {
@@ -229,7 +209,7 @@ export const state = () => ({
       entries: [5],
     },
     {
-      id: 6,
+      id: '4A4wJkAE3Htv2rYpbW6Y',
       name: "Bank Barn",
       isLandmark: true,
       position: {
@@ -428,13 +408,13 @@ export const state = () => ({
           id: 0,
           text: 'Head towards the Century House.',
           icon: 'mdi-home',
-          forward: 4, // Century House
+          forward: '3Dt1xa31yMLknHaqgvNi', // Century House
         },
         {
           id: 1,
           text: 'Continue to the Bank Barn.',
           icon: 'mdi-barn',
-          forward: 6, // Bank Barn
+          forward: '4A4wJkAE3Htv2rYpbW6Y', // Bank Barn
         },
       ],
       requirements: [],
@@ -444,7 +424,7 @@ export const state = () => ({
     {
       id: 4,
       title: 'Century House',
-      location: 4, // Century House
+      location: '3Dt1xa31yMLknHaqgvNi', // Century House
       text: 'Step into the original farmhouse, built in 1829, and into the lives of early Ohio settlers. The Century House is a pioneer museum to be explored when farm staff is on site!',
       actions: [{
         id: 0,
@@ -474,7 +454,7 @@ export const state = () => ({
     {
       id: 6,
       title: 'Bank Barn',
-      location: 6, // Bank Barn
+      location: '4A4wJkAE3Htv2rYpbW6Y', // Bank Barn
       text: 'The Bank Barn is an old wooden barn built atop of a 5 ft stone base. A green door on the side leads to the main interior of the barn.',
       actions: [{
         id: 0,
@@ -525,7 +505,7 @@ export const state = () => ({
         id: 0,
         text: 'Walk towards the Century House.',
         icon: 'mdi-home',
-        forward: 4, // Century House
+        forward: '3Dt1xa31yMLknHaqgvNi', // Century House
       }, ],
       requirements: [],
       expiration: [],

@@ -18,22 +18,22 @@ export default {
     state.user = user
   },
 
-  SET_QUEST: (state, quest) => {
+  SET_QUEST: (state, obj) => {
     state.quest = {
-      id: quest.id,
-      title: quest.title,
-      author: quest.author,
-      description: quest.description,
-      image: quest.image,
-      categories: quest.categories,
-      // favorite: quest.favorite,
-      featured: quest.featured,
-      region: quest.region,
-      objectives: quest.objectives,
-      locations: quest.locations,
-      entries: quest.entries,
-      items: quest.items,
-      startingPoint: quest.startingPoint,
+      questId: obj.questId,
+      title: obj.quest.title,
+      author: obj.quest.author,
+      description: obj.quest.description,
+      image: obj.quest.image,
+      categories: obj.quest.categories,
+      // favorite: obj.quest.favorite,
+      featured: obj.quest.featured,
+      region: obj.quest.region,
+      objectives: obj.quest.objectives,
+      locations: obj.quest.locations,
+      entries: obj.quest.entries,
+      items: obj.quest.items,
+      startingPoint: obj.quest.startingPoint,
     }
   },
 
