@@ -124,7 +124,7 @@ import { mapState, mapMutations } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
-  name: "LocationsEditor",
+  name: "LocationsTab",
   data() {
     return {
       location: {

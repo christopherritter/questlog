@@ -79,7 +79,7 @@ import EntriesTab from "@/components/editor/EntriesTab.vue";
 import ItemsTab from "@/components/editor/ItemsTab.vue";
 
 export default {
-  name: "questEditor",
+  name: "QuestEditor",
   layout: "fluid",
   middleware: "authenticated",
   components: {

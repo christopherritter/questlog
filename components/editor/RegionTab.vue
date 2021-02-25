@@ -89,7 +89,7 @@ import { mapMutations } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
-  name: "RegionEditor",
+  name: "RegionTab",
   data() {
     return {
       region: {

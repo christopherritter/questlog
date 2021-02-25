@@ -104,7 +104,7 @@
 
 <script>
 export default {
-  name: "actionsPanel",
+  name: "ActionsPanel",
   data() {
     return {
       editedIndex: -1,

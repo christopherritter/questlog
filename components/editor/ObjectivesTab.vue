@@ -114,7 +114,7 @@
 import { mapState, mapMutations } from "vuex";
 
 export default {
-  name: "ObjectivesEditor",
+  name: "ObjectivesTab",
   data() {
     return {
       objective: {

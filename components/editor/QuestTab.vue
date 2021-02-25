@@ -57,7 +57,7 @@
 import { mapState } from "vuex";
 
 export default {
-  name: "QuestEditor",
+  name: "QuestTab",
   data() {
     return {
       quest: {

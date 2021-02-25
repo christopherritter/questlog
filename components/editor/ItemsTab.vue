@@ -191,7 +191,7 @@ import { mapState, mapMutations } from "vuex";
 import ActionsPanel from "@/components/editor/ActionsPanel.vue";
 
 export default {
-  name: "ItemsEditor",
+  name: "ItemsTab",
   data() {
     return {
       item: {
