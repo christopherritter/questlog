@@ -160,7 +160,6 @@ export default {
 
       if (!doc.exists) {
         console.log("No such document!");
-        this.loading = false;
       } else {
         const regionRef = questRef.collection("region");
         const objectivesRef = questRef.collection("objectives");
@@ -194,9 +193,8 @@ export default {
         });
 
         this.quest = quest;
-        console.log("Done loading!");
-        this.loading = false;
       }
+      this.loading = false;
     }
   }
 };
