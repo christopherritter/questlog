@@ -42,7 +42,11 @@
         outlined
       ></v-autocomplete>
       <div class="d-flex">
-        <v-btn outlined dark disabled>
+        <v-btn outlined dark>
+          Update
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn outlined dark disabled class="ml-2">
           Back
         </v-btn>
         <v-btn
@@ -58,9 +62,9 @@
           dark
           color="primary"
           class="ml-2"
-          @click="$store.dispatch('saveQuest', newQuest)"
+          @click="$store.dispatch('publishQuest', newQuest)"
         >
-          Save
+          Publish
         </v-btn>
       </div>
     </v-card-text>
@@ -105,6 +109,9 @@ export default {
         image: this.quest.image,
         categories: this.quest.categories,
       })
+    },
+    publishQuest() {
+      console.log("Publish Quest")
     }
   }
 };

@@ -76,8 +76,6 @@
                 no-filter
               ></v-autocomplete>
               <div class="d-flex justify-end">
-                <v-btn dark outlined disabled>Reset</v-btn>
-                <v-spacer></v-spacer>
                 <v-btn
                   v-if="selectedItem == 'undefined'"
                   :disable="!selectedLocation"
@@ -94,6 +92,8 @@
                   @click="updateItem()"
                   >Update</v-btn
                 >
+                <v-spacer></v-spacer>
+                <v-btn dark outlined disabled>Reset</v-btn>
               </div>
             </v-col>
           </v-row>
@@ -177,7 +177,7 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn dark disabled color="primary" class="ml-2">
-              Save
+              Publish
             </v-btn>
           </div>
         </v-col>

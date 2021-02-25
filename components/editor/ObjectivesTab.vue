@@ -34,8 +34,6 @@
                 label="Primary Objective"
               ></v-checkbox>
               <div class="d-flex justify-end">
-                <v-btn dark outlined disabled>Reset</v-btn>
-                <v-spacer></v-spacer>
                 <v-btn
                   v-if="currentObjective == null"
                   :disabled="newObjective.name.length <= 0"
@@ -53,6 +51,8 @@
                   color="primary"
                   >Update</v-btn
                 >
+                <v-spacer></v-spacer>
+                <v-btn dark outlined disabled>Reset</v-btn>
               </div>
             </v-col>
           </v-row>
@@ -101,7 +101,7 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn dark disabled color="primary" class="ml-2">
-              Save
+              Publish
             </v-btn>
           </div>
         </v-col>
@@ -125,7 +125,7 @@ export default {
       currentObjective: null
     };
   },
-  props: ['objectives'],
+  props: ["objectives"],
   methods: {
     ...mapMutations([
       "ADD_OBJECTIVE_EDITOR",
@@ -141,7 +141,7 @@ export default {
       this.newObjective = {
         name: objective.name,
         description: objective.description,
-        isPrimary: objective.isPrimary,
+        isPrimary: objective.isPrimary
       };
     },
     updateObjective() {

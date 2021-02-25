@@ -19,6 +19,7 @@
                 v-model="newLocation.name"
                 label="Name"
                 outlined
+                hide-details
               ></v-text-field>
               <v-checkbox
                 v-model="newLocation.isLandmark"
@@ -57,8 +58,6 @@
               <!-- <v-select :items="entries" label="Entries" outlined></v-select> -->
               <v-row>
                 <v-col cols="12" class="d-flex pt-1">
-                  <v-btn dark color="red" outlined disabled>Remove</v-btn>
-                  <v-spacer></v-spacer>
                   <v-btn
                     dark
                     outlined
@@ -66,6 +65,8 @@
                     @click="updateLocation()"
                     >Update</v-btn
                   >
+                  <v-spacer></v-spacer>
+                  <v-btn dark color="red" outlined disabled>Reset</v-btn>
                 </v-col>
               </v-row>
             </v-col>
@@ -110,7 +111,7 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn dark disabled color="primary">
-              Save
+              Publish
             </v-btn>
           </div>
         </v-col>

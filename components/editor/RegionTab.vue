@@ -37,8 +37,6 @@
               ></v-slider>
               <v-row>
                 <v-col cols="12" class="d-flex pt-1">
-                  <v-btn dark color="red" outlined disabled>Remove</v-btn>
-                  <v-spacer></v-spacer>
                   <v-btn
                     dark
                     outlined
@@ -75,7 +73,7 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn dark disabled color="primary">
-              Save
+              Publish
             </v-btn>
           </div>
         </v-col>
