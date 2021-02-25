@@ -3,36 +3,36 @@
     <v-card-text>
       <h1 class="mt-5 mb-4">Quest</h1>
       <v-text-field
-        v-model="newQuest.title"
+        v-model="newDetails.title"
         label="Title"
         outlined
       ></v-text-field>
       <v-text-field
-        v-model="newQuest.author"
+        v-model="newDetails.author"
         label="Author"
         readonly
         outlined
         hide-details
       ></v-text-field>
       <v-checkbox
-        v-model="newQuest.isAnonymous"
+        v-model="newDetails.isAnonymous"
         label="Publish anonymously"
-        :value="newQuest.isAnonymous"
+        :value="newDetails.isAnonymous"
       ></v-checkbox>
       <v-textarea
         name="input-7-1"
         label="Description"
-        v-model="newQuest.description"
+        v-model="newDetails.description"
         hint="Describe your quest."
         outlined
       ></v-textarea>
       <v-text-field
-        v-model="newQuest.image"
+        v-model="newDetails.image"
         label="Image"
         outlined
       ></v-text-field>
       <v-autocomplete
-        v-model="newQuest.categories"
+        v-model="newDetails.categories"
         :items="categories"
         label="Categories"
         item-text="name"
@@ -42,7 +42,7 @@
         outlined
       ></v-autocomplete>
       <div class="d-flex">
-        <v-btn outlined dark>
+        <v-btn outlined dark @click="updateDetails()">
           Update
         </v-btn>
         <v-spacer></v-spacer>
@@ -62,7 +62,7 @@
           dark
           color="primary"
           class="ml-2"
-          @click="$store.dispatch('publishQuest', newQuest)"
+          @click="$store.dispatch('publishQuest')"
         >
           Publish
         </v-btn>
@@ -72,13 +72,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "DetailsTab",
   data() {
     return {
-      newQuest: {
+      newDetails: {
         title: "",
         author: "Anonymous",
         isAnonymous: true,
@@ -100,8 +100,11 @@ export default {
     })
   },
   methods: {
+    ...mapMutations([
+      "SET_DETAILS_EDITOR",
+    ]),
     fetchDetails() {
-      Object.assign(this.newQuest, {
+      Object.assign(this.newDetails, {
         title: this.quest.title,
         author: this.quest.author,
         isAnonymous: this.quest.isAnonymous,
@@ -109,6 +112,9 @@ export default {
         image: this.quest.image,
         categories: this.quest.categories,
       })
+    },
+    updateDetails() {
+      this.$store.commit("SET_DETAILS_EDITOR", this.newDetails);
     },
     publishQuest() {
       console.log("Publish Quest")

@@ -75,6 +75,15 @@ export default {
     state.editor.quest = null;
   },
 
+  SET_DETAILS_EDITOR: (state, details) => {
+    state.editor.quest.title = details.title;
+    state.editor.quest.author = details.author;
+    state.editor.quest.isAnonymous = details.isAnonymous;
+    state.editor.quest.description = details.description;
+    state.editor.quest.image = details.image;
+    state.editor.quest.categories = details.categories;
+  },
+
   SET_REGION_EDITOR: (state, region) => {
     state.editor.quest.region = region;
   },

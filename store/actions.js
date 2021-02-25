@@ -226,4 +226,8 @@ export default {
     commit('SET_ACTIONS', actions)
   },
 
+  publishQuest({}) {
+    console.log("Publish Quest")
+  },
+
 }
