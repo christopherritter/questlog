@@ -124,6 +124,11 @@ export default {
       this.error = null;
       this.loading = true;
 
+      if (!this.quest) {
+        this.loading = false;
+        return;
+      }
+
       if (this.quest.questId) {
         const db = this.$fire.firestore;
         const questRef = db.collection("quests").doc(this.quest.questId);

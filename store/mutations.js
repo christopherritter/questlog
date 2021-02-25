@@ -71,6 +71,10 @@ export default {
     state.editor.quest = quest;
   },
 
+  CLEAR_QUEST_EDITOR: (state) => {
+    state.editor.quest = null;
+  },
+
   SET_REGION_EDITOR: (state, region) => {
     state.editor.quest.region = region;
   },

@@ -14,7 +14,7 @@
     </span>
     <span v-else>
       <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
-      <v-btn plain nuxt to="/editor">Build your Own!</v-btn>
+      <v-btn plain @click="questEditor()">Build your Own!</v-btn>
     </span>
 
     <v-spacer />
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "navBar",
@@ -103,6 +103,13 @@ export default {
     })
   },
   methods: {
+    ...mapMutations([
+      "CLEAR_QUEST_EDITOR",
+    ]),
+    questEditor() {
+      this.$store.commit("CLEAR_QUEST_EDITOR");
+      this.$router.push("/editor");
+    },
     async logout() {
       try {
         await this.$fire.auth.signOut();
