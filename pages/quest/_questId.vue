@@ -94,13 +94,17 @@
                   {{ error }}
                 </div>
 
+                <!-- <div v-if="quest">
+                  <p v-for="(location, index) in quest.locations" :key="index">{{ location.coordinates[0]}}, {{ location.coordinates[1]}}</p>
+                </div> -->
+
                 <LeafletMap
                   v-if="quest"
                   id="QuestMap"
                   class="mb-16"
                   :center="quest.region.coordinates"
                   :zoom="quest.region.zoom"
-                  :locations="locations"
+                  :locations="quest.locations"
                 />
               </v-col>
             </v-row>
