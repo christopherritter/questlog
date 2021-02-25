@@ -53,18 +53,21 @@
             </v-tab-item>
             <v-tab-item value="locations">
               <LocationsTab
+                :region="currentQuest.region"
                 :locations="currentQuest.locations"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="entries">
               <EntriesTab
+                :objectives="currentQuest.objectives"
                 :locations="currentQuest.locations"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="items">
               <ItemsTab
+                :objectives="currentQuest.objectives"
                 :locations="currentQuest.locations"
                 @change-tab="changeTab($event)"
               />

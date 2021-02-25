@@ -20,17 +20,17 @@
                 </v-btn>
               </div>
               <v-text-field
-                v-model="objective.name"
+                v-model="newObjective.name"
                 label="Name"
                 outlined
               ></v-text-field>
               <v-textarea
-                v-model="objective.description"
+                v-model="newObjective.description"
                 label="Description"
                 outlined
               ></v-textarea>
               <v-checkbox
-                v-model="objective.isPrimary"
+                v-model="newObjective.isPrimary"
                 label="Primary Objective"
               ></v-checkbox>
               <div class="d-flex justify-end">
@@ -38,7 +38,7 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   v-if="currentObjective == null"
-                  :disabled="objective.name.length <= 0"
+                  :disabled="newObjective.name.length <= 0"
                   dark
                   outlined
                   color="primary"
@@ -111,13 +111,13 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 
 export default {
   name: "ObjectivesTab",
   data() {
     return {
-      objective: {
+      newObjective: {
         name: "",
         description: "",
         isPrimary: false
@@ -125,11 +125,7 @@ export default {
       currentObjective: null
     };
   },
-  computed: {
-    ...mapState({
-      objectives: state => state.editor.quest.objectives,
-    })
-  },
+  props: ['objectives'],
   methods: {
     ...mapMutations([
       "ADD_OBJECTIVE_EDITOR",
@@ -137,12 +133,12 @@ export default {
       "SET_OBJECTIVES_EDITOR"
     ]),
     addObjective() {
-      this.$store.commit("ADD_OBJECTIVE_EDITOR", this.objective);
+      this.$store.commit("ADD_OBJECTIVE_EDITOR", this.newObjective);
       this.clearObjective();
     },
     selectObjective(index) {
       const objective = this.objectives[index];
-      this.objective = {
+      this.newObjective = {
         name: objective.name,
         description: objective.description,
         isPrimary: objective.isPrimary,
@@ -151,12 +147,12 @@ export default {
     updateObjective() {
       this.$store.commit("UPDATE_OBJECTIVE_EDITOR", {
         currentObjective: this.currentObjective,
-        newObjective: this.objective
+        newObjective: this.newObjective
       });
       this.clearObjective();
     },
     clearObjective() {
-      this.objective = {
+      this.newObjective = {
         name: "",
         description: "",
         isPrimary: false

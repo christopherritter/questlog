@@ -16,26 +16,26 @@
                 </v-btn>
               </div>
               <v-text-field
-                v-model="location.name"
+                v-model="newLocation.name"
                 label="Name"
                 outlined
               ></v-text-field>
               <v-checkbox
-                v-model="location.isLandmark"
+                v-model="newLocation.isLandmark"
                 label="Landmark Location"
               ></v-checkbox>
               <h4 class="mt-1 mb-6">Coordinates</h4>
               <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="location.coordinates.lat"
+                    v-model="newLocation.coordinates[0]"
                     label="Latitude"
                     outlined
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="location.coordinates.lng"
+                    v-model="newLocation.coordinates[1]"
                     label="Longitude"
                     outlined
                   ></v-text-field>
@@ -43,13 +43,13 @@
               </v-row>
               <h4 class="mt-1 mb-6">Zoom</h4>
               <v-slider
-                v-model="location.zoom"
+                v-model="newLocation.zoom"
                 min="0"
                 max="18"
                 thumb-label
               ></v-slider>
               <v-text-field
-                v-model="location.image"
+                v-model="newLocation.image"
                 label="Image"
                 outlined
               ></v-text-field>
@@ -62,7 +62,7 @@
                   <v-btn
                     dark
                     outlined
-                    :disabled="!location.coordinates == null"
+                    :disabled="!newLocation.coordinates == null"
                     @click="updateLocation()"
                     >Update</v-btn
                   >
@@ -90,7 +90,7 @@
             id="LocationMap"
             class="mb-5"
             :center="region.coordinates"
-            :zoom="location.zoom"
+            :zoom="newLocation.zoom"
             :locations="locations"
             @mark-location="markLocation($event)"
             @select-location="selectLocation($event)"
@@ -127,7 +127,7 @@ export default {
   name: "LocationsTab",
   data() {
     return {
-      location: {
+      newLocation: {
         name: "Untitled",
         isLandmark: false,
         coordinates: {
@@ -144,11 +144,10 @@ export default {
       selectedLocation: null
     };
   },
+  props: ['region', 'locations'],
   components: { LeafletMap },
   computed: {
     ...mapState({
-      region: state => state.editor.quest.region,
-      locations: state => state.editor.quest.locations,
       markers: state => state.markers
     }),
   },
@@ -159,12 +158,12 @@ export default {
     ]),
     markLocation(location) {
       this.clearLocation();
-      this.location.coordinates = location.latlng;
-      this.$store.commit("ADD_LOCATION_EDITOR", this.location);
+      this.newLocation.coordinates = location.latlng;
+      this.$store.commit("ADD_LOCATION_EDITOR", this.newLocation);
     },
     async selectLocation(location) {
       this.$store.dispatch("selectLocation", location).then(index => {
-        this.location = {
+        this.newLocation = {
           name: this.locations[index].name,
           isLandmark: this.locations[index].isLandmark,
           coordinates: {
@@ -184,17 +183,17 @@ export default {
     moveLocation(location) {
       var coordinates = location.target.getLatLng();
       var index = this.selectedLocation;
-      this.location.coordinates = coordinates;
+      this.newLocation.coordinates = coordinates;
       this.$store.commit("SET_COORDINATES_EDITOR", { coordinates, index });
     },
     updateLocation() {
       this.$store.commit("UPDATE_LOCATION_EDITOR", {
         selectedLocation: this.selectedLocation,
-        newLocation: this.location
+        newLocation: this.newLocation
       });
     },
     clearLocation() {
-      this.location = {
+      this.newLocation = {
         name: "Untitled",
         isLandmark: true,
         coordinates: {

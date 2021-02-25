@@ -209,13 +209,8 @@ export default {
       entryIndex: null
     };
   },
+  props: ['objectives', 'locations'],
   components: { ActionsPanel },
-  computed: {
-    ...mapState({
-      objectives: state => state.editor.quest.objectives,
-      locations: state => state.editor.quest.locations
-    })
-  },
   methods: {
     ...mapMutations([
       "ADD_ENTRY_EDITOR",
