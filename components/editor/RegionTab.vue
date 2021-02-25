@@ -7,7 +7,7 @@
             <v-col>
               <h1 class="mt-5 mb-4">Region</h1>
               <v-text-field
-                v-model="region.name"
+                v-model="newRegion.name"
                 label="Name"
                 outlined
               ></v-text-field>
@@ -15,14 +15,14 @@
               <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="region.coordinates.lat"
+                    v-model="newRegion.coordinates[0]"
                     label="Latitude"
                     outlined
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="region.coordinates.lng"
+                    v-model="newRegion.coordinates[1]"
                     label="Longitude"
                     outlined
                   ></v-text-field>
@@ -30,7 +30,7 @@
               </v-row>
               <h4 class="mt-1 mb-6">Zoom</h4>
               <v-slider
-                v-model="region.zoom"
+                v-model="newRegion.zoom"
                 min="0"
                 max="18"
                 thumb-label
@@ -42,7 +42,7 @@
                   <v-btn
                     dark
                     outlined
-                    :disabled="!region.coordinates == null"
+                    :disabled="!newRegion.coordinates == null"
                     @click="updateRegion()"
                     >Update</v-btn
                   >
@@ -55,9 +55,9 @@
           <LeafletMap
             id="RegionMap"
             class="mb-5"
-            :center="region.coordinates"
-            :zoom="region.zoom"
-            :locations="[region]"
+            :center="newRegion.coordinates"
+            :zoom="newRegion.zoom"
+            :locations="[newRegion]"
             @mark-location="markLocation($event)"
             @move-location="moveLocation($event)"
           />
@@ -92,29 +92,38 @@ export default {
   name: "RegionTab",
   data() {
     return {
-      region: {
+      newRegion: {
         name: "",
-        coordinates: {
-          lat: 39.828175,
-          lng: -98.5795
-        },
+        coordinates: [
+          39.828175,
+          -98.5795
+        ],
         zoom: 18,
         draggable: true,
         mapOptions: {}
-      }
+      },
+      loading: false,
+      error: null,
     };
+  },
+  props: ['region'],
+  created() {
+    this.fetchRegion();
   },
   components: { LeafletMap },
   methods: {
     ...mapMutations(['SET_REGION_EDITOR']),
+    fetchRegion() {
+      Object.assign(this.newRegion, this.region);
+    },
     markLocation(event) {
-      this.region.coordinates = event.latlng;
+      this.newRegion.coordinates = event.latlng;
     },
     moveLocation(event) {
-      this.region.coordinates = event.target.getLatLng();
+      this.newRegion.coordinates = event.target.getLatLng();
     },
     updateRegion() {
-      this.$store.commit("SET_REGION_EDITOR", this.region);
+      this.$store.commit("SET_REGION_EDITOR", this.newRegion);
     }
   }
 };
