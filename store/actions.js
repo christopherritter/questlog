@@ -226,8 +226,10 @@ export default {
     commit('SET_ACTIONS', actions)
   },
 
-  publishQuest({}) {
-    console.log("Publish Quest")
+  async publishQuest({ state }) {
+    const db = this.$fire.firestore;
+    const quest = state.editor.quest;
+    const questRef = await db.collection('quests').doc(quest.questId).set(quest);
   },
 
 }

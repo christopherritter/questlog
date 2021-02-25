@@ -44,6 +44,8 @@
                     @click="updateRegion()"
                     >Update</v-btn
                   >
+                  <v-spacer></v-spacer>
+                  <v-btn dark outlined @click="resetRegion()">Reset</v-btn>
                 </v-col>
               </v-row>
             </v-col>
@@ -72,7 +74,7 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn dark disabled color="primary">
+            <v-btn dark @click="publishQuest()" color="primary">
               Publish
             </v-btn>
           </div>
@@ -83,7 +85,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
@@ -92,36 +94,41 @@ export default {
     return {
       newRegion: {
         name: "",
-        coordinates: [
-          39.828175,
-          -98.5795
-        ],
+        coordinates: [39.828175, -98.5795],
         zoom: 18,
         draggable: true,
         mapOptions: {}
       },
       loading: false,
-      error: null,
+      error: null
     };
   },
-  props: ['region'],
+  props: ["region"],
   created() {
     this.fetchRegion();
   },
   components: { LeafletMap },
   methods: {
-    ...mapMutations(['SET_REGION_EDITOR']),
+    ...mapActions(["publishQuest"]),
+    ...mapMutations(["SET_REGION_EDITOR"]),
     fetchRegion() {
       Object.assign(this.newRegion, this.region);
     },
     markLocation(event) {
-      this.newRegion.coordinates = event.latlng;
+      this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
     },
     moveLocation(event) {
-      this.newRegion.coordinates = event.target.getLatLng();
+      console.log(event);
+      // this.newRegion.coordinates = event.target.getLatLng();
     },
     updateRegion() {
       this.$store.commit("SET_REGION_EDITOR", this.newRegion);
+    },
+    resetRegion() {
+      this.fetchRegion();
+    },
+    publishQuest() {
+      this.$store.dispatch("publishQuest");
     }
   }
 };

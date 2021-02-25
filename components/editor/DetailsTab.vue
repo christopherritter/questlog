@@ -45,8 +45,9 @@
         <v-btn outlined dark @click="updateDetails()">
           Update
         </v-btn>
+        <v-btn dark outlined class="ml-2" @click="resetDetails()">Reset</v-btn>
         <v-spacer></v-spacer>
-        <v-btn outlined dark disabled class="ml-2">
+        <v-btn outlined dark disabled>
           Back
         </v-btn>
         <v-btn
@@ -72,7 +73,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "DetailsTab",
@@ -87,22 +88,21 @@ export default {
         categories: []
       },
       loading: false,
-      error: null,
+      error: null
     };
   },
   created() {
     this.fetchDetails();
   },
-  props: ['quest'],
+  props: ["quest"],
   computed: {
     ...mapState({
-      categories: state => state.categories,
+      categories: state => state.categories
     })
   },
   methods: {
-    ...mapMutations([
-      "SET_DETAILS_EDITOR",
-    ]),
+    ...mapActions(["publishQuest"]),
+    ...mapMutations(["SET_DETAILS_EDITOR"]),
     fetchDetails() {
       Object.assign(this.newDetails, {
         title: this.quest.title,
@@ -110,14 +110,17 @@ export default {
         isAnonymous: this.quest.isAnonymous,
         description: this.quest.description,
         image: this.quest.image,
-        categories: this.quest.categories,
-      })
+        categories: this.quest.categories
+      });
     },
     updateDetails() {
       this.$store.commit("SET_DETAILS_EDITOR", this.newDetails);
     },
+    resetRegion() {
+      this.fetchDetails();
+    },
     publishQuest() {
-      console.log("Publish Quest")
+      this.$store.dispatch("publishQuest");
     }
   }
 };

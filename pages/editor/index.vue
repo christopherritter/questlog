@@ -130,58 +130,9 @@ export default {
       }
 
       if (this.quest.questId) {
-        const db = this.$fire.firestore;
-        const questRef = db.collection("quests").doc(this.quest.questId);
-
-        const regionRef = questRef.collection("region");
-        const objectivesRef = questRef.collection("objectives");
-        const locationsRef = questRef.collection("locations");
-
-        const region = await regionRef.get();
-        const objectives = await objectivesRef.get();
-        const locations = await locationsRef.get();
-
-        var quest = {};
-
-        Object.assign(quest, this.quest);
-        quest.objectives = [];
-        quest.locations = [];
-
-        region.forEach(result => {
-          var region = result.data();
-          region.regionId = result.id;
-          quest.region = region;
-        });
-
-        objectives.forEach(result => {
-          var objective = result.data();
-          objective.objectiveId = result.id;
-          quest.objectives.push(objective);
-        });
-
-        locations.forEach(result => {
-          var location = result.data();
-          location.locationId = result.id;
-          quest.locations.push(location);
-        });
-
-        for (let i = 0; i < quest.locations.length; i++) {
-          const entriesRef = locationsRef.doc(locationId).collection("entries");
-          const entries = await entriesRef.get();
-          var location = quest.locations[i];
-          var locationId = location.locationId;
-          location.entries = [];
-
-          entries.forEach(result => {
-            var entry = result.data();
-            entry.entryId = result.id;
-            location.entries.push(entry);
-          });
-        }
-
-        Object.assign(this.currentQuest, quest);
+        Object.assign(this.currentQuest, this.quest);
       }
-      console.log("Done loading Quest Tab!");
+
       this.loading = false;
     }
   }

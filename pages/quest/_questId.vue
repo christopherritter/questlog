@@ -161,38 +161,7 @@ export default {
       if (!doc.exists) {
         console.log("No such document!");
       } else {
-        const regionRef = questRef.collection("region");
-        const objectivesRef = questRef.collection("objectives");
-        const locationsRef = questRef.collection("locations");
-        const region = await regionRef.get();
-        const objectives = await objectivesRef.get();
-        const locations = await locationsRef.get();
-
-        var quest = {};
-
-        quest = doc.data();
-        quest.objectives = [];
-        quest.locations = [];
-
-        region.forEach(result => {
-          var region = result.data();
-          region.regionId = result.id;
-          quest.region = region;
-        });
-
-        objectives.forEach(result => {
-          var objective = result.data();
-          objective.objectiveId = result.id;
-          quest.objectives.push(objective);
-        });
-
-        locations.forEach(result => {
-          var location = result.data();
-          location.locationId = result.id;
-          quest.locations.push(location);
-        });
-
-        this.quest = quest;
+        this.quest = doc.data();
       }
       this.loading = false;
     }
