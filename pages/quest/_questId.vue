@@ -2,7 +2,7 @@
   <v-container fluid class="pa-0">
     <v-row>
       <v-col class="py-0">
-        <QuestHeader v-if="quest" :quest="quest" />
+        <QuestHeader v-if="quest" :quest="quest" :questId="this.questId" />
       </v-col>
     </v-row>
 
