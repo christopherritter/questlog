@@ -34,32 +34,32 @@
 
 
             <v-tab-item value="quest">
-              <QuestEditor
+              <QuestTab
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="region">
-              <RegionEditor
+              <RegionTab
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="objectives">
-              <ObjectivesEditor
+              <ObjectivesTab
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="locations">
-              <LocationsEditor
+              <LocationsTab
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="entries">
-              <EntriesEditor
+              <EntriesTab
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="items">
-              <ItemsEditor
+              <ItemsTab
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
@@ -71,26 +71,24 @@
 </template>
 
 <script>
-import QuestEditor from "@/components/editor/QuestEditor.vue";
-import RegionEditor from "@/components/editor/RegionEditor.vue";
-import ObjectivesEditor from "@/components/editor/ObjectivesEditor.vue";
-import LocationsEditor from "@/components/editor/LocationsEditor.vue";
-import EntriesEditor from "@/components/editor/EntriesEditor.vue";
-import ActionsEditor from "@/components/editor/ActionsEditor.vue";
-import ItemsEditor from "@/components/editor/ItemsEditor.vue";
+import QuestTab from "@/components/editor/QuestTab.vue";
+import RegionTab from "@/components/editor/RegionTab.vue";
+import ObjectivesTab from "@/components/editor/ObjectivesTab.vue";
+import LocationsTab from "@/components/editor/LocationsTab.vue";
+import EntriesTab from "@/components/editor/EntriesTab.vue";
+import ItemsTab from "@/components/editor/ItemsTab.vue";
 
 export default {
   name: "questEditor",
   layout: "fluid",
   middleware: "authenticated",
   components: {
-    QuestEditor,
-    RegionEditor,
-    ObjectivesEditor,
-    LocationsEditor,
-    EntriesEditor,
-    ActionsEditor,
-    ItemsEditor
+    QuestTab,
+    RegionTab,
+    ObjectivesTab,
+    LocationsTab,
+    EntriesTab,
+    ItemsTab
   },
   data() {
     return {

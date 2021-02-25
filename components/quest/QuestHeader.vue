@@ -43,7 +43,7 @@ export default {
       this.$router.push("/quest/reader");
     },
     editQuest() {
-      this.$store.commit("SET_QUEST", {
+      this.$store.commit("SET_QUEST_EDITOR", {
         quest: this.quest,
         questId: this.questId
       });

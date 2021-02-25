@@ -132,20 +132,6 @@ export default {
       quest: null,
       loading: false,
       error: null,
-      locations: [
-        {
-          coordinates: [
-            39.69718650553957,
-            -84.3090084688364
-          ]
-        },
-        {
-          coordinates: [
-            39.697139635581166,
-            -84.30512614831034
-          ]
-        }
-      ]
     };
   },
   components: { QuestHeader, LeafletMap },

@@ -65,13 +65,10 @@ export default {
 
   // _EDITOR
 
-  SET_QUEST_EDITOR: (state, quest) => {
-    state.editor.quest = {
-      title: quest.title,
-      description: quest.description,
-      image: quest.image,
-      categories: quest.categories,
-    }
+  SET_QUEST_EDITOR: (state, obj) => {
+    var quest = obj.quest;
+    quest.questId = obj.questId;
+    state.editor.quest = quest;
   },
 
   SET_REGION_EDITOR: (state, region) => {
