@@ -1,15 +1,14 @@
 <template>
   <div id="map-wrap">
     <client-only>
-      <l-map ref="lMap" :zoom="zoom" :center="center" @click="$emit('mark-location', $event)">
+      <l-map ref="lMap" :zoom="zoom" :center="[center[0], center[1]]" @click="$emit('mark-location', $event)">
         <l-tile-layer
           url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
         ></l-tile-layer>
         <l-marker
           v-for="(location, id) in locations"
           :key="id"
-          :lat-lng="[location.coordinates.lat, location.coordinates.lng]"
-          :draggable="location.draggable ? true : false"
+          :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           @click="$emit('select-location', $event)"
           @dragstart="$emit('select-location', $event)"
           @dragend="$emit('move-location', $event)"

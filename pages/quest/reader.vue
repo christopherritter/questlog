@@ -47,9 +47,9 @@
 
 <script>
 import { mapState } from "vuex";
-import QuestSidebar from "@/components/QuestSidebar.vue";
-import QuestMap from "@/components/QuestMap.vue";
-import QuestDialog from "@/components/QuestDialog.vue";
+import QuestSidebar from "@/components/quest/QuestSidebar.vue";
+import QuestMap from "@/components/quest/QuestMap.vue";
+import QuestDialog from "@/components/quest/QuestDialog.vue";
 
 export default {
   name: "questReader",

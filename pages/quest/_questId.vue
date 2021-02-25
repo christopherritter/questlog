@@ -2,7 +2,7 @@
   <v-container fluid class="pa-0">
     <v-row>
       <v-col class="py-0">
-        <QuestHeader :quest="quest" />
+        <QuestHeader v-if="quest" :quest="quest" />
       </v-col>
     </v-row>
 
@@ -16,7 +16,7 @@
                   <v-col cols="12" md="6">
                     <h2 class="pt-8 pb-4">Description</h2>
 
-                    <p>{{ quest.description }}</p>
+                    <p v-if="quest">{{ quest.description }}</p>
 
                     <!-- <v-chip
                       label
@@ -55,12 +55,17 @@
                     </v-row> -->
                   </v-col>
                   <v-col cols="12" md="6">
-                    <v-sheet rounded color="grey lighten-4" class="pa-6">
+                    <v-sheet
+                      rounded
+                      color="grey lighten-4"
+                      class="pa-6"
+                      v-if="quest"
+                    >
                       <h3 class="mb-2">Objectives</h3>
 
-                      <!-- <v-list-item
+                      <v-list-item
                         v-for="objective in quest.objectives"
-                        :key="objective.id"
+                        :key="objective.objectiveId"
                         dense
                       >
                         <v-list-item-icon>
@@ -74,22 +79,29 @@
                             objective.name
                           }}</v-list-item-title>
                         </v-list-item-content>
-                      </v-list-item> -->
+                      </v-list-item>
                     </v-sheet>
                   </v-col>
                 </v-row>
 
                 <h2 class="py-4">Map</h2>
 
-                <!-- <QuestMap
+                <div v-if="loading" class="loading">
+                  Loading...
+                </div>
+
+                <div v-if="error" class="error">
+                  {{ error }}
+                </div>
+
+                <LeafletMap
+                  v-if="quest"
                   id="QuestMap"
                   class="mb-16"
-                  :quest-id="this.questId"
-                  :position="quest.region.coordinates"
-                  :locations="quest.locations"
-                  :zoom="zoom"
-                  :mapOptions="mapOptions"
-                /> -->
+                  :center="quest.region.coordinates"
+                  :zoom="quest.region.zoom"
+                  :locations="locations"
+                />
               </v-col>
             </v-row>
           </v-container>
@@ -101,8 +113,8 @@
 
 <script>
 import { mapState } from "vuex";
-import QuestHeader from "@/components/QuestHeader.vue";
-import QuestMap from "@/components/QuestMap.vue";
+import QuestHeader from "@/components/quest/QuestHeader.vue";
+import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
   name: "quest",
@@ -113,30 +125,32 @@ export default {
   },
   data() {
     return {
-      quest: {
-        title: "",
-        description: "",
-        image: "",
-        categories: [],
-        author: null,
-        region: {
-          name: "",
-          coordinates: {
-            lat: 39.828175,
-            lng: -98.5795
-          },
-          zoom: 18,
-          draggable: true,
-          mapOptions: {}
+      quest: null,
+      loading: false,
+      error: null,
+      locations: [
+        {
+          coordinates: [
+            39.69718650553957,
+            -84.3090084688364
+          ]
         },
-        objectives: [],
-        locations: []
-      }
+        {
+          coordinates: [
+            39.697139635581166,
+            -84.30512614831034
+          ]
+        }
+      ]
     };
   },
-  components: { QuestHeader, QuestMap },
+  components: { QuestHeader, LeafletMap },
   created() {
     this.fetchQuest();
+  },
+  watch: {
+    // call again the method if the route changes
+    $route: "fetchQuest"
   },
   computed: {
     ...mapState({
@@ -145,13 +159,53 @@ export default {
   },
   methods: {
     async fetchQuest() {
+      this.error = this.quest = null;
+      this.loading = true;
+
       const db = this.$fire.firestore;
       const questRef = db.collection("quests").doc(this.questId);
       const doc = await questRef.get();
+
+      // if (this.$route.params.id !== this.questId) return;
+
       if (!doc.exists) {
         console.log("No such document!");
+        this.loading = false;
       } else {
-        this.quest = doc.data();
+        const regionRef = questRef.collection("region");
+        const objectivesRef = questRef.collection("objectives");
+        const locationsRef = questRef.collection("locations");
+        const region = await regionRef.get();
+        const objectives = await objectivesRef.get();
+        const locations = await locationsRef.get();
+
+        var quest = {};
+
+        quest = doc.data();
+        quest.objectives = [];
+        quest.locations = [];
+
+        region.forEach(result => {
+          var region = result.data();
+          region.regionId = result.id;
+          quest.region = region;
+        });
+
+        objectives.forEach(result => {
+          var objective = result.data();
+          objective.objectiveId = result.id;
+          quest.objectives.push(objective);
+        });
+
+        locations.forEach(result => {
+          var location = result.data();
+          location.locationId = result.id;
+          quest.locations.push(location);
+        });
+
+        this.quest = quest;
+        console.log("Done loading!");
+        this.loading = false;
       }
     }
   }
