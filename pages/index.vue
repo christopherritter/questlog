@@ -43,7 +43,7 @@
               sm="12"
               md="6"
               lg="4"
-              v-for="quest in quests"
+              v-for="quest in featuredQuests"
               :key="quest.id"
             >
               <v-card>
@@ -103,15 +103,17 @@ export default {
       const featuredQuestArr = this.quests.filter(quest => quest.questId === 'lNVAf14Ngq3JBSwaK0IA');
       return featuredQuestArr[0];
     },
-    // featuredQuests() {
-    //   var featuredQuests = [];
+    featuredQuests() {
+      var featuredQuests = [];
 
-    //   for (let q = 1; q <= 3; q++) {
-    //     featuredQuests.push(this.quests[q]);
-    //   }
+      for (let q = 0; q < this.quests.length; q++) {
+        if (this.quests[q].featured) {
+          featuredQuests.push(this.quests[q]);
+        }
+      }
 
-    //   return featuredQuests;
-    // }
+      return featuredQuests;
+    }
   },
   methods: {
     async fetchQuests() {
