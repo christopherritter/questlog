@@ -119,6 +119,19 @@ export default {
       var quest = {};
       Object.assign(quest, state.editor.quest)
 
+      if (!quest.title) quest.title = "Untitled";
+
+      if (!quest.author) {
+        quest.author = state.user.name;
+        quest.authorId = state.user.userId;
+      }
+
+      if (!quest.description) quest.description = "";
+
+      if (!quest.image) quest.image = "";
+
+      if (!quest.categories) quest.categories = [];
+
       if (!quest.region) {
         quest.region = {
           name: "Center of America",
