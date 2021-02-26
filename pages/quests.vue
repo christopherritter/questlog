@@ -69,9 +69,16 @@ import { mapState } from "vuex";
 import QuestCard from "@/components/QuestCard.vue";
 
 export default {
-  name: "questLibrary",
+  name: "QuestLibrary",
   data() {
     return {
+      quests: [],
+      authors: [
+        {
+          name: "Christopher Ritter",
+          authorId: "W8INchB9HLWxMHfgNVQ4mWE5P8v1"
+        }
+      ],
       questSearch: null,
       sortBy: ["Alphabetical", "Authors", "Categories"],
       sortSelection: null,
@@ -79,13 +86,14 @@ export default {
       categorySelection: []
     };
   },
+  created() {
+    this.fetchQuests();
+  },
   components: {
     QuestCard
   },
   computed: {
     ...mapState({
-      quests: state => state.demoData.quests,
-      authors: state => state.demoData.authors,
       categories: state => state.categories
     }),
     filteredQuests() {
@@ -159,6 +167,14 @@ export default {
     }
   },
   methods: {
+    async fetchQuests() {
+      const snapshot = await this.$fire.firestore.collection('quests').get();
+      this.quests = snapshot.docs.map(doc => {
+        var newDoc = doc.data();
+        newDoc.id = doc.id;
+        return newDoc;
+      });
+    },
     containsObject(obj, list) {
       var i;
       for (i = 0; i < list.length; i++) {
