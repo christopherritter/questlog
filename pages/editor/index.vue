@@ -47,28 +47,28 @@
             </v-tab-item>
             <v-tab-item value="objectives">
               <ObjectivesTab
-                :objectives="quest.objectives"
+                :objectives="objectives"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="locations">
               <LocationsTab
                 :region="quest.region"
-                :locations="quest.locations"
+                :locations="locations"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="entries">
               <EntriesTab
-                :objectives="quest.objectives"
-                :locations="quest.locations"
+                :objectives="objectives"
+                :locations="locations"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="items">
               <ItemsTab
-                :objectives="quest.objectives"
-                :locations="quest.locations"
+                :objectives="objectives"
+                :locations="locations"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
@@ -109,7 +109,9 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user,
-      quest: state => state.editor.quest
+      quest: state => state.editor.quest,
+      objectives: state => state.editor.objectives,
+      locations: state => state.editor.locations,
     })
   },
   methods: {

@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 export default {
   name: "ObjectivesTab",
@@ -127,13 +127,10 @@ export default {
   },
   props: ["objectives"],
   methods: {
-    ...mapMutations([
-      "ADD_OBJECTIVE_EDITOR",
-      "UPDATE_OBJECTIVE_EDITOR",
-      "SET_OBJECTIVES_EDITOR"
-    ]),
+    ...mapActions(["addObjective", "updateObjective"]),
+    ...mapMutations(["SET_OBJECTIVES_EDITOR"]),
     addObjective() {
-      this.$store.commit("ADD_OBJECTIVE_EDITOR", this.newObjective);
+      this.$store.dispatch("addObjective", this.newObjective);
       this.clearObjective();
     },
     selectObjective(index) {
@@ -145,9 +142,9 @@ export default {
       };
     },
     updateObjective() {
-      this.$store.commit("UPDATE_OBJECTIVE_EDITOR", {
-        currentObjective: this.currentObjective,
-        newObjective: this.newObjective
+      this.$store.dispatch("updateObjective", {
+        newObjective: this.newObjective,
+        currentObjective: this.currentObjective
       });
       this.clearObjective();
     },

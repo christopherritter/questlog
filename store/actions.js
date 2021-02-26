@@ -96,19 +96,22 @@ export default {
   // 'READ QUEST'
 
   readQuest({
-    state,
     commit
-  }, questId) {
-    const quest = state.demoData.quests[questId];
-    commit('SET_QUEST', {
-      quest,
-      questId
-    });
+  }, quest) {
+    commit('SET_QUEST', quest);
   },
-
 
   // 'PLAY QUEST'
   // 'EDIT QUEST'
+
+  editQuest({
+    commit
+  }, obj) {
+    commit('SET_QUEST_EDITOR', {
+      quest: obj.quest,
+      questId: obj.questId
+    });
+  },
 
   // Editor
 
@@ -142,13 +145,13 @@ export default {
         }
       }
 
-      if (!quest.locations) {
-        quest.locations = [];
-      }
+      // if (!quest.locations) {
+      //   quest.locations = [];
+      // }
 
-      if (!quest.objectives) {
-        quest.objectives = [];
-      }
+      // if (!quest.objectives) {
+      //   quest.objectives = [];
+      // }
 
       const result = await this.$fire.firestore.collection('quests').add(quest);
       const update = await this.$fire.firestore.collection('quests').doc(result.id).update({
@@ -165,6 +168,43 @@ export default {
       const questRef = this.$fire.firestore.collection('quests').doc(questId);
       const result = await questRef.update(quest);
     }
+  },
+
+  // Editor Objectives
+
+  async addObjective({
+    state,
+    commit
+  }, objective) {
+    const objectivesRef = this.$fire.firestore.collection('quests').doc(state.editor.quest.questId).collection("objectives");
+    var newObjective = objective;
+
+    const result = await objectivesRef.add(objective);
+    newObjective.objectiveId = result.id;
+    commit("ADD_OBJECTIVE_EDITOR", newObjective);
+
+    const update = objectivesRef.doc(result.id).update({
+      objectiveId: result.id
+    });
+  },
+
+  async updateObjective({
+    state,
+    commit
+  }, objective) {
+    const questId = state.editor.quest.questId;
+    const questRef = this.$fire.firestore.collection('quests');
+    const objectivesRef = questRef.doc(questId).collection("objectives");
+
+    var newObjective = objective.newObjective;
+    var currentObjective = objective.currentObjective;
+
+    commit("UPDATE_OBJECTIVE_EDITOR", {
+      currentObjective: currentObjective,
+      newObjective: newObjective
+    });
+
+    const update = await objectivesRef.doc(state.editor.objectives[currentObjective].objectiveId).update(newObjective);
   },
 
   // Editor Locations

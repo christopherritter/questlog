@@ -23,9 +23,9 @@ export default () => ({
         draggable: true,
         mapOptions: {}
       },
-      objectives: [],
-      locations: [],
     },
+    objectives: [],
+    locations: [],
   },
   categories: [{
       id: 0,

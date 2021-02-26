@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import QuestHeader from "@/components/quest/QuestHeader.vue";
 import LeafletMap from "@/components/LeafletMap.vue";
 
@@ -130,6 +130,8 @@ export default {
   data() {
     return {
       quest: null,
+      objectives: null,
+      locations: null,
       loading: false,
       error: null,
     };
@@ -148,20 +150,40 @@ export default {
     })
   },
   methods: {
+    ...mapMutations([
+      "ADD_OBJECTIVE_EDITOR",
+      "ADD_LOCATION_EDITOR"
+    ]),
     async fetchQuest() {
       this.error = this.quest = null;
       this.loading = true;
 
       const db = this.$fire.firestore;
       const questRef = db.collection("quests").doc(this.questId);
-      const doc = await questRef.get();
+      const objectivesRef = questRef.collection("objectives");
+      const locationsRef = questRef.collection("locations");
+      const quest = await questRef.get();
 
       // if (this.$route.params.id !== this.questId) return;
 
-      if (!doc.exists) {
+      if (!quest.exists) {
         console.log("No such document!");
       } else {
-        this.quest = doc.data();
+        this.quest = quest.data();
+
+        const objectives = await objectivesRef.get();
+        objectives.forEach(objective => {
+          // console.log(doc.id, '=>', doc.data());
+          // let newObjective = objective.data();
+          this.$store.commit("ADD_OBJECTIVE_EDITOR", objective.data())
+        });
+
+        const locations = await locationsRef.get();
+        locations.forEach(location => {
+          // console.log(doc.id, '=>', doc.data());
+          // let newLocation = location.data();
+          this.$store.commit("ADD_LOCATION_EDITOR", location.data())
+        });
       }
       this.loading = false;
     }

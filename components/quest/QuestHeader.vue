@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   name: "QuestHeader",
   props: ["quest", "questId"],
@@ -37,13 +37,17 @@ export default {
     }),
   },
   methods: {
+    ...mapActions([
+      "readQuest",
+      "editQuest",
+    ]),
     ...mapMutations(["SET_QUEST", "SET_QUEST_EDITOR"]),
     readQuest() {
-      this.$store.commit("SET_QUEST", this.quest);
+      this.$store.dispatch("readQuest", this.quest);
       this.$router.push("/quest/reader");
     },
     editQuest() {
-      this.$store.commit("SET_QUEST_EDITOR", {
+      this.$store.dispatch("editQuest", {
         quest: this.quest,
         questId: this.questId
       });
