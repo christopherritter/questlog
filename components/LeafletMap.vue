@@ -10,7 +10,7 @@
         :scrollWheelZoom="false"
       >
         <l-tile-layer
-          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
         ></l-tile-layer>
         <l-marker
           v-for="(location, id) in locations"
