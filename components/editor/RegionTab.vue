@@ -54,10 +54,12 @@
         <v-col>
           <LeafletMap
             id="RegionMap"
+            ref="regionMap"
             class="mb-5"
             :center="newRegion.coordinates"
             :zoom="newRegion.zoom"
             :locations="[newRegion]"
+            :draggable="true"
             @mark-location="markLocation($event)"
             @move-location="moveLocation($event)"
           />
@@ -105,6 +107,7 @@ export default {
   props: ["region"],
   created() {
     this.fetchRegion();
+    // this.$refs.regionMap.map.scrollWheelZoom.disable()
   },
   components: { LeafletMap },
   methods: {
@@ -117,8 +120,7 @@ export default {
       this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
     },
     moveLocation(event) {
-      console.log(event);
-      // this.newRegion.coordinates = event.target.getLatLng();
+      this.newRegion.coordinates = event.target.getLatLng();
     },
     updateRegion() {
       this.$store.commit("SET_REGION_EDITOR", this.newRegion);

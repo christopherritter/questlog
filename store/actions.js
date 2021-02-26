@@ -146,11 +146,10 @@ export default {
         questId: result.id
       })
     } else {
-      const questId = state.editor.quest.questId;
+      const quest = state.editor.quest;
+      const questId = quest.questId;
       const questRef = this.$fire.firestore.collection('quests').doc(questId);
-      const result = await questRef.update(quest);
-      console.log("Quest ID " + questId + " has been updated.");
-      console.log(result);
+      const result = await questRef.update(state.editor.quest);
     }
   },
 
