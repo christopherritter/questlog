@@ -1,9 +1,9 @@
 <template>
   <v-container fluid>
-    <v-row>
+    <v-row v-if="featuredQuest">
       <v-sheet color="dark" elevation="1" height="100%" width="100%">
         <v-container style="height:100%">
-          <!-- <v-row>
+          <v-row>
             <v-col cols="12" sm="12" md=6 class="my-auto">
               <div class="d-flex flex-row mb-2">
                 <v-icon medium color="green darken-2">mdi-crown</v-icon>
@@ -17,7 +17,7 @@
                 </nuxt-link>
               </h1>
               <h3 class="subtitle-1 mb-8 mb-lg-12">
-                by {{ authors[featuredQuest.author].name }}
+                by {{ featuredQuest.author }}
               </h3>
               <v-btn nuxt color="primary" to="/quest/0">View Quest</v-btn>
             </v-col>
@@ -25,12 +25,12 @@
               <nuxt-link to="/quest/0">
                 <v-img
                   class="mt-12"
-                  :src="require('~/assets/img/' + featuredQuest.image)"
+                  :src="featuredQuest.image"
                   aspect-ratio="1.4"
                 ></v-img>
               </nuxt-link>
             </v-col>
-          </v-row> -->
+          </v-row>
         </v-container>
       </v-sheet>
     </v-row>
@@ -98,10 +98,11 @@ export default {
   computed: {
     ...mapState({
       categories: state => state.categories
-    })
-    // featuredQuest() {
-    //   return this.quests[0];
-    // },
+    }),
+    featuredQuest() {
+      const featuredQuestArr = this.quests.filter(quest => quest.questId === 'lNVAf14Ngq3JBSwaK0IA');
+      return featuredQuestArr[0];
+    },
     // featuredQuests() {
     //   var featuredQuests = [];
 
