@@ -25,7 +25,7 @@
           v-model="authorSelection"
           :items="authorList"
           item-text="name"
-          item-value="id"
+          item-value="authorId"
           label="Authors"
           clearable
           solo
@@ -79,6 +79,13 @@ export default {
   middleware: "authenticated",
   data() {
     return {
+      quests: [],
+      authors: [
+        {
+          name: "Christopher Ritter",
+          authorId: "W8INchB9HLWxMHfgNVQ4mWE5P8v1"
+        }
+      ],
       questSearch: null,
       sortBy: ["Alphabetical", "Authors", "Categories"],
       sortSelection: null,
@@ -86,19 +93,20 @@ export default {
       categorySelection: []
     };
   },
+  created() {
+    this.fetchQuests();
+  },
   components: {
     QuestCard
   },
   computed: {
     ...mapState({
       authUser: state => state.authUser,
-      users: state => state.demoData.users,
-      quests: state => state.demoData.quests,
-      authors: state => state.demoData.authors,
+      user: state => state.user,
       categories: state => state.categories
     }),
     filteredQuests() {
-      const userFavorites = this.users[this.authUser.uid].favorites;
+      const userFavorites = [];
 
       var questSearch = this.questSearch;
       var authorSelection = this.authorSelection;
@@ -174,6 +182,14 @@ export default {
     }
   },
   methods: {
+    async fetchQuests() {
+      const snapshot = await this.$fire.firestore.collection('quests').get();
+      this.quests = snapshot.docs.map(doc => {
+        var newDoc = doc.data();
+        newDoc.id = doc.id;
+        return newDoc;
+      });
+    },
     containsObject(obj, list) {
       var i;
       for (i = 0; i < list.length; i++) {

@@ -20,20 +20,20 @@
           hide-details
         ></v-autocomplete>
       </v-col>
-      <v-col cols="12" md="3"
-         class="pb-0"><v-autocomplete
-          v-model="authorSelection"
+      <v-col cols="12" md="3" class="pb-0"
+        ><v-autocomplete
+          v-model="authors"
           :items="authorList"
           item-text="name"
           item-value="id"
-          :label="authors[users[authUser.uid].authorId].name"
+          :label="this.user.name"
           disabled
           solo
           hide-details
         ></v-autocomplete
       ></v-col>
-      <v-col cols="12" md="3"
-         class="pb-0"><v-autocomplete
+      <v-col cols="12" md="3" class="pb-0"
+        ><v-autocomplete
           v-model="categorySelection"
           :items="categories"
           item-text="name"
@@ -45,8 +45,8 @@
           hide-details
         ></v-autocomplete
       ></v-col>
-      <v-col cols="12" md="2"
-         class="pb-0"><v-combobox
+      <v-col cols="12" md="2" class="pb-0"
+        ><v-combobox
           v-model="sortSelection"
           :items="sortBy"
           label="Sort"
@@ -56,8 +56,14 @@
         ></v-combobox
       ></v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12" md="6" lg="4" v-for="quest in filteredQuests" :key="quest.id">
+    <v-row v-if="quests">
+      <v-col
+        cols="12"
+        md="6"
+        lg="4"
+        v-for="quest in filteredQuests"
+        :key="quest.id"
+      >
         <QuestCard :quest="quest" :author="authors[quest.author]" />
       </v-col>
     </v-row>
@@ -73,6 +79,13 @@ export default {
   middleware: "authenticated",
   data() {
     return {
+      quests: [],
+      authors: [
+        {
+          name: "Christopher Ritter",
+          authorId: "W8INchB9HLWxMHfgNVQ4mWE5P8v1"
+        }
+      ],
       questSearch: null,
       sortBy: ["Alphabetical", "Authors", "Categories"],
       sortSelection: null,
@@ -80,63 +93,63 @@ export default {
       categorySelection: []
     };
   },
+  created() {
+    this.fetchQuests();
+  },
   components: {
     QuestCard
   },
   computed: {
     ...mapState({
-      authUser: state => state.authUser,
-      users: state => state.demoData.users,
-      quests: state => state.demoData.quests,
-      authors: state => state.demoData.authors,
+      user: state => state.user,
       categories: state => state.categories
     }),
     filteredQuests() {
       var filteredQuests = this.quests.slice();
-      var questSearch = this.questSearch;
-      var categorySelection = this.categorySelection;
-      var sortSelection = this.sortSelection;
+      // var questSearch = this.questSearch;
+      // var categorySelection = this.categorySelection;
+      // var sortSelection = this.sortSelection;
 
-      if (questSearch != null) {
-        filteredQuests = filteredQuests.filter(
-          quest => quest.id == questSearch
-        );
-      }
+      // if (questSearch != null) {
+      //   filteredQuests = filteredQuests.filter(
+      //     quest => quest.id == questSearch
+      //   );
+      // }
 
-      filteredQuests = filteredQuests.filter(
-        quest => quest.author == this.users[this.authUser.uid].authorId
-      );
+      // filteredQuests = filteredQuests.filter(
+      //   quest => quest.authorId == this.user.userId
+      // );
 
-      if (categorySelection.length > 0) {
-        var categoryQuests = [];
-        for (let f = 0; f < filteredQuests.length; f++) {
-          for (let c = 0; c < categorySelection.length; c++) {
-            let checker = (arr, target) => target.every(v => arr.includes(v));
-            if (checker(filteredQuests[f].categories, categorySelection)) {
-              let exists = this.containsObject(filteredQuests[f], categoryQuests);
-              if (!exists) {
-                categoryQuests.push(filteredQuests[f]);
-              }
-            }
-          }
-        }
-        filteredQuests = categoryQuests;
-      }
+      // if (categorySelection.length > 0) {
+      //   var categoryQuests = [];
+      //   for (let f = 0; f < filteredQuests.length; f++) {
+      //     for (let c = 0; c < categorySelection.length; c++) {
+      //       let checker = (arr, target) => target.every(v => arr.includes(v));
+      //       if (checker(filteredQuests[f].categories, categorySelection)) {
+      //         let exists = this.containsObject(filteredQuests[f], categoryQuests);
+      //         if (!exists) {
+      //           categoryQuests.push(filteredQuests[f]);
+      //         }
+      //       }
+      //     }
+      //   }
+      //   filteredQuests = categoryQuests;
+      // }
 
-      if (sortSelection == "Alphabetical") {
-        filteredQuests.sort((a, b) => {
-          let qa = a.title.toLowerCase(),
-            qb = b.title.toLowerCase();
+      // if (sortSelection == "Alphabetical") {
+      //   filteredQuests.sort((a, b) => {
+      //     let qa = a.title.toLowerCase(),
+      //       qb = b.title.toLowerCase();
 
-          if (qa < qb) {
-            return -1;
-          }
-          if (qa > qb) {
-            return 1;
-          }
-          return 0;
-        });
-      }
+      //     if (qa < qb) {
+      //       return -1;
+      //     }
+      //     if (qa > qb) {
+      //       return 1;
+      //     }
+      //     return 0;
+      //   });
+      // }
 
       return filteredQuests;
     },
@@ -159,6 +172,24 @@ export default {
     }
   },
   methods: {
+    async fetchQuests() {
+      const snapshot = await this.$fire.firestore.collection('quests').get();
+      this.quests = snapshot.docs.map(doc => {
+        var newDoc = doc.data();
+        newDoc.id = doc.id;
+        return newDoc;
+      });
+    },
+    containsObject(obj, list) {
+      var i;
+      for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+          return true;
+        }
+      }
+
+      return false;
+    },
     containsObject(obj, list) {
       var i;
       for (i = 0; i < list.length; i++) {
