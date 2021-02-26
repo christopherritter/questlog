@@ -19,10 +19,10 @@
               <h3 class="subtitle-1 mb-8 mb-lg-12">
                 by {{ featuredQuest.author }}
               </h3>
-              <v-btn nuxt color="primary" to="/quest/0">View Quest</v-btn>
+              <v-btn nuxt color="primary" :to="'/quest/' + featuredQuest.questId">View Quest</v-btn>
             </v-col>
             <v-col cols="6" sm="6" class="pb-0 hidden-sm-and-down">
-              <nuxt-link to="/quest/0">
+              <nuxt-link :to="'/quest/' + featuredQuest.questId">
                 <v-img
                   class="mt-12"
                   :src="featuredQuest.image"
