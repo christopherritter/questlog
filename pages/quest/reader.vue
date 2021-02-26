@@ -1,38 +1,35 @@
 <template>
   <v-container fluid class="fill-height pa-0">
-    <v-layout>
-      <v-navigation-drawer
-        v-if="quest"
-        class="fill-height"
-        light
-        :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'"
-        :permanent="selectedLocation ? true : false"
-      >
+    <v-layout class="fill-height">
+      <v-navigation-drawer light :width="sidebarWidth">
+        <!-- Replaced width above -->
+        <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
+        <!-- Replaced permanent above -->
+        <!-- :permanent="selectedLocation != null ? true : false" -->
         <QuestSidebar
-          v-if="selectedLocation"
+
           id="QuestSidebar"
           class="fill-height"
           :location="selectedLocation"
           :entries="selectedLocation.entries"
-          :objectives="quest.objectives"
+          :objectives="[]"
           @view-location="viewLocation($event)"
           @view-objective="dialog = true"
         />
+        <QuestDialog
+          :dialog="dialog"
+          :quest="quest"
+          :objectives="quest.objectives"
+          @open-dialog="dialog = true"
+          @close-dialog="dialog = false"
+          @restart-quest="restartQuest(quest.questId)"
+        />
       </v-navigation-drawer>
-      <QuestDialog
-        :dialog="dialog"
-        :quest="quest"
-        :objectives="quest.objectives"
-        @open-dialog="dialog = true"
-        @close-dialog="dialog = false"
-        @restart-quest="restartQuest(quest.questId)"
-      />
       <v-flex>
         <LeafletMap
           id="QuestMap"
           ref="qMap"
           class="fill-height"
-          :style="{ width: mapWidth }"
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
           :locations="quest.locations"
@@ -56,14 +53,15 @@ export default {
   data() {
     return {
       quest: {},
-      selectedLocation: null,
+      selectedLocation: {},
+      sidebar: false,
       dialog: false
     };
   },
   created() {
     const quest = this.$store.state.quest;
     if (quest) {
-      Object.assign(this.quest, quest)
+      Object.assign(this.quest, quest);
     } else {
       this.dialog = true;
     }
@@ -73,6 +71,13 @@ export default {
     ...mapState({
       objectives: state => state.demoData.objectives
     }),
+    sidebarWidth() {
+      if (Object.keys(this.selectedLocation).length !== 0) {
+        return this.$vuetify.breakpoint.smAndUp ? 450 : '85vw';
+      } else {
+        return 0
+      }
+    },
     mapWidth() {
       if (!this.quest) {
         return "100%";
@@ -102,7 +107,7 @@ export default {
       }
 
       return locationObjectives;
-    }
+    },
   },
   methods: {
     viewLocation(index) {
@@ -113,10 +118,7 @@ export default {
       this.selectedLocation = location;
       this.zoom = location.zoom;
 
-      this.$refs.qMap.panTo([
-        location.coordinates[0],
-        location.coordinates[1]
-      ]);
+      this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
     },
     // locationEntries(locationId) {
     //   const location = this.quest.locations[locationId];
