@@ -98,7 +98,10 @@ export default {
     commit
   }, questId) {
     const quest = state.demoData.quests[questId];
-    commit('SET_QUEST', { quest, questId });
+    commit('SET_QUEST', {
+      quest,
+      questId
+    });
   },
 
   // There is only:
@@ -108,11 +111,13 @@ export default {
 
   // Editor
 
-  async publishQuest({ state, commit }) {
+  async publishQuest({
+    state,
+    commit
+  }) {
     if (!state.editor.quest.questId) {
-      const quest = state.editor.quest;
-      const result = await this.$fire.firestore.collection('quests').add(quest);
-      const update = await this.$fire.firestore.collection('quests').doc(result.id).update({questId: result.id})
+      var quest = {};
+      Object.assign(quest, state.editor.quest)
 
       if (!quest.region) {
         quest.region = {
@@ -131,10 +136,15 @@ export default {
         quest.objectives = [];
       }
 
-      commit('SET_QUEST_EDITOR', { quest: quest, questId: result.id })
-      // commit('SET_QUEST_EDITOR', { quest: quest, questId: 'fake-id' })
-      // console.log("The following quest has been set:");
-      // console.log(result);
+      const result = await this.$fire.firestore.collection('quests').add(quest);
+      const update = await this.$fire.firestore.collection('quests').doc(result.id).update({
+        questId: result.id
+      })
+
+      commit('SET_QUEST_EDITOR', {
+        quest: quest,
+        questId: result.id
+      })
     } else {
       const questId = state.editor.quest.questId;
       const questRef = this.$fire.firestore.collection('quests').doc(questId);
