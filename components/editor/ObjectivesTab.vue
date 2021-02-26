@@ -62,13 +62,13 @@
             <v-btn
               text
               dark
-              :disabled="!currentObjective"
-              @click="removeObjective()"
+              :disabled="currentObjective < 0"
+              @click="deleteObjective()"
             >
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
-              Remove
+              Delete
             </v-btn>
           </div>
           <div v-if="objectives.length <= 0">
@@ -127,7 +127,7 @@ export default {
   },
   props: ["objectives"],
   methods: {
-    ...mapActions(["addObjective", "updateObjective"]),
+    ...mapActions(["addObjective", "updateObjective", "deleteObjective"]),
     ...mapMutations(["SET_OBJECTIVES_EDITOR"]),
     addObjective() {
       this.$store.dispatch("addObjective", this.newObjective);
@@ -146,6 +146,10 @@ export default {
         newObjective: this.newObjective,
         currentObjective: this.currentObjective
       });
+      this.clearObjective();
+    },
+    deleteObjective() {
+      this.$store.dispatch("deleteObjective", this.currentObjective)
       this.clearObjective();
     },
     clearObjective() {

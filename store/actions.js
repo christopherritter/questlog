@@ -194,6 +194,7 @@ export default {
   }, objective) {
     const questId = state.editor.quest.questId;
     const questRef = this.$fire.firestore.collection('quests');
+    const objectiveId = state.editor.objectives[objective.currentObjective].objectiveId;
     const objectivesRef = questRef.doc(questId).collection("objectives");
 
     var newObjective = objective.newObjective;
@@ -204,7 +205,19 @@ export default {
       newObjective: newObjective
     });
 
-    const update = await objectivesRef.doc(state.editor.objectives[currentObjective].objectiveId).update(newObjective);
+    const update = await objectivesRef.doc(objectiveId).update(newObjective);
+  },
+
+  async deleteObjective({ state, commit }, index) {
+    const questId = state.editor.quest.questId;
+    const questRef = this.$fire.firestore.collection('quests');
+    const objectiveId = state.editor.objectives[index].objectiveId;
+    const objectivesRef = questRef.doc(questId).collection("objectives");
+
+    var newObjectives = state.editor.objectives.filter(objective => objective.objectiveId != objectiveId)
+    commit("SET_OBJECTIVES_EDITOR", newObjectives)
+
+    const res = await objectivesRef.doc(objectiveId).delete();
   },
 
   // Editor Locations

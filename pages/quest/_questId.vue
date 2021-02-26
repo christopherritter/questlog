@@ -173,15 +173,11 @@ export default {
 
         const objectives = await objectivesRef.get();
         objectives.forEach(objective => {
-          // console.log(doc.id, '=>', doc.data());
-          // let newObjective = objective.data();
           this.$store.commit("ADD_OBJECTIVE_EDITOR", objective.data())
         });
 
         const locations = await locationsRef.get();
         locations.forEach(location => {
-          // console.log(doc.id, '=>', doc.data());
-          // let newLocation = location.data();
           this.$store.commit("ADD_LOCATION_EDITOR", location.data())
         });
       }
