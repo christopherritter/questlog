@@ -58,7 +58,12 @@
           Next
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn dark color="primary" class="ml-2" @click="publishQuest()">
+        <v-btn
+          dark
+          color="primary"
+          class="ml-2"
+          @click="publishQuest()"
+        >
           Publish
         </v-btn>
       </div>
@@ -85,22 +90,23 @@ export default {
       error: null
     };
   },
+  props: ['quest'],
   created() {
     if (this.quest) {
       this.fetchDetails();
     }
   },
-  props: ["user", "quest"],
   computed: {
     ...mapState({
+      user: state => state.user,
       categories: state => state.categories
-    }),
+    })
   },
   watch: {
     newDetails: {
-      handler: function (val) {
+      handler: function(val) {
         if (val.isAnonymous) {
-          this.newDetails.author = "Anonymous"
+          this.newDetails.author = "Anonymous";
         } else {
           this.newDetails.author = this.user.name;
         }
@@ -121,6 +127,7 @@ export default {
       });
     },
     updateDetails() {
+      this.$emit("update-quest");
       this.$store.commit("SET_DETAILS_EDITOR", this.newDetails);
     },
     resetRegion() {

@@ -96,8 +96,7 @@ export default {
         name: "",
         coordinates: [39.828175, -98.5795],
         zoom: 18,
-        draggable: true,
-        mapOptions: {}
+        draggable: true
       },
       loading: false,
       error: null

@@ -176,7 +176,7 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn dark disabled color="primary" class="ml-2">
+            <v-btn dark color="primary" class="ml-2">
               Publish
             </v-btn>
           </div>

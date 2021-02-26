@@ -113,6 +113,24 @@ export default {
       const quest = state.editor.quest;
       const result = await this.$fire.firestore.collection('quests').add(quest);
       const update = await this.$fire.firestore.collection('quests').doc(result.id).update({questId: result.id})
+
+      if (!quest.region) {
+        quest.region = {
+          name: "Center of America",
+          coordinates: [39.828175, -98.5795],
+          zoom: 18,
+          draggable: true
+        }
+      }
+
+      if (!quest.locations) {
+        quest.locations = [];
+      }
+
+      if (!quest.objectives) {
+        quest.objectives = [];
+      }
+
       commit('SET_QUEST_EDITOR', { quest: quest, questId: result.id })
       // commit('SET_QUEST_EDITOR', { quest: quest, questId: 'fake-id' })
       // console.log("The following quest has been set:");

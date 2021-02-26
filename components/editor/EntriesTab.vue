@@ -176,7 +176,12 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn dark @click="publishQuest" color="primary" class="ml-2">
+            <v-btn
+              dark
+              @click="publishQuest"
+              color="primary"
+              class="ml-2"
+            >
               Publish
             </v-btn>
           </div>
@@ -209,14 +214,14 @@ export default {
       entryIndex: null
     };
   },
-  props: ['objectives', 'locations'],
+  props: ["objectives", "locations"],
   components: { ActionsPanel },
   methods: {
     ...mapActions(["publishQuest"]),
     ...mapMutations([
       "ADD_ENTRY_EDITOR",
       "UPDATE_ENTRY_EDITOR",
-      "REMOVE_ENTRY_EDITOR",
+      "REMOVE_ENTRY_EDITOR"
     ]),
     addEntry() {
       var index = this.locations.indexOf(this.selectedLocation);

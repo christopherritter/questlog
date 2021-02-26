@@ -9,7 +9,7 @@
         </p>
       </v-col>
     </v-row>
-    <v-row v-if="!loading">
+    <v-row>
       <v-col cols="12">
         <v-form>
           <v-tabs vertical v-model="tab">
@@ -32,44 +32,43 @@
               Items
             </v-tab>
 
-
             <v-tab-item value="details">
               <DetailsTab
+                :quest="quest"
                 :user="user"
-                :quest="currentQuest"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="region">
               <RegionTab
-                :region="currentQuest.region"
+                :region="quest.region"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="objectives">
               <ObjectivesTab
-                :objectives="currentQuest.objectives"
+                :objectives="quest.objectives"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="locations">
               <LocationsTab
-                :region="currentQuest.region"
-                :locations="currentQuest.locations"
+                :region="quest.region"
+                :locations="quest.locations"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="entries">
               <EntriesTab
-                :objectives="currentQuest.objectives"
-                :locations="currentQuest.locations"
+                :objectives="quest.objectives"
+                :locations="quest.locations"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
             <v-tab-item value="items">
               <ItemsTab
-                :objectives="currentQuest.objectives"
-                :locations="currentQuest.locations"
+                :objectives="quest.objectives"
+                :locations="quest.locations"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
@@ -96,13 +95,8 @@ export default {
   data() {
     return {
       tab: "details",
-      currentQuest: {},
-      loading: false,
-      error: null,
+      updatedQuest: false
     };
-  },
-  created() {
-    this.fetchQuest();
   },
   components: {
     DetailsTab,
@@ -115,27 +109,12 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user,
-      quest: state => state.editor.quest,
+      quest: state => state.editor.quest
     })
   },
   methods: {
     changeTab(tab) {
       this.tab = tab;
-    },
-    async fetchQuest() {
-      this.error = null;
-      this.loading = true;
-
-      if (!this.quest) {
-        this.loading = false;
-        return;
-      }
-
-      if (this.quest.questId) {
-        Object.assign(this.currentQuest, this.quest);
-      }
-
-      this.loading = false;
     }
   }
 };

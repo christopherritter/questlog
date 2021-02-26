@@ -110,7 +110,7 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn dark disabled color="primary">
+            <v-btn dark color="primary">
               Publish
             </v-btn>
           </div>
