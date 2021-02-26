@@ -31,9 +31,9 @@
 
     <v-list>
       <v-list-item
-        v-for="action in actions"
-        :key="action.id"
-        @click="$emit('view-location', action.forward)"
+        v-for="(action, index) in actions"
+        :key="index"
+        @click="$emit('select-action', action)"
       >
         <v-list-item-icon>
           <v-icon>{{ action.icon }}</v-icon>

@@ -15,6 +15,7 @@
           :entries="selectedLocation.entries"
           :actions="locationActions"
           @view-location="viewLocation($event)"
+          @select-action="selectAction($event)"
           @view-objective="dialog = true"
         />
         <QuestDialog
@@ -56,7 +57,6 @@ export default {
       quest: {},
       selectedLocation: {},
       locationActions: [],
-      sidebar: false,
       dialog: false
     };
   },
@@ -136,11 +136,14 @@ export default {
 
       this.locationActions = locationActions;
     },
+    selectAction(event) {
+      if (event.type == "Move") {
+        this.viewLocation(event.target);
+      }
+    },
     clearLocation() {
-      this.location = null;
-      this.entries = null;
-      this.actions = null;
-      this.items = null;
+      this.selectedLocation = {};
+      this.locationActions = [];
     },
     restartQuest() {
       const location = this.locations[0];
