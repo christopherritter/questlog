@@ -149,7 +149,7 @@ export default {
       const quest = state.editor.quest;
       const questId = quest.questId;
       const questRef = this.$fire.firestore.collection('quests').doc(questId);
-      const result = await questRef.update(state.editor.quest);
+      const result = await questRef.update(quest);
     }
   },
 
@@ -166,8 +166,8 @@ export default {
     for (let i = 0; i < locations.length; i++) {
       var currentPosition = locations[i].coordinates;
       if (
-        position.lat === currentPosition.lat &&
-        position.lng === currentPosition.lng
+        position.lat === currentPosition[0] &&
+        position.lng === currentPosition[1]
       ) {
         newLocation = locations[i];
         selectedLocation = i;

@@ -110,7 +110,7 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn dark color="primary">
+            <v-btn dark @click="publishQuest()" color="primary">
               Publish
             </v-btn>
           </div>
@@ -159,7 +159,10 @@ export default {
     ]),
     markLocation(location) {
       this.clearLocation();
-      this.newLocation.coordinates = location.latlng;
+      this.newLocation.coordinates = [
+        location.latlng.lat,
+        location.latlng.lng
+      ];
       this.$store.commit("ADD_LOCATION_EDITOR", this.newLocation);
     },
     async selectLocation(location) {
@@ -167,10 +170,10 @@ export default {
         this.newLocation = {
           name: this.locations[index].name,
           isLandmark: this.locations[index].isLandmark,
-          coordinates: {
-            lat: this.locations[index].coordinates.lat,
-            lng: this.locations[index].coordinates.lng
-          },
+          coordinates: [
+            this.locations[index].coordinates[0],
+            this.locations[index].coordinates[1]
+          ],
           zoom: this.locations[index].zoom,
           image: this.locations[index].image,
           marker: this.locations[index].marker,
@@ -184,7 +187,7 @@ export default {
     moveLocation(location) {
       var coordinates = location.target.getLatLng();
       var index = this.selectedLocation;
-      this.newLocation.coordinates = coordinates;
+      this.newLocation.coordinates = [coordinates.lat, coordinates.lng];
       this.$store.commit("SET_COORDINATES_EDITOR", { coordinates, index });
     },
     updateLocation() {
@@ -197,10 +200,10 @@ export default {
       this.newLocation = {
         name: "Untitled",
         isLandmark: true,
-        coordinates: {
-          lat: null,
-          lng: null
-        },
+        coordinates: [
+          null,
+          null
+        ],
         zoom: 18,
         image: "",
         marker: null,
@@ -209,6 +212,12 @@ export default {
         items: []
       };
       this.selectedLocation = null;
+    },
+    publishQuest() {
+      if (this.selectedLocation) {
+        this.updateLocation();
+      }
+      this.$store.dispatch("publishQuest");
     }
   }
 };
