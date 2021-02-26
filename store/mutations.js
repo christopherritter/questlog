@@ -14,7 +14,7 @@ export default {
     }
   },
 
-  SET_USER: ( state, user) => {
+  SET_USER: (state, user) => {
     state.user = user
   },
 
@@ -72,16 +72,17 @@ export default {
   },
 
   CLEAR_QUEST_EDITOR: (state) => {
-    state.editor.quest = null;
+    state.editor.quest = {};
   },
 
   SET_DETAILS_EDITOR: (state, details) => {
-    state.editor.quest.title = details.title;
-    state.editor.quest.author = details.author;
-    state.editor.quest.isAnonymous = details.isAnonymous;
-    state.editor.quest.description = details.description;
-    state.editor.quest.image = details.image;
-    state.editor.quest.categories = details.categories;
+    state.editor.quest.title = details.title || "Untitled";
+    state.editor.quest.author = details.author || "Anonymous";
+    state.editor.quest.authorId = state.authUser.uid;
+    state.editor.quest.description = details.description || "";
+    state.editor.quest.image = details.image || "";
+    state.editor.quest.categories = details.categories || [];
+    state.editor.quest.featured = false;
   },
 
   SET_REGION_EDITOR: (state, region) => {

@@ -8,7 +8,7 @@
         outlined
       ></v-text-field>
       <v-text-field
-        v-model="newDetails.author"
+        :value="newDetails.author"
         label="Author"
         readonly
         outlined
@@ -17,7 +17,6 @@
       <v-checkbox
         v-model="newDetails.isAnonymous"
         label="Publish anonymously"
-        :value="newDetails.isAnonymous"
       ></v-checkbox>
       <v-textarea
         name="input-7-1"
@@ -59,12 +58,7 @@
           Next
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn
-          dark
-          color="primary"
-          class="ml-2"
-          @click="$store.dispatch('publishQuest')"
-        >
+        <v-btn dark color="primary" class="ml-2" @click="publishQuest()">
           Publish
         </v-btn>
       </div>
@@ -82,7 +76,7 @@ export default {
       newDetails: {
         title: "",
         author: "Anonymous",
-        isAnonymous: true,
+        isAnonymous: false,
         description: "",
         image: "",
         categories: []
@@ -92,13 +86,27 @@ export default {
     };
   },
   created() {
-    this.fetchDetails();
+    if (this.quest) {
+      this.fetchDetails();
+    }
   },
-  props: ["quest"],
+  props: ["user", "quest"],
   computed: {
     ...mapState({
       categories: state => state.categories
-    })
+    }),
+  },
+  watch: {
+    newDetails: {
+      handler: function (val) {
+        if (val.isAnonymous) {
+          this.newDetails.author = "Anonymous"
+        } else {
+          this.newDetails.author = this.user.name;
+        }
+      },
+      deep: true
+    }
   },
   methods: {
     ...mapActions(["publishQuest"]),
@@ -107,7 +115,6 @@ export default {
       Object.assign(this.newDetails, {
         title: this.quest.title,
         author: this.quest.author,
-        isAnonymous: this.quest.isAnonymous,
         description: this.quest.description,
         image: this.quest.image,
         categories: this.quest.categories
@@ -120,6 +127,7 @@ export default {
       this.fetchDetails();
     },
     publishQuest() {
+      this.$store.commit("SET_DETAILS_EDITOR", this.newDetails);
       this.$store.dispatch("publishQuest");
     }
   }

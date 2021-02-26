@@ -108,14 +108,17 @@ export default {
 
   // Editor
 
-  async saveQuest({ state, commit }, quest) {
-    if (state.quest == null) {
+  async publishQuest({ state, commit }) {
+    if (!state.editor.quest.questId) {
+      const quest = state.editor.quest;
       const result = await this.$fire.firestore.collection('quests').add(quest);
-      commit('SET_QUEST', { quest: quest, questId: result.id })
-      console.log("The following quest has been set:");
-      console.log(result);
+      const update = await this.$fire.firestore.collection('quests').doc(result.id).update({questId: result.id})
+      commit('SET_QUEST_EDITOR', { quest: quest, questId: result.id })
+      // commit('SET_QUEST_EDITOR', { quest: quest, questId: 'fake-id' })
+      // console.log("The following quest has been set:");
+      // console.log(result);
     } else {
-      const questId = state.quest.questId;
+      const questId = state.editor.quest.questId;
       const questRef = this.$fire.firestore.collection('quests').doc(questId);
       const result = await questRef.update(quest);
       console.log("Quest ID " + questId + " has been updated.");
@@ -224,12 +227,6 @@ export default {
   }, actions) {
     console.log("Updating Actions")
     commit('SET_ACTIONS', actions)
-  },
-
-  async publishQuest({ state }) {
-    const db = this.$fire.firestore;
-    const quest = state.editor.quest;
-    const questRef = await db.collection('quests').doc(quest.questId).set(quest);
   },
 
 }

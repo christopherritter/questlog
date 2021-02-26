@@ -35,6 +35,7 @@
 
             <v-tab-item value="details">
               <DetailsTab
+                :user="user"
                 :quest="currentQuest"
                 @change-tab="changeTab($event)"
               />
@@ -113,6 +114,7 @@ export default {
   },
   computed: {
     ...mapState({
+      user: state => state.user,
       quest: state => state.editor.quest,
     })
   },

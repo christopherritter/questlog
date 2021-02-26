@@ -128,6 +128,7 @@ export default {
       this.fetchRegion();
     },
     publishQuest() {
+      this.$store.commit("SET_REGION_EDITOR", this.newRegion);
       this.$store.dispatch("publishQuest");
     }
   }

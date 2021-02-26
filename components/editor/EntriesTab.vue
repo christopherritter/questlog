@@ -176,7 +176,7 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn dark disabled color="primary" class="ml-2">
+            <v-btn dark @click="publishQuest" color="primary" class="ml-2">
               Publish
             </v-btn>
           </div>
@@ -187,7 +187,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import ActionsPanel from "@/components/editor/ActionsPanel.vue";
 
 export default {
@@ -212,6 +212,7 @@ export default {
   props: ['objectives', 'locations'],
   components: { ActionsPanel },
   methods: {
+    ...mapActions(["publishQuest"]),
     ...mapMutations([
       "ADD_ENTRY_EDITOR",
       "UPDATE_ENTRY_EDITOR",
@@ -272,6 +273,9 @@ export default {
     },
     deleteAction(index) {
       this.entry.actions.splice(index, 1);
+    },
+    publishQuest() {
+      this.$store.dispatch("publishQuest");
     }
   }
 };

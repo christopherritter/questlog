@@ -15,10 +15,10 @@ export default () => ({
       author: null,
       region: {
         name: "",
-        coordinates: {
-          lat: 39.828175,
-          lng: -98.5795
-        },
+        coordinates: [
+          39.828175,
+          -98.5795
+        ],
         zoom: 18,
         draggable: true,
         mapOptions: {}
