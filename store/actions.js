@@ -92,8 +92,10 @@ export default {
   // Quest
 
   // There is no 'BEGIN QUEST'
+  // There is only:
+  // 'READ QUEST'
 
-  beginQuest({
+  readQuest({
     state,
     commit
   }, questId) {
@@ -104,8 +106,7 @@ export default {
     });
   },
 
-  // There is only:
-  // 'READ QUEST'
+
   // 'PLAY QUEST'
   // 'EDIT QUEST'
 

@@ -2,7 +2,7 @@
   <div id="map-wrap">
     <client-only>
       <l-map
-        ref="lMap"
+        ref="map"
         :zoom="zoom"
         :center="[center[0], center[1]]"
         @click="$emit('mark-location', $event)"
@@ -13,13 +13,13 @@
           url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
         ></l-tile-layer>
         <l-marker
-          v-for="(location, id) in locations"
-          :key="id"
+          v-for="(location, index) in locations"
+          :key="index"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
-          @click="$emit('select-location', $event)"
-          @dragstart="$emit('select-location', $event)"
-          @dragend="$emit('move-location', $event)"
+          @click="$emit('select-location', index)"
+          @dragstart="$emit('select-location', index)"
+          @dragend="$emit('move-location', index)"
         ></l-marker>
       </l-map>
     </client-only>
@@ -28,6 +28,12 @@
 
 <script>
 export default {
-  props: ["center", "zoom", "locations", "draggable"]
+  name: "LeafletMap",
+  props: ["center", "zoom", "locations", "draggable"],
+  methods: {
+    panTo(coordinates) {
+      this.$refs.map.mapObject.setView([coordinates[0], coordinates[1]]);
+    }
+  }
 };
 </script>

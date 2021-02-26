@@ -6,16 +6,15 @@
         class="fill-height"
         light
         :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'"
-        :permanent="location ? true : false"
+        :permanent="selectedLocation ? true : false"
       >
         <QuestSidebar
-          v-if="location"
+          v-if="selectedLocation"
           id="QuestSidebar"
           class="fill-height"
-          :location="location"
-          :entries="entries"
-          :actions="actions"
-          :objectives="locationObjectives"
+          :location="selectedLocation"
+          :entries="selectedLocation.entries"
+          :objectives="quest.objectives"
           @view-location="viewLocation($event)"
           @view-objective="dialog = true"
         />
@@ -23,21 +22,21 @@
       <QuestDialog
         :dialog="dialog"
         :quest="quest"
-        :objectives="objectives"
+        :objectives="quest.objectives"
         @open-dialog="dialog = true"
         @close-dialog="dialog = false"
-        @restart-quest="restartQuest(quest.id)"
+        @restart-quest="restartQuest(quest.questId)"
       />
       <v-flex>
-        <QuestMap
+        <LeafletMap
           id="QuestMap"
           ref="qMap"
+          class="fill-height"
           :style="{ width: mapWidth }"
-          :position="position"
-          :locations="locations"
-          :zoom="zoom"
-          :mapOptions="mapOptions"
-          @view-location="viewLocation($event)"
+          :center="quest.region.coordinates"
+          :zoom="quest.region.zoom"
+          :locations="quest.locations"
+          @select-location="viewLocation($event)"
           @clear-location="clearLocation()"
         />
       </v-flex>
@@ -48,7 +47,7 @@
 <script>
 import { mapState } from "vuex";
 import QuestSidebar from "@/components/quest/QuestSidebar.vue";
-import QuestMap from "@/components/quest/QuestMap.vue";
+import LeafletMap from "@/components/LeafletMap.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
 
 export default {
@@ -56,44 +55,20 @@ export default {
   layout: "fluid",
   data() {
     return {
-      quest: null,
-      position: {
-        lat: 39.828175,
-        lng: -98.5795
-      },
-      region: null,
-      locations: null,
-      location: null,
-      zoom: 4,
-      entries: null,
-      items: null,
-      actions: null,
-      startingPoint: null,
-      mapOptions: {},
+      quest: {},
+      selectedLocation: null,
       dialog: false
     };
   },
   created() {
     const quest = this.$store.state.quest;
     if (quest) {
-      const region = this.$store.state.demoData.regions[quest.region];
-      const locations = this.$store.state.demoData.locations;
-      const location = this.$store.state.demoData.locations[0];
-      const startingPoint = locations[quest.startingPoint];
-
-      this.quest = quest;
-      this.region = region;
-      this.zoom = region.zoom;
-      this.locations = locations;
-      this.location = location;
-      this.position = startingPoint.position;
-
-      this.locationEntries(location.id);
+      Object.assign(this.quest, quest)
     } else {
       this.dialog = true;
     }
   },
-  components: { QuestSidebar, QuestMap, QuestDialog },
+  components: { QuestSidebar, LeafletMap, QuestDialog },
   computed: {
     ...mapState({
       objectives: state => state.demoData.objectives
@@ -130,38 +105,38 @@ export default {
     }
   },
   methods: {
-    viewLocation(id) {
-      const location = this.$store.state.demoData.locations[id];
+    viewLocation(index) {
+      const location = this.quest.locations[index];
+      // console.log(location)
+      // this.locationEntries(index);
 
-      this.locationEntries(id);
+      this.selectedLocation = location;
+      this.zoom = location.zoom;
 
-      this.location = location;
-      // this.zoom = location.zoom;
-
-      this.$refs.qMap.setCenter({
-        lat: location.position.lat,
-        lng: location.position.lng
-      });
+      this.$refs.qMap.panTo([
+        location.coordinates[0],
+        location.coordinates[1]
+      ]);
     },
-    locationEntries(locationId) {
-      const location = this.$store.state.demoData.locations[locationId];
-      const entries = this.$store.state.demoData.entries;
+    // locationEntries(locationId) {
+    //   const location = this.quest.locations[locationId];
+    //   const entries = location.entries;
 
-      var locationEntries = [];
-      var locationActions = [];
+    //   var locationEntries = [];
+    //   var locationActions = [];
 
-      for (var e = 0; e < location.entries.length; e++) {
-        locationEntries.push(entries[location.entries[e]]);
+    //   for (var e = 0; e < location.entries.length; e++) {
+    //     locationEntries.push(entries[location.entries[e]]);
 
-        let entryActions = entries[location.entries[e]].actions;
-        for (let a = 0; a < entryActions.length; a++) {
-          locationActions.push(entryActions[a]);
-        }
-      }
+    //     let entryActions = entries[location.entries[e]].actions;
+    //     for (let a = 0; a < entryActions.length; a++) {
+    //       locationActions.push(entryActions[a]);
+    //     }
+    //   }
 
-      this.entries = locationEntries;
-      this.actions = locationActions;
-    },
+    //   this.entries = locationEntries;
+    //   this.actions = locationActions;
+    // },
     clearLocation() {
       this.location = null;
       this.entries = null;
@@ -169,8 +144,8 @@ export default {
       this.items = null;
     },
     restartQuest() {
-      const location = this.$store.state.demoData.locations[0];
-      const startingPoint = this.$store.state.demoData.locations[this.quest.startingPoint];
+      const location = this.locations[0];
+      const startingPoint = this.quest.startingPoint;
 
       for (let o = 0; o < this.objectives.length; o++) {
         this.$store.dispatch("updateObjective", {
