@@ -10,9 +10,10 @@
 
           id="QuestSidebar"
           class="fill-height"
+          :objectives="[]"
           :location="selectedLocation"
           :entries="selectedLocation.entries"
-          :objectives="[]"
+          :actions="locationActions"
           @view-location="viewLocation($event)"
           @view-objective="dialog = true"
         />
@@ -54,6 +55,7 @@ export default {
     return {
       quest: {},
       selectedLocation: {},
+      locationActions: [],
       sidebar: false,
       dialog: false
     };
@@ -112,33 +114,28 @@ export default {
   methods: {
     viewLocation(index) {
       const location = this.quest.locations[index];
-      // console.log(location)
-      // this.locationEntries(index);
 
+      this.locationEntries(index);
       this.selectedLocation = location;
       this.zoom = location.zoom;
 
       this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
     },
-    // locationEntries(locationId) {
-    //   const location = this.quest.locations[locationId];
-    //   const entries = location.entries;
+    locationEntries(locationId) {
+      const location = this.quest.locations[locationId];
+      const entries = location.entries;
 
-    //   var locationEntries = [];
-    //   var locationActions = [];
+      var locationActions = [];
 
-    //   for (var e = 0; e < location.entries.length; e++) {
-    //     locationEntries.push(entries[location.entries[e]]);
+      for (var e = 0; e < location.entries.length; e++) {
+        let entryActions = entries[e].actions;
+        for (let a = 0; a < entryActions.length; a++) {
+          locationActions.push(entryActions[a]);
+        }
+      }
 
-    //     let entryActions = entries[location.entries[e]].actions;
-    //     for (let a = 0; a < entryActions.length; a++) {
-    //       locationActions.push(entryActions[a]);
-    //     }
-    //   }
-
-    //   this.entries = locationEntries;
-    //   this.actions = locationActions;
-    // },
+      this.locationActions = locationActions;
+    },
     clearLocation() {
       this.location = null;
       this.entries = null;
