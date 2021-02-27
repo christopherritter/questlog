@@ -3,7 +3,7 @@
     <v-img
       v-if="location.image"
       height="240"
-      :src="require('~/assets/img/' + location.image)"
+      :src="location.image"
     ></v-img>
 
     <v-card-title>
