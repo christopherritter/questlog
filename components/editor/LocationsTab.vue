@@ -211,7 +211,7 @@ export default {
       this.newLocation = {
         locationId: null,
         name: "",
-        isLandmark: true,
+        isLandmark: false,
         coordinates: [null, null],
         zoom: 18,
         image: "",
