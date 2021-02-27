@@ -77,7 +77,6 @@ export default {
   watch: {
     localObjectives(val) {
       if (val.length > 0) {
-        console.log(val)
         for (let i = 0; i < val.length; i++ ) {
           var objective = val[i];
           if (objective.isComplete != true) {

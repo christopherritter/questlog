@@ -23,7 +23,7 @@
           :objectives="objectives"
           @open-dialog="dialog = true"
           @close-dialog="dialog = false"
-          @restart-quest="restartQuest(quest.questId)"
+          @restart-quest="restartQuest()"
         />
       </v-navigation-drawer>
       <v-flex style="z-index: 0">
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import QuestSidebar from "@/components/quest/QuestSidebar.vue";
 import LeafletMap from "@/components/LeafletMap.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
@@ -106,6 +106,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(["SET_OBJECTIVE"]),
     viewLocation(index) {
       const location = this.locations[index];
 
@@ -141,21 +142,12 @@ export default {
       this.locationActions = [];
     },
     restartQuest() {
-      const location = this.locations[0];
-      const startingPoint = this.quest.startingPoint;
-
-      for (let o = 0; o < this.objectives.length; o++) {
-        this.$store.dispatch("updateObjective", {
-          id: o,
+      for (let i = 0; i < this.objectives.length; i++) {
+        this.$store.commit("SET_OBJECTIVE", {
+          index: i,
           bool: false
         });
       }
-      this.location = location;
-      this.position = startingPoint.position;
-
-      this.locationEntries(location.id);
-
-      this.dialog = false;
     }
   }
 };

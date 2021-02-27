@@ -75,10 +75,10 @@ export default {
   props: ["dialog", "quest", "objectives"],
   computed: {
     isQuestComplete() {
-      for (var o = 0; o < this.objectives.length; o++) {
-        if (!this.objectives[o].isComplete) return false;
-        return true;
+      for (var i = 0; i < this.objectives.length; i++) {
+        if (!this.objectives[i].isComplete) return false;
       }
+      return true;
     }
   },
   watch: {
