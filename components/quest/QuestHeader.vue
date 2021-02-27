@@ -53,7 +53,8 @@ export default {
     editQuest() {
       this.$store.dispatch("editQuest", {
         quest: this.quest,
-        questId: this.questId
+        objectives: this.objectives,
+        locations: this.locations,
       });
       this.$router.push("/editor");
     },

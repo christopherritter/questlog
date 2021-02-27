@@ -109,10 +109,9 @@ export default {
   editQuest({
     commit
   }, obj) {
-    commit('SET_QUEST_EDITOR', {
-      quest: obj.quest,
-      questId: obj.questId
-    });
+    commit('SET_QUEST_EDITOR', obj.quest);
+    commit('SET_OBJECTIVES_EDITOR', obj.objectives);
+    commit('SET_LOCATIONS_EDITOR', obj.locations);
   },
 
   // Editor

@@ -58,9 +58,7 @@ export default {
 
   // _EDITOR
 
-  SET_QUEST_EDITOR: (state, obj) => {
-    var quest = obj.quest;
-    quest.questId = obj.questId;
+  SET_QUEST_EDITOR: (state, quest) => {
     state.editor.quest = quest;
   },
 
