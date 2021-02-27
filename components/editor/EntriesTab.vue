@@ -159,10 +159,7 @@
                 </v-list-item>
               </template>
             </v-list-item-group>
-            <v-divider
-              inset
-              class="mt-4 mb-2"
-            ></v-divider>
+            <v-divider class="mt-4 mb-2"></v-divider>
           </v-list>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
             <v-btn outlined dark @click="$emit('change-tab', 'locations')">

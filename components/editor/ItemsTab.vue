@@ -109,7 +109,7 @@
               Remove
             </v-btn>
           </div>
-          <!-- <div v-if="sortedItems.length <= 0">
+          <!-- <div>
             <v-card outlined>
               <v-card-text>
                 Add items to your quest with the form on the left.
@@ -159,11 +159,7 @@
                 </v-list-item>
               </template>
             </v-list-item-group>
-            <v-divider
-              inset
-              class="mt-4 mb-2"
-              v-if="sortedItems.length > 1"
-            ></v-divider>
+            <v-divider class="mt-4 mb-2"></v-divider>
           </v-list>
           <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
             <v-btn outlined dark @click="$emit('change-tab', 'locations')">
@@ -204,7 +200,6 @@ export default {
         expiration: [],
         objectives: []
       },
-      sortedItems: [],
       selectedItem: "undefined",
       selectedLocation: null,
       locationIndex: null,

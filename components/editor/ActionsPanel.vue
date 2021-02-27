@@ -9,7 +9,7 @@
       <v-list-item-content>
         <v-list-item-title v-text="action.text"></v-list-item-title>
 
-        <v-list-item-subtitle v-text="action.target"></v-list-item-subtitle>
+        <v-list-item-subtitle v-text="action.targetName"></v-list-item-subtitle>
       </v-list-item-content>
 
       <v-list-item-action>
@@ -45,6 +45,7 @@
                 <v-col cols="12" sm="4">
                   <v-select
                     :items="types"
+                    v-model="editedAction.type"
                     label="Type"
                     outlined
                     hide-details="auto"
@@ -59,10 +60,12 @@
                     item-value="locationId"
                     hide-details="auto"
                     outlined
+                    @change="fetchTargetName($event)"
                   ></v-autocomplete>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <v-select
+                    v-model="editedAction.color"
                     :items="colors"
                     label="Color"
                     outlined
@@ -71,6 +74,7 @@
                 </v-col>
                 <v-col cols="12" sm="8">
                   <v-select
+                    v-model="editedAction.icon"
                     :items="icons"
                     label="Icon"
                     outlined
@@ -121,18 +125,20 @@ export default {
   name: "ActionsPanel",
   data() {
     return {
-      editedIndex: -1,
       editedAction: {
         text: "",
         type: "",
         target: "",
+        targetName: "",
         icon: "",
         color: "",
       },
+      editedIndex: -1,
       defaultAction: {
         text: "",
         type: "",
         target: "",
+        targetName: "",
         icon: "",
         color: "",
       },
@@ -154,17 +160,20 @@ export default {
       this.editedAction = Object.assign({}, action);
       this.dialog = true;
     },
-
+    fetchTargetName(event) {
+      if (this.editedAction.type == "Move") {
+        var targets = this.locations.filter(target => target.locationId == event);
+        this.editedAction.targetName = targets[0].name;
+      }
+    },
     deleteAction() {
       this.dialog = false;
       this.dialogDelete = true;
     },
-
     deleteActionConfirm() {
       this.$emit('delete-action', this.editedIndex );
       this.closeDelete();
     },
-
     close() {
       this.dialog = false;
       this.$nextTick(() => {
@@ -172,7 +181,6 @@ export default {
         this.editedIndex = -1;
       });
     },
-
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
@@ -180,7 +188,6 @@ export default {
         this.editedIndex = -1;
       });
     },
-
     save() {
       if (this.editedIndex > -1) {
         this.$emit('edit-action', { action: this.editedAction, index: this.editedIndex })
