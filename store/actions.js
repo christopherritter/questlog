@@ -245,6 +245,54 @@ export default {
     return selectedLocation;
   },
 
+  async addLocation({
+    state,
+    commit
+  }, location) {
+    const locationsRef = this.$fire.firestore.collection('quests').doc(state.editor.quest.questId).collection("locations");
+    var newLocation = location;
+
+    const result = await locationsRef.add(location);
+    newLocation.locationId = result.id;
+    commit("ADD_LOCATION_EDITOR", newLocation);
+
+    const update = locationsRef.doc(result.id).update({
+      locationId: result.id
+    });
+  },
+
+  async updateLocation({
+    state,
+    commit
+  }, location) {
+    const questId = state.editor.quest.questId;
+    const questRef = this.$fire.firestore.collection('quests');
+    const locationId = state.editor.locations[location.currentLocation].locationId;
+    const locationsRef = questRef.doc(questId).collection("locations");
+
+    var newLocation = location.newLocation;
+    var currentLocation = location.currentLocation;
+
+    commit("UPDATE_LOCATION_EDITOR", {
+      currentLocation: currentLocation,
+      newLocation: newLocation
+    });
+
+    const update = await locationsRef.doc(locationId).update(newLocation);
+  },
+
+  async deleteLocation({ state, commit }, index) {
+    const questId = state.editor.quest.questId;
+    const questRef = this.$fire.firestore.collection('quests');
+    const locationId = state.editor.locations[index].locationId;
+    const locationsRef = questRef.doc(questId).collection("locations");
+
+    var newLocations = state.editor.locations.filter(location => location.locationId != locationId)
+    commit("SET_LOCATIONS_EDITOR", newLocations)
+
+    const res = await locationsRef.doc(locationId).delete();
+  },
+
   // Editor Items
 
   addItem({

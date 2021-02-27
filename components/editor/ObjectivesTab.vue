@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "ObjectivesTab",
@@ -128,7 +128,6 @@ export default {
   props: ["objectives"],
   methods: {
     ...mapActions(["addObjective", "updateObjective", "deleteObjective"]),
-    ...mapMutations(["SET_OBJECTIVES_EDITOR"]),
     addObjective() {
       this.$store.dispatch("addObjective", this.newObjective);
       this.clearObjective();

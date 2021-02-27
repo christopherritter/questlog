@@ -99,8 +99,12 @@ export default {
       location.newLocation);
   },
 
+  SET_LOCATIONS_EDITOR: (state, locations) => {
+    state.editor.locations = locations;
+  },
+
   SET_COORDINATES_EDITOR: (state, location) => {
-    state.editor.locations[location.index].coordinates = location.coordinates;
+    state.editor.locations[location.index].coordinates = location.coords;
   },
 
   ADD_ENTRY_EDITOR: (state, obj) => {

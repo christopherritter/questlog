@@ -8,7 +8,11 @@
               <div class="d-flex mt-5 mb-4 align-center">
                 <h1>Locations</h1>
                 <v-spacer></v-spacer>
-                <v-btn text>
+                <v-btn
+                  text
+                  @click="clearLocation()"
+                  :disabled="newLocation.locationId === null"
+                >
                   <v-icon class="mr-2" dark>
                     mdi-plus-circle
                   </v-icon>
@@ -59,9 +63,18 @@
               <v-row>
                 <v-col cols="12" class="d-flex pt-1">
                   <v-btn
+                    v-if="selectedLocation === null"
+                    :disabled="newLocation.name.length <= 0"
                     dark
                     outlined
-                    :disabled="!newLocation.coordinates == null"
+                    color="primary"
+                    @click="addLocation()"
+                    >Add</v-btn
+                  >
+                  <v-btn
+                    v-else
+                    dark
+                    outlined
                     @click="updateLocation()"
                     >Update</v-btn
                   >
@@ -74,17 +87,17 @@
         </v-col>
         <v-col>
           <div class="mt-5 mb-4 align-center">
-            <v-btn text dark disabled>
+            <v-btn text dark @click="editLocation()" :disabled="selectedLocation === null">
               <v-icon class="mr-2">
                 mdi-pencil
               </v-icon>
               Edit
             </v-btn>
-            <v-btn text dark disabled>
+            <v-btn text dark @click="deleteLocation()" :disabled="selectedLocation === null">
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
-              Remove
+              Delete
             </v-btn>
           </div>
           <LeafletMap
@@ -93,8 +106,9 @@
             :center="region.coordinates"
             :zoom="newLocation.zoom"
             :locations="locations"
-            @mark-location="markLocation($event)"
+            :draggable="true"
             @select-location="selectLocation($event)"
+            @mark-location="markLocation($event)"
             @move-location="moveLocation($event)"
           />
           <div class="d-flex">
@@ -121,7 +135,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapActions } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
@@ -129,12 +143,10 @@ export default {
   data() {
     return {
       newLocation: {
-        name: "Untitled",
+        locationId: null,
+        name: "",
         isLandmark: false,
-        coordinates: {
-          lat: null,
-          lng: null
-        },
+        coordinates: [null, null],
         zoom: 18,
         image: "",
         marker: null,
@@ -145,50 +157,45 @@ export default {
       selectedLocation: null
     };
   },
-  props: ['region', 'locations'],
+  props: ["region", "locations"],
   components: { LeafletMap },
   computed: {
     ...mapState({
       markers: state => state.markers
-    }),
+    })
   },
   methods: {
-    ...mapMutations([
-      "ADD_LOCATION_EDITOR",
-      "SET_COORDINATES_EDITOR",
-    ]),
+    ...mapActions(["addLocation", "updateLocation", "deleteLocation"]),
     markLocation(location) {
       this.clearLocation();
-      this.newLocation.coordinates = [
-        location.latlng.lat,
-        location.latlng.lng
-      ];
-      this.$store.commit("ADD_LOCATION_EDITOR", this.newLocation);
+      this.newLocation.coordinates = [location.latlng.lat, location.latlng.lng];
     },
-    async selectLocation(location) {
-      this.$store.dispatch("selectLocation", location).then(index => {
-        this.newLocation = {
-          name: this.locations[index].name,
-          isLandmark: this.locations[index].isLandmark,
-          coordinates: [
-            this.locations[index].coordinates[0],
-            this.locations[index].coordinates[1]
-          ],
-          zoom: this.locations[index].zoom,
-          image: this.locations[index].image,
-          marker: this.locations[index].marker,
-          draggable: true,
-          entries: this.locations[index].entries,
-          items: this.locations[index].items,
-        };
-        this.selectedLocation = index;
-      });
+    addLocation() {
+      this.$store.dispatch("addLocation", this.newLocation);
+      this.clearLocation();
     },
-    moveLocation(location) {
-      var coordinates = location.target.getLatLng();
-      var index = this.selectedLocation;
-      this.newLocation.coordinates = [coordinates.lat, coordinates.lng];
-      this.$store.commit("SET_COORDINATES_EDITOR", { coordinates, index });
+    selectLocation(index) {
+      const location = this.locations[index];
+      this.newLocation = {
+        locationId: location.locationId,
+        name: location.name,
+        isLandmark: location.isLandmark,
+        coordinates: location.coordinates,
+        zoom: location.zoom,
+        image: location.image,
+        marker: location.marker,
+        draggable: location.draggable,
+        entries: location.entries,
+        items: location.items
+      };
+      this.selectedLocation = index;
+    },
+    moveLocation(event) {
+      var coordinates = event.location.target.getLatLng();
+      var coords = [coordinates.lat, coordinates.lng];
+      var index = event.index;
+      this.newLocation.coordinates = coords;
+      this.$store.commit("SET_COORDINATES_EDITOR", { coords, index });
     },
     updateLocation() {
       this.$store.commit("UPDATE_LOCATION_EDITOR", {
@@ -196,14 +203,16 @@ export default {
         newLocation: this.newLocation
       });
     },
+    deleteLocation() {
+      this.$store.dispatch("deleteLocation", this.selectedLocation)
+      this.clearLocation();
+    },
     clearLocation() {
       this.newLocation = {
-        name: "Untitled",
+        locationId: null,
+        name: "",
         isLandmark: true,
-        coordinates: [
-          null,
-          null
-        ],
+        coordinates: [null, null],
         zoom: 18,
         image: "",
         marker: null,

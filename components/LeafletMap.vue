@@ -19,7 +19,7 @@
           :draggable="draggable"
           @click="$emit('select-location', index)"
           @dragstart="$emit('select-location', index)"
-          @dragend="$emit('move-location', index)"
+          @dragend="$emit('move-location', { location: $event, index: index })"
         ></l-marker>
       </l-map>
     </client-only>
