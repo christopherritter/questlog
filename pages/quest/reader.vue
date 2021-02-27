@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="fill-height pa-0">
     <v-layout class="fill-height">
-      <v-navigation-drawer light :width="sidebarWidth" permanent>
+      <v-navigation-drawer light :width="sidebarWidth" touchless permanent>
         <!-- Replaced width above -->
         <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
         <!-- Replaced permanent above -->
