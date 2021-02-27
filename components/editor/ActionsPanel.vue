@@ -40,6 +40,7 @@
                     label="Text"
                     outlined
                     hide-details="auto"
+                    light
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="4">
@@ -49,6 +50,7 @@
                     label="Type"
                     outlined
                     hide-details="auto"
+                    light
                   ></v-select>
                 </v-col>
                 <v-col cols="12" sm="8">
@@ -60,6 +62,7 @@
                     item-value="locationId"
                     hide-details="auto"
                     outlined
+                    light
                     @change="fetchTargetName($event)"
                   ></v-autocomplete>
                 </v-col>
@@ -69,6 +72,7 @@
                     :items="colors"
                     label="Color"
                     outlined
+                    light
                     hide-details="auto"
                   ></v-select>
                 </v-col>
@@ -78,6 +82,7 @@
                     :items="icons"
                     label="Icon"
                     outlined
+                    light
                     hide-details="auto"
                   ></v-select>
                 </v-col>

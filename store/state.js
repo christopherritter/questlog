@@ -73,7 +73,14 @@ export default () => ({
     'mdi-door',
     'mdi-eye',
     'mdi-hand-right',
-    'mdi-run'
+    'mdi-run',
+    'mdi-walk',
+    'mdi-barn',
+    'mdi-home',
+    'mdi-corn',
+    'mdi-smog',
+    'mdi-tractor-variant',
+    'mdi-fire'
   ],
   colors: [
     'red',
