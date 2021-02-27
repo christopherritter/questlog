@@ -126,7 +126,14 @@ export default {
       dialogDelete: false
     };
   },
-  props: ['actions'],
+  props: ["objectives", "locations", "actions"],
+  computed: {
+    ...mapState({
+      types: state => state.actionTypes,
+      icons: state => state.icons,
+      colors: state => state.icons,
+    })
+  },
   methods: {
     editAction(action) {
       this.editedIndex = this.actions.indexOf(action);
