@@ -61,11 +61,11 @@ export default () => ({
     gate: 'gate.png'
   },
   actionTypes: [
-    "Look",
+    // "Look",
     "Move",
-    "Place",
-    "Take",
-    "Use",
+    // "Place",
+    // "Take",
+    // "Use",
   ],
   icons: [
     'mdi-car-side',
