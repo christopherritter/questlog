@@ -132,7 +132,8 @@ export default {
     },
     selectAction(event) {
       if (event.type == "Move") {
-        this.viewLocation(event.target);
+        const index = this.locations.map(e => e.locationId).indexOf(event.target);
+        this.viewLocation(index);
       }
     },
     clearLocation() {
