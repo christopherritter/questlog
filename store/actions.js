@@ -114,6 +114,11 @@ export default {
     commit('SET_LOCATIONS_EDITOR', obj.locations);
   },
 
+  setObjective({ state, commit }, obj) {
+    const index = state.objectives.map(e => e.objectiveId).indexOf(obj.id);
+    commit("SET_OBJECTIVE", {index: index, bool: obj.bool})
+  },
+
   // Editor
 
   async publishQuest({

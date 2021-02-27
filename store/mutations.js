@@ -27,10 +27,10 @@ export default {
   },
 
   SET_OBJECTIVE: (state, {
-    id,
+    index,
     bool
   }) => {
-    state.demoData.objectives[id].isComplete = bool;
+    state.objectives[index].isComplete = bool;
   },
 
   SET_OBJECTIVES: (state, objectives) => {

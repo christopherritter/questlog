@@ -1,33 +1,29 @@
 <template>
   <v-sheet>
-    <v-img
-      v-if="location.image"
-      height="240"
-      :src="location.image"
-    ></v-img>
+    <v-img v-if="location.image" height="240" :src="location.image"></v-img>
 
     <v-card-title>
       {{ location.name }}
     </v-card-title>
 
-    <v-layout v-if="objectives.length > 0">
+    <v-layout v-if="localObjectives.length > 0">
       <v-flex class="px-4">
         <v-chip
           class="mr-2 mb-2"
           color="green"
           outlined
-          v-for="objective in objectives"
-          :key="objective.id"
-          @click="$emit('view-objective', objective.id)"
+          v-for="objective in localObjectives"
+          :key="objective.objectiveId"
+          @click="$emit('view-objective', objective.objectiveId)"
         >
           <v-icon class="mr-1">mdi-check-bold</v-icon> {{ objective.name }}
         </v-chip>
       </v-flex>
     </v-layout>
 
-    <v-card-text v-for="entry in entries" :key="entry.id">{{
-      entry.text
-    }}</v-card-text>
+    <div v-for="(entry, index) in entries" :key="index">
+      <v-card-text v-if="entryAllowed(entry)">{{ entry.text }}</v-card-text>
+    </div>
 
     <v-list>
       <v-list-item
@@ -48,21 +44,55 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "QuestSidebar",
   data() {
-    return {
-      panel: [0]
-    };
-  },
-  mounted() {
-    this.panel = [0];
+    return {};
   },
   props: ["location", "entries", "actions", "objectives"],
+  computed: {
+    localObjectives() {
+      var localObjectives = [];
+      if (this.entries) {
+        const entries = this.entries;
+
+        for (let e = 0; e < entries.length; e++) {
+          if (entries[e].objectives.length > 0) {
+            for (let i = 0; i < entries[e].objectives.length; i++) {
+              var objectiveId = entries[e].objectives[i];
+              const index = this.objectives
+                .map(obj => obj.objectiveId)
+                .indexOf(objectiveId);
+              var objective = {};
+              Object.assign(objective, this.objectives[index]);
+              localObjectives.push(objective);
+            }
+          }
+        }
+      }
+      return localObjectives;
+    }
+  },
   watch: {
-    entries(newVal, oldVal) {
-      if (newVal != oldVal) {
-        this.panel = [0];
+    localObjectives(val) {
+      if (val.length > 0) {
+        for (let i = 0; i < val.length; i++ ) {
+          var objective = val[i];
+          this.$store.dispatch("setObjective", { id: objective.objectiveId, bool: true })
+        }
+      }
+    }
+  },
+  methods: {
+    ...mapActions([
+      "setObjective",
+    ]),
+    entryAllowed(entry) {
+      const expiration = entry.expiration;
+      const requirements = entry.requirements;
+      if (expiration.length <= 0 && requirements.length <= 0) {
+        return true;
       }
     }
   }

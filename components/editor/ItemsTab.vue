@@ -49,7 +49,7 @@
                 :items="objectives"
                 label="Requirements"
                 item-text="name"
-                item-value="id"
+                item-value="objectiveId"
                 clearable
                 multiple
                 outlined
@@ -60,7 +60,7 @@
                 :items="objectives"
                 label="Expiration"
                 item-text="name"
-                item-value="id"
+                item-value="objectiveId"
                 clearable
                 multiple
                 outlined
@@ -71,7 +71,7 @@
                 :items="objectives"
                 label="Objectives"
                 item-text="name"
-                item-value="id"
+                item-value="objectiveId"
                 clearable
                 multiple
                 outlined

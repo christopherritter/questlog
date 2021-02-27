@@ -120,7 +120,8 @@ export default {
       newObjective: {
         name: "",
         description: "",
-        isPrimary: false
+        isPrimary: false,
+        isComplete: false,
       },
       currentObjective: null
     };
@@ -137,7 +138,8 @@ export default {
       this.newObjective = {
         name: objective.name,
         description: objective.description,
-        isPrimary: objective.isPrimary
+        isPrimary: objective.isPrimary,
+        isComplete: objective.isComplete,
       };
     },
     updateObjective() {
@@ -155,7 +157,8 @@ export default {
       this.newObjective = {
         name: "",
         description: "",
-        isPrimary: false
+        isPrimary: false,
+        isComplete: false,
       };
       this.currentObjective = null;
     },

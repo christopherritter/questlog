@@ -35,7 +35,7 @@
       </v-card-text>
       <v-card-text class="py-0"><h3>Objectives</h3></v-card-text>
       <v-list>
-        <v-list-item v-for="objective in objectives" :key="objective.id">
+        <v-list-item v-for="objective in objectives" :key="objective.objectiveId">
           <v-list-item-icon>
             <v-icon color="green" v-if="objective.isComplete"
               >mdi-check-bold</v-icon
