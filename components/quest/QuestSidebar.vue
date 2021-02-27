@@ -77,9 +77,12 @@ export default {
   watch: {
     localObjectives(val) {
       if (val.length > 0) {
+        console.log(val)
         for (let i = 0; i < val.length; i++ ) {
           var objective = val[i];
-          this.$store.dispatch("setObjective", { id: objective.objectiveId, bool: true })
+          if (objective.isComplete != true) {
+            this.$store.dispatch("setObjective", { id: objective.objectiveId, bool: true })
+          }
         }
       }
     }
