@@ -27,20 +27,20 @@
                       >{{ categories[category].name }}</v-chip
                     > -->
 
-                    <!-- <v-row class="mt-4 mb-1 body-2">
-                      <v-col class="py-1" cols="3" xs="3" md="3"
+                    <v-row class="mt-4 mb-1 body-2">
+                      <!-- <v-col class="py-1" cols="3" xs="3" md="3"
                         ><strong>Objectives</strong></v-col
                       >
                       <v-col class="py-1" cols="3" xs="3" md="3">{{
-                        quest.locations.length
-                      }}</v-col>
+                        objectives.length
+                      }}</v-col> -->
                       <v-col class="py-1" cols="3" xs="3" md="3"
                         ><strong>Locations</strong></v-col
                       >
                       <v-col class="py-1" cols="3" xs="3" md="3">{{
-                        quest.locations.length
+                        locations.length
                       }}</v-col>
-                      <v-col class="py-1" cols="3" xs="3" md="3"
+                      <!-- <v-col class="py-1" cols="3" xs="3" md="3"
                         ><strong>Entries</strong></v-col
                       >
                       <v-col class="py-1" cols="3" xs="3" md="3">{{
@@ -51,8 +51,8 @@
                       >
                       <v-col class="py-1" cols="3" xs="3" md="3">{{
                         quest.items.length
-                      }}</v-col>
-                    </v-row> -->
+                      }}</v-col> -->
+                    </v-row>
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-sheet
@@ -104,7 +104,7 @@
                   class="mb-16"
                   :center="quest.region.coordinates"
                   :zoom="quest.region.zoom"
-                  :locations="quest.locations"
+                  :locations="locations"
                 />
               </v-col>
             </v-row>
@@ -129,9 +129,9 @@ export default {
   },
   data() {
     return {
-      quest: null,
-      objectives: null,
-      locations: null,
+      quest: {},
+      objectives: [],
+      locations: [],
       loading: false,
       error: null,
     };
@@ -173,12 +173,12 @@ export default {
 
         const objectives = await objectivesRef.get();
         objectives.forEach(objective => {
-          this.$store.commit("ADD_OBJECTIVE_EDITOR", objective.data())
+          this.objectives.push(objective.data());
         });
 
         const locations = await locationsRef.get();
         locations.forEach(location => {
-          this.$store.commit("ADD_LOCATION_EDITOR", location.data())
+          this.locations.push(location.data());
         });
       }
       this.loading = false;
