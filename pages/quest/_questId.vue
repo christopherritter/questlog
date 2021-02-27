@@ -2,7 +2,13 @@
   <v-container fluid class="pa-0">
     <v-row>
       <v-col class="py-0">
-        <QuestHeader v-if="quest" :quest="quest" :questId="this.questId" />
+        <QuestHeader
+          v-if="quest"
+          :quest="quest"
+          :questId="this.questId"
+          :objectives="objectives"
+          :locations="locations"
+        />
       </v-col>
     </v-row>
 
@@ -133,7 +139,7 @@ export default {
       objectives: [],
       locations: [],
       loading: false,
-      error: null,
+      error: null
     };
   },
   components: { QuestHeader, LeafletMap },
@@ -150,10 +156,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations([
-      "ADD_OBJECTIVE_EDITOR",
-      "ADD_LOCATION_EDITOR"
-    ]),
+    ...mapMutations(["ADD_OBJECTIVE_EDITOR", "ADD_LOCATION_EDITOR"]),
     async fetchQuest() {
       this.error = this.quest = null;
       this.loading = true;

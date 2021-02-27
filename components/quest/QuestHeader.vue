@@ -29,7 +29,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   name: "QuestHeader",
-  props: ["quest", "questId"],
+  props: ["quest", "questId", "objectives", "locations"],
   computed: {
     ...mapState({
       categories: state => state.categories,
@@ -43,7 +43,11 @@ export default {
     ]),
     ...mapMutations(["SET_QUEST", "SET_QUEST_EDITOR"]),
     readQuest() {
-      this.$store.dispatch("readQuest", this.quest);
+      this.$store.dispatch("readQuest", {
+        quest: this.quest,
+        objectives: this.objectives,
+        locations: this.locations,
+      });
       this.$router.push("/quest/reader");
     },
     editQuest() {

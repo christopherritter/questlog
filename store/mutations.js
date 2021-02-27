@@ -33,6 +33,10 @@ export default {
     state.demoData.objectives[id].isComplete = bool;
   },
 
+  SET_OBJECTIVES: (state, objectives) => {
+    state.objectives = objectives;
+  },
+
   SET_LOCATION: (state, location) => {
     state.location = {
       name: location.name,
@@ -46,6 +50,10 @@ export default {
       marker: location.marker,
       draggable: location.draggable,
     }
+  },
+
+  SET_LOCATIONS: (state, locations) => {
+    state.locations = locations;
   },
 
   // _EDITOR

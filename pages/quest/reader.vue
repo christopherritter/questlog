@@ -7,7 +7,6 @@
         <!-- Replaced permanent above -->
         <!-- :permanent="selectedLocation != null ? true : false" -->
         <QuestSidebar
-
           id="QuestSidebar"
           class="fill-height"
           :objectives="[]"
@@ -21,7 +20,7 @@
         <QuestDialog
           :dialog="dialog"
           :quest="quest"
-          :objectives="quest.objectives"
+          :objectives="objectives"
           @open-dialog="dialog = true"
           @close-dialog="dialog = false"
           @restart-quest="restartQuest(quest.questId)"
@@ -34,7 +33,7 @@
           class="fill-height"
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
-          :locations="quest.locations"
+          :locations="locations"
           @select-location="viewLocation($event)"
           @clear-location="clearLocation()"
         />
@@ -54,24 +53,19 @@ export default {
   layout: "fluid",
   data() {
     return {
-      quest: {},
       selectedLocation: {},
       locationActions: [],
-      dialog: false
+      dialog: false,
+      loading: false,
+      error: null,
     };
-  },
-  created() {
-    const quest = this.$store.state.quest;
-    if (quest) {
-      Object.assign(this.quest, quest);
-    } else {
-      this.dialog = true;
-    }
   },
   components: { QuestSidebar, LeafletMap, QuestDialog },
   computed: {
     ...mapState({
-      objectives: state => state.demoData.objectives
+      quest: state => state.quest,
+      objectives: state => state.objectives,
+      locations: state => state.locations
     }),
     sidebarWidth() {
       if (Object.keys(this.selectedLocation).length !== 0) {
@@ -113,7 +107,7 @@ export default {
   },
   methods: {
     viewLocation(index) {
-      const location = this.quest.locations[index];
+      const location = this.locations[index];
 
       this.locationEntries(index);
       this.selectedLocation = location;
@@ -122,7 +116,7 @@ export default {
       this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
     },
     locationEntries(locationId) {
-      const location = this.quest.locations[locationId];
+      const location = this.locations[locationId];
       const entries = location.entries;
 
       var locationActions = [];

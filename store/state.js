@@ -2,6 +2,8 @@ export default () => ({
   authUser: null,
   user: null,
   quest: null,
+  objectives: null,
+  locations: null,
   editor: {
     quest: {
       questId: null,

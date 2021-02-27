@@ -97,8 +97,10 @@ export default {
 
   readQuest({
     commit
-  }, quest) {
-    commit('SET_QUEST', quest);
+  }, obj) {
+    commit('SET_QUEST', obj.quest);
+    commit('SET_OBJECTIVES', obj.objectives);
+    commit('SET_LOCATIONS', obj.locations);
   },
 
   // 'PLAY QUEST'
