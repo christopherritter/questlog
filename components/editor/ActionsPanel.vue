@@ -34,35 +34,48 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" sm="6" md="4">
+                <v-col cols="12" sm="12">
                   <v-text-field
                     v-model="editedAction.text"
                     label="Text"
+                    outlined
+                    hide-details="auto"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedAction.type"
+                <v-col cols="12" sm="4">
+                  <v-select
+                    :items="types"
                     label="Type"
-                  ></v-text-field>
+                    outlined
+                    hide-details="auto"
+                  ></v-select>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
+                <v-col cols="12" sm="8">
+                  <v-autocomplete
                     v-model="editedAction.target"
+                    :items="locations"
                     label="Target"
-                  ></v-text-field>
+                    item-text="name"
+                    item-value="locationId"
+                    hide-details="auto"
+                    outlined
+                  ></v-autocomplete>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedAction.icon"
-                    label="Icon"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field
-                    v-model="editedAction.color"
+                <v-col cols="12" sm="4">
+                  <v-select
+                    :items="colors"
                     label="Color"
-                  ></v-text-field>
+                    outlined
+                    hide-details="auto"
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-select
+                    :items="icons"
+                    label="Icon"
+                    outlined
+                    hide-details="auto"
+                  ></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -132,7 +145,7 @@ export default {
     ...mapState({
       types: state => state.actionTypes,
       icons: state => state.icons,
-      colors: state => state.icons,
+      colors: state => state.colors,
     })
   },
   methods: {

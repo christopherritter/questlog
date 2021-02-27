@@ -37,6 +37,8 @@
                 outlined
               ></v-textarea>
               <ActionsPanel
+                :objectives="objectives"
+                :locations="locations"
                 :actions="entry.actions"
                 @add-action="addAction($event)"
                 @edit-action="editAction($event)"
