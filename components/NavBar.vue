@@ -10,7 +10,7 @@
             this.$route.name == 'quest-player')
       "
     >
-      <v-btn plain nuxt :to="'/quest/' + quest.id">{{ quest.title }}</v-btn>
+      <v-btn plain nuxt :to="'/quest/' + quest.questId">{{ quest.title }}</v-btn>
     </span>
     <span v-else>
       <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
