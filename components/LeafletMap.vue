@@ -6,8 +6,7 @@
         :zoom="zoom"
         :center="[center[0], center[1]]"
         @click="$emit('mark-location', $event)"
-        :attributionControl="false"
-        :scrollWheelZoom="false"
+        :options="mapOptions"
       >
         <l-tile-layer
           url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -29,7 +28,7 @@
 <script>
 export default {
   name: "LeafletMap",
-  props: ["center", "zoom", "locations", "draggable"],
+  props: ["center", "zoom", "locations", "draggable", "mapOptions"],
   methods: {
     panTo(coordinates) {
       this.$refs.map.mapObject.setView([coordinates[0], coordinates[1]]);

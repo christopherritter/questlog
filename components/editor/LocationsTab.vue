@@ -154,7 +154,7 @@ export default {
         entries: [],
         items: []
       },
-      selectedLocation: null
+      selectedLocation: null,
     };
   },
   props: ["region", "locations"],

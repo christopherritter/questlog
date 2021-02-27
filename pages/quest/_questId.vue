@@ -111,6 +111,7 @@
                   :center="quest.region.coordinates"
                   :zoom="quest.region.zoom"
                   :locations="locations"
+                  :mapOptions="mapOptions"
                 />
               </v-col>
             </v-row>
@@ -138,6 +139,15 @@ export default {
       quest: {},
       objectives: [],
       locations: [],
+      mapOptions: {
+        dragging: false,
+        touchZoom: false,
+        doubleClickZoom: false,
+        scrollWheelZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        tap: false,
+      },
       loading: false,
       error: null
     };

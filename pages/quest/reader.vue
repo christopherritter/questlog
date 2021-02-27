@@ -65,7 +65,7 @@ export default {
     ...mapState({
       quest: state => state.quest,
       objectives: state => state.objectives,
-      locations: state => state.locations
+      locations: state => state.locations,
     }),
     sidebarWidth() {
       if (Object.keys(this.selectedLocation).length !== 0) {
