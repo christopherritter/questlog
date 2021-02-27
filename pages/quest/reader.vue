@@ -9,7 +9,7 @@
         <QuestSidebar
           id="QuestSidebar"
           class="fill-height"
-          :objectives="[]"
+          :objectives="objectives"
           :location="selectedLocation"
           :entries="selectedLocation.entries"
           :actions="locationActions"
