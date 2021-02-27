@@ -26,7 +26,7 @@
           @restart-quest="restartQuest(quest.questId)"
         />
       </v-navigation-drawer>
-      <v-flex>
+      <v-flex style="z-index: 0">
         <LeafletMap
           id="QuestMap"
           ref="qMap"
