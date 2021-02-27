@@ -163,10 +163,27 @@ export default {
         questId: result.id
       })
     } else {
-      const quest = state.editor.quest;
-      const questId = quest.questId;
-      const questRef = this.$fire.firestore.collection('quests').doc(questId);
-      const result = await questRef.update(quest);
+      const db = this.$fire.firestore;
+      const questId = state.editor.quest.questId;
+      const questRef = db.collection('quests').doc(questId);
+      const objectivesRef = questRef.collection("objectives");
+      const locationsRef = questRef.collection("locations");
+
+      // Get a new write batch
+      const batch = db.batch();
+
+      batch.update(questRef, state.editor.quest)
+
+      state.editor.objectives.forEach(objective => {
+        batch.set(objectivesRef.doc(objective.objectiveId), objective )
+      });
+
+      state.editor.locations.forEach(location => {
+        batch.set(locationsRef.doc(location.locationId), location )
+      });
+
+      // Commit the batch
+      await batch.commit();
     }
   },
 
