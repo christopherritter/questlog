@@ -9,7 +9,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - questlog',
+    titleTemplate: '%s - QuestLog',
     title: 'QuestLog Location-Based Adventures',
     htmlAttrs: {
       lang: 'en'
