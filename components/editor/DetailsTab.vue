@@ -41,12 +41,19 @@
         outlined
       ></v-autocomplete>
       <div class="d-flex">
-        <v-btn outlined dark @click="updateDetails()">
+        <v-btn outlined dark @click="updateDetails()" v-if="questSaved">
           Update
         </v-btn>
-        <v-btn dark outlined class="ml-2" @click="resetDetails()">Reset</v-btn>
+        <v-btn
+          dark
+          outlined
+          class="ml-2"
+          @click="resetDetails()"
+          v-if="questSaved"
+          >Reset</v-btn
+        >
         <v-spacer></v-spacer>
-        <v-btn outlined dark disabled>
+        <v-btn outlined dark disabled v-if="questSaved">
           Back
         </v-btn>
         <v-btn
@@ -54,6 +61,7 @@
           dark
           class="ml-2"
           @click="$emit('change-tab', 'region')"
+          v-if="questSaved"
         >
           Next
         </v-btn>
@@ -63,8 +71,12 @@
           color="primary"
           class="ml-2"
           @click="publishQuest()"
+          v-if="questSaved"
         >
           Publish
+        </v-btn>
+        <v-btn dark color="primary" class="ml-2" @click="publishQuest()" v-else>
+          Create
         </v-btn>
       </div>
     </v-card-text>
@@ -90,7 +102,7 @@ export default {
       error: null
     };
   },
-  props: ['quest'],
+  props: ["quest"],
   created() {
     if (this.quest) {
       this.fetchDetails();
@@ -100,7 +112,11 @@ export default {
     ...mapState({
       user: state => state.user,
       categories: state => state.categories
-    })
+    }),
+    questSaved() {
+      if (Object.keys(this.quest).length === 0) return false;
+      return true;
+    }
   },
   watch: {
     newDetails: {

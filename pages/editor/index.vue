@@ -3,9 +3,13 @@
     <v-row>
       <v-col>
         <h1 class="pt-6 pb-2">Quest Editor</h1>
-        <p>
+        <p v-if="questSaved">
           Build your own quest using the sections below. Once you're finished
-          you can save it to share with other adventurers.
+          you can publish it to share with other adventurers.
+        </p>
+        <p v-else>
+          Fill out the form below then click on the create button to start building
+          your quest.
         </p>
       </v-col>
     </v-row>
@@ -13,22 +17,22 @@
       <v-col cols="12">
         <v-form>
           <v-tabs vertical v-model="tab">
-            <v-tab href="#details">
+            <v-tab href="#details" v-if="questSaved">
               Quest
             </v-tab>
-            <v-tab href="#region">
+            <v-tab href="#region" v-if="questSaved">
               Region
             </v-tab>
-            <v-tab href="#objectives">
+            <v-tab href="#objectives" v-if="questSaved">
               Objectives
             </v-tab>
-            <v-tab href="#locations">
+            <v-tab href="#locations" v-if="questSaved">
               Locations
             </v-tab>
-            <v-tab href="#entries">
+            <v-tab href="#entries" v-if="questSaved">
               Entries
             </v-tab>
-            <v-tab href="#items">
+            <v-tab href="#items" v-if="questSaved">
               Items
             </v-tab>
 
@@ -112,7 +116,11 @@ export default {
       quest: state => state.editor.quest,
       objectives: state => state.editor.objectives,
       locations: state => state.editor.locations,
-    })
+    }),
+    questSaved() {
+      if (Object.keys(this.quest).length === 0) return false;
+      return true;
+    }
   },
   methods: {
     changeTab(tab) {

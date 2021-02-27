@@ -2,12 +2,9 @@ export default () => ({
   authUser: null,
   user: null,
   quest: null,
-  // region: null,
-  // location: null,
-  // entry: null,
-  // item: null,
   editor: {
     quest: {
+      questId: null,
       title: "",
       description: "",
       image: "",

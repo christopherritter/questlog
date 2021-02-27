@@ -58,6 +58,8 @@ export default {
 
   CLEAR_QUEST_EDITOR: (state) => {
     state.editor.quest = {};
+    state.editor.objectives = [];
+    state.editor.locations = [];
   },
 
   SET_DETAILS_EDITOR: (state, details) => {
