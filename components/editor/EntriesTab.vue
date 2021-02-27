@@ -178,7 +178,7 @@
             <v-spacer></v-spacer>
             <v-btn
               dark
-              @click="publishQuest"
+              @click="publishQuest()"
               color="primary"
               class="ml-2"
             >

@@ -176,7 +176,7 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn dark color="primary" class="ml-2">
+            <v-btn dark @click="publishQuest()" color="primary" class="ml-2">
               Publish
             </v-btn>
           </div>
@@ -272,6 +272,9 @@ export default {
     },
     deleteAction(index) {
       this.item.actions.splice(index, 1);
+    },
+    publishQuest() {
+      this.$store.dispatch("publishQuest");
     }
   }
 };
