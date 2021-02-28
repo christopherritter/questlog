@@ -107,7 +107,7 @@ export default {
         description: "",
         image: "",
         categories: [],
-        startingPoint: null,
+        startingPoint: "",
       },
       loading: false,
       error: null
