@@ -62,7 +62,7 @@ export default {
         name: 'profile'
       });
       commit("SET_USER", profile);
-      // this.$router.back();
+      this.$router.push("/");
     }
 
     // userRef.get()
