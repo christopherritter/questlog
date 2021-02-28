@@ -31,8 +31,11 @@ export default {
   props: ["center", "zoom", "locations", "draggable", "mapOptions"],
   methods: {
     panTo(coordinates) {
-      this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
-    }
+      this.$nextTick(() => {
+        this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
+      });
+
+    },
   }
 };
 </script>

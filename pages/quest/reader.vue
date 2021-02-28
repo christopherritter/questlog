@@ -60,6 +60,9 @@ export default {
       error: null
     };
   },
+  mounted() {
+    this.viewLocation(0);
+  },
   components: { QuestSidebar, LeafletMap, QuestDialog },
   computed: {
     ...mapState({
