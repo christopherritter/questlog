@@ -61,6 +61,14 @@ export default {
     };
   },
   components: { QuestSidebar, LeafletMap, QuestDialog },
+  created() {
+    // if (this.quest.startingPoint) {
+    //   var index = 0
+    //   this.viewLocation(index);
+    // } else {
+    //   this.viewLocation(0);
+    // }
+  },
   computed: {
     ...mapState({
       quest: state => state.quest,
@@ -90,12 +98,14 @@ export default {
         for (let e = 0; e < this.entries.length; e++) {
           if (this.entries[e].objectives) {
             for (let o = 0; o < this.entries[e].objectives.length; o++) {
-              this.$store.dispatch("updateObjective", {
-                id: this.entries[e].objectives[o],
+              var objective = {};
+              Object.assign(objective, this.entries[e].objectives[o])
+              this.$store.dispatch("setObjective", {
+                id: objective,
                 bool: true
               });
               locationObjectives.push(
-                this.objectives[this.entries[e].objectives[o]]
+                this.objectives[objective]
               );
             }
           }
