@@ -61,11 +61,6 @@ export default {
     };
   },
   components: { QuestSidebar, LeafletMap, QuestDialog },
-  mounted() {
-    if (this.locations.length > 0) {
-      this.viewLocation(0)
-    }
-  },
   computed: {
     ...mapState({
       quest: state => state.quest,

@@ -31,13 +31,7 @@ export default {
   props: ["center", "zoom", "locations", "draggable", "mapOptions"],
   methods: {
     panTo(coordinates) {
-      if ((this.$refs.lMap = "undefined")) {
-        this.$nextTick(() => {
-          this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
-        });
-      } else {
-        this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
-      }
+      this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
     }
   }
 };
