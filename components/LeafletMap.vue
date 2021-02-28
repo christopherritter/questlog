@@ -2,7 +2,7 @@
   <div id="map-wrap">
     <client-only>
       <l-map
-        ref="map"
+        ref="lMap"
         :zoom="zoom"
         :center="[center[0], center[1]]"
         @click="$emit('mark-location', $event)"
@@ -31,7 +31,13 @@ export default {
   props: ["center", "zoom", "locations", "draggable", "mapOptions"],
   methods: {
     panTo(coordinates) {
-      this.$refs.map.mapObject.setView([coordinates[0], coordinates[1]]);
+      if ((this.$refs.lMap = "undefined")) {
+        this.$nextTick(() => {
+          this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
+        });
+      } else {
+        this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
+      }
     }
   }
 };
