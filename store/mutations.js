@@ -56,6 +56,12 @@ export default {
     state.locations = locations;
   },
 
+  CLEAR_QUEST: (state) => {
+    state.quest = {};
+    state.objectives = [];
+    state.locations = [];
+  },
+
   // _EDITOR
 
   SET_QUEST_EDITOR: (state, quest) => {

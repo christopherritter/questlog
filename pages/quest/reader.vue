@@ -61,14 +61,15 @@ export default {
     };
   },
   components: { QuestSidebar, LeafletMap, QuestDialog },
-  created() {
-    // if (this.quest.startingPoint) {
-    //   var index = 0
-    //   this.viewLocation(index);
-    // } else {
-      // this.viewLocation(0);
-    // }
-  },
+  // mounted() {
+  //   console.log("Quest Starting")
+  //   if (this.quest.startingPoint) {
+  //     var index = 0
+  //     this.viewLocation(index);
+  //   } else {
+  //     this.viewLocation(0);
+  //   }
+  // },
   computed: {
     ...mapState({
       quest: state => state.quest,
@@ -130,9 +131,10 @@ export default {
       var locationActions = [];
 
       for (var e = 0; e < location.entries.length; e++) {
-        let entryActions = entries[e].actions;
+        let entryActions = [];
+        Object.assign(entryActions, entries[e].actions);
         for (let a = 0; a < entryActions.length; a++) {
-          locationActions.push(entryActions[a]);
+          locationActions.concat(entryActions);
         }
       }
 
@@ -150,12 +152,13 @@ export default {
     },
     restartQuest() {
       this.dialog = false;
-      // if (this.quest.startingPoint) {
-      //   var index = 0;
-      //   this.viewLocation(index);
-      // } else {
-        // this.viewLocation(0)
-      // }
+      if (this.quest.startingPoint) {
+        console.log(this.quest.startingPoint)
+        // var index = 0;
+        // this.viewLocation(index);
+      } else {
+        this.viewLocation(0)
+      }
       for (let i = 0; i < this.objectives.length; i++) {
         this.$store.commit("SET_OBJECTIVE", {
           index: i,
