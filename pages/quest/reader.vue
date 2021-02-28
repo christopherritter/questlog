@@ -61,7 +61,9 @@ export default {
     };
   },
   mounted() {
-    this.viewLocation(0);
+    if (this.locations.length > 0) {
+      this.viewLocation(0);
+    }
   },
   components: { QuestSidebar, LeafletMap, QuestDialog },
   computed: {
