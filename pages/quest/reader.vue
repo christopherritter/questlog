@@ -57,30 +57,21 @@ export default {
       locationActions: [],
       dialog: false,
       loading: false,
-      error: null,
+      error: null
     };
   },
   components: { QuestSidebar, LeafletMap, QuestDialog },
-  mounted() {
-    // console.log("Quest Starting")
-    // if (this.quest.startingPoint) {
-    //   var index = 0
-    //   this.viewLocation(index);
-    // } else {
-    //   this.viewLocation(0);
-    // }
-  },
   computed: {
     ...mapState({
       quest: state => state.quest,
       objectives: state => state.objectives,
-      locations: state => state.locations,
+      locations: state => state.locations
     }),
     sidebarWidth() {
       if (Object.keys(this.selectedLocation).length !== 0) {
-        return this.$vuetify.breakpoint.smAndUp ? 450 : '85vw';
+        return this.$vuetify.breakpoint.smAndUp ? 450 : "85vw";
       } else {
-        return 0
+        return 0;
       }
     },
     mapWidth() {
@@ -100,7 +91,7 @@ export default {
           if (this.entries[e].objectives) {
             for (let o = 0; o < this.entries[e].objectives.length; o++) {
               var objective = {};
-              Object.assign(objective, this.entries[e].objectives[o])
+              Object.assign(objective, this.entries[e].objectives[o]);
               this.$store.dispatch("setObjective", {
                 id: objective,
                 bool: true
@@ -111,7 +102,7 @@ export default {
       }
 
       return locationObjectives;
-    },
+    }
   },
   methods: {
     ...mapMutations(["SET_OBJECTIVE"]),
@@ -143,7 +134,9 @@ export default {
     },
     selectAction(event) {
       if (event.type == "Move") {
-        const index = this.locations.map(e => e.locationId).indexOf(event.target);
+        const index = this.locations
+          .map(e => e.locationId)
+          .indexOf(event.target);
         this.viewLocation(index);
       }
     },
@@ -155,10 +148,10 @@ export default {
       this.dialog = false;
       // if (this.quest.startingPoint) {
       //   console.log(this.quest.startingPoint)
-        // var index = 0;
-        // this.viewLocation(index);
+      // var index = 0;
+      // this.viewLocation(index);
       // } else {
-        this.viewLocation(0)
+      this.viewLocation(0);
       // }
       for (let i = 0; i < this.objectives.length; i++) {
         this.$store.commit("SET_OBJECTIVE", {
