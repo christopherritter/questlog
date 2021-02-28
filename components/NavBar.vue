@@ -9,16 +9,17 @@
           (this.$route.name == 'quest-reader' ||
             this.$route.name == 'quest-player')
       "
+      class="hidden-sm-and-down"
     >
       <v-btn plain nuxt :to="'/quest/' + quest.questId">{{ quest.title }}</v-btn>
     </span>
-    <span v-else>
+    <span v-else class="hidden-sm-and-down">
       <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
       <v-btn plain @click="questEditor()">Build your Own!</v-btn>
     </span>
 
     <v-spacer />
-    <span v-if="$store.state.authUser">
+    <span v-if="$store.state.authUser" class="hidden-sm-and-down">
       <v-btn icon nuxt to="/profile/myFavorites">
         <v-icon>mdi-heart</v-icon>
       </v-btn>
