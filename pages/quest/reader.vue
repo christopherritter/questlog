@@ -66,7 +66,7 @@ export default {
     //   var index = 0
     //   this.viewLocation(index);
     // } else {
-    //   this.viewLocation(0);
+      // this.viewLocation(0);
     // }
   },
   computed: {
@@ -104,9 +104,6 @@ export default {
                 id: objective,
                 bool: true
               });
-              locationObjectives.push(
-                this.objectives[objective]
-              );
             }
           }
         }
@@ -152,6 +149,13 @@ export default {
       this.locationActions = [];
     },
     restartQuest() {
+      this.dialog = false;
+      // if (this.quest.startingPoint) {
+      //   var index = 0;
+      //   this.viewLocation(index);
+      // } else {
+        // this.viewLocation(0)
+      // }
       for (let i = 0; i < this.objectives.length; i++) {
         this.$store.commit("SET_OBJECTIVE", {
           index: i,

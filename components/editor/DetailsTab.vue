@@ -25,6 +25,16 @@
         hint="Describe your quest."
         outlined
       ></v-textarea>
+      <v-autocomplete
+        v-model="newDetails.startingPoint"
+        :items="locations"
+        label="Starting Point"
+        item-text="name"
+        clearable
+        outlined
+        no-filter
+        return-object
+      ></v-autocomplete>
       <v-text-field
         v-model="newDetails.image"
         label="Image"
@@ -96,13 +106,14 @@ export default {
         isAnonymous: false,
         description: "",
         image: "",
-        categories: []
+        categories: [],
+        startingPoint: null,
       },
       loading: false,
       error: null
     };
   },
-  props: ["quest"],
+  props: ["quest", "locations"],
   created() {
     if (this.quest) {
       this.fetchDetails();
@@ -111,7 +122,7 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user,
-      categories: state => state.categories
+      categories: state => state.categories,
     }),
     questSaved() {
       if (Object.keys(this.quest).length === 0) return false;
@@ -139,7 +150,8 @@ export default {
         author: this.quest.author,
         description: this.quest.description,
         image: this.quest.image,
-        categories: this.quest.categories
+        categories: this.quest.categories,
+        startingPoint: this.quest.startingPoint,
       });
     },
     updateDetails() {

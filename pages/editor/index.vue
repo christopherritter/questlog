@@ -39,7 +39,7 @@
             <v-tab-item value="details">
               <DetailsTab
                 :quest="quest"
-                :user="user"
+                :locations="locations"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
