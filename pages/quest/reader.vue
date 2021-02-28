@@ -133,7 +133,9 @@ export default {
       for (var e = 0; e < location.entries.length; e++) {
         let entryActions = entries[e].actions;
         for (let a = 0; a < entryActions.length; a++) {
-          locationActions.push(entryActions[a]);
+          let action = {};
+          Object.assign(action, entryActions[a]);
+          locationActions.push(action);
         }
       }
 
