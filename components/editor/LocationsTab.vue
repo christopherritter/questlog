@@ -145,6 +145,7 @@
                     v-model="sortLocations"
                     :items="sort"
                     label="Sort"
+                    disabled
                     outlined
                     hide-details
                   ></v-select>
@@ -231,7 +232,7 @@ export default {
       selectedLocation: null,
       selectedView: 0,
       searchTerm: "",
-      sortLocations: "",
+      sortLocations: "Alphabetically",
       sort: [
         "Alphabetically", "Numerically"
       ]
@@ -244,8 +245,14 @@ export default {
       markers: state => state.markers
     }),
     filterByTerm() {
-      let searchTerm = this.searchTerm;
-      return this.locations.filter(location => {
+      let searchTerm = this.searchTerm.toLowerCase();
+      let locations = this.locations.slice();
+
+      if (this.sortLocations === "Alphabetically") {
+        locations.sort((a, b) => (a.name > b.name) ? 1 : -1)
+      }
+
+      return locations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
     }
