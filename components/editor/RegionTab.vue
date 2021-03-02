@@ -120,7 +120,7 @@ export default {
       this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
     },
     moveLocation(event) {
-      const latLng = event.target.getLatLng();
+      const latLng = event.location.target.getLatLng();
       this.newRegion.coordinates = [latLng.lat, latLng.lng];
     },
     updateRegion() {
