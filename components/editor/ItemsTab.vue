@@ -27,7 +27,6 @@
                 item-text="name"
                 clearable
                 outlined
-                no-filter
                 return-object
               ></v-autocomplete>
               <v-textarea
@@ -53,7 +52,6 @@
                 clearable
                 multiple
                 outlined
-                no-filter
               ></v-autocomplete>
               <v-autocomplete
                 v-model="item.expiration"
@@ -64,7 +62,6 @@
                 clearable
                 multiple
                 outlined
-                no-filter
               ></v-autocomplete>
               <v-autocomplete
                 v-model="item.objectives"
@@ -75,7 +72,6 @@
                 clearable
                 multiple
                 outlined
-                no-filter
               ></v-autocomplete>
               <div class="d-flex justify-end">
                 <v-btn
