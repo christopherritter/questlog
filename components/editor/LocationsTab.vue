@@ -71,11 +71,7 @@
                     @click="addLocation()"
                     >Add</v-btn
                   >
-                  <v-btn
-                    v-else
-                    dark
-                    outlined
-                    @click="updateLocation()"
+                  <v-btn v-else dark outlined @click="updateLocation()"
                     >Update</v-btn
                   >
                   <v-spacer></v-spacer>
@@ -85,22 +81,44 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col>
-          <div class="mt-5 mb-4 align-center">
-            <v-btn text dark @click="editLocation()" :disabled="selectedLocation === null">
+        <v-col cols="8">
+          <v-row class="mt-4 mb-3 mx-0 align-center">
+            <v-btn
+              text
+              dark
+              @click="editLocation()"
+              :disabled="selectedLocation === null"
+            >
               <v-icon class="mr-2">
                 mdi-pencil
               </v-icon>
               Edit
             </v-btn>
-            <v-btn text dark @click="deleteLocation()" :disabled="selectedLocation === null">
+            <v-btn
+              text
+              dark
+              @click="deleteLocation()"
+              :disabled="selectedLocation === null"
+            >
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
               Delete
             </v-btn>
-          </div>
+            <v-spacer></v-spacer>
+            <v-btn-toggle dense borderless group v-model="selectedView">
+              <v-btn>
+                <v-icon class="mr-2">mdi-format-align-left</v-icon>
+                Map View
+              </v-btn>
+              <v-btn>
+                <v-icon class="mr-2">mdi-format-align-center</v-icon>
+                List View
+              </v-btn>
+            </v-btn-toggle>
+          </v-row>
           <LeafletMap
+            v-if="selectedView === 0"
             id="LocationMap"
             class="mb-5"
             :center="region.coordinates"
@@ -111,7 +129,62 @@
             @mark-location="markLocation($event)"
             @move-location="moveLocation($event)"
           />
-          <div class="d-flex">
+          <v-row v-else>
+            <v-col class="pt-0">
+              <v-row>
+                <v-col cols="12" sm="8">
+                  <v-text-field
+                    v-model="searchTerm"
+                    label="Find Location"
+                    outlined
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col sm="4">
+                  <v-select
+                    v-model="sortLocations"
+                    :items="sort"
+                    label="Sort"
+                    outlined
+                    hide-details
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row class="my-0">
+                <v-list two-line width="100%">
+                  <v-list-item
+                    v-for="(location, index) in filterByTerm"
+                    :key="location.locationId"
+                    @click="selectLocation(index)"
+                  >
+                    <v-list-item-avatar>
+                      <v-icon class="grey lighten-1" dark>
+                        mdi-map-marker
+                      </v-icon>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="location.name"
+                      ></v-list-item-title>
+
+                      <v-list-item-subtitle
+                        >{{ location.coordinates[0] }},
+                        {{ location.coordinates[1] }}</v-list-item-subtitle
+                      >
+                    </v-list-item-content>
+
+                    <v-list-item-action>
+                      <v-btn icon>
+                        <v-icon color="grey lighten-1">mdi-information</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row class="mt-2 mx-0">
             <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
               Back
             </v-btn>
@@ -127,7 +200,7 @@
             <v-btn dark @click="publishQuest()" color="primary">
               Publish
             </v-btn>
-          </div>
+          </v-row>
         </v-col>
       </v-row>
     </v-card-text>
@@ -156,6 +229,12 @@ export default {
         items: []
       },
       selectedLocation: null,
+      selectedView: 0,
+      searchTerm: "",
+      sortLocations: "",
+      sort: [
+        "Alphabetically", "Numerically"
+      ]
     };
   },
   props: ["region", "locations"],
@@ -163,7 +242,13 @@ export default {
   computed: {
     ...mapState({
       markers: state => state.markers
-    })
+    }),
+    filterByTerm() {
+      let searchTerm = this.searchTerm;
+      return this.locations.filter(location => {
+        return location.name.toLowerCase().includes(searchTerm);
+      });
+    }
   },
   methods: {
     ...mapActions(["addLocation", "updateLocation", "deleteLocation"]),
@@ -206,7 +291,7 @@ export default {
       });
     },
     deleteLocation() {
-      this.$store.dispatch("deleteLocation", this.selectedLocation)
+      this.$store.dispatch("deleteLocation", this.selectedLocation);
       this.clearLocation();
     },
     clearLocation() {
