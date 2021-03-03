@@ -279,7 +279,6 @@ export default {
         }
 
       } else if (val === "Numerically") {
-        console.log("Numerically")
         locations.sort((a, b) => (a.order > b.order) ? 1 : -1);
 
         if (locations != this.locations) {
