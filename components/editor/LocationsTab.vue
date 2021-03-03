@@ -193,7 +193,7 @@
               </v-row>
             </v-col>
           </v-row>
-          <v-row class="mt-2 mx-0">
+          <v-row class="my-2 mx-0">
             <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
               Back
             </v-btn>
