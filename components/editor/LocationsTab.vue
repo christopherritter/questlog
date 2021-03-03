@@ -137,6 +137,7 @@
                     v-model="searchTerm"
                     label="Find Location"
                     outlined
+                    clearable
                     hide-details
                   ></v-text-field>
                 </v-col>
@@ -145,7 +146,6 @@
                     v-model="sortLocations"
                     :items="sort"
                     label="Sort"
-                    disabled
                     outlined
                     hide-details
                   ></v-select>
@@ -209,7 +209,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
@@ -232,10 +232,8 @@ export default {
       selectedLocation: null,
       selectedView: 0,
       searchTerm: "",
-      sortLocations: "Alphabetically",
-      sort: [
-        "Alphabetically", "Numerically"
-      ]
+      sortLocations: "",
+      sort: ["Alphabetically", "Numerically"]
     };
   },
   props: ["region", "locations"],
@@ -248,17 +246,32 @@ export default {
       let searchTerm = this.searchTerm.toLowerCase();
       let locations = this.locations.slice();
 
-      if (this.sortLocations === "Alphabetically") {
-        locations.sort((a, b) => (a.name > b.name) ? 1 : -1)
-      }
+      // if (this.sortLocations === "Alphabetically") {
+      //   locations.sort((a, b) => (a.name > b.name) ? 1 : -1)
+      // }
 
       return locations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
     }
   },
+  watch: {
+    sortLocations(val) {
+      let locations = this.locations.slice();
+
+      if (val === "Alphabetically") {
+        locations.sort((a, b) => (a.name > b.name) ? 1 : -1);
+
+        if (locations != this.locations) {
+          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+        }
+
+      }
+    }
+  },
   methods: {
     ...mapActions(["addLocation", "updateLocation", "deleteLocation"]),
+    ...mapMutations(["SET_LOCATIONS_EDITOR"]),
     markLocation(location) {
       this.clearLocation();
       this.newLocation.coordinates = [location.latlng.lat, location.latlng.lng];
