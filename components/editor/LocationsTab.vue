@@ -53,6 +53,12 @@
                 max="18"
                 thumb-label
               ></v-slider>
+              <v-select
+                v-model="newLocation.order"
+                :items="orderItems"
+                label="Order"
+                outlined
+              ></v-select>
               <v-text-field
                 v-model="newLocation.image"
                 label="Image"
@@ -157,10 +163,8 @@
                     :key="location.locationId"
                     @click="selectLocation(location)"
                   >
-                    <v-list-item-avatar>
-                      <v-icon class="grey lighten-1" dark>
-                        mdi-map-marker
-                      </v-icon>
+                    <v-list-item-avatar color="indigo" size="48">
+                      <span class="white--text headline">{{ location.order }}</span>
                     </v-list-item-avatar>
 
                     <v-list-item-content>
@@ -222,6 +226,7 @@ export default {
         isStartingPoint: false,
         coordinates: [null, null],
         zoom: 18,
+        order: null,
         image: "",
         marker: null,
         draggable: true,
@@ -245,13 +250,16 @@ export default {
       let searchTerm = this.searchTerm.toLowerCase();
       let locations = this.locations.slice();
 
-      // if (this.sortLocations === "Alphabetically") {
-      //   locations.sort((a, b) => (a.name > b.name) ? 1 : -1)
-      // }
-
       return locations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
+    },
+    orderItems() {
+      const orderItems = [];
+      for (let i = 0; i < this.locations.length; i++) {
+        orderItems.push(i + 1);
+      }
+      return orderItems;
     }
   },
   watch: {
@@ -259,13 +267,21 @@ export default {
       let locations = this.locations.slice();
 
       if (val === "Alphabetically") {
-        locations.sort((a, b) => (a.name > b.name) ? 1 : -1);
+        locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
         if (locations != this.locations) {
           this.$store.commit("SET_LOCATIONS_EDITOR", locations);
         }
+      } else if (val === "Numerically") {
+        console.log("Numerically");
+        locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
+        if (locations != this.locations) {
+          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+        }
       }
+
+      this.clearLocation();
     }
   },
   methods: {
@@ -280,7 +296,7 @@ export default {
       this.clearLocation();
     },
     selectLocation(location) {
-      const index = this.locations.indexOf(location)
+      const index = this.locations.indexOf(location);
       this.newLocation = {
         locationId: location.locationId,
         name: location.name,
@@ -288,6 +304,7 @@ export default {
         isStartingPoint: location.isStartingPoint,
         coordinates: location.coordinates,
         zoom: location.zoom,
+        order: location.order || 0,
         image: location.image,
         marker: location.marker,
         draggable: location.draggable,
@@ -297,7 +314,7 @@ export default {
       this.selectedLocation = index;
     },
     moveLocation(location) {
-      const index = this.locations.indexOf(location)
+      const index = this.locations.indexOf(location);
       const coordinates = location.coordinates;
       this.newLocation.coordinates = coordinates;
       this.$store.commit("SET_COORDINATES_EDITOR", { coordinates, index });
@@ -307,6 +324,7 @@ export default {
         selectedLocation: this.selectedLocation,
         newLocation: this.newLocation
       });
+      this.clearLocation();
     },
     deleteLocation() {
       this.$store.dispatch("deleteLocation", this.selectedLocation);
@@ -320,6 +338,7 @@ export default {
         isStartingPoint: false,
         coordinates: [null, null],
         zoom: 18,
+        order: null,
         image: "",
         marker: null,
         draggable: true,
