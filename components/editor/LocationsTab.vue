@@ -157,39 +157,38 @@
                 </v-col>
               </v-row>
               <v-row class="my-0">
-                <v-list-item-group
-                  v-model="selectedLocation"
-                  color="light-blue darken-1"
-                >
-                  <v-list two-line width="100%">
-                    <v-list-item
-                      v-for="location in filterByTerm"
-                      :key="location.locationId"
-                      @click="selectLocation(location)"
-                    >
-                      <v-list-item-avatar color="light-blue darken-1">
-                        <v-icon class="white--text" dark>
-                          mdi-map-marker
-                        </v-icon>
-                      </v-list-item-avatar>
+                <v-col>
+                  <v-list-item-group
+                    v-model="selectedLocation"
+                    color="light-blue darken-1"
+                  >
+                    <v-list width="100%">
+                      <v-list-item
+                        v-for="location in filterByTerm"
+                        :key="location.locationId"
+                        @click="selectLocation(location)"
+                      >
+                        <v-list-item-avatar color="light-blue darken-1">
+                          <v-icon class="white--text" dark>
+                            mdi-map-marker
+                          </v-icon>
+                        </v-list-item-avatar>
 
-                      <v-list-item-content>
-                        <v-list-item-title
-                          v-text="location.name"
-                        ></v-list-item-title>
+                        <v-list-item-content>
+                          <v-list-item-title
+                            v-text="location.name"
+                          ></v-list-item-title>
+                        </v-list-item-content>
 
-                        <v-list-item-subtitle
-                          >{{ location.coordinates[0] }},
-                          {{ location.coordinates[1] }}</v-list-item-subtitle
-                        >
-                      </v-list-item-content>
-
-                      <v-list-item-avatar color="grey darken-2" size="36">
-                        <span class="white--text title">{{ location.order }}</span>
-                      </v-list-item-avatar>
-                    </v-list-item>
-                  </v-list>
-                </v-list-item-group>
+                        <v-list-item-avatar color="grey darken-2" size="36">
+                          <span class="white--text title">{{
+                            location.order
+                          }}</span>
+                        </v-list-item-avatar>
+                      </v-list-item>
+                    </v-list>
+                  </v-list-item-group>
+                </v-col>
               </v-row>
             </v-col>
           </v-row>
@@ -272,14 +271,13 @@ export default {
       let locations = this.locations.slice();
 
       if (val === "Alphabetically") {
-        locations.sort((a, b) => (a.name > b.name) ? 1 : -1);
+        locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
         if (locations != this.locations) {
           this.$store.commit("SET_LOCATIONS_EDITOR", locations);
         }
-
       } else if (val === "Numerically") {
-        locations.sort((a, b) => (a.order > b.order) ? 1 : -1);
+        locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
         if (locations != this.locations) {
           this.$store.commit("SET_LOCATIONS_EDITOR", locations);
@@ -301,7 +299,7 @@ export default {
       this.clearLocation();
     },
     selectLocation(location) {
-      const index = this.locations.indexOf(location)
+      const index = this.locations.indexOf(location);
       this.newLocation = {
         locationId: location.locationId,
         name: location.name,
@@ -319,7 +317,7 @@ export default {
       this.selectedLocation = index;
     },
     moveLocation(location) {
-      const index = this.locations.indexOf(location)
+      const index = this.locations.indexOf(location);
       const coordinates = location.coordinates;
       this.newLocation.coordinates = coordinates;
       this.$store.commit("SET_COORDINATES_EDITOR", { coordinates, index });
