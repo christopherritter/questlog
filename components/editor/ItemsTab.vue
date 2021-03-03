@@ -96,15 +96,38 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12" md="7" lg="8" class="d-flex flex-column">
-          <div class="d-flex flex-shrink-0 mt-5 mb-4 align-center">
+        <v-col cols="12" md="7" lg="8">
+          <v-row class="mt-5 mb-4 align-center">
             <v-btn text dark :disabled="!selectedItem" @click="removeItem()">
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
               Remove
             </v-btn>
-          </div>
+          </v-row>
+          <v-row>
+            <v-col class="pt-0 pb-2">
+              <v-row>
+                <v-col cols="12" sm="8">
+                  <v-text-field
+                    v-model="searchTerm"
+                    label="Find Location"
+                    outlined
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col sm="4">
+                  <v-select
+                    v-model="sortLocations"
+                    :items="sort"
+                    label="Sort Locations"
+                    outlined
+                    hide-details
+                  ></v-select>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
           <!-- <div>
             <v-card outlined>
               <v-card-text>
@@ -112,52 +135,64 @@
               </v-card-text>
             </v-card>
           </div> -->
-          <v-list
-            span
-            v-for="(location, l) in locations"
-            :key="l"
-            subheader
-            two-line
-          >
-            <v-subheader>{{ location.name }}</v-subheader>
-            <v-list-item-group v-model="selectedItem" color="green">
-              <template v-for="(item, e) in location.items">
-                <v-list-item
-                  :key="`item-${l}-${e}`"
-                  :value="`item-${l}-${e}`"
-                  @click="
-                    selectItem({
-                      locationIndex: l,
-                      itemIndex: e,
-                      item: item
-                    })
-                  "
-                >
-                  <v-list-item-avatar>
-                    <v-icon dark color="grey darken-3" class="grey lighten-1">
-                      mdi-feather
-                    </v-icon>
-                  </v-list-item-avatar>
+          <v-row>
+            <v-col>
+              <v-list
+                span
+                v-for="(location, l) in filterByTerm"
+                :key="l"
+                subheader
+                two-line
+              >
+                <v-subheader>{{ location.name }}</v-subheader>
+                <v-list-item-group v-model="selectedItem" color="green">
+                  <template v-for="(item, e) in location.items">
+                    <v-list-item
+                      :key="`item-${l}-${e}`"
+                      :value="`item-${l}-${e}`"
+                      @click="
+                        selectItem({
+                          locationIndex: l,
+                          itemIndex: e,
+                          item: item
+                        })
+                      "
+                    >
+                      <v-list-item-avatar>
+                        <v-icon
+                          dark
+                          color="grey darken-3"
+                          class="grey lighten-1"
+                        >
+                          mdi-feather
+                        </v-icon>
+                      </v-list-item-avatar>
 
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                      <v-list-item-content>
+                        <v-list-item-title
+                          v-text="item.name"
+                        ></v-list-item-title>
 
-                    <v-list-item-subtitle
-                      v-text="item.description"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
+                        <v-list-item-subtitle
+                          v-text="item.description"
+                        ></v-list-item-subtitle>
+                      </v-list-item-content>
 
-                  <v-list-item-action>
-                    <v-btn icon>
-                      <v-icon color="grey lighten-1">mdi-information</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </template>
-            </v-list-item-group>
-            <v-divider class="mt-4 mb-2"></v-divider>
-          </v-list>
-          <div class="d-flex flex-grow-1 flex-shrink-1 align-end justify-end">
+                      <v-list-item-action>
+                        <v-btn icon>
+                          <v-icon color="grey lighten-1"
+                            >mdi-information</v-icon
+                          >
+                        </v-btn>
+                      </v-list-item-action>
+                    </v-list-item>
+                  </template>
+                </v-list-item-group>
+                <v-divider class="mt-4 mb-2"></v-divider>
+              </v-list>
+            </v-col>
+          </v-row>
+          <v-row class="my-2 mx-0 align-end justify-end">
             <v-btn outlined dark @click="$emit('change-tab', 'locations')">
               Back
             </v-btn>
@@ -173,7 +208,7 @@
             <v-btn dark @click="publishQuest()" color="primary" class="ml-2">
               Publish
             </v-btn>
-          </div>
+          </v-row>
         </v-col>
       </v-row>
     </v-card-text>
@@ -199,11 +234,45 @@ export default {
       selectedItem: "undefined",
       selectedLocation: null,
       locationIndex: null,
-      itemIndex: null
+      itemIndex: null,
+      searchTerm: "",
+      sortLocations: "",
+      sort: ["Alphabetically", "Numerically"]
     };
   },
-  props: ['objectives', 'locations'],
+  props: ["objectives", "locations"],
+  computed: {
+    filterByTerm() {
+      let searchTerm = this.searchTerm.toLowerCase();
+      let locations = this.locations.slice();
+
+      return locations.filter(location => {
+        return location.name.toLowerCase().includes(searchTerm);
+      });
+    }
+  },
   components: { ActionsPanel },
+  watch: {
+    sortLocations(val) {
+      let locations = this.locations.slice();
+
+      if (val === "Alphabetically") {
+        locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+        if (locations != this.locations) {
+          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+        }
+      } else if (val === "Numerically") {
+        locations.sort((a, b) => (a.order > b.order ? 1 : -1));
+
+        if (locations != this.locations) {
+          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+        }
+      }
+
+      this.clearItems();
+    }
+  },
   methods: {
     ...mapMutations([
       "ADD_ITEM_EDITOR",
