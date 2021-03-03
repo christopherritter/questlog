@@ -118,7 +118,7 @@ export default {
   },
 
   SET_COORDINATES_EDITOR: (state, location) => {
-    state.editor.locations[location.index].coordinates = location.coords;
+    state.editor.locations[location.index].coordinates = location.coordinates;
   },
 
   ADD_ENTRY_EDITOR: (state, obj) => {

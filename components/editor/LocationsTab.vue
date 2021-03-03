@@ -137,7 +137,6 @@
                     v-model="searchTerm"
                     label="Find Location"
                     outlined
-                    clearable
                     hide-details
                   ></v-text-field>
                 </v-col>
@@ -154,9 +153,9 @@
               <v-row class="my-0">
                 <v-list two-line width="100%">
                   <v-list-item
-                    v-for="(location, index) in filterByTerm"
+                    v-for="location in filterByTerm"
                     :key="location.locationId"
-                    @click="selectLocation(index)"
+                    @click="selectLocation(location)"
                   >
                     <v-list-item-avatar>
                       <v-icon class="grey lighten-1" dark>
@@ -280,8 +279,8 @@ export default {
       this.$store.dispatch("addLocation", this.newLocation);
       this.clearLocation();
     },
-    selectLocation(index) {
-      const location = this.locations[index];
+    selectLocation(location) {
+      const index = this.locations.indexOf(location)
       this.newLocation = {
         locationId: location.locationId,
         name: location.name,
@@ -297,12 +296,11 @@ export default {
       };
       this.selectedLocation = index;
     },
-    moveLocation(event) {
-      var coordinates = event.location.target.getLatLng();
-      var coords = [coordinates.lat, coordinates.lng];
-      var index = event.index;
-      this.newLocation.coordinates = coords;
-      this.$store.commit("SET_COORDINATES_EDITOR", { coords, index });
+    moveLocation(location) {
+      const index = this.locations.indexOf(location)
+      const coordinates = location.coordinates;
+      this.newLocation.coordinates = coordinates;
+      this.$store.commit("SET_COORDINATES_EDITOR", { coordinates, index });
     },
     updateLocation() {
       this.$store.commit("UPDATE_LOCATION_EDITOR", {

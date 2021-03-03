@@ -16,9 +16,9 @@
           :key="index"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
-          @click="$emit('select-location', index)"
-          @dragstart="$emit('select-location', index)"
-          @dragend="$emit('move-location', { location: $event, index: index })"
+          @click="$emit('select-location', location)"
+          @dragstart="$emit('select-location', location)"
+          @dragend="$emit('move-location', location)"
         ></l-marker>
       </l-map>
     </client-only>
@@ -34,8 +34,7 @@ export default {
       this.$nextTick(() => {
         this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
       });
-
-    },
+    }
   }
 };
 </script>
