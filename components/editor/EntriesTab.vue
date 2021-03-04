@@ -16,21 +16,21 @@
                 </v-btn>
               </div>
               <v-text-field
-                v-model="entry.title"
+                v-model="newEntry.title"
                 label="Title"
                 outlined
               ></v-text-field>
               <v-autocomplete
-                v-model="selectedLocation"
+                v-model="newEntry.location"
                 :items="locations"
                 label="Location"
                 item-text="name"
-                clearable
+                item-value="locationId"
                 outlined
                 return-object
               ></v-autocomplete>
               <v-textarea
-                v-model="entry.text"
+                v-model="newEntry.text"
                 label="Text"
                 hide-details="auto"
                 outlined
@@ -38,45 +38,42 @@
               <ActionsPanel
                 :objectives="objectives"
                 :locations="locations"
-                :actions="entry.actions"
+                :actions="newEntry.actions"
                 @add-action="addAction($event)"
                 @edit-action="editAction($event)"
                 @delete-action="deleteAction($event)"
               />
               <v-autocomplete
-                v-model="entry.requirements"
+                v-model="newEntry.requirements"
                 :items="objectives"
                 label="Requirements"
                 item-text="name"
                 item-value="objectiveId"
-                clearable
                 multiple
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="entry.expiration"
+                v-model="newEntry.expiration"
                 :items="objectives"
                 label="Expiration"
                 item-text="name"
                 item-value="objectiveId"
-                clearable
                 multiple
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="entry.objectives"
+                v-model="newEntry.objectives"
                 :items="objectives"
                 label="Objectives"
                 item-text="name"
                 item-value="objectiveId"
-                clearable
                 multiple
                 outlined
               ></v-autocomplete>
               <div class="d-flex justify-end">
                 <v-btn
                   v-if="selectedEntry == 'undefined'"
-                  :disable="!selectedLocation"
+                  :disabled="newEntry.location == ''"
                   dark
                   outlined
                   @click="addEntry()"
@@ -153,6 +150,7 @@
                       @click="
                         selectEntry({
                           locationIndex: l,
+                          location: location,
                           entryIndex: e,
                           entry: entry
                         })
@@ -223,16 +221,16 @@ export default {
   name: "EntriesTab",
   data() {
     return {
-      entry: {
+      newEntry: {
         title: "",
         text: "",
+        location: "",
         actions: [],
         requirements: [],
         expiration: [],
         objectives: []
       },
       selectedEntry: "undefined",
-      selectedLocation: null,
       locationIndex: null,
       entryIndex: null,
       searchTerm: "",
@@ -271,7 +269,7 @@ export default {
       }
 
       this.clearEntry();
-    }
+    },
   },
   methods: {
     ...mapActions(["publishQuest"]),
@@ -281,40 +279,46 @@ export default {
       "REMOVE_ENTRY_EDITOR"
     ]),
     addEntry() {
-      var index = this.locations.indexOf(this.selectedLocation);
+      const locationId = this.newEntry.location.locationId;
+      const locationIndex = this.findWithAttr(locationId);
       this.$store.commit("ADD_ENTRY_EDITOR", {
-        selectedLocation: index,
-        entry: this.entry
+        selectedLocation: locationIndex,
+        entry: this.newEntry
       });
       this.clearEntry();
     },
     selectEntry(obj) {
-      Object.assign(this.entry, obj.entry);
-      this.selectedLocation = this.locations[obj.locationIndex];
-      this.locationIndex = obj.locationIndex;
+      const locationIndex = this.locations.indexOf(obj.location);
+      Object.assign(this.newEntry, obj.entry);
+      this.newEntry.location = obj.location.locationId;
+      this.locationIndex = locationIndex;
       this.entryIndex = obj.entryIndex;
     },
     updateEntry() {
+      const locationId = this.newEntry.location;
+      const locationIndex = this.findWithAttr(locationId);
       this.$store.commit("UPDATE_ENTRY_EDITOR", {
-        selectedLocation: this.locationIndex,
+        selectedLocation: locationIndex,
         selectedEntry: this.entryIndex,
-        entry: this.entry
+        entry: this.newEntry
       });
       this.clearEntry();
     },
     removeEntry() {
+      const locationId = this.newEntry.location;
+      const locationIndex = this.findWithAttr(locationId);
+
       this.$store.commit("REMOVE_ENTRY_EDITOR", {
-        locationIndex: this.locationIndex,
+        locationIndex: locationIndex,
         entryIndex: this.entryIndex
       });
       this.clearEntry();
     },
     clearEntry() {
       this.selectedEntry = "undefined";
-      this.selectedLocation = null;
-      this.entry = {
+      this.newEntry = {
         title: "",
-        location: {},
+        location: "",
         text: "",
         actions: [],
         requirements: [],
@@ -323,21 +327,30 @@ export default {
       };
 
       this.selectedEntry = "undefined";
-      this.selectedLocation = null;
       this.locationIndex = null;
       this.entryIndex = null;
     },
     addAction(event) {
-      this.entry.actions.push(event.action);
+      this.newEntry.actions.push(event.action);
     },
     editAction(event) {
-      Object.assign(this.entry.actions[event.index], event.action);
+      Object.assign(this.newEntry.actions[event.index], event.action);
     },
     deleteAction(index) {
-      this.entry.actions.splice(index, 1);
+      this.newEntry.actions.splice(index, 1);
     },
     publishQuest() {
       this.$store.dispatch("publishQuest");
+    },
+    findWithAttr(value) {
+      const array = this.locations;
+      const attr = "locationId";
+      for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
+          return i;
+        }
+      }
+      return -1;
     }
   }
 };
