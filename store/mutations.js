@@ -81,7 +81,7 @@ export default {
     state.editor.quest.description = details.description || "";
     state.editor.quest.image = details.image || "";
     state.editor.quest.categories = details.categories || [];
-    state.editor.quest.featured = false;
+    state.editor.quest.startingPoint = details.startingPoint || "";
   },
 
   SET_REGION_EDITOR: (state, region) => {

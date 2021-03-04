@@ -30,10 +30,8 @@
         :items="locations"
         label="Starting Point"
         item-text="name"
-        clearable
+        item-value="locationId"
         outlined
-        no-filter
-        return-object
       ></v-autocomplete>
       <v-text-field
         v-model="newDetails.image"
