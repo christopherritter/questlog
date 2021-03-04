@@ -325,8 +325,10 @@ export default {
       this.$store.commit("SET_COORDINATES_EDITOR", { coordinates, index });
     },
     updateLocation() {
+      const locationId = this.newLocation.locationId;
+      const locationIndex = this.findWithAttr(locationId);
       this.$store.commit("UPDATE_LOCATION_EDITOR", {
-        selectedLocation: this.selectedLocation,
+        selectedLocation: locationIndex,
         newLocation: this.newLocation
       });
       this.clearLocation();
@@ -357,6 +359,16 @@ export default {
         this.updateLocation();
       }
       this.$store.dispatch("publishQuest");
+    },
+    findWithAttr(value) {
+      const array = this.locations;
+      const attr = "locationId";
+      for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
+          return i;
+        }
+      }
+      return -1;
     }
   }
 };

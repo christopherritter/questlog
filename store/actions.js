@@ -290,11 +290,11 @@ export default {
   }, location) {
     const questId = state.editor.quest.questId;
     const questRef = this.$fire.firestore.collection('quests');
-    const locationId = state.editor.locations[location.currentLocation].locationId;
+    const locationId = state.editor.locations[location.selectedLocation].locationId;
     const locationsRef = questRef.doc(questId).collection("locations");
 
     var newLocation = location.newLocation;
-    var currentLocation = location.currentLocation;
+    var currentLocation = location.selectedLocation;
 
     commit("UPDATE_LOCATION_EDITOR", {
       currentLocation: currentLocation,
