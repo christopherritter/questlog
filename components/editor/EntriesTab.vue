@@ -156,7 +156,12 @@
                   </span>
                   {{ location.name }}
                   <v-spacer></v-spacer>
-                  <v-avatar rounded size="24" class="mr-2" color="grey darken-3">
+                  <v-avatar
+                    rounded
+                    size="24"
+                    class="mr-2"
+                    color="grey darken-3"
+                  >
                     <span class="text--white">
                       {{ location.order }}
                     </span>
@@ -197,9 +202,14 @@
                       </v-list-item-content>
 
                       <v-list-item-action>
-                        <v-list-item-avatar rounded color="grey darken-2" class="mr-2" size="36">
+                        <v-list-item-avatar
+                          rounded
+                          color="grey darken-2"
+                          class="mr-2"
+                          size="36"
+                        >
                           <span class="white--text title">{{
-                            entry.order
+                            entry.order | toLetters
                           }}</span>
                         </v-list-item-avatar>
                       </v-list-item-action>
@@ -269,7 +279,7 @@ export default {
       return locations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
-    },
+    }
   },
   components: { ActionsPanel },
   watch: {
@@ -295,6 +305,25 @@ export default {
     "newEntry.location": function(val) {
       const locationIndex = this.findWithAttr(val);
       this.selectedLocation = this.locations[locationIndex];
+    }
+  },
+  filters: {
+    toLetters(num) {
+      "use strict";
+      var mod = num % 26;
+      var pow = (num / 26) | 0;
+      var out = mod ? String.fromCharCode(64 + mod) : (pow--, "Z");
+      return pow ? toLetters(pow) + out : out;
+    },
+    fromLetters(str) {
+      "use strict";
+      var out = 0,
+        len = str.length,
+        pos = len;
+      while ((pos -= 1) > -1) {
+        out += (str.charCodeAt(pos) - 64) * Math.pow(26, len - 1 - pos);
+      }
+      return out;
     }
   },
   methods: {
