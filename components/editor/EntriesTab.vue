@@ -31,9 +31,14 @@
               <v-textarea
                 v-model="newEntry.text"
                 label="Text"
-                hide-details="auto"
                 outlined
               ></v-textarea>
+              <v-text-field
+                v-model="newEntry.order"
+                label="Order"
+                outlined
+                hide-details
+              ></v-text-field>
               <ActionsPanel
                 :objectives="objectives"
                 :locations="locations"
@@ -140,7 +145,23 @@
                 subheader
                 two-line
               >
-                <v-subheader>{{ location.name }}</v-subheader>
+                <v-subheader>
+                  <v-btn icon rounded elevation="0" color="grey lighten-1">
+                    <v-icon dark>
+                      mdi-map-marker
+                    </v-icon>
+                  </v-btn>
+                  <span class="black--text">
+                    {{ location.order }}
+                  </span>
+                  {{ location.name }}
+                  <v-spacer></v-spacer>
+                  <v-avatar rounded size="24" class="mr-2" color="grey darken-3">
+                    <span class="text--white">
+                      {{ location.order }}
+                    </span>
+                  </v-avatar>
+                </v-subheader>
                 <v-list-item-group v-model="selectedEntry" color="green">
                   <template v-for="(entry, e) in location.entries">
                     <v-list-item
@@ -158,8 +179,8 @@
                       <v-list-item-avatar>
                         <v-icon
                           dark
-                          color="grey darken-3"
-                          class="grey lighten-1"
+                          color="white darken-1"
+                          class="indigo darken-1"
                         >
                           mdi-feather
                         </v-icon>
@@ -176,11 +197,11 @@
                       </v-list-item-content>
 
                       <v-list-item-action>
-                        <v-btn icon>
-                          <v-icon color="grey lighten-1"
-                            >mdi-information</v-icon
-                          >
-                        </v-btn>
+                        <v-list-item-avatar rounded color="grey darken-2" class="mr-2" size="36">
+                          <span class="white--text title">{{
+                            entry.order
+                          }}</span>
+                        </v-list-item-avatar>
                       </v-list-item-action>
                     </v-list-item>
                   </template>
@@ -224,6 +245,7 @@ export default {
         title: "",
         text: "",
         location: "",
+        order: 1,
         actions: [],
         requirements: [],
         expiration: [],
@@ -247,7 +269,7 @@ export default {
       return locations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
-    }
+    },
   },
   components: { ActionsPanel },
   watch: {
@@ -270,10 +292,10 @@ export default {
 
       this.clearEntry();
     },
-    'newEntry.location': function (val){
+    "newEntry.location": function(val) {
       const locationIndex = this.findWithAttr(val);
       this.selectedLocation = this.locations[locationIndex];
-     },
+    }
   },
   methods: {
     ...mapActions(["publishQuest"]),
@@ -295,6 +317,9 @@ export default {
       const locationIndex = this.locations.indexOf(obj.location);
       Object.assign(this.newEntry, obj.entry);
       this.newEntry.location = obj.location.locationId;
+      if (!obj.location.order) {
+        this.newEntry.order = 1;
+      }
       this.locationIndex = locationIndex;
       this.entryIndex = obj.entryIndex;
     },
@@ -324,6 +349,7 @@ export default {
         title: "",
         location: "",
         text: "",
+        order: 1,
         actions: [],
         requirements: [],
         expiration: [],

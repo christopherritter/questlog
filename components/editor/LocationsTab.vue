@@ -53,12 +53,11 @@
                 max="18"
                 thumb-label
               ></v-slider>
-              <v-select
+              <v-text-field
                 v-model="newLocation.order"
-                :items="orderItems"
                 label="Order"
                 outlined
-              ></v-select>
+              ></v-text-field>
               <v-text-field
                 v-model="newLocation.image"
                 label="Image"
@@ -180,7 +179,7 @@
                           ></v-list-item-title>
                         </v-list-item-content>
 
-                        <v-list-item-avatar color="grey darken-2" size="36">
+                        <v-list-item-avatar rounded color="grey darken-2" size="36">
                           <span class="white--text title">{{
                             location.order
                           }}</span>
@@ -258,15 +257,15 @@ export default {
         return location.name.toLowerCase().includes(searchTerm);
       });
     },
-    orderItems() {
-      const orderItems = [];
-      var i;
-      for (i = 0; i < this.locations.length; i++) {
-        orderItems.push(i + 1);
-      }
-      orderItems.push(i + 1);
-      return orderItems;
-    }
+    // orderItems() {
+    //   const orderItems = [];
+    //   var i;
+    //   for (i = 0; i < this.locations.length; i++) {
+    //     orderItems.push(i + 1);
+    //   }
+    //   orderItems.push(i + 1);
+    //   return orderItems;
+    // }
   },
   watch: {
     sortLocations(val) {
