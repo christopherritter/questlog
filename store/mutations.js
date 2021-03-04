@@ -144,7 +144,7 @@ export default {
   },
 
   REMOVE_ITEM_EDITOR: (state, obj) => {
-    state.editor.locations[obj.locationIndex].entries.splice(obj.itemIndex, 1);
+    state.editor.locations[obj.locationIndex].items.splice(obj.itemIndex, 1);
   },
 
   ADD_ACTION_EDITOR: (state, action) => {

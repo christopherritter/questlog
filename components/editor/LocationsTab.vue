@@ -260,9 +260,11 @@ export default {
     },
     orderItems() {
       const orderItems = [];
-      for (let i = 0; i < this.locations.length; i++) {
+      var i;
+      for (i = 0; i < this.locations.length; i++) {
         orderItems.push(i + 1);
       }
+      orderItems.push(i + 1);
       return orderItems;
     }
   },

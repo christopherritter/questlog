@@ -27,7 +27,6 @@
                 item-text="name"
                 item-value="locationId"
                 outlined
-                return-object
               ></v-autocomplete>
               <v-textarea
                 v-model="newEntry.text"
@@ -230,6 +229,7 @@ export default {
         expiration: [],
         objectives: []
       },
+      selectedLocation: {},
       selectedEntry: "undefined",
       locationIndex: null,
       entryIndex: null,
@@ -270,6 +270,10 @@ export default {
 
       this.clearEntry();
     },
+    'newEntry.location': function (val){
+      const locationIndex = this.findWithAttr(val);
+      this.selectedLocation = this.locations[locationIndex];
+     },
   },
   methods: {
     ...mapActions(["publishQuest"]),
@@ -279,7 +283,7 @@ export default {
       "REMOVE_ENTRY_EDITOR"
     ]),
     addEntry() {
-      const locationId = this.newEntry.location.locationId;
+      const locationId = this.newEntry.location;
       const locationIndex = this.findWithAttr(locationId);
       this.$store.commit("ADD_ENTRY_EDITOR", {
         selectedLocation: locationIndex,

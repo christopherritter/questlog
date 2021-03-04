@@ -16,21 +16,20 @@
                 </v-btn>
               </div>
               <v-text-field
-                v-model="item.name"
+                v-model="newItem.name"
                 label="Name"
                 outlined
               ></v-text-field>
               <v-autocomplete
-                v-model="selectedLocation"
+                v-model="newItem.location"
                 :items="locations"
                 label="Location"
                 item-text="name"
-                clearable
+                item-value="locationId"
                 outlined
-                return-object
               ></v-autocomplete>
               <v-textarea
-                v-model="item.description"
+                v-model="newItem.description"
                 label="Description"
                 hide-details="auto"
                 outlined
@@ -38,45 +37,42 @@
               <ActionsPanel
                 :objectives="objectives"
                 :locations="locations"
-                :actions="item.actions"
+                :actions="newItem.actions"
                 @add-action="addAction($event)"
                 @edit-action="editAction($event)"
                 @delete-action="deleteAction($event)"
               />
               <v-autocomplete
-                v-model="item.requirements"
+                v-model="newItem.requirements"
                 :items="objectives"
                 label="Requirements"
                 item-text="name"
                 item-value="objectiveId"
-                clearable
                 multiple
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="item.expiration"
+                v-model="newItem.expiration"
                 :items="objectives"
                 label="Expiration"
                 item-text="name"
                 item-value="objectiveId"
-                clearable
                 multiple
                 outlined
               ></v-autocomplete>
               <v-autocomplete
-                v-model="item.objectives"
+                v-model="newItem.objectives"
                 :items="objectives"
                 label="Objectives"
                 item-text="name"
                 item-value="objectiveId"
-                clearable
                 multiple
                 outlined
               ></v-autocomplete>
               <div class="d-flex justify-end">
                 <v-btn
                   v-if="selectedItem == 'undefined'"
-                  :disable="!selectedLocation"
+                  :disabled="newItem.location == ''"
                   dark
                   outlined
                   @click="addItem()"
@@ -102,7 +98,7 @@
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
-              Remove
+              Delete
             </v-btn>
           </v-row>
           <v-row>
@@ -146,14 +142,15 @@
               >
                 <v-subheader>{{ location.name }}</v-subheader>
                 <v-list-item-group v-model="selectedItem" color="green">
-                  <template v-for="(item, e) in location.items">
+                  <template v-for="(item, i) in location.items">
                     <v-list-item
-                      :key="`item-${l}-${e}`"
-                      :value="`item-${l}-${e}`"
+                      :key="`item-${l}-${i}`"
+                      :value="`item-${l}-${i}`"
                       @click="
                         selectItem({
                           locationIndex: l,
-                          itemIndex: e,
+                          location: location,
+                          itemIndex: i,
                           item: item
                         })
                       "
@@ -216,23 +213,24 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import ActionsPanel from "@/components/editor/ActionsPanel.vue";
 
 export default {
   name: "ItemsTab",
   data() {
     return {
-      item: {
-        name: "",
-        description: "",
+      newItem: {
+        title: "",
+        text: "",
+        location: "",
         actions: [],
         requirements: [],
         expiration: [],
         objectives: []
       },
+      selectedLocation: {},
       selectedItem: "undefined",
-      selectedLocation: null,
       locationIndex: null,
       itemIndex: null,
       searchTerm: "",
@@ -270,51 +268,62 @@ export default {
         }
       }
 
-      this.clearItems();
-    }
+      this.clearItem();
+    },
+    'newItem.location': function (val){
+      const locationIndex = this.findWithAttr(val);
+      this.selectedLocation = this.locations[locationIndex];
+     },
   },
   methods: {
+    ...mapActions(["publishQuest"]),
     ...mapMutations([
       "ADD_ITEM_EDITOR",
       "UPDATE_ITEM_EDITOR",
       "REMOVE_ITEM_EDITOR"
     ]),
     addItem() {
-      var index = this.locations.indexOf(this.selectedLocation);
+      const locationId = this.newItem.location;
+      const locationIndex = this.findWithAttr(locationId);
       this.$store.commit("ADD_ITEM_EDITOR", {
-        selectedLocation: index,
-        item: this.item
+        selectedLocation: locationIndex,
+        item: this.newItem
       });
       this.clearItem();
     },
     selectItem(obj) {
-      Object.assign(this.item, obj.item);
-      this.selectedLocation = this.locations[obj.locationIndex];
-      this.locationIndex = obj.locationIndex;
+      const locationIndex = this.locations.indexOf(obj.location);
+      Object.assign(this.newItem, obj.item);
+      this.newItem.location = obj.location.locationId;
+      this.locationIndex = locationIndex;
       this.itemIndex = obj.itemIndex;
     },
     updateItem() {
+      const locationId = this.newItem.location;
+      const locationIndex = this.findWithAttr(locationId);
       this.$store.commit("UPDATE_ITEM_EDITOR", {
-        selectedLocation: this.locationIndex,
+        selectedLocation: locationIndex,
         selectedItem: this.itemIndex,
-        item: this.item
+        item: this.newItem
       });
       this.clearItem();
     },
     removeItem() {
+      const locationId = this.newItem.location;
+      const locationIndex = this.findWithAttr(locationId);
+
       this.$store.commit("REMOVE_ITEM_EDITOR", {
-        locationIndex: this.locationIndex,
+        locationIndex: locationIndex,
         itemIndex: this.itemIndex
       });
       this.clearItem();
     },
     clearItem() {
       this.selectedItem = "undefined";
-      this.selectedLocation = null;
-      this.item = {
-        name: "",
-        location: {},
-        description: "",
+      this.newItem = {
+        title: "",
+        location: "",
+        text: "",
         actions: [],
         requirements: [],
         expiration: [],
@@ -322,21 +331,30 @@ export default {
       };
 
       this.selectedItem = "undefined";
-      this.selectedLocation = null;
       this.locationIndex = null;
       this.itemIndex = null;
     },
     addAction(event) {
-      this.item.actions.push(event.action);
+      this.newItem.actions.push(event.action);
     },
     editAction(event) {
-      Object.assign(this.item.actions[event.index], event.action);
+      Object.assign(this.newItem.actions[event.index], event.action);
     },
     deleteAction(index) {
-      this.item.actions.splice(index, 1);
+      this.newItem.actions.splice(index, 1);
     },
     publishQuest() {
       this.$store.dispatch("publishQuest");
+    },
+    findWithAttr(value) {
+      const array = this.locations;
+      const attr = "locationId";
+      for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
+          return i;
+        }
+      }
+      return -1;
     }
   }
 };
