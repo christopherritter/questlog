@@ -209,7 +209,7 @@
                           size="36"
                         >
                           <span class="white--text title">{{
-                            entry.order | toLetters
+                            entry.order
                           }}</span>
                         </v-list-item-avatar>
                       </v-list-item-action>
