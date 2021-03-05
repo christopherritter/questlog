@@ -56,14 +56,14 @@ export default {
     const doc = await userRef.get();
     if (!doc.exists) {
       // console.log('No such document!');
-      const newUserRef = this.$fire.firestore.collection('users').doc();
+      const newUserRef = this.$fire.firestore.collection('users').doc(uid);
 
       var newUser = {
         email: state.authUser.email,
         myFavorites: [],
         myQuests: [],
         name: "Anonymous",
-        userId: state.authUser.uid
+        userId: uid
       }
 
       // Later...
@@ -96,12 +96,13 @@ export default {
   },
 
   async updateUserName({
-    state
-  }, name) {
+    state, commit
+  }, userName) {
     const userRef = this.$fire.firestore.collection('users').doc(state.authUser.uid);
     const result = await userRef.update({
-      name: name
+      name: userName
     });
+    commit("SET_USER_NAME", userName);
   },
 
   // Quest

@@ -100,8 +100,8 @@ export default {
     return {
       newDetails: {
         title: "",
-        author: "Anonymous",
-        isAnonymous: false,
+        author: "",
+        isAnonymous: true,
         description: "",
         image: "",
         categories: [],

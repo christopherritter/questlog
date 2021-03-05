@@ -18,6 +18,10 @@ export default {
     state.user = user
   },
 
+  SET_USER_NAME: (state, userName) => {
+    state.user.name = userName;
+  },
+
   SET_QUEST: (state, quest) => {
     state.quest = quest
   },
