@@ -57,9 +57,9 @@ export default {
   },
 
   CLEAR_QUEST: (state) => {
-    Object.assign(state.quest, initialState());
-    Object.assign(state.objectives, initialState());
-    Object.assign(state.locations, initialState());
+    state.quest = {};
+    state.objectives = [];
+    state.locations = [];
   },
 
   // _EDITOR
@@ -69,9 +69,9 @@ export default {
   },
 
   CLEAR_QUEST_EDITOR: (state) => {
-    Object.assign(state.editor.quest, initialState());
-    Object.assign(state.editor.objectives, initialState());
-    Object.assign(state.editor.locations, initialState());
+    state.editor.quest = {};
+    state.editor.objectives = [];
+    state.editor.locations = [];
   },
 
   SET_DETAILS_EDITOR: (state, details) => {
