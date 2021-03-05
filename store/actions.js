@@ -49,13 +49,28 @@ export default {
   },
 
   async fetchUserProfile({
-    commit
+    state, commit
   }, uid) {
     const userRef = this.$fire.firestore.collection('users').doc(uid);
 
     const doc = await userRef.get();
     if (!doc.exists) {
-      console.log('No such document!');
+      // console.log('No such document!');
+      const newUserRef = this.$fire.firestore.collection('users').doc();
+
+      var newUser = {
+        email: state.authUser.email,
+        myFavorites: [],
+        myQuests: [],
+        name: "Anonymous",
+        userId: state.authUser.uid
+      }
+
+      // Later...
+      const res = await newUserRef.set(newUser);
+
+      commit("SET_USER", newUser);
+      this.$router.push("/");
     } else {
       var profile = doc.data();
       if (profile.name.length <= 0) this.$router.push({
