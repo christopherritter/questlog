@@ -151,9 +151,6 @@
                       mdi-map-marker
                     </v-icon>
                   </v-btn>
-                  <span class="black--text">
-                    {{ location.order }}
-                  </span>
                   {{ location.name }}
                   <v-spacer></v-spacer>
                   <v-avatar
