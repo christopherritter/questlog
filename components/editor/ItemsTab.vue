@@ -31,9 +31,14 @@
               <v-textarea
                 v-model="newItem.description"
                 label="Description"
-                hide-details="auto"
                 outlined
               ></v-textarea>
+              <v-text-field
+                v-model="newItem.order"
+                label="Order"
+                outlined
+                hide-details
+              ></v-text-field>
               <ActionsPanel
                 :objectives="objectives"
                 :locations="locations"
@@ -140,7 +145,25 @@
                 subheader
                 two-line
               >
-                <v-subheader>{{ location.name }}</v-subheader>
+                <v-subheader>
+                  <v-btn icon rounded elevation="0" color="grey lighten-1">
+                    <v-icon dark>
+                      mdi-map-marker
+                    </v-icon>
+                  </v-btn>
+                  {{ location.name }}
+                  <v-spacer></v-spacer>
+                  <v-avatar
+                    rounded
+                    size="24"
+                    class="mr-2"
+                    color="grey darken-3"
+                  >
+                    <span class="text--white">
+                      {{ location.order }}
+                    </span>
+                  </v-avatar>
+                </v-subheader>
                 <v-list-item-group v-model="selectedItem" color="green">
                   <template v-for="(item, i) in location.items">
                     <v-list-item
@@ -176,11 +199,16 @@
                       </v-list-item-content>
 
                       <v-list-item-action>
-                        <v-btn icon>
-                          <v-icon color="grey lighten-1"
-                            >mdi-information</v-icon
-                          >
-                        </v-btn>
+                        <v-list-item-avatar
+                          rounded
+                          color="grey darken-2"
+                          class="mr-2"
+                          size="36"
+                        >
+                          <span class="white--text title">{{
+                            item.order
+                          }}</span>
+                        </v-list-item-avatar>
                       </v-list-item-action>
                     </v-list-item>
                   </template>
@@ -224,6 +252,7 @@ export default {
         title: "",
         text: "",
         location: "",
+        order: 1,
         actions: [],
         requirements: [],
         expiration: [],
@@ -295,6 +324,9 @@ export default {
       const locationIndex = this.locations.indexOf(obj.location);
       Object.assign(this.newItem, obj.item);
       this.newItem.location = obj.location.locationId;
+      if (!obj.location.order) {
+        this.newItem.order = 1;
+      }
       this.locationIndex = locationIndex;
       this.itemIndex = obj.itemIndex;
     },
@@ -324,6 +356,7 @@ export default {
         title: "",
         location: "",
         text: "",
+        order: 1,
         actions: [],
         requirements: [],
         expiration: [],
