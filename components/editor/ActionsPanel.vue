@@ -2,8 +2,8 @@
   <v-list subheader two-line class="my-4">
     <v-subheader class="px-0">Actions</v-subheader>
     <v-list-item class="px-0" v-for="action in actions" :key="action.text">
-      <v-list-item-avatar>
-        <v-icon :class="action.color" dark v-text="action.icon"></v-icon>
+      <v-list-item-avatar color="grey darken-3">
+        <v-icon dark v-text="action.icon"></v-icon>
       </v-list-item-avatar>
 
       <v-list-item-content>
@@ -21,7 +21,15 @@
     <v-list-item class="px-0">
       <v-dialog v-model="dialog" light max-width="500px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn block dark large outlined class="mb-2" v-bind="attrs" v-on="on">
+          <v-btn
+            block
+            dark
+            large
+            outlined
+            class="mb-2"
+            v-bind="attrs"
+            v-on="on"
+          >
             <v-icon class="mr-2">mdi-plus-circle</v-icon>
             Add Action
           </v-btn>
@@ -43,6 +51,18 @@
                     light
                   ></v-text-field>
                 </v-col>
+
+                <v-col cols="12" sm="12">
+                  <v-select
+                    v-model="editedAction.icon"
+                    :items="icons"
+                    label="Icon"
+                    outlined
+                    light
+                    hide-details="auto"
+                  ></v-select>
+                </v-col>
+
                 <v-col cols="12" sm="4">
                   <v-select
                     :items="types"
@@ -65,26 +85,6 @@
                     light
                     @change="fetchTargetName($event)"
                   ></v-autocomplete>
-                </v-col>
-                <v-col cols="12" sm="4">
-                  <v-select
-                    v-model="editedAction.color"
-                    :items="colors"
-                    label="Color"
-                    outlined
-                    light
-                    hide-details="auto"
-                  ></v-select>
-                </v-col>
-                <v-col cols="12" sm="8">
-                  <v-select
-                    v-model="editedAction.icon"
-                    :items="icons"
-                    label="Icon"
-                    outlined
-                    light
-                    hide-details="auto"
-                  ></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -136,7 +136,6 @@ export default {
         target: "",
         targetName: "",
         icon: "",
-        color: "",
       },
       editedIndex: -1,
       defaultAction: {
@@ -145,7 +144,6 @@ export default {
         target: "",
         targetName: "",
         icon: "",
-        color: "",
       },
       dialog: false,
       dialogDelete: false
@@ -156,7 +154,6 @@ export default {
     ...mapState({
       types: state => state.actionTypes,
       icons: state => state.icons,
-      colors: state => state.colors,
     })
   },
   methods: {
@@ -167,7 +164,9 @@ export default {
     },
     fetchTargetName(event) {
       if (this.editedAction.type == "Move") {
-        var targets = this.locations.filter(target => target.locationId == event);
+        var targets = this.locations.filter(
+          target => target.locationId == event
+        );
         this.editedAction.targetName = targets[0].name;
       }
     },
@@ -176,7 +175,7 @@ export default {
       this.dialogDelete = true;
     },
     deleteActionConfirm() {
-      this.$emit('delete-action', this.editedIndex );
+      this.$emit("delete-action", this.editedIndex);
       this.closeDelete();
     },
     close() {
@@ -195,9 +194,12 @@ export default {
     },
     save() {
       if (this.editedIndex > -1) {
-        this.$emit('edit-action', { action: this.editedAction, index: this.editedIndex })
+        this.$emit("edit-action", {
+          action: this.editedAction,
+          index: this.editedIndex
+        });
       } else {
-        this.$emit('add-action', { action: this.editedAction })
+        this.$emit("add-action", { action: this.editedAction });
       }
       this.close();
     }
