@@ -34,7 +34,7 @@
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
           :locations="locations"
-          @select-location="viewLocation($event)"
+          @select-location="viewLocation($event.locationId)"
           @clear-location="clearLocation()"
         />
       </v-flex>
@@ -62,7 +62,7 @@ export default {
   },
   mounted() {
     if (this.quest.startingPoint.length > 0) {
-      this.goToStartingPoint(this.quest.startingPoint);
+      this.viewLocation(this.quest.startingPoint);
     }
   },
   components: { QuestSidebar, LeafletMap, QuestDialog },
@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_OBJECTIVE"]),
-    goToStartingPoint(locationId) {
+    viewLocation(locationId) {
       const locationIndex = this.findWithAttr(locationId);
       const location = this.locations[locationIndex];
 
@@ -121,18 +121,8 @@ export default {
 
       this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
     },
-    viewLocation(location) {
-      const index = this.locations.indexOf(location);
-      // const location = this.locations[index];
-
-      this.locationEntries(index);
-      this.selectedLocation = location;
-      this.zoom = location.zoom;
-
-      this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
-    },
-    locationEntries(locationId) {
-      const location = this.locations[locationId];
+    locationEntries(index) {
+      const location = this.locations[index];
       const entries = location.entries;
 
       var locationActions = [];
@@ -150,10 +140,7 @@ export default {
     },
     selectAction(event) {
       if (event.type == "Move") {
-        const index = this.locations
-          .map(e => e.locationId)
-          .indexOf(event.target);
-        this.viewLocation(index);
+        this.viewLocation(event.target);
       }
     },
     clearLocation() {
@@ -163,7 +150,7 @@ export default {
     restartQuest() {
       this.dialog = false;
       if (this.quest.startingPoint.length > 0) {
-        this.goToStartingPoint(this.quest.startingPoint);
+        this.viewLocation(this.quest.startingPoint);
       }
       for (let i = 0; i < this.objectives.length; i++) {
         this.$store.commit("SET_OBJECTIVE", {
