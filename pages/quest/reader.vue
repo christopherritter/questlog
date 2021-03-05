@@ -61,8 +61,8 @@ export default {
     };
   },
   mounted() {
-    if (this.locations.length > 0) {
-      this.viewLocation(0);
+    if (this.quest.startingPoint.length > 0) {
+      this.goToStartingPoint(this.quest.startingPoint);
     }
   },
   components: { QuestSidebar, LeafletMap, QuestDialog },
@@ -111,8 +111,19 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_OBJECTIVE"]),
-    viewLocation(index) {
-      const location = this.locations[index];
+    goToStartingPoint(locationId) {
+      const locationIndex = this.findWithAttr(locationId);
+      const location = this.locations[locationIndex];
+
+      this.locationEntries(locationIndex);
+      this.selectedLocation = location;
+      this.zoom = location.zoom;
+
+      this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
+    },
+    viewLocation(location) {
+      const index = this.locations.indexOf(location);
+      // const location = this.locations[index];
 
       this.locationEntries(index);
       this.selectedLocation = location;
@@ -151,19 +162,25 @@ export default {
     },
     restartQuest() {
       this.dialog = false;
-      // if (this.quest.startingPoint) {
-      //   console.log(this.quest.startingPoint)
-      // var index = 0;
-      // this.viewLocation(index);
-      // } else {
-      this.viewLocation(0);
-      // }
+      if (this.quest.startingPoint.length > 0) {
+        this.goToStartingPoint(this.quest.startingPoint);
+      }
       for (let i = 0; i < this.objectives.length; i++) {
         this.$store.commit("SET_OBJECTIVE", {
           index: i,
           bool: false
         });
       }
+    },
+    findWithAttr(value) {
+      const array = this.locations;
+      const attr = "locationId";
+      for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
+          return i;
+        }
+      }
+      return -1;
     }
   }
 };
