@@ -11,7 +11,21 @@
       "
       class="hidden-sm-and-down"
     >
-      <v-btn plain nuxt :to="'/quest/' + quest.questId">{{ quest.title }}</v-btn>
+      <v-btn plain nuxt :to="'/quest/' + quest.questId">{{
+        quest.title
+      }}</v-btn>
+    </span>
+    <span
+      v-else-if="
+        quest &&
+          this.$route.name == 'editor' &&
+          editor.quest.questId.length > 0
+      "
+      class="hidden-sm-and-down"
+    >
+      <v-btn plain nuxt :to="'/quest/' + editor.quest.questId">{{
+        editor.quest.title
+      }}</v-btn>
     </span>
     <span v-else class="hidden-sm-and-down">
       <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
@@ -51,7 +65,7 @@
                 <v-list-item-title v-text="item.text"></v-list-item-title>
               </v-list-item-content>
             </v-list-item> -->
-            <v-list-item :to="{ name: 'profile'}">
+            <v-list-item :to="{ name: 'profile' }">
               <v-list-item-icon>
                 <v-icon>mdi-account</v-icon>
               </v-list-item-icon>
@@ -100,13 +114,12 @@ export default {
   },
   computed: {
     ...mapState({
-      quest: state => state.quest
+      quest: state => state.quest,
+      editor: state => state.editor,
     })
   },
   methods: {
-    ...mapMutations([
-      "CLEAR_QUEST_EDITOR",
-    ]),
+    ...mapMutations(["CLEAR_QUEST_EDITOR"]),
     questEditor() {
       this.$store.commit("CLEAR_QUEST_EDITOR");
       this.$router.push("/editor");

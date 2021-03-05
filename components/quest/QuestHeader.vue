@@ -43,7 +43,6 @@ export default {
     ]),
     ...mapMutations(["CLEAR_QUEST", "CLEAR_QUEST_EDITOR"]),
     readQuest() {
-      this.$store.commit("CLEAR_QUEST");
       this.$store.dispatch("readQuest", {
         quest: this.quest,
         objectives: this.objectives,
@@ -52,7 +51,6 @@ export default {
       this.$router.push("/quest/reader");
     },
     editQuest() {
-      this.$store.commit("CLEAR_QUEST_EDITOR");
       this.$store.dispatch("editQuest", {
         quest: this.quest,
         objectives: this.objectives,
