@@ -287,13 +287,13 @@ export default {
         locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
         if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+          this.$store.commit("SET_LOCATIONS", locations);
         }
       } else if (val === "Numerically") {
         locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
         if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+          this.$store.commit("SET_LOCATIONS", locations);
         }
       }
 
@@ -307,14 +307,14 @@ export default {
   methods: {
     ...mapActions(["publishQuest"]),
     ...mapMutations([
-      "ADD_ITEM_EDITOR",
-      "UPDATE_ITEM_EDITOR",
-      "REMOVE_ITEM_EDITOR"
+      "ADD_ITEM",
+      "UPDATE_ITEM",
+      "REMOVE_ITEM"
     ]),
     addItem() {
       const locationId = this.newItem.location;
       const locationIndex = this.findWithAttr(locationId);
-      this.$store.commit("ADD_ITEM_EDITOR", {
+      this.$store.commit("ADD_ITEM", {
         selectedLocation: locationIndex,
         item: this.newItem
       });
@@ -333,7 +333,7 @@ export default {
     updateItem() {
       const locationId = this.newItem.location;
       const locationIndex = this.findWithAttr(locationId);
-      this.$store.commit("UPDATE_ITEM_EDITOR", {
+      this.$store.commit("UPDATE_ITEM", {
         selectedLocation: locationIndex,
         selectedItem: this.itemIndex,
         item: this.newItem
@@ -344,7 +344,7 @@ export default {
       const locationId = this.newItem.location;
       const locationIndex = this.findWithAttr(locationId);
 
-      this.$store.commit("REMOVE_ITEM_EDITOR", {
+      this.$store.commit("REMOVE_ITEM", {
         locationIndex: locationIndex,
         itemIndex: this.itemIndex
       });

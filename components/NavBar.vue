@@ -16,11 +16,11 @@
       }}</v-btn>
     </span>
     <span
-      v-else-if="this.$route.name == 'editor' && editor.quest.questId"
+      v-else-if="this.$route.name == 'editor' && quest.questId"
       class="hidden-sm-and-down"
     >
-      <v-btn plain nuxt :to="'/quest/' + editor.quest.questId">{{
-        editor.quest.title
+      <v-btn plain nuxt :to="'/quest/' + quest.questId">{{
+        quest.title
       }}</v-btn>
     </span>
     <span v-else class="hidden-sm-and-down">
@@ -110,8 +110,7 @@ export default {
   },
   computed: {
     ...mapState({
-      quest: state => state.quest,
-      editor: state => state.editor
+      quest: state => state.quest
     })
   },
   methods: {

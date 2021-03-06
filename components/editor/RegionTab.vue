@@ -112,7 +112,7 @@ export default {
   components: { LeafletMap },
   methods: {
     ...mapActions(["publishQuest"]),
-    ...mapMutations(["SET_REGION_EDITOR"]),
+    ...mapMutations(["SET_REGION"]),
     fetchRegion() {
       Object.assign(this.newRegion, this.region);
     },
@@ -124,13 +124,13 @@ export default {
       this.newRegion.coordinates = [latLng.lat, latLng.lng];
     },
     updateRegion() {
-      this.$store.commit("SET_REGION_EDITOR", this.newRegion);
+      this.$store.commit("SET_REGION", this.newRegion);
     },
     resetRegion() {
       this.fetchRegion();
     },
     publishQuest() {
-      this.$store.commit("SET_REGION_EDITOR", this.newRegion);
+      this.$store.commit("SET_REGION", this.newRegion);
       this.$store.dispatch("publishQuest");
     }
   }

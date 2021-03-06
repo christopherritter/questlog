@@ -141,7 +141,7 @@ export default {
   },
   methods: {
     ...mapActions(["publishQuest"]),
-    ...mapMutations(["SET_DETAILS_EDITOR"]),
+    ...mapMutations(["SET_DETAILS"]),
     fetchDetails() {
       Object.assign(this.newDetails, {
         title: this.quest.title,
@@ -154,13 +154,13 @@ export default {
     },
     updateDetails() {
       this.$emit("update-quest");
-      this.$store.commit("SET_DETAILS_EDITOR", this.newDetails);
+      this.$store.commit("SET_QUEST", this.newDetails);
     },
     resetRegion() {
       this.fetchDetails();
     },
     publishQuest() {
-      this.$store.commit("SET_DETAILS_EDITOR", this.newDetails);
+      this.$store.commit("SET_QUEST", this.newDetails);
       this.$store.dispatch("publishQuest");
     }
   }

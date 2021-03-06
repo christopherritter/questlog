@@ -275,13 +275,13 @@ export default {
         locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
         if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+          this.$store.commit("SET_LOCATIONS", locations);
         }
       } else if (val === "Numerically") {
         locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
         if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+          this.$store.commit("SET_LOCATIONS", locations);
         }
       }
 
@@ -290,7 +290,7 @@ export default {
   },
   methods: {
     ...mapActions(["addLocation", "updateLocation", "deleteLocation", "publishQuest"]),
-    ...mapMutations(["SET_LOCATIONS_EDITOR"]),
+    ...mapMutations(["UPDATE_LOCATION", "SET_COORDINATES", "SET_LOCATIONS"]),
     markLocation(location) {
       this.clearLocation();
       this.newLocation.coordinates = [location.latlng.lat, location.latlng.lng];
@@ -321,12 +321,12 @@ export default {
       const index = this.locations.indexOf(location);
       const coordinates = location.coordinates;
       this.newLocation.coordinates = coordinates;
-      this.$store.commit("SET_COORDINATES_EDITOR", { coordinates, index });
+      this.$store.commit("SET_COORDINATES", { coordinates, index });
     },
     updateLocation() {
       const locationId = this.newLocation.locationId;
       const locationIndex = this.findWithAttr(locationId);
-      this.$store.commit("UPDATE_LOCATION_EDITOR", {
+      this.$store.commit("UPDATE_LOCATION", {
         selectedLocation: locationIndex,
         newLocation: this.newLocation
       });

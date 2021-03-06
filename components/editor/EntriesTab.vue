@@ -287,13 +287,13 @@ export default {
         locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
         if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+          this.$store.commit("SET_LOCATIONS", locations);
         }
       } else if (val === "Numerically") {
         locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
         if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS_EDITOR", locations);
+          this.$store.commit("SET_LOCATIONS", locations);
         }
       }
 
@@ -326,10 +326,10 @@ export default {
   methods: {
     ...mapActions(["addEntry", "updateLocation", "deleteLocation", "publishQuest"]),
     ...mapMutations([
-      "ADD_ENTRY_EDITOR",
-      "UPDATE_ENTRY_EDITOR",
-      "REMOVE_ENTRY_EDITOR",
-      "SET_ENTRIES_EDITOR",
+      "ADD_ENTRY",
+      "UPDATE_ENTRY",
+      "REMOVE_ENTRY",
+      "SET_ENTRIES",
     ]),
     addEntry() {
       this.$store.dispatch("addEntry", this.newEntry);
@@ -338,7 +338,7 @@ export default {
     // addEntry() {
     //   const locationId = this.newEntry.location;
     //   const locationIndex = this.findWithAttr(locationId);
-    //   this.$store.commit("ADD_ENTRY_EDITOR", {
+    //   this.$store.commit("ADD_ENTRY", {
     //     selectedLocation: locationIndex,
     //     entry: this.newEntry
     //   });
@@ -373,7 +373,7 @@ export default {
     updateEntry() {
       const locationId = this.newEntry.location;
       const locationIndex = this.findWithAttr(locationId);
-      this.$store.commit("UPDATE_ENTRY_EDITOR", {
+      this.$store.commit("UPDATE_ENTRY", {
         selectedLocation: locationIndex,
         selectedEntry: this.entryIndex,
         entry: this.newEntry
@@ -384,7 +384,7 @@ export default {
       const locationId = this.newEntry.location;
       const locationIndex = this.findWithAttr(locationId);
 
-      this.$store.commit("REMOVE_ENTRY_EDITOR", {
+      this.$store.commit("REMOVE_ENTRY", {
         locationIndex: locationIndex,
         entryIndex: this.entryIndex
       });

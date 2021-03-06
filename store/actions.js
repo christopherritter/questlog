@@ -121,24 +121,24 @@ export default {
   // There is only:
   // 'READ QUEST'
 
-  readQuest({
-    commit
-  }, obj) {
-    commit('SET_QUEST', obj.quest);
-    commit('SET_OBJECTIVES', obj.objectives);
-    commit('SET_LOCATIONS', obj.locations);
-  },
+  // readQuest({
+  //   commit
+  // }, obj) {
+  //   commit('SET_QUEST', obj.quest);
+  //   commit('SET_OBJECTIVES', obj.objectives);
+  //   commit('SET_LOCATIONS', obj.locations);
+  // },
 
   // 'PLAY QUEST'
   // 'EDIT QUEST'
 
-  editQuest({
-    commit
-  }, obj) {
-    commit('SET_QUEST_EDITOR', obj.quest);
-    commit('SET_OBJECTIVES_EDITOR', obj.objectives);
-    commit('SET_LOCATIONS_EDITOR', obj.locations);
-  },
+  // editQuest({
+  //   commit
+  // }, obj) {
+  //   commit('SET_QUEST', obj.quest);
+  //   commit('SET_OBJECTIVES', obj.objectives);
+  //   commit('SET_LOCATIONS', obj.locations);
+  // },
 
   setObjective({ state, commit }, obj) {
     const index = state.objectives.map(e => e.objectiveId).indexOf(obj.id);
@@ -190,7 +190,7 @@ export default {
         questId: result.id
       })
 
-      commit('SET_QUEST_EDITOR', {
+      commit('SET_QUEST', {
         quest: quest,
         questId: result.id
       })
@@ -240,7 +240,7 @@ export default {
 
     const result = await objectivesRef.add(objective);
     newObjective.objectiveId = result.id;
-    commit("ADD_OBJECTIVE_EDITOR", newObjective);
+    commit("ADD_OBJECTIVE", newObjective);
 
     const update = objectivesRef.doc(result.id).update({
       objectiveId: result.id
@@ -259,7 +259,7 @@ export default {
     var newObjective = objective.newObjective;
     var currentObjective = objective.currentObjective;
 
-    commit("UPDATE_OBJECTIVE_EDITOR", {
+    commit("UPDATE_OBJECTIVE", {
       currentObjective: currentObjective,
       newObjective: newObjective
     });
@@ -274,7 +274,7 @@ export default {
     const objectivesRef = questRef.doc(questId).collection("objectives");
 
     var newObjectives = state.objectives.filter(objective => objective.objectiveId != objectiveId)
-    commit("SET_OBJECTIVES_EDITOR", newObjectives)
+    commit("SET_OBJECTIVES", newObjectives)
 
     const res = await objectivesRef.doc(objectiveId).delete();
   },
@@ -300,7 +300,7 @@ export default {
       }
     }
 
-    // commit('SET_LOCATION_EDITOR', newLocation);
+    // commit('SET_LOCATION', newLocation);
     return selectedLocation;
   },
 
@@ -313,7 +313,7 @@ export default {
 
     const result = await locationsRef.add(location);
     newLocation.locationId = result.id;
-    commit("ADD_LOCATION_EDITOR", newLocation);
+    commit("ADD_LOCATION", newLocation);
 
     const update = locationsRef.doc(result.id).update({
       locationId: result.id
@@ -332,7 +332,7 @@ export default {
     var newLocation = location.newLocation;
     var currentLocation = location.selectedLocation;
 
-    commit("UPDATE_LOCATION_EDITOR", {
+    commit("UPDATE_LOCATION", {
       currentLocation: currentLocation,
       newLocation: newLocation
     });
@@ -347,7 +347,7 @@ export default {
     const locationsRef = questRef.doc(questId).collection("locations");
 
     var newLocations = state.locations.filter(location => location.locationId != locationId)
-    commit("SET_LOCATIONS_EDITOR", newLocations)
+    commit("SET_LOCATIONS", newLocations)
 
     const res = await locationsRef.doc(locationId).delete();
   },
@@ -364,7 +364,7 @@ export default {
 
     const result = await entriesRef.add(entry);
     newEntry.entryId = result.id;
-    commit("ADD_ENTRY_EDITOR", newEntry);
+    commit("ADD_ENTRY", newEntry);
 
     const update = entriesRef.doc(result.id).update({
       entryId: result.id
