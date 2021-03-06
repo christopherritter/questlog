@@ -140,8 +140,8 @@
             <v-col>
               <v-list
                 span
-                v-for="(location, l) in filterByTerm"
-                :key="l"
+                v-for="location in filterByTerm"
+                :key="location.locationId"
                 subheader
                 two-line
               >
@@ -165,18 +165,11 @@
                   </v-avatar>
                 </v-subheader>
                 <v-list-item-group v-model="selectedEntry" color="green">
-                  <template v-for="(entry, e) in location.entries">
+                  <template v-for="entry in localEntries(location)">
                     <v-list-item
-                      :key="`item-${l}-${e}`"
-                      :value="`item-${l}-${e}`"
-                      @click="
-                        selectEntry({
-                          locationIndex: l,
-                          location: location,
-                          entryIndex: e,
-                          entry: entry
-                        })
-                      "
+                      :key="entry.entryId"
+                      :value="entry.entryId"
+                      @click="selectEntry(entry)"
                     >
                       <v-list-item-avatar>
                         <v-icon
@@ -258,7 +251,7 @@ export default {
         expiration: [],
         objectives: []
       },
-      selectedLocation: {},
+      // selectedLocation: {},
       selectedEntry: "undefined",
       locationIndex: null,
       entryIndex: null,
@@ -298,69 +291,38 @@ export default {
       }
 
       this.clearEntry();
-    },
-    "newEntry.location": function(val) {
-      const locationIndex = this.findWithAttr(val);
-      this.selectedLocation = this.locations[locationIndex];
-    }
-  },
-  filters: {
-    toLetters(num) {
-      "use strict";
-      var mod = num % 26;
-      var pow = (num / 26) | 0;
-      var out = mod ? String.fromCharCode(64 + mod) : (pow--, "Z");
-      return pow ? toLetters(pow) + out : out;
-    },
-    fromLetters(str) {
-      "use strict";
-      var out = 0,
-        len = str.length,
-        pos = len;
-      while ((pos -= 1) > -1) {
-        out += (str.charCodeAt(pos) - 64) * Math.pow(26, len - 1 - pos);
-      }
-      return out;
     }
   },
   methods: {
-    ...mapActions(["addEntry", "updateLocation", "deleteLocation", "publishQuest"]),
-    ...mapMutations([
-      "ADD_ENTRY",
-      "UPDATE_ENTRY",
-      "REMOVE_ENTRY",
-      "SET_ENTRIES",
+    ...mapActions([
+      "addEntry",
+      "updateLocation",
+      "deleteLocation",
+      "publishQuest",
+      "findWithAttr"
     ]),
+    ...mapMutations(["REMOVE_ENTRY", "SET_ENTRIES"]),
+    localEntries(location) {
+      const entries = this.entries;
+      var localEntries = []
+      for (let e = 0; e < location.entries.length; e++) {
+
+        for (let f = 0; f < entries.length; f++) {
+          if (location.entries[e] == entries[f].entryId) {
+            localEntries.push(entries[f]);
+          }
+        }
+
+      }
+      return localEntries;
+    },
     addEntry() {
       this.$store.dispatch("addEntry", this.newEntry);
       this.clearEntry();
     },
-    // addEntry() {
-    //   const locationId = this.newEntry.location;
-    //   const locationIndex = this.findWithAttr(locationId);
-    //   this.$store.commit("ADD_ENTRY", {
-    //     selectedLocation: locationIndex,
-    //     entry: this.newEntry
-    //   });
-    //   this.clearEntry();
-    // },
     selectEntry(entry) {
-      const index = this.entries.indexOf(entry);
-      this.newLocation = {
-        locationId: location.locationId,
-        name: location.name,
-        isLandmark: location.isLandmark,
-        isStartingPoint: location.isStartingPoint,
-        coordinates: location.coordinates,
-        zoom: location.zoom,
-        order: location.order || 0,
-        image: location.image,
-        marker: location.marker,
-        draggable: location.draggable,
-        entries: location.entries,
-        items: location.items
-      };
-      this.selectedLocation = index;
+      this.newEntry = Object.assign({}, entry);
+      // this.selectedEntry = newEntry.entryId;
     },
     // selectEntry(obj) {
     //   this.newEntry = obj.entry;
@@ -371,18 +333,12 @@ export default {
     //   this.entryIndex = obj.entryIndex;
     // },
     updateEntry() {
-      const locationId = this.newEntry.location;
-      const locationIndex = this.findWithAttr(locationId);
-      this.$store.commit("UPDATE_ENTRY", {
-        selectedLocation: locationIndex,
-        selectedEntry: this.entryIndex,
-        entry: this.newEntry
-      });
+      this.$store.dispatch("updateEntry", this.newEntry);
       this.clearEntry();
     },
     removeEntry() {
-      const locationId = this.newEntry.location;
-      const locationIndex = this.findWithAttr(locationId);
+      // const locationId = this.newEntry.location;
+      // const locationIndex = this.findWithAttr(locationId);
 
       this.$store.commit("REMOVE_ENTRY", {
         locationIndex: locationIndex,
@@ -409,7 +365,7 @@ export default {
     },
     addAction(event) {
       var newEvent = {};
-      Object.assign(newEvent, event.action)
+      Object.assign(newEvent, event.action);
       this.newEntry.actions.push(newEvent);
     },
     editAction(event) {

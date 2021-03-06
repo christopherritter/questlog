@@ -21,7 +21,7 @@
       </v-flex>
     </v-layout>
 
-    <div v-for="(entry, index) in entries" :key="index">
+    <div v-for="(entry, index) in localEntries" :key="index">
       <v-card-text v-if="entryAllowed(entry)">{{ entry.text }}</v-card-text>
     </div>
 
@@ -50,27 +50,36 @@ export default {
   data() {
     return {};
   },
-  props: ["location", "entries", "actions", "objectives"],
+  props: ["objectives", "location", "entries", "items", "actions"],
   computed: {
-    localObjectives() {
-      var localObjectives = [];
-      if (this.entries) {
-        const entries = this.entries;
+    localEntries() {
+      const locationId = this.location.locationId;
+      var localEntries = [];
 
-        for (let e = 0; e < entries.length; e++) {
-          if (entries[e].objectives.length > 0) {
-            for (let i = 0; i < entries[e].objectives.length; i++) {
-              var objectiveId = entries[e].objectives[i];
-              const index = this.objectives
-                .map(obj => obj.objectiveId)
-                .indexOf(objectiveId);
-              var objective = {};
-              Object.assign(objective, this.objectives[index]);
-              localObjectives.push(objective);
-            }
-          }
+      for (let e = 0; e < this.entries.length; e++) {
+        if (this.entries[e].location == locationId) {
+          localEntries.push(this.entries[e]);
         }
       }
+
+      return localEntries;
+    },
+    localObjectives() {
+      var localObjectives = [];
+
+      for (let e = 0; e < this.localEntries.length; e++) {
+        // if (this.entries[e].objectives) {
+          for (let o = 0; o < this.localEntries[e].objectives.length; o++) {
+            var objective = {};
+            Object.assign(objective, this.localEntries[e].objectives[o]);
+            this.$store.dispatch("setObjective", {
+              id: objective,
+              bool: true
+            });
+          }
+        // }
+      }
+
       return localObjectives;
     }
   },
@@ -91,11 +100,11 @@ export default {
       "setObjective",
     ]),
     entryAllowed(entry) {
-      const expiration = entry.expiration;
-      const requirements = entry.requirements;
-      if (expiration.length <= 0 && requirements.length <= 0) {
+    //   const expiration = entry.expiration;
+    //   const requirements = entry.requirements;
+    //   if (expiration.length <= 0 && requirements.length <= 0) {
         return true;
-      }
+    //   }
     }
   }
 };

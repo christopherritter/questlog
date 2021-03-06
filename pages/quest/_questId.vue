@@ -147,7 +147,7 @@ export default {
         scrollWheelZoom: false,
         boxZoom: false,
         keyboard: false,
-        tap: false,
+        tap: false
       },
       loading: false,
       error: null
@@ -194,33 +194,52 @@ export default {
 
         const locations = await locationsRef.get();
         locations.forEach(result => {
-
           var location = result.data();
+          var newLocation = {
+            name: location.name,
+            isLandmark: location.isLandmark,
+            isStartingPoint: location.isStartingPoint,
+            coordinates: location.coordinates,
+            zoom: location.zoom,
+            image: location.image,
+            marker: location.marker,
+            order: location.order,
+            locationId: location.locationId,
+            draggable: location.draggable,
+            entries: [],
+            items: []
+          };
 
           if (location.entries) {
             location.entries.forEach(entry => {
-              this.entries.push(entry);
+              this.createEntry(entry).then(result => {
+                newLocation.entries.push(result.entryId);
+                this.entries.push(result)
+              })
             });
           }
 
           if (location.items) {
             location.items.forEach(item => {
-              this.items.push(item);
+              this.createItem(item).then(result => {
+                newLocation.items.push(result.itemId);
+                this.items.push(result)
+              })
             });
           }
 
-          this.locations.push(location);
+          this.locations.push(newLocation);
         });
 
-        const entries = await entriesRef.get();
-        entries.forEach(entry => {
-          this.entries.push(entry.data());
-        });
+        // const entries = await entriesRef.get();
+        // entries.forEach(entry => {
+        //   this.entries.push(entry.data());
+        // });
 
-        const items = await itemsRef.get();
-        items.forEach(item => {
-          this.items.push(item.data());
-        });
+        // const items = await itemsRef.get();
+        // items.forEach(item => {
+        //   this.items.push(item.data());
+        // });
       }
       this.loading = false;
     },
@@ -230,7 +249,7 @@ export default {
         objectives: this.objectives,
         locations: this.locations,
         entries: this.entries,
-        items: this.items,
+        items: this.items
       });
     },
     readQuest() {
@@ -241,6 +260,38 @@ export default {
       this.setQuest();
       this.$router.push("/editor");
     },
+    async createEntry(entry) {
+      const db = this.$fire.firestore;
+      const questRef = db.collection("quests").doc(this.questId);
+      const entriesRef = questRef.collection("entries");
+      const entryResult = await entriesRef.add(entry);
+
+      var newEntry = entry;
+      newEntry.entryId = entryResult.id;
+
+      const updateEntry = entriesRef.doc(entryResult.id).update({
+        entryId: entryResult.id
+      });
+
+      console.log("Created entry " + entryResult.id)
+      return newEntry
+    },
+    async createItem(item) {
+      const db = this.$fire.firestore;
+      const questRef = db.collection("quests").doc(this.questId);
+      const itemsRef = questRef.collection("items");
+      const itemResult = await itemsRef.add(item);
+
+      var newItem = item;
+      newItem.itemId = itemResult.id;
+
+      const updateItem = itemsRef.doc(itemResult.id).update({
+        itemId: itemResult.id
+      });
+
+      console.log("Created item " + itemResult.id)
+      return newItem
+    }
   }
 };
 </script>

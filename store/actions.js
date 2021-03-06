@@ -49,7 +49,8 @@ export default {
   },
 
   async fetchUserProfile({
-    state, commit
+    state,
+    commit
   }, uid) {
     const userRef = this.$fire.firestore.collection('users').doc(uid);
 
@@ -96,7 +97,8 @@ export default {
   },
 
   async updateUserName({
-    state, commit
+    state,
+    commit
   }, userName) {
     const userRef = this.$fire.firestore.collection('users').doc(state.authUser.uid);
     const result = await userRef.update({
@@ -140,9 +142,15 @@ export default {
   //   commit('SET_LOCATIONS', obj.locations);
   // },
 
-  setObjective({ state, commit }, obj) {
+  setObjective({
+    state,
+    commit
+  }, obj) {
     const index = state.objectives.map(e => e.objectiveId).indexOf(obj.id);
-    commit("SET_OBJECTIVE", {index: index, bool: obj.bool})
+    commit("SET_OBJECTIVE", {
+      index: index,
+      bool: obj.bool
+    })
   },
 
   // Editor
@@ -209,19 +217,19 @@ export default {
       batch.update(questRef, state.quest)
 
       state.objectives.forEach(objective => {
-        batch.set(objectivesRef.doc(objective.objectiveId), objective )
+        batch.set(objectivesRef.doc(objective.objectiveId), objective)
       });
 
       state.locations.forEach(location => {
-        batch.set(locationsRef.doc(location.locationId), location )
+        batch.set(locationsRef.doc(location.locationId), location)
       });
 
       state.entries.forEach(entry => {
-        batch.set(entriesRef.doc(entry.entryId), entry )
+        batch.set(entriesRef.doc(entry.entryId), entry)
       });
 
       state.items.forEach(item => {
-        batch.set(itemsRef.doc(item.itemId), item )
+        batch.set(itemsRef.doc(item.itemId), item)
       });
 
       // Commit the batch
@@ -267,7 +275,10 @@ export default {
     const update = await objectivesRef.doc(objectiveId).update(newObjective);
   },
 
-  async deleteObjective({ state, commit }, index) {
+  async deleteObjective({
+    state,
+    commit
+  }, index) {
     const questId = state.quest.questId;
     const questRef = this.$fire.firestore.collection('quests');
     const objectiveId = state.objectives[index].objectiveId;
@@ -340,7 +351,10 @@ export default {
     const update = await locationsRef.doc(locationId).update(newLocation);
   },
 
-  async deleteLocation({ state, commit }, index) {
+  async deleteLocation({
+    state,
+    commit
+  }, index) {
     const questId = state.quest.questId;
     const questRef = this.$fire.firestore.collection('quests');
     const locationId = state.locations[index].locationId;
@@ -369,6 +383,15 @@ export default {
     const update = entriesRef.doc(result.id).update({
       entryId: result.id
     });
+  },
+
+  updateEntry({ state, dispatch }, entry) {
+    console.log(entry)
+    dispatch("findWithAttr", {
+      array: state.entries,
+      attr: "entryId",
+      value: entry.entryId,
+    }).then(result => console.log(result))
   },
 
   // Editor Items
@@ -448,5 +471,20 @@ export default {
     console.log("Updating Actions")
     commit('SET_ACTIONS', actions)
   },
+
+  // General Actions
+
+  findWithAttr({}, {
+    array,
+    attr,
+    value
+  }) {
+    for (var i = 0; i < array.length; i += 1) {
+      if (array[i][attr] === value) {
+        return i;
+      }
+    }
+    return -1;
+  }
 
 }

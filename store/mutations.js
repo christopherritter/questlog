@@ -63,18 +63,7 @@ export default {
   },
 
   SET_LOCATION: (state, location) => {
-    state.location = {
-      name: location.name,
-      isLandmark: location.isLandmark,
-      coordinates: {
-        lat: location.coordinates.lat,
-        lng: location.coordinates.lng,
-      },
-      zoom: location.zoom,
-      image: location.image,
-      marker: location.marker,
-      draggable: location.draggable,
-    }
+    state.location = location;
   },
 
   SET_LOCATIONS: (state, locations) => {

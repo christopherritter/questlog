@@ -11,7 +11,8 @@
           class="fill-height"
           :objectives="objectives"
           :location="selectedLocation"
-          :entries="selectedLocation.entries"
+          :entries="entries"
+          :items="items"
           :actions="locationActions"
           @view-location="viewLocation($event)"
           @select-action="selectAction($event)"
@@ -70,7 +71,9 @@ export default {
     ...mapState({
       quest: state => state.quest,
       objectives: state => state.objectives,
-      locations: state => state.locations
+      locations: state => state.locations,
+      entries: state => state.entries,
+      items: state => state.actions
     }),
     sidebarWidth() {
       if (Object.keys(this.selectedLocation).length !== 0) {
@@ -87,26 +90,6 @@ export default {
       } else {
         return "100vw";
       }
-    },
-    locationObjectives() {
-      var locationObjectives = [];
-
-      if (this.entries) {
-        for (let e = 0; e < this.entries.length; e++) {
-          if (this.entries[e].objectives) {
-            for (let o = 0; o < this.entries[e].objectives.length; o++) {
-              var objective = {};
-              Object.assign(objective, this.entries[e].objectives[o]);
-              this.$store.dispatch("setObjective", {
-                id: objective,
-                bool: true
-              });
-            }
-          }
-        }
-      }
-
-      return locationObjectives;
     }
   },
   methods: {
@@ -123,12 +106,12 @@ export default {
     },
     locationEntries(index) {
       const location = this.locations[index];
-      const entries = location.entries;
-
+      const localEntries = location.entries;
       var locationActions = [];
 
-      for (var e = 0; e < location.entries.length; e++) {
-        let entryActions = entries[e].actions;
+      for (var e = 0; e < localEntries.length; e++) {
+        const index = this.findEntry(localEntries[e]);
+        let entryActions = this.entries[index].actions;
         for (let a = 0; a < entryActions.length; a++) {
           let action = {};
           Object.assign(action, entryActions[a]);
@@ -164,6 +147,16 @@ export default {
       const attr = "locationId";
       for (var i = 0; i < array.length; i += 1) {
         if (array[i][attr] === value) {
+          return i;
+        }
+      }
+      return -1;
+    },
+    findEntry(entryId) {
+      const array = this.entries;
+      const attr = "entryId";
+      for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === entryId) {
           return i;
         }
       }
