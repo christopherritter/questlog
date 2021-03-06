@@ -394,6 +394,20 @@ export default {
     })
   },
 
+  async deleteEntry({
+    state,
+    commit
+  }, entryId) {
+    const questId = state.quest.questId;
+    const questRef = this.$fire.firestore.collection('quests');
+    const entriesRef = questRef.doc(questId).collection("entries");
+
+    var newEntries = state.entries.filter(entry => entry.entryId != entryId)
+    commit("SET_ENTRIES", newEntries)
+
+    const res = await entriesRef.doc(entryId).delete();
+  },
+
   // Editor Items
 
   addItem({

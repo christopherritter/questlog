@@ -251,7 +251,6 @@ export default {
         expiration: [],
         objectives: []
       },
-      // sortedEntries: [],
       selectedEntry: "undefined",
       // locationIndex: null,
       // entryIndex: null,
@@ -261,9 +260,6 @@ export default {
     };
   },
   props: ["objectives", "locations", "entries"],
-  // created() {
-  //   this.sortEntries();
-  // },
   computed: {
     filterByTerm() {
       let searchTerm = this.searchTerm.toLowerCase();
@@ -271,10 +267,10 @@ export default {
 
       locations.forEach(location => {
         // if (location.entries.length > 0) {
-          var entries = this.entries.filter(function(entry) {
-            return entry.location === location.locationId;
-          });
-          location.entries = entries;
+        var entries = this.entries.filter(function(entry) {
+          return entry.location === location.locationId;
+        });
+        location.entries = entries;
         // }
       });
 
@@ -286,35 +282,24 @@ export default {
   components: { ActionsPanel },
   watch: {
     sortBy(val) {
-      console.log("Sort by " + val);
-      //   let locations = this.locations.slice();
+      let locations = this.locations.slice();
 
-      //   if (val === "Alphabetically") {
-      //     locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+      if (val === "Alphabetically") {
+        locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-      //     if (locations != this.locations) {
-      //       this.$store.commit("SET_LOCATIONS", locations);
-      //     }
-      //   } else if (val === "Numerically") {
-      //     locations.sort((a, b) => (a.order > b.order ? 1 : -1));
+        if (locations != this.locations) {
+          this.$store.commit("SET_LOCATIONS", locations);
+        }
+      } else if (val === "Numerically") {
+        locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
-      //     if (locations != this.locations) {
-      //       this.$store.commit("SET_LOCATIONS", locations);
-      //     }
-      //   }
+        if (locations != this.locations) {
+          this.$store.commit("SET_LOCATIONS", locations);
+        }
+      }
 
-      //   this.clearEntry();
-    },
-    // entries: {
-    //   // This will let Vue know to look inside the array
-    //   deep: true,
-
-    //   // We have to move our method to a handler field
-    //   handler() {
-    //     console.log("Entries changed, sorting entries.")
-    //     this.sortEntries()
-    //   }
-    // }
+      this.clearEntry();
+    }
   },
   methods: {
     ...mapActions([
@@ -325,64 +310,22 @@ export default {
       "findWithAttr"
     ]),
     ...mapMutations(["REMOVE_ENTRY", "SET_ENTRIES"]),
-    // sortEntries() {
-    //   let sortedEntries = [];
-    //   this.locations.forEach(location => {
-
-    //     if (location.entries.length > 0) {
-    //       var entries = this.entries.filter(function(entry) {
-    //         return entry.location === location.locationId;
-    //       });
-    //       // console.log(entries)
-    //       location.entries = entries;
-    //     }
-    //     sortedEntries.push(location)
-    //   });
-
-    //   this.sortedEntries = sortedEntries;
-
-    // },
-    // localEntries(location) {
-    //   const entries = this.entries;
-    //   var localEntries = [];
-    //   for (let e = 0; e < location.entries.length; e++) {
-    //     for (let f = 0; f < entries.length; f++) {
-    //       if (location.entries[e] == entries[f].entryId) {
-    //         localEntries.push(entries[f]);
-    //       }
-    //     }
-    //   }
-    //   return localEntries;
-    // },
     addEntry() {
       this.$store.dispatch("addEntry", this.newEntry);
       this.clearEntry();
     },
     selectEntry(entry) {
       this.newEntry = Object.assign({}, entry);
-      // this.selectedEntry = newEntry.entryId;
     },
-    // selectEntry(obj) {
-    //   this.newEntry = obj.entry;
-    //   this.newEntry.location = obj.location.locationId;
-    //   if (!obj.location.order) {
-    //     this.newEntry.order = 1;
-    //   }
-    //   this.entryIndex = obj.entryIndex;
-    // },
     updateEntry() {
       this.$store.dispatch("updateEntry", this.newEntry);
-      // this.sortEntries();
       this.clearEntry();
     },
     removeEntry() {
       // const locationId = this.newEntry.location;
       // const locationIndex = this.findWithAttr(locationId);
 
-      this.$store.commit("REMOVE_ENTRY", {
-        locationIndex: locationIndex,
-        entryIndex: this.entryIndex
-      });
+      this.$store.dispatch("deleteEntry", this.selectedEntry);
       this.clearEntry();
     },
     clearEntry() {
