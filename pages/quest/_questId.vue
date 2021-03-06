@@ -138,6 +138,8 @@ export default {
       quest: {},
       objectives: [],
       locations: [],
+      entries: [],
+      items: [],
       mapOptions: {
         dragging: false,
         touchZoom: false,
@@ -191,8 +193,23 @@ export default {
         });
 
         const locations = await locationsRef.get();
-        locations.forEach(location => {
-          this.locations.push(location.data());
+        locations.forEach(result => {
+
+          var location = result.data();
+
+          if (location.entries) {
+            location.entries.forEach(entry => {
+              this.entries.push(entry);
+            });
+          }
+
+          if (location.items) {
+            location.items.forEach(item => {
+              this.items.push(item);
+            });
+          }
+
+          this.locations.push(location);
         });
 
         const entries = await entriesRef.get();

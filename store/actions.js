@@ -200,6 +200,8 @@ export default {
       const questRef = db.collection('quests').doc(questId);
       const objectivesRef = questRef.collection("objectives");
       const locationsRef = questRef.collection("locations");
+      const entriesRef = questRef.collection("entries");
+      const itemsRef = questRef.collection("items");
 
       // Get a new write batch
       const batch = db.batch();
@@ -212,6 +214,14 @@ export default {
 
       state.locations.forEach(location => {
         batch.set(locationsRef.doc(location.locationId), location )
+      });
+
+      state.entries.forEach(entry => {
+        batch.set(entriesRef.doc(entry.entryId), entry )
+      });
+
+      state.items.forEach(item => {
+        batch.set(itemsRef.doc(item.itemId), item )
       });
 
       // Commit the batch
