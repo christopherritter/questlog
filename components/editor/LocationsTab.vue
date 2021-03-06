@@ -289,7 +289,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addLocation", "updateLocation", "deleteLocation"]),
+    ...mapActions(["addLocation", "updateLocation", "deleteLocation", "publishQuest"]),
     ...mapMutations(["SET_LOCATIONS_EDITOR"]),
     markLocation(location) {
       this.clearLocation();

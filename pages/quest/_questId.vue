@@ -5,9 +5,8 @@
         <QuestHeader
           v-if="quest"
           :quest="quest"
-          :questId="this.questId"
-          :objectives="objectives"
-          :locations="locations"
+          @read-quest="readQuest()"
+          @edit-quest="editQuest()"
         />
       </v-col>
     </v-row>
@@ -123,7 +122,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapActions } from "vuex";
 import QuestHeader from "@/components/quest/QuestHeader.vue";
 import LeafletMap from "@/components/LeafletMap.vue";
 
@@ -166,7 +165,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations(["ADD_OBJECTIVE_EDITOR", "ADD_LOCATION_EDITOR"]),
+    ...mapActions(["setQuest"]),
     async fetchQuest() {
       this.error = this.quest = null;
       this.loading = true;
@@ -175,6 +174,8 @@ export default {
       const questRef = db.collection("quests").doc(this.questId);
       const objectivesRef = questRef.collection("objectives");
       const locationsRef = questRef.collection("locations");
+      const entriesRef = questRef.collection("entries");
+      const itemsRef = questRef.collection("items");
       const quest = await questRef.get();
 
       // if (this.$route.params.id !== this.questId) return;
@@ -193,9 +194,36 @@ export default {
         locations.forEach(location => {
           this.locations.push(location.data());
         });
+
+        const entries = await entriesRef.get();
+        entries.forEach(entry => {
+          this.entries.push(entry.data());
+        });
+
+        const items = await itemsRef.get();
+        items.forEach(item => {
+          this.items.push(item.data());
+        });
       }
       this.loading = false;
-    }
+    },
+    setQuest() {
+      this.$store.dispatch("setQuest", {
+        quest: this.quest,
+        objectives: this.objectives,
+        locations: this.locations,
+        entries: this.entries,
+        items: this.items,
+      });
+    },
+    readQuest() {
+      this.setQuest();
+      this.$router.push("/quest/reader");
+    },
+    editQuest() {
+      this.setQuest();
+      this.$router.push("/editor");
+    },
   }
 };
 </script>

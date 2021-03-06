@@ -66,6 +66,7 @@
               <EntriesTab
                 :objectives="objectives"
                 :locations="locations"
+                :entries="entries"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
@@ -73,6 +74,7 @@
               <ItemsTab
                 :objectives="objectives"
                 :locations="locations"
+                :items="items"
                 @change-tab="changeTab($event)"
               />
             </v-tab-item>
@@ -113,9 +115,11 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user,
-      quest: state => state.editor.quest,
-      objectives: state => state.editor.objectives,
-      locations: state => state.editor.locations,
+      quest: state => state.quest,
+      objectives: state => state.objectives,
+      locations: state => state.locations,
+      entries: state => state.entries,
+      items: state => state.items,
     }),
     questSaved() {
       if (Object.keys(this.quest).length === 0) return false;

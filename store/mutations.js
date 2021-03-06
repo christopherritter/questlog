@@ -60,6 +60,14 @@ export default {
     state.locations = locations;
   },
 
+  SET_ENTRIES: (state, entries) => {
+    state.entries = entries;
+  },
+
+  SET_ITEMS: (state, items) => {
+    state.items = items;
+  },
+
   CLEAR_QUEST: (state) => {
     state.quest = {};
     state.objectives = [];
@@ -69,35 +77,35 @@ export default {
   // _EDITOR
 
   SET_QUEST_EDITOR: (state, quest) => {
-    state.editor.quest = quest;
+    state.quest = quest;
   },
 
   CLEAR_QUEST_EDITOR: (state) => {
-    state.editor.quest = {};
-    state.editor.objectives = [];
-    state.editor.locations = [];
+    state.quest = {};
+    state.objectives = [];
+    state.locations = [];
   },
 
   SET_DETAILS_EDITOR: (state, details) => {
-    state.editor.quest.title = details.title || "Untitled";
-    state.editor.quest.author = details.author || "Anonymous";
-    state.editor.quest.authorId = state.authUser.uid;
-    state.editor.quest.description = details.description || "";
-    state.editor.quest.image = details.image || "";
-    state.editor.quest.categories = details.categories || [];
-    state.editor.quest.startingPoint = details.startingPoint || "";
+    state.quest.title = details.title || "Untitled";
+    state.quest.author = details.author || "Anonymous";
+    state.quest.authorId = state.authUser.uid;
+    state.quest.description = details.description || "";
+    state.quest.image = details.image || "";
+    state.quest.categories = details.categories || [];
+    state.quest.startingPoint = details.startingPoint || "";
   },
 
   SET_REGION_EDITOR: (state, region) => {
-    state.editor.quest.region = region;
+    state.quest.region = region;
   },
 
   ADD_OBJECTIVE_EDITOR: (state, objective) => {
-    state.editor.objectives.push(objective);
+    state.objectives.push(objective);
   },
 
   UPDATE_OBJECTIVE_EDITOR: (state, objective) => {
-    state.editor.objectives[objective.currentObjective] = {
+    state.objectives[objective.currentObjective] = {
       name: objective.newObjective.name,
       description: objective.newObjective.description,
       isPrimary: objective.newObjective.isPrimary,
@@ -105,58 +113,58 @@ export default {
   },
 
   SET_OBJECTIVES_EDITOR: (state, objectives) => {
-    state.editor.objectives = objectives;
+    state.objectives = objectives;
   },
 
   ADD_LOCATION_EDITOR: (state, location) => {
-    state.editor.locations.push(location);
+    state.locations.push(location);
   },
 
   UPDATE_LOCATION_EDITOR: (state, location) => {
-    Object.assign(state.editor.locations[location.selectedLocation],
+    Object.assign(state.locations[location.selectedLocation],
       location.newLocation);
   },
 
   SET_LOCATIONS_EDITOR: (state, locations) => {
-    state.editor.locations = locations;
+    state.locations = locations;
   },
 
   SET_COORDINATES_EDITOR: (state, location) => {
-    state.editor.locations[location.index].coordinates = location.coordinates;
+    state.locations[location.index].coordinates = location.coordinates;
   },
 
   ADD_ENTRY_EDITOR: (state, obj) => {
-    state.editor.locations[obj.selectedLocation].entries.push(obj.entry);
+    state.locations[obj.selectedLocation].entries.push(obj.entry);
   },
 
   UPDATE_ENTRY_EDITOR: (state, obj) => {
-    Object.assign(state.editor.locations[obj.selectedLocation].entries[obj.selectedEntry],
+    Object.assign(state.locations[obj.selectedLocation].entries[obj.selectedEntry],
       obj.entry);
   },
 
   REMOVE_ENTRY_EDITOR: (state, obj) => {
-    state.editor.locations[obj.locationIndex].entries.splice(obj.entryIndex, 1);
+    state.locations[obj.locationIndex].entries.splice(obj.entryIndex, 1);
   },
 
   ADD_ITEM_EDITOR: (state, obj) => {
-    state.editor.locations[obj.selectedLocation].items.push(obj.item);
+    state.locations[obj.selectedLocation].items.push(obj.item);
   },
 
   UPDATE_ITEM_EDITOR: (state, obj) => {
-    Object.assign(state.editor.locations[obj.selectedLocation].items[obj.selectedItem],
+    Object.assign(state.locations[obj.selectedLocation].items[obj.selectedItem],
       obj.item);
   },
 
   REMOVE_ITEM_EDITOR: (state, obj) => {
-    state.editor.locations[obj.locationIndex].items.splice(obj.itemIndex, 1);
+    state.locations[obj.locationIndex].items.splice(obj.itemIndex, 1);
   },
 
   ADD_ACTION_EDITOR: (state, action) => {
-    state.editor.actions.push(action);
+    state.actions.push(action);
   },
 
   UPDATE_ACTION_EDITOR: (state, action) => {
-    state.editor.actions[action.currentAction] = {
+    state.actions[action.currentAction] = {
       name: action.newAction.name,
       type: action.newAction.type,
       target: action.newAction.target,
@@ -164,6 +172,6 @@ export default {
   },
 
   SET_ACTIONS_EDITOR: (state, actions) => {
-    state.editor.actions = actions;
+    state.actions = actions;
   },
 }

@@ -267,7 +267,7 @@ export default {
       sort: ["Alphabetically", "Numerically"]
     };
   },
-  props: ["objectives", "locations"],
+  props: ["objectives", "locations", "entries"],
   computed: {
     filterByTerm() {
       let searchTerm = this.searchTerm.toLowerCase();
@@ -324,31 +324,52 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["publishQuest"]),
+    ...mapActions(["addEntry", "updateLocation", "deleteLocation", "publishQuest"]),
     ...mapMutations([
       "ADD_ENTRY_EDITOR",
       "UPDATE_ENTRY_EDITOR",
-      "REMOVE_ENTRY_EDITOR"
+      "REMOVE_ENTRY_EDITOR",
+      "SET_ENTRIES_EDITOR",
     ]),
     addEntry() {
-      const locationId = this.newEntry.location;
-      const locationIndex = this.findWithAttr(locationId);
-      this.$store.commit("ADD_ENTRY_EDITOR", {
-        selectedLocation: locationIndex,
-        entry: this.newEntry
-      });
+      this.$store.dispatch("addEntry", this.newEntry);
       this.clearEntry();
     },
-    selectEntry(obj) {
-      const locationIndex = this.locations.indexOf(obj.location);
-      Object.assign(this.newEntry, obj.entry);
-      this.newEntry.location = obj.location.locationId;
-      if (!obj.location.order) {
-        this.newEntry.order = 1;
-      }
-      this.locationIndex = locationIndex;
-      this.entryIndex = obj.entryIndex;
+    // addEntry() {
+    //   const locationId = this.newEntry.location;
+    //   const locationIndex = this.findWithAttr(locationId);
+    //   this.$store.commit("ADD_ENTRY_EDITOR", {
+    //     selectedLocation: locationIndex,
+    //     entry: this.newEntry
+    //   });
+    //   this.clearEntry();
+    // },
+    selectEntry(entry) {
+      const index = this.entries.indexOf(entry);
+      this.newLocation = {
+        locationId: location.locationId,
+        name: location.name,
+        isLandmark: location.isLandmark,
+        isStartingPoint: location.isStartingPoint,
+        coordinates: location.coordinates,
+        zoom: location.zoom,
+        order: location.order || 0,
+        image: location.image,
+        marker: location.marker,
+        draggable: location.draggable,
+        entries: location.entries,
+        items: location.items
+      };
+      this.selectedLocation = index;
     },
+    // selectEntry(obj) {
+    //   this.newEntry = obj.entry;
+    //   this.newEntry.location = obj.location.locationId;
+    //   if (!obj.location.order) {
+    //     this.newEntry.order = 1;
+    //   }
+    //   this.entryIndex = obj.entryIndex;
+    // },
     updateEntry() {
       const locationId = this.newEntry.location;
       const locationIndex = this.findWithAttr(locationId);
@@ -387,7 +408,9 @@ export default {
       this.entryIndex = null;
     },
     addAction(event) {
-      this.newEntry.actions.push(event.action);
+      var newEvent = {};
+      Object.assign(newEvent, event.action)
+      this.newEntry.actions.push(newEvent);
     },
     editAction(event) {
       Object.assign(this.newEntry.actions[event.index], event.action);

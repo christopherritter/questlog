@@ -4,28 +4,8 @@ export default () => ({
   quest: null,
   objectives: null,
   locations: null,
-  editor: {
-    quest: {
-      questId: null,
-      title: "",
-      description: "",
-      image: "",
-      categories: [],
-      author: null,
-      region: {
-        name: "",
-        coordinates: [
-          39.828175,
-          -98.5795
-        ],
-        zoom: 18,
-        draggable: true,
-        mapOptions: {}
-      },
-    },
-    objectives: [],
-    locations: [],
-  },
+  entries: null,
+  items: null,
   categories: [{
       id: 0,
       name: "family-friendly",

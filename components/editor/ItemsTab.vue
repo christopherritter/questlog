@@ -321,13 +321,13 @@ export default {
       this.clearItem();
     },
     selectItem(obj) {
-      const locationIndex = this.locations.indexOf(obj.location);
-      Object.assign(this.newItem, obj.item);
+      // const locationIndex = this.locations.indexOf(obj.location);
+      this.newItem = obj.item;
       this.newItem.location = obj.location.locationId;
       if (!obj.location.order) {
         this.newItem.order = 1;
       }
-      this.locationIndex = locationIndex;
+      // this.locationIndex = locationIndex;
       this.itemIndex = obj.itemIndex;
     },
     updateItem() {

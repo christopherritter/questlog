@@ -11,10 +11,12 @@
         <h1 class="display-3 mb-3">{{ quest.title }}</h1>
         <h3 class="subtitle-1 mb-8 mb-lg-12">by {{ quest.author }}</h3>
         <v-btn color="primary" class="mr-2" large disabled>Play</v-btn>
-        <v-btn outlined class="mr-2" large @click="readQuest()"
-          >Read</v-btn
-        >
-        <v-btn v-if="authUser && authUser.uid == quest.authorId" outlined large @click="editQuest()"
+        <v-btn outlined class="mr-2" large @click="$emit('read-quest')">Read</v-btn>
+        <v-btn
+          v-if="authUser && authUser.uid == quest.authorId"
+          outlined
+          large
+          @click="$emit('edit-quest')"
           >Edit</v-btn
         >
       </v-col>
@@ -26,39 +28,16 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "QuestHeader",
-  props: ["quest", "questId", "objectives", "locations"],
+  props: ["quest"],
   computed: {
     ...mapState({
       categories: state => state.categories,
       authUser: state => state.authUser
-    }),
+    })
   },
-  methods: {
-    ...mapActions([
-      "readQuest",
-      "editQuest",
-    ]),
-    ...mapMutations(["CLEAR_QUEST", "CLEAR_QUEST_EDITOR"]),
-    readQuest() {
-      this.$store.dispatch("readQuest", {
-        quest: this.quest,
-        objectives: this.objectives,
-        locations: this.locations,
-      });
-      this.$router.push("/quest/reader");
-    },
-    editQuest() {
-      this.$store.dispatch("editQuest", {
-        quest: this.quest,
-        objectives: this.objectives,
-        locations: this.locations,
-      });
-      this.$router.push("/editor");
-    },
-  }
 };
 </script>
 

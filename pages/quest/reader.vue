@@ -49,7 +49,7 @@ import LeafletMap from "@/components/LeafletMap.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
 
 export default {
-  name: "questReader",
+  name: "QuestReader",
   layout: "fluid",
   data() {
     return {

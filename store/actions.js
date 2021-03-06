@@ -107,6 +107,16 @@ export default {
 
   // Quest
 
+  setQuest({
+    commit
+  }, obj) {
+    commit('SET_QUEST', obj.quest);
+    commit('SET_OBJECTIVES', obj.objectives);
+    commit('SET_LOCATIONS', obj.locations);
+    commit('SET_ENTRIES', obj.entries);
+    commit('SET_ITEMS', obj.items);
+  },
+
   // There is no 'BEGIN QUEST'
   // There is only:
   // 'READ QUEST'
@@ -141,9 +151,9 @@ export default {
     state,
     commit
   }) {
-    if (!state.editor.quest.questId) {
+    if (!state.quest.questId) {
       var quest = {};
-      Object.assign(quest, state.editor.quest)
+      Object.assign(quest, state.quest)
 
       if (!quest.title) quest.title = "Untitled";
 
@@ -186,7 +196,7 @@ export default {
       })
     } else {
       const db = this.$fire.firestore;
-      const questId = state.editor.quest.questId;
+      const questId = state.quest.questId;
       const questRef = db.collection('quests').doc(questId);
       const objectivesRef = questRef.collection("objectives");
       const locationsRef = questRef.collection("locations");
@@ -194,13 +204,13 @@ export default {
       // Get a new write batch
       const batch = db.batch();
 
-      batch.update(questRef, state.editor.quest)
+      batch.update(questRef, state.quest)
 
-      state.editor.objectives.forEach(objective => {
+      state.objectives.forEach(objective => {
         batch.set(objectivesRef.doc(objective.objectiveId), objective )
       });
 
-      state.editor.locations.forEach(location => {
+      state.locations.forEach(location => {
         batch.set(locationsRef.doc(location.locationId), location )
       });
 
@@ -215,7 +225,7 @@ export default {
     state,
     commit
   }, objective) {
-    const objectivesRef = this.$fire.firestore.collection('quests').doc(state.editor.quest.questId).collection("objectives");
+    const objectivesRef = this.$fire.firestore.collection('quests').doc(state.quest.questId).collection("objectives");
     var newObjective = objective;
 
     const result = await objectivesRef.add(objective);
@@ -231,9 +241,9 @@ export default {
     state,
     commit
   }, objective) {
-    const questId = state.editor.quest.questId;
+    const questId = state.quest.questId;
     const questRef = this.$fire.firestore.collection('quests');
-    const objectiveId = state.editor.objectives[objective.currentObjective].objectiveId;
+    const objectiveId = state.objectives[objective.currentObjective].objectiveId;
     const objectivesRef = questRef.doc(questId).collection("objectives");
 
     var newObjective = objective.newObjective;
@@ -248,12 +258,12 @@ export default {
   },
 
   async deleteObjective({ state, commit }, index) {
-    const questId = state.editor.quest.questId;
+    const questId = state.quest.questId;
     const questRef = this.$fire.firestore.collection('quests');
-    const objectiveId = state.editor.objectives[index].objectiveId;
+    const objectiveId = state.objectives[index].objectiveId;
     const objectivesRef = questRef.doc(questId).collection("objectives");
 
-    var newObjectives = state.editor.objectives.filter(objective => objective.objectiveId != objectiveId)
+    var newObjectives = state.objectives.filter(objective => objective.objectiveId != objectiveId)
     commit("SET_OBJECTIVES_EDITOR", newObjectives)
 
     const res = await objectivesRef.doc(objectiveId).delete();
@@ -265,7 +275,7 @@ export default {
     state,
     commit
   }, location) {
-    const locations = state.editor.quest.locations;
+    const locations = state.quest.locations;
     var position = location.sourceTarget.getLatLng();
     var newLocation, selectedLocation;
 
@@ -288,7 +298,7 @@ export default {
     state,
     commit
   }, location) {
-    const locationsRef = this.$fire.firestore.collection('quests').doc(state.editor.quest.questId).collection("locations");
+    const locationsRef = this.$fire.firestore.collection('quests').doc(state.quest.questId).collection("locations");
     var newLocation = location;
 
     const result = await locationsRef.add(location);
@@ -304,9 +314,9 @@ export default {
     state,
     commit
   }, location) {
-    const questId = state.editor.quest.questId;
+    const questId = state.quest.questId;
     const questRef = this.$fire.firestore.collection('quests');
-    const locationId = state.editor.locations[location.selectedLocation].locationId;
+    const locationId = state.locations[location.selectedLocation].locationId;
     const locationsRef = questRef.doc(questId).collection("locations");
 
     var newLocation = location.newLocation;
@@ -321,15 +331,34 @@ export default {
   },
 
   async deleteLocation({ state, commit }, index) {
-    const questId = state.editor.quest.questId;
+    const questId = state.quest.questId;
     const questRef = this.$fire.firestore.collection('quests');
-    const locationId = state.editor.locations[index].locationId;
+    const locationId = state.locations[index].locationId;
     const locationsRef = questRef.doc(questId).collection("locations");
 
-    var newLocations = state.editor.locations.filter(location => location.locationId != locationId)
+    var newLocations = state.locations.filter(location => location.locationId != locationId)
     commit("SET_LOCATIONS_EDITOR", newLocations)
 
     const res = await locationsRef.doc(locationId).delete();
+  },
+
+  // Editor Entries
+
+  async addEntry({
+    state,
+    commit
+  }, entry) {
+    const questId = state.quest.questId;
+    const entriesRef = this.$fire.firestore.collection("quests").doc(questId).collection("entries");
+    var newEntry = entry;
+
+    const result = await entriesRef.add(entry);
+    newEntry.entryId = result.id;
+    commit("ADD_ENTRY_EDITOR", newEntry);
+
+    const update = entriesRef.doc(result.id).update({
+      entryId: result.id
+    });
   },
 
   // Editor Items
@@ -344,7 +373,7 @@ export default {
     state,
     commit
   }, index) {
-    const item = state.editor.quest.items[index];
+    const item = state.quest.items[index];
     commit('SET_ITEM', item);
   },
 
@@ -359,7 +388,7 @@ export default {
     commit
   }, index) {
     console.log("Remove Item No. " + index)
-    var items = state.editor.quest.items;
+    var items = state.quest.items;
     var newItems = items.slice(index, 1)
     console.log(newItems)
     commit('SET_ITEMS', newItems)
