@@ -372,8 +372,7 @@ export default {
     state,
     commit
   }, entry) {
-    const questId = state.quest.questId;
-    const entriesRef = this.$fire.firestore.collection("quests").doc(questId).collection("entries");
+    const entriesRef = this.$fire.firestore.collection('quests').doc(state.quest.questId).collection("entries");
     var newEntry = entry;
 
     const result = await entriesRef.add(entry);
@@ -385,13 +384,14 @@ export default {
     });
   },
 
-  updateEntry({ state, dispatch }, entry) {
-    console.log(entry)
+  updateEntry({ state, dispatch, commit }, entry) {
     dispatch("findWithAttr", {
       array: state.entries,
       attr: "entryId",
       value: entry.entryId,
-    }).then(result => console.log(result))
+    }).then(index => {
+      commit("UPDATE_ENTRY", { index: index, entry: entry })
+    })
   },
 
   // Editor Items

@@ -119,7 +119,7 @@
                 </v-col>
                 <v-col sm="4">
                   <v-select
-                    v-model="sortLocations"
+                    v-model="sortBy"
                     :items="sort"
                     label="Sort Locations"
                     outlined
@@ -165,7 +165,7 @@
                   </v-avatar>
                 </v-subheader>
                 <v-list-item-group v-model="selectedEntry" color="green">
-                  <template v-for="entry in localEntries(location)">
+                  <template v-for="entry in location.entries">
                     <v-list-item
                       :key="entry.entryId"
                       :value="entry.entryId"
@@ -251,20 +251,32 @@ export default {
         expiration: [],
         objectives: []
       },
-      // selectedLocation: {},
+      // sortedEntries: [],
       selectedEntry: "undefined",
-      locationIndex: null,
-      entryIndex: null,
+      // locationIndex: null,
+      // entryIndex: null,
       searchTerm: "",
-      sortLocations: "",
+      sortBy: "",
       sort: ["Alphabetically", "Numerically"]
     };
   },
   props: ["objectives", "locations", "entries"],
+  // created() {
+  //   this.sortEntries();
+  // },
   computed: {
     filterByTerm() {
       let searchTerm = this.searchTerm.toLowerCase();
       let locations = this.locations.slice();
+
+      locations.forEach(location => {
+        // if (location.entries.length > 0) {
+          var entries = this.entries.filter(function(entry) {
+            return entry.location === location.locationId;
+          });
+          location.entries = entries;
+        // }
+      });
 
       return locations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
@@ -273,25 +285,36 @@ export default {
   },
   components: { ActionsPanel },
   watch: {
-    sortLocations(val) {
-      let locations = this.locations.slice();
+    sortBy(val) {
+      console.log("Sort by " + val);
+      //   let locations = this.locations.slice();
 
-      if (val === "Alphabetically") {
-        locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+      //   if (val === "Alphabetically") {
+      //     locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-        if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS", locations);
-        }
-      } else if (val === "Numerically") {
-        locations.sort((a, b) => (a.order > b.order ? 1 : -1));
+      //     if (locations != this.locations) {
+      //       this.$store.commit("SET_LOCATIONS", locations);
+      //     }
+      //   } else if (val === "Numerically") {
+      //     locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
-        if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS", locations);
-        }
-      }
+      //     if (locations != this.locations) {
+      //       this.$store.commit("SET_LOCATIONS", locations);
+      //     }
+      //   }
 
-      this.clearEntry();
-    }
+      //   this.clearEntry();
+    },
+    // entries: {
+    //   // This will let Vue know to look inside the array
+    //   deep: true,
+
+    //   // We have to move our method to a handler field
+    //   handler() {
+    //     console.log("Entries changed, sorting entries.")
+    //     this.sortEntries()
+    //   }
+    // }
   },
   methods: {
     ...mapActions([
@@ -302,20 +325,35 @@ export default {
       "findWithAttr"
     ]),
     ...mapMutations(["REMOVE_ENTRY", "SET_ENTRIES"]),
-    localEntries(location) {
-      const entries = this.entries;
-      var localEntries = []
-      for (let e = 0; e < location.entries.length; e++) {
+    // sortEntries() {
+    //   let sortedEntries = [];
+    //   this.locations.forEach(location => {
 
-        for (let f = 0; f < entries.length; f++) {
-          if (location.entries[e] == entries[f].entryId) {
-            localEntries.push(entries[f]);
-          }
-        }
+    //     if (location.entries.length > 0) {
+    //       var entries = this.entries.filter(function(entry) {
+    //         return entry.location === location.locationId;
+    //       });
+    //       // console.log(entries)
+    //       location.entries = entries;
+    //     }
+    //     sortedEntries.push(location)
+    //   });
 
-      }
-      return localEntries;
-    },
+    //   this.sortedEntries = sortedEntries;
+
+    // },
+    // localEntries(location) {
+    //   const entries = this.entries;
+    //   var localEntries = [];
+    //   for (let e = 0; e < location.entries.length; e++) {
+    //     for (let f = 0; f < entries.length; f++) {
+    //       if (location.entries[e] == entries[f].entryId) {
+    //         localEntries.push(entries[f]);
+    //       }
+    //     }
+    //   }
+    //   return localEntries;
+    // },
     addEntry() {
       this.$store.dispatch("addEntry", this.newEntry);
       this.clearEntry();
@@ -334,6 +372,7 @@ export default {
     // },
     updateEntry() {
       this.$store.dispatch("updateEntry", this.newEntry);
+      // this.sortEntries();
       this.clearEntry();
     },
     removeEntry() {
@@ -378,8 +417,8 @@ export default {
       this.$store.dispatch("publishQuest");
     },
     findWithAttr(value) {
-      const array = this.locations;
-      const attr = "locationId";
+      const array = this.entries;
+      const attr = "entryId";
       for (var i = 0; i < array.length; i += 1) {
         if (array[i][attr] === value) {
           return i;

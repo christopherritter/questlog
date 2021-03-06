@@ -210,36 +210,40 @@ export default {
             items: []
           };
 
-          if (location.entries) {
-            location.entries.forEach(entry => {
-              this.createEntry(entry).then(result => {
-                newLocation.entries.push(result.entryId);
-                this.entries.push(result)
-              })
-            });
-          }
+          // Only uncomment these two (or the bottom two)
 
-          if (location.items) {
-            location.items.forEach(item => {
-              this.createItem(item).then(result => {
-                newLocation.items.push(result.itemId);
-                this.items.push(result)
-              })
-            });
-          }
+          // if (location.entries) {
+          //   location.entries.forEach(entry => {
+          //     this.createEntry(entry).then(result => {
+          //       newLocation.entries.push(result.entryId);
+          //       this.entries.push(result)
+          //     })
+          //   });
+          // }
+
+          // if (location.items) {
+          //   location.items.forEach(item => {
+          //     this.createItem(item).then(result => {
+          //       newLocation.items.push(result.itemId);
+          //       this.items.push(result)
+          //     })
+          //   });
+          // }
 
           this.locations.push(newLocation);
         });
 
-        // const entries = await entriesRef.get();
-        // entries.forEach(entry => {
-        //   this.entries.push(entry.data());
-        // });
+        // Only uncomment these two (or the top two)
 
-        // const items = await itemsRef.get();
-        // items.forEach(item => {
-        //   this.items.push(item.data());
-        // });
+        const entries = await entriesRef.get();
+        entries.forEach(entry => {
+          this.entries.push(entry.data());
+        });
+
+        const items = await itemsRef.get();
+        items.forEach(item => {
+          this.items.push(item.data());
+        });
       }
       this.loading = false;
     },

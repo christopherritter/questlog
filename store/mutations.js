@@ -78,13 +78,12 @@ export default {
     state.locations = locations;
   },
 
-  ADD_ENTRY: (state, obj) => {
-    state.locations[obj.selectedLocation].entries.push(obj.entry);
+  ADD_ENTRY: (state, entry) => {
+    state.entries.push(entry);
   },
 
   UPDATE_ENTRY: (state, obj) => {
-    Object.assign(state.locations[obj.selectedLocation].entries[obj.selectedEntry],
-      obj.entry);
+    Object.assign(state.entries[obj.index], obj.entry);
   },
 
   REMOVE_ENTRY: (state, obj) => {
