@@ -234,7 +234,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions } from "vuex";
 import ActionsPanel from "@/components/editor/ActionsPanel.vue";
 
 export default {
@@ -252,8 +252,6 @@ export default {
         objectives: []
       },
       selectedEntry: "undefined",
-      // locationIndex: null,
-      // entryIndex: null,
       searchTerm: "",
       sortBy: "",
       sort: ["Alphabetically", "Numerically"]
@@ -266,12 +264,10 @@ export default {
       let locations = this.locations.slice();
 
       locations.forEach(location => {
-        // if (location.entries.length > 0) {
         var entries = this.entries.filter(function(entry) {
           return entry.location === location.locationId;
         });
         location.entries = entries;
-        // }
       });
 
       return locations.filter(location => {
@@ -304,12 +300,9 @@ export default {
   methods: {
     ...mapActions([
       "addEntry",
-      "updateLocation",
-      "deleteLocation",
       "publishQuest",
       "findWithAttr"
     ]),
-    ...mapMutations(["REMOVE_ENTRY", "SET_ENTRIES"]),
     addEntry() {
       this.$store.dispatch("addEntry", this.newEntry);
       this.clearEntry();
@@ -322,14 +315,10 @@ export default {
       this.clearEntry();
     },
     removeEntry() {
-      // const locationId = this.newEntry.location;
-      // const locationIndex = this.findWithAttr(locationId);
-
       this.$store.dispatch("deleteEntry", this.selectedEntry);
       this.clearEntry();
     },
     clearEntry() {
-      this.selectedEntry = "undefined";
       this.newEntry = {
         title: "",
         location: "",
@@ -340,15 +329,12 @@ export default {
         expiration: [],
         objectives: []
       };
-
       this.selectedEntry = "undefined";
-      this.locationIndex = null;
-      this.entryIndex = null;
     },
     addAction(event) {
-      var newEvent = {};
-      Object.assign(newEvent, event.action);
-      this.newEntry.actions.push(newEvent);
+      var newAction = {};
+      Object.assign(newAction, event.action);
+      this.newEntry.actions.push(newAction);
     },
     editAction(event) {
       Object.assign(this.newEntry.actions[event.index], event.action);

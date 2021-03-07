@@ -35,11 +35,8 @@ export default {
   },
 
   UPDATE_OBJECTIVE: (state, objective) => {
-    state.objectives[objective.currentObjective] = {
-      name: objective.newObjective.name,
-      description: objective.newObjective.description,
-      isPrimary: objective.newObjective.isPrimary,
-    };
+    Object.assign(state.objectives[objective.currentObjective],
+      objective.newObjective);
   },
 
   SET_OBJECTIVE: (state, {
@@ -86,34 +83,20 @@ export default {
     Object.assign(state.entries[obj.index], obj.entry);
   },
 
-  REMOVE_ENTRY: (state, obj) => {
-    state.locations[obj.locationIndex].entries.splice(obj.entryIndex, 1);
-  },
-
   SET_ENTRIES: (state, entries) => {
     state.entries = entries;
   },
 
-  ADD_ITEM: (state, obj) => {
-    state.locations[obj.selectedLocation].items.push(obj.item);
+  ADD_ITEM: (state, item) => {
+    state.items.push(item);
   },
 
   UPDATE_ITEM: (state, obj) => {
-    Object.assign(state.locations[obj.selectedLocation].items[obj.selectedItem],
-      obj.item);
-  },
-
-  REMOVE_ITEM: (state, obj) => {
-    state.locations[obj.locationIndex].items.splice(obj.itemIndex, 1);
+    Object.assign(state.items[obj.index], obj.item);
   },
 
   SET_ITEMS: (state, items) => {
     state.items = items;
   },
 
-  CLEAR_QUEST: (state) => {
-    state.quest = {};
-    state.objectives = [];
-    state.locations = [];
-  },
 }

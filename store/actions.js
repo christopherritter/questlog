@@ -372,10 +372,12 @@ export default {
     state,
     commit
   }, entry) {
-    const entriesRef = this.$fire.firestore.collection('quests').doc(state.quest.questId).collection("entries");
+    const questId = state.quest.questId;
+    const questRef = this.$fire.firestore.collection('quests');
+    const entriesRef = questRef.doc(questId).collection("entries");
     var newEntry = entry;
 
-    const result = await entriesRef.add(entry);
+    const result = await entriesRef.add(newEntry);
     newEntry.entryId = result.id;
     commit("ADD_ENTRY", newEntry);
 
@@ -390,7 +392,7 @@ export default {
       attr: "entryId",
       value: entry.entryId,
     }).then(index => {
-      commit("UPDATE_ENTRY", { index: index, entry: entry })
+      commit("UPDATE_ENTRY", { index, entry })
     })
   },
 
@@ -410,80 +412,46 @@ export default {
 
   // Editor Items
 
-  addItem({
+  async addItem({
+    state,
     commit
   }, item) {
-    commit('ADD_ITEM', item)
+    const questId = state.quest.questId;
+    const questRef = this.$fire.firestore.collection("quests");
+    const itemsRef = questRef.doc(questId).collection("items");
+    var newItem = item;
+
+    const result = await itemsRef.add(newItem);
+    newItem.itemId = result.id;
+    commit("ADD_ITEM", newItem);
+
+    const update = itemsRef.doc(result.id).update({
+      itemId: result.id
+    });
   },
 
-  selectItem({
-    state,
-    commit
-  }, index) {
-    const item = state.quest.items[index];
-    commit('SET_ITEM', item);
-  },
-
-  clearItem({
-    commit
-  }) {
-    commit('CLEAR_ITEM');
-  },
-
-  removeItem({
-    state,
-    commit
-  }, index) {
-    console.log("Remove Item No. " + index)
-    var items = state.quest.items;
-    var newItems = items.slice(index, 1)
-    console.log(newItems)
-    commit('SET_ITEMS', newItems)
-  },
-
-  updateItem({
-    commit
-  }, {
-    selectedItem,
-    newItem
-  }) {
-    commit('UPDATE_ITEM', {
-      selectedItem,
-      newItem
+  updateItem({ state, dispatch, commit }, item) {
+    dispatch("findWithAttr", {
+      array: state.items,
+      attr: "itemId",
+      value: item.itemId,
+    }).then(index => {
+      commit("UPDATE_ITEM", { index, item })
     })
   },
 
-  updateItems({
+  async deleteItem({
+    state,
     commit
-  }, items) {
-    commit('SET_ITEMS', items)
-  },
+  }, itemId) {
+    const questId = state.quest.questId;
+    const questRef = this.$fire.firestore.collection("quests");
+    const itemsRef = questRef.doc(questId).collection("items");
 
-  // Editor Actions
+    var newItems = state.items.filter(item => item.itemId != itemId)
+    commit("SET_ITEMS", newItems);
 
-  addAction({
-    commit
-  }, action) {
-    commit('ADD_ACTION', action)
-  },
-
-  updateAction({
-    commit
-  }, action) {
-    console.log(action)
-    console.log("Action No. " + action.currentAction)
-    console.log(action.newAction)
-    commit('UPDATE_ACTION', {
-      currentAction: action.currentAction,
-      newAction: action.newAction
-    })
-  },
-
-  updateActions({
-    commit
-  }, actions) {
-    console.log("Updating Actions")
-    commit('SET_ACTIONS', actions)
+    const res = await itemsRef.doc(itemId).delete();
   },
 
   // General Actions

@@ -119,7 +119,7 @@
                 </v-col>
                 <v-col sm="4">
                   <v-select
-                    v-model="sortLocations"
+                    v-model="sortBy"
                     :items="sort"
                     label="Sort Locations"
                     outlined
@@ -140,8 +140,8 @@
             <v-col>
               <v-list
                 span
-                v-for="(location, l) in filterByTerm"
-                :key="l"
+                v-for="location in filterByTerm"
+                :key="location.locationId"
                 subheader
                 two-line
               >
@@ -165,18 +165,11 @@
                   </v-avatar>
                 </v-subheader>
                 <v-list-item-group v-model="selectedItem" color="green">
-                  <template v-for="(item, i) in location.items">
+                  <template v-for="item in location.items">
                     <v-list-item
-                      :key="`item-${l}-${i}`"
-                      :value="`item-${l}-${i}`"
-                      @click="
-                        selectItem({
-                          locationIndex: l,
-                          location: location,
-                          itemIndex: i,
-                          item: item
-                        })
-                      "
+                      :key="item.itemId"
+                      :value="item.itemId"
+                      @click="selectItem(item)"
                     >
                       <v-list-item-avatar>
                         <v-icon
@@ -241,7 +234,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions } from "vuex";
 import ActionsPanel from "@/components/editor/ActionsPanel.vue";
 
 export default {
@@ -258,20 +251,24 @@ export default {
         expiration: [],
         objectives: []
       },
-      selectedLocation: {},
       selectedItem: "undefined",
-      locationIndex: null,
-      itemIndex: null,
       searchTerm: "",
-      sortLocations: "",
+      sortBy: "",
       sort: ["Alphabetically", "Numerically"]
     };
   },
-  props: ["objectives", "locations"],
+  props: ["objectives", "locations", "items"],
   computed: {
     filterByTerm() {
       let searchTerm = this.searchTerm.toLowerCase();
       let locations = this.locations.slice();
+
+      locations.forEach(location => {
+        var items = this.items.filter(function(item) {
+          return item.location === location.locationId;
+        });
+        location.items = items;
+      });
 
       return locations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
@@ -280,7 +277,7 @@ export default {
   },
   components: { ActionsPanel },
   watch: {
-    sortLocations(val) {
+    sortBy(val) {
       let locations = this.locations.slice();
 
       if (val === "Alphabetically") {
@@ -299,59 +296,29 @@ export default {
 
       this.clearItem();
     },
-    'newItem.location': function (val){
-      const locationIndex = this.findWithAttr(val);
-      this.selectedLocation = this.locations[locationIndex];
-     },
   },
   methods: {
-    ...mapActions(["publishQuest"]),
-    ...mapMutations([
-      "ADD_ITEM",
-      "UPDATE_ITEM",
-      "REMOVE_ITEM"
+    ...mapActions([
+      "addItem",
+      "publishQuest",
+      "findWithAttr"
     ]),
     addItem() {
-      const locationId = this.newItem.location;
-      const locationIndex = this.findWithAttr(locationId);
-      this.$store.commit("ADD_ITEM", {
-        selectedLocation: locationIndex,
-        item: this.newItem
-      });
+      this.$store.dispatch("addItem", this.newItem);
       this.clearItem();
     },
-    selectItem(obj) {
-      // const locationIndex = this.locations.indexOf(obj.location);
-      this.newItem = obj.item;
-      this.newItem.location = obj.location.locationId;
-      if (!obj.location.order) {
-        this.newItem.order = 1;
-      }
-      // this.locationIndex = locationIndex;
-      this.itemIndex = obj.itemIndex;
+    selectItem(item) {
+      this.newItem = Object.assign({}, item);
     },
     updateItem() {
-      const locationId = this.newItem.location;
-      const locationIndex = this.findWithAttr(locationId);
-      this.$store.commit("UPDATE_ITEM", {
-        selectedLocation: locationIndex,
-        selectedItem: this.itemIndex,
-        item: this.newItem
-      });
+      this.$store.dispatch("updateItem", this.newItem);
       this.clearItem();
     },
     removeItem() {
-      const locationId = this.newItem.location;
-      const locationIndex = this.findWithAttr(locationId);
-
-      this.$store.commit("REMOVE_ITEM", {
-        locationIndex: locationIndex,
-        itemIndex: this.itemIndex
-      });
-      this.clearItem();
+      this.$store.dispatch("deleteItem", this.selectedItem);
+      this.clearEntry();
     },
     clearItem() {
-      this.selectedItem = "undefined";
       this.newItem = {
         title: "",
         location: "",
@@ -362,13 +329,12 @@ export default {
         expiration: [],
         objectives: []
       };
-
       this.selectedItem = "undefined";
-      this.locationIndex = null;
-      this.itemIndex = null;
     },
     addAction(event) {
-      this.newItem.actions.push(event.action);
+      var newAction = {};
+      Object.assign(newAction, event.action);
+      this.newItem.actions.push(newAction);
     },
     editAction(event) {
       Object.assign(this.newItem.actions[event.index], event.action);
@@ -380,8 +346,8 @@ export default {
       this.$store.dispatch("publishQuest");
     },
     findWithAttr(value) {
-      const array = this.locations;
-      const attr = "locationId";
+      const array = this.items;
+      const attr = "itemId";
       for (var i = 0; i < array.length; i += 1) {
         if (array[i][attr] === value) {
           return i;
