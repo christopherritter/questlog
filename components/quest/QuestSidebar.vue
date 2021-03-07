@@ -68,44 +68,42 @@ export default {
       var localObjectives = [];
 
       for (let e = 0; e < this.localEntries.length; e++) {
-        // if (this.entries[e].objectives) {
-          for (let o = 0; o < this.localEntries[e].objectives.length; o++) {
-            var objective = {};
-            Object.assign(objective, this.localEntries[e].objectives[o]);
+        for (let o = 0; o < this.localEntries[e].objectives.length; o++) {
+          var localObjectives = [];
+
+          this.localEntries[e].objectives.forEach(objectiveId => {
+            var index = this.findObjective(objectiveId);
             this.$store.dispatch("setObjective", {
-              id: objective,
+              objectiveId: objectiveId,
               bool: true
             });
-          }
-        // }
+            localObjectives.push(this.objectives[index])
+          })
+        }
       }
 
       return localObjectives;
     }
   },
-  watch: {
-    localObjectives(val) {
-      if (val.length > 0) {
-        for (let i = 0; i < val.length; i++ ) {
-          var objective = val[i];
-          if (objective.isComplete != true) {
-            this.$store.dispatch("setObjective", { id: objective.objectiveId, bool: true })
-          }
+  methods: {
+    ...mapActions(["setObjective", "findWithAttr"]),
+    entryAllowed(entry) {
+      //   const expiration = entry.expiration;
+      //   const requirements = entry.requirements;
+      //   if (expiration.length <= 0 && requirements.length <= 0) {
+      return true;
+      //   }
+    },
+    findObjective(objectiveId) {
+      const array = this.objectives;
+      const attr = "objectiveId";
+      for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === objectiveId) {
+          return i;
         }
       }
-    }
-  },
-  methods: {
-    ...mapActions([
-      "setObjective",
-    ]),
-    entryAllowed(entry) {
-    //   const expiration = entry.expiration;
-    //   const requirements = entry.requirements;
-    //   if (expiration.length <= 0 && requirements.length <= 0) {
-        return true;
-    //   }
-    }
+      return -1;
+    },
   }
 };
 </script>

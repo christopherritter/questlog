@@ -95,58 +95,24 @@ export default {
   methods: {
     ...mapMutations(["SET_OBJECTIVE"]),
     viewLocation(locationId) {
-      const locationIndex = this.findWithAttr(locationId);
+      const locationIndex = this.findLocation(locationId);
       const location = this.locations[locationIndex];
 
-      this.locationEntries(locationIndex);
       this.selectedLocation = location;
+      this.selectedActions(locationId);
       this.zoom = location.zoom;
 
       this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
-    },
-    locationEntries(index) {
-      const location = this.locations[index];
-      const localEntries = location.entries;
-      var locationActions = [];
-
-      for (var e = 0; e < localEntries.length; e++) {
-        const index = this.findEntry(localEntries[e]);
-        let entryActions = this.entries[index].actions;
-        for (let a = 0; a < entryActions.length; a++) {
-          let action = {};
-          Object.assign(action, entryActions[a]);
-          locationActions.push(action);
-        }
-      }
-
-      this.locationActions = locationActions;
-    },
-    selectAction(event) {
-      if (event.type == "Move") {
-        this.viewLocation(event.target);
-      }
     },
     clearLocation() {
       this.selectedLocation = {};
       this.locationActions = [];
     },
-    restartQuest() {
-      this.dialog = false;
-      if (this.quest.startingPoint.length > 0) {
-        this.viewLocation(this.quest.startingPoint);
-      }
-      for (let i = 0; i < this.objectives.length; i++) {
-        this.$store.commit("SET_OBJECTIVE", {
-          index: i,
-          bool: false
-        });
-      }
-    },
-    findWithAttr(value) {
+    findLocation(locationId) {
       const array = this.locations;
       const attr = "locationId";
       for (var i = 0; i < array.length; i += 1) {
-        if (array[i][attr] === value) {
+        if (array[i][attr] === locationId) {
           return i;
         }
       }
@@ -161,6 +127,37 @@ export default {
         }
       }
       return -1;
+    },
+    selectedActions(locationId) {
+      var selectedActions = [];
+      for (var e = 0; e < this.entries.length; e++) {
+        if (this.entries[e].location == locationId) {
+          let entryActions = this.entries[e].actions;
+          for (let a = 0; a < entryActions.length; a++) {
+            let action = {};
+            Object.assign(action, entryActions[a]);
+            selectedActions.push(action);
+          }
+        }
+      }
+      this.locationActions = selectedActions;
+    },
+    selectAction(event) {
+      if (event.type == "Move") {
+        this.viewLocation(event.target);
+      }
+    },
+    restartQuest() {
+      this.dialog = false;
+      if (this.quest.startingPoint.length > 0) {
+        this.viewLocation(this.quest.startingPoint);
+      }
+      for (let i = 0; i < this.objectives.length; i++) {
+        this.$store.commit("SET_OBJECTIVE", {
+          index: i,
+          bool: false
+        });
+      }
     }
   }
 };

@@ -1,4 +1,7 @@
 export default {
+
+  // Auth
+
   async nuxtServerInit({
     dispatch
   }, ctx) {
@@ -48,6 +51,8 @@ export default {
     dispatch('fetchUserProfile', authUser.uid);
   },
 
+  // Users
+
   async fetchUserProfile({
     state,
     commit
@@ -81,19 +86,6 @@ export default {
       this.$router.push("/");
     }
 
-    // userRef.get()
-    //   .then((docSnapshot) => {
-    //     if (docSnapshot.exists) {
-    //       console.log(docSnapshot)
-    //       userRef.onSnapshot((doc) => {
-    //         console.log(doc.data)
-    //         if (!doc.data.name) this.$router.push({ name: 'profile' });
-    //       });
-    //     } else {
-    //       this.$router.back();
-    //     }
-    //   });
-
   },
 
   async updateUserName({
@@ -118,42 +110,6 @@ export default {
     commit('SET_ENTRIES', obj.entries);
     commit('SET_ITEMS', obj.items);
   },
-
-  // There is no 'BEGIN QUEST'
-  // There is only:
-  // 'READ QUEST'
-
-  // readQuest({
-  //   commit
-  // }, obj) {
-  //   commit('SET_QUEST', obj.quest);
-  //   commit('SET_OBJECTIVES', obj.objectives);
-  //   commit('SET_LOCATIONS', obj.locations);
-  // },
-
-  // 'PLAY QUEST'
-  // 'EDIT QUEST'
-
-  // editQuest({
-  //   commit
-  // }, obj) {
-  //   commit('SET_QUEST', obj.quest);
-  //   commit('SET_OBJECTIVES', obj.objectives);
-  //   commit('SET_LOCATIONS', obj.locations);
-  // },
-
-  setObjective({
-    state,
-    commit
-  }, obj) {
-    const index = state.objectives.map(e => e.objectiveId).indexOf(obj.id);
-    commit("SET_OBJECTIVE", {
-      index: index,
-      bool: obj.bool
-    })
-  },
-
-  // Editor
 
   async publishQuest({
     state,
@@ -237,7 +193,17 @@ export default {
     }
   },
 
-  // Editor Objectives
+  // Objectives
+
+  setObjective({ state, dispatch, commit }, obj) {
+    dispatch("findWithAttr", {
+      array: state.objectives,
+      attr: "objectiveId",
+      value: obj.objectiveId,
+    }).then(index => {
+      commit("SET_OBJECTIVE", { index: index, bool: obj.bool })
+    })
+  },
 
   async addObjective({
     state,
@@ -290,7 +256,7 @@ export default {
     const res = await objectivesRef.doc(objectiveId).delete();
   },
 
-  // Editor Locations
+  // Locations
 
   selectLocation({
     state,
@@ -366,7 +332,7 @@ export default {
     const res = await locationsRef.doc(locationId).delete();
   },
 
-  // Editor Entries
+  // Entries
 
   async addEntry({
     state,
@@ -410,7 +376,7 @@ export default {
     const res = await entriesRef.doc(entryId).delete();
   },
 
-  // Editor Items
+  // Items
 
   async addItem({
     state,
@@ -454,7 +420,7 @@ export default {
     const res = await itemsRef.doc(itemId).delete();
   },
 
-  // General Actions
+  // Utils
 
   findWithAttr({}, {
     array,
