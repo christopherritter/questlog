@@ -114,7 +114,9 @@ export default {
     })
   },
   methods: {
+    ...mapMutations(["CLEAR_QUEST"]),
     questEditor() {
+      this.$store.commit("CLEAR_QUEST");
       this.$router.push("/editor");
     },
     async logout() {

@@ -101,7 +101,7 @@ export default {
       newDetails: {
         title: "",
         author: "",
-        isAnonymous: true,
+        isAnonymous: false,
         description: "",
         image: "",
         categories: [],
@@ -113,9 +113,9 @@ export default {
   },
   props: ["quest", "locations"],
   created() {
-    if (this.quest) {
+
       this.fetchDetails();
-    }
+
   },
   computed: {
     ...mapState({
@@ -144,12 +144,12 @@ export default {
     ...mapMutations(["SET_DETAILS"]),
     fetchDetails() {
       Object.assign(this.newDetails, {
-        title: this.quest.title,
-        author: this.quest.author,
-        description: this.quest.description,
-        image: this.quest.image,
-        categories: this.quest.categories,
-        startingPoint: this.quest.startingPoint,
+        title: this.quest.title || "Untitled",
+        author: this.quest.author || "Anonymous",
+        description: this.quest.description || "",
+        image: this.quest.image || "",
+        categories: this.quest.categories || [],
+        startingPoint: this.quest.startingPoint || "",
       });
     },
     updateDetails() {

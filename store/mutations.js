@@ -26,6 +26,14 @@ export default {
     state.quest = quest
   },
 
+  CLEAR_QUEST: (state) => {
+    state.quest = {};
+    state.objectives = [];
+    state.locations = [];
+    state.entries = [];
+    state.items = [];
+  },
+
   SET_REGION: (state, region) => {
     state.region = region;
   },
