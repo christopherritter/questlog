@@ -35,7 +35,7 @@ export default {
   },
 
   SET_REGION: (state, region) => {
-    state.region = region;
+    state.quest.region = region;
   },
 
   ADD_OBJECTIVE: (state, objective) => {
