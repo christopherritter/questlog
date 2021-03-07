@@ -206,8 +206,6 @@ export default {
             order: location.order,
             locationId: location.locationId,
             draggable: location.draggable,
-            entries: [],
-            items: []
           };
 
           // Only uncomment these two (or the bottom two)
