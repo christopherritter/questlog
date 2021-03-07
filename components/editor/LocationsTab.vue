@@ -229,7 +229,7 @@ export default {
         isStartingPoint: false,
         coordinates: [null, null],
         zoom: 18,
-        order: null,
+        order: 0,
         image: "",
         marker: null,
         draggable: true,
@@ -272,17 +272,17 @@ export default {
       let locations = this.locations.slice();
 
       if (val === "Alphabetically") {
-        locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+        // locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-        if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS", locations);
-        }
+        // if (locations != this.locations) {
+        //   this.$store.commit("SET_LOCATIONS", locations);
+        // }
       } else if (val === "Numerically") {
-        locations.sort((a, b) => (a.order > b.order ? 1 : -1));
+        // locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
-        if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS", locations);
-        }
+        // if (locations != this.locations) {
+        //   this.$store.commit("SET_LOCATIONS", locations);
+        // }
       }
 
       this.clearLocation();
@@ -308,7 +308,7 @@ export default {
         isStartingPoint: location.isStartingPoint,
         coordinates: location.coordinates,
         zoom: location.zoom,
-        order: location.order || 0,
+        order: location.order,
         image: location.image,
         marker: location.marker,
         draggable: location.draggable,
@@ -344,7 +344,7 @@ export default {
         isStartingPoint: false,
         coordinates: [null, null],
         zoom: 18,
-        order: null,
+        order: 0,
         image: "",
         marker: null,
         draggable: true,

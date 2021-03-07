@@ -140,7 +140,7 @@
             <v-col>
               <v-list
                 span
-                v-for="location in filterByTerm"
+                v-for="location in sortedEntries"
                 :key="location.locationId"
                 subheader
                 two-line
@@ -259,18 +259,20 @@ export default {
   },
   props: ["objectives", "locations", "entries"],
   computed: {
-    filterByTerm() {
-      let searchTerm = this.searchTerm.toLowerCase();
-      let locations = this.locations.slice();
+    sortedEntries() {
+      var sortedEntries = [];
+      var searchTerm = this.searchTerm.toLowerCase();
 
-      locations.forEach(location => {
-        var entries = this.entries.filter(function(entry) {
+      this.locations.forEach(location => {
+        var newLocation = Object.assign({}, location);
+        var filteredEntries = this.entries.filter(function(entry) {
           return entry.location === location.locationId;
         });
-        location.entries = entries;
+        newLocation.entries = filteredEntries.slice();
+        sortedEntries.push(newLocation);
       });
 
-      return locations.filter(location => {
+      return sortedEntries.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
     }
