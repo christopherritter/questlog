@@ -83,6 +83,7 @@
                     hide-details="auto"
                     outlined
                     light
+                    :disabled="editedAction.type == ''"
                     @change="fetchTargetName($event)"
                   ></v-autocomplete>
                 </v-col>
@@ -98,7 +99,7 @@
             <v-btn text @click="close">
               Cancel
             </v-btn>
-            <v-btn color="green darken-1" text @click="save">
+            <v-btn color="green darken-1" text @click="saveAction">
               Save
             </v-btn>
           </v-card-actions>
@@ -157,6 +158,17 @@ export default {
     })
   },
   methods: {
+    saveAction() {
+      if (this.editedIndex > -1) {
+        this.$emit("edit-action", {
+          action: this.editedAction,
+          index: this.editedIndex
+        });
+      } else {
+        this.$emit("add-action", { action: this.editedAction });
+      }
+      this.close();
+    },
     editAction(action) {
       this.editedIndex = this.actions.indexOf(action);
       this.editedAction = Object.assign({}, action);
@@ -192,17 +204,6 @@ export default {
         this.editedIndex = -1;
       });
     },
-    save() {
-      if (this.editedIndex > -1) {
-        this.$emit("edit-action", {
-          action: this.editedAction,
-          index: this.editedIndex
-        });
-      } else {
-        this.$emit("add-action", { action: this.editedAction });
-      }
-      this.close();
-    }
   }
 };
 </script>
