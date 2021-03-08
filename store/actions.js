@@ -106,7 +106,6 @@ export default {
     commit
   }) {
     if (state.quest.questId.length > 0) {
-      console.log("Found quest id " + state.quest.questId)
       const db = this.$fire.firestore;
       const questId = state.quest.questId;
       const questRef = db.collection('quests').doc(questId);
@@ -139,7 +138,6 @@ export default {
       // Commit the batch
       await batch.commit();
     } else {
-      console.log("No quest found")
       var quest = {};
       Object.assign(quest, state.quest)
 
@@ -170,11 +168,7 @@ export default {
         questId: result.id
       })
 
-      console.log("Committing quest")
-
       quest.questId = result.id;
-
-      console.log(quest)
       commit("SET_QUEST", quest);
     }
   },

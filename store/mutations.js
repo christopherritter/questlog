@@ -23,8 +23,6 @@ export default {
   // QUEST
 
   SET_QUEST: (state, quest) => {
-    console.log("Set quest")
-    console.log(quest)
     state.quest = quest
   },
 
