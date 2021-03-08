@@ -5,9 +5,9 @@
     </v-btn>
     <span
       v-if="
-        quest &&
-          (this.$route.name == 'quest-reader' ||
-            this.$route.name == 'quest-player')
+        quest && Object.keys(quest).length !== 0 &&
+          (this.$route.name === 'quest-reader' ||
+            this.$route.name === 'editor')
       "
       class="hidden-sm-and-down"
     >

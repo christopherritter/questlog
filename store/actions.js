@@ -101,64 +101,12 @@ export default {
 
   // Quest
 
-  setQuest({
-    commit
-  }, obj) {
-    commit('SET_QUEST', obj.quest);
-    commit('SET_OBJECTIVES', obj.objectives);
-    commit('SET_LOCATIONS', obj.locations);
-    commit('SET_ENTRIES', obj.entries);
-    commit('SET_ITEMS', obj.items);
-  },
-
   async publishQuest({
     state,
     commit
   }) {
-    if (!state.quest.questId) {
-      var quest = {};
-      Object.assign(quest, state.quest)
-
-      if (!quest.title) quest.title = "Untitled";
-
-      if (!quest.author) {
-        quest.author = state.user.name;
-        quest.authorId = state.user.userId;
-      }
-
-      if (!quest.description) quest.description = "";
-
-      if (!quest.image) quest.image = "";
-
-      if (!quest.categories) quest.categories = [];
-
-      if (!quest.region) {
-        quest.region = {
-          name: "Center of America",
-          coordinates: [39.828175, -98.5795],
-          zoom: 18,
-          draggable: true
-        }
-      }
-
-      // if (!quest.locations) {
-      //   quest.locations = [];
-      // }
-
-      // if (!quest.objectives) {
-      //   quest.objectives = [];
-      // }
-
-      const result = await this.$fire.firestore.collection('quests').add(quest);
-      const update = await this.$fire.firestore.collection('quests').doc(result.id).update({
-        questId: result.id
-      })
-
-      commit('SET_QUEST', {
-        quest: quest,
-        questId: result.id
-      })
-    } else {
+    if (state.quest.questId.length > 0) {
+      console.log("Found quest id " + state.quest.questId)
       const db = this.$fire.firestore;
       const questId = state.quest.questId;
       const questRef = db.collection('quests').doc(questId);
@@ -190,7 +138,55 @@ export default {
 
       // Commit the batch
       await batch.commit();
+    } else {
+      console.log("No quest found")
+      var quest = {};
+      Object.assign(quest, state.quest)
+
+      if (!quest.title) quest.title = "Untitled";
+
+      if (!quest.author) {
+        quest.author = state.user.name;
+        quest.authorId = state.user.userId;
+      }
+
+      if (!quest.description) quest.description = "";
+
+      if (!quest.image) quest.image = "";
+
+      if (!quest.categories) quest.categories = [];
+
+      if (!quest.region) {
+        quest.region = {
+          name: "Center of America",
+          coordinates: [39.828175, -98.5795],
+          zoom: 18,
+          draggable: true
+        }
+      }
+
+      const result = await this.$fire.firestore.collection('quests').add(quest);
+      const update = await this.$fire.firestore.collection('quests').doc(result.id).update({
+        questId: result.id
+      })
+
+      console.log("Committing quest")
+
+      quest.questId = result.id;
+
+      console.log(quest)
+      commit("SET_QUEST", quest);
     }
+  },
+
+  setQuest({
+    commit
+  }, obj) {
+    commit('SET_QUEST', obj.quest);
+    commit('SET_OBJECTIVES', obj.objectives);
+    commit('SET_LOCATIONS', obj.locations);
+    commit('SET_ENTRIES', obj.entries);
+    commit('SET_ITEMS', obj.items);
   },
 
   // Objectives

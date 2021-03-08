@@ -122,9 +122,13 @@ export default {
       items: state => state.items,
     }),
     questSaved() {
-      if (Object.keys(this.quest).length === 0) return false;
-      return true;
+      if (this.quest.questId) return true;
+      return false;
     }
+    // questSaved() {
+    //   if (Object.keys(this.quest).length === 0) return false;
+    //   return true;
+    // }
   },
   methods: {
     changeTab(tab) {

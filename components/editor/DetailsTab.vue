@@ -101,11 +101,13 @@ export default {
       newDetails: {
         title: "",
         author: "",
+        authorId: "",
         isAnonymous: false,
         description: "",
         image: "",
         categories: [],
         startingPoint: "",
+        questId: "",
       },
       loading: false,
       error: null
@@ -113,9 +115,7 @@ export default {
   },
   props: ["quest", "locations"],
   created() {
-
-      this.fetchDetails();
-
+    this.fetchDetails();
   },
   computed: {
     ...mapState({
@@ -128,40 +128,27 @@ export default {
     }
   },
   watch: {
-    newDetails: {
-      handler: function(val) {
-        if (val.isAnonymous) {
-          this.newDetails.author = "Anonymous";
-        } else {
-          this.newDetails.author = this.user.name;
-        }
-      },
-      deep: true
+    quest(val, oldVal) {
+      if (val.questId.length > 0 && val.questId != oldVal.questId ) {
+        this.newDetails.questId = val.questId;
+      }
     }
   },
   methods: {
     ...mapActions(["publishQuest"]),
-    ...mapMutations(["SET_DETAILS"]),
+    ...mapMutations(["SET_QUEST"]),
     fetchDetails() {
-      Object.assign(this.newDetails, {
-        title: this.quest.title || "Untitled",
-        author: this.quest.author || "Anonymous",
-        description: this.quest.description || "",
-        image: this.quest.image || "",
-        categories: this.quest.categories || [],
-        startingPoint: this.quest.startingPoint || "",
-      });
+      Object.assign(this.newDetails, this.quest);
+      this.newDetails.author = this.user.name;
+      this.newDetails.authorId = this.user.userId;
     },
     updateDetails() {
-      this.$emit("update-quest");
       this.$store.commit("SET_QUEST", this.newDetails);
-    },
-    resetRegion() {
-      this.fetchDetails();
     },
     publishQuest() {
       this.$store.commit("SET_QUEST", this.newDetails);
       this.$store.dispatch("publishQuest");
+      this.fetchDetails();
     }
   }
 };
