@@ -234,7 +234,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import ActionsPanel from "@/components/editor/ActionsPanel.vue";
 
 export default {
@@ -297,13 +297,14 @@ export default {
       }
 
       this.clearItem();
-    },
+    }
   },
   methods: {
-    ...mapActions([
-      "addItem",
-      "publishQuest",
-      "findWithAttr"
+    ...mapActions(["addItem", "publishQuest", "findWithAttr"]),
+    ...mapMutations([
+      "ADD_ACTION",
+      "UPDATE_ACTION",
+      "REMOVE_ACTION"
     ]),
     addItem() {
       this.$store.dispatch("addItem", this.newItem);
@@ -334,20 +335,40 @@ export default {
       this.selectedItem = "undefined";
     },
     addAction(event) {
-      var newAction = {};
-      Object.assign(newAction, event.action);
-      this.newItem.actions.push(newAction);
+      if (this.newItem.itemId) {
+        const itemIndex = this.findItem(this.newItem.itemId);
+        this.$store.commit("ADD_ACTION", {
+          itemIndex: itemIndex,
+          action: event.action
+        });
+      } else {
+        this.newItem.actions.push(event.action);
+      }
     },
     editAction(event) {
-      Object.assign(this.newItem.actions[event.index], event.action);
+      if (this.newItem.itemId) {
+        const itemIndex = this.findItem(this.newItem.itemId);
+        this.$store.commit("UPDATE_ACTION", {
+          itemIndex: itemIndex,
+          actionIndex: event.index,
+          action: event.action,
+        });
+      } else {
+        Object.assign(this.newItem.actions[event.index], event.action);
+      }
     },
-    deleteAction(index) {
-      this.newItem.actions.splice(index, 1);
+    deleteAction(actionIndex) {
+      if (this.newItem.itemId) {
+        const itemIndex = this.findItem(this.newItem.itemId);
+        this.$store.commit("DELETE_ACTION", { itemIndex, actionIndex });
+      } else {
+        this.newItem.actions.splice(actionIndex, 1);
+      }
     },
     publishQuest() {
       this.$store.dispatch("publishQuest");
     },
-    findWithAttr(value) {
+    findItem(value) {
       const array = this.items;
       const attr = "itemId";
       for (var i = 0; i < array.length; i += 1) {

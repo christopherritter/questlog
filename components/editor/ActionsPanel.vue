@@ -99,7 +99,7 @@
             <v-btn text @click="close">
               Cancel
             </v-btn>
-            <v-btn color="green darken-1" text @click="saveAction">
+            <v-btn color="green darken-1" text @click="save">
               Save
             </v-btn>
           </v-card-actions>
@@ -158,7 +158,7 @@ export default {
     })
   },
   methods: {
-    saveAction() {
+    save() {
       if (this.editedIndex > -1) {
         this.$emit("edit-action", {
           action: this.editedAction,

@@ -234,7 +234,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import ActionsPanel from "@/components/editor/ActionsPanel.vue";
 
 export default {
@@ -300,10 +300,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      "addEntry",
-      "publishQuest",
-      "findWithAttr"
+    ...mapActions(["addEntry", "publishQuest", "findWithAttr"]),
+    ...mapMutations([
+      "ADD_ACTION",
+      "UPDATE_ACTION",
+      "REMOVE_ACTION"
     ]),
     addEntry() {
       this.$store.dispatch("addEntry", this.newEntry);
@@ -334,20 +335,40 @@ export default {
       this.selectedEntry = "undefined";
     },
     addAction(event) {
-      var newAction = {};
-      Object.assign(newAction, event.action);
-      this.newEntry.actions.push(newAction);
+      if (this.newEntry.entryId) {
+        const entryIndex = this.findEntry(this.newEntry.entryId);
+        this.$store.commit("ADD_ACTION", {
+          entryIndex: entryIndex,
+          action: event.action
+        });
+      } else {
+        this.newEntry.actions.push(event.action);
+      }
     },
     editAction(event) {
-      Object.assign(this.newEntry.actions[event.index], event.action);
+      if (this.newEntry.entryId) {
+        const entryIndex = this.findEntry(this.newEntry.entryId);
+        this.$store.commit("UPDATE_ACTION", {
+          entryIndex: entryIndex,
+          actionIndex: event.index,
+          action: event.action,
+        });
+      } else {
+        Object.assign(this.newEntry.actions[event.index], event.action);
+      }
     },
-    deleteAction(index) {
-      this.newEntry.actions.splice(index, 1);
+    deleteAction(actionIndex) {
+      if (this.newEntry.entryId) {
+        const entryIndex = this.findEntry(this.newEntry.entryId);
+        this.$store.commit("DELETE_ACTION", { entryIndex, actionIndex });
+      } else {
+        this.newEntry.actions.splice(actionIndex, 1);
+      }
     },
     publishQuest() {
       this.$store.dispatch("publishQuest");
     },
-    findWithAttr(value) {
+    findEntry(value) {
       const array = this.entries;
       const attr = "entryId";
       for (var i = 0; i < array.length; i += 1) {

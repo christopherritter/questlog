@@ -1,9 +1,7 @@
 import initialState from './state'
 
 export default {
-  RESET_STORE: (state) => {
-    Object.assign(state, initialState())
-  },
+  // USER
 
   SET_AUTH_USER: (state, {
     authUser
@@ -22,6 +20,8 @@ export default {
     state.user.name = userName;
   },
 
+  // QUEST
+
   SET_QUEST: (state, quest) => {
     state.quest = quest
   },
@@ -37,6 +37,8 @@ export default {
   SET_REGION: (state, region) => {
     state.quest.region = region;
   },
+
+  // OBJECTIVES
 
   ADD_OBJECTIVE: (state, objective) => {
     state.objectives.push(objective);
@@ -57,6 +59,8 @@ export default {
   SET_OBJECTIVES: (state, objectives) => {
     state.objectives = objectives;
   },
+
+  // LOCATIONS
 
   ADD_LOCATION: (state, location) => {
     state.locations.push(location);
@@ -83,6 +87,8 @@ export default {
     state.locations = locations;
   },
 
+  // ENTRIES
+
   ADD_ENTRY: (state, entry) => {
     state.entries.push(entry);
   },
@@ -95,6 +101,8 @@ export default {
     state.entries = entries;
   },
 
+  // ITEMS
+
   ADD_ITEM: (state, item) => {
     state.items.push(item);
   },
@@ -105,6 +113,38 @@ export default {
 
   SET_ITEMS: (state, items) => {
     state.items = items;
+  },
+
+  // ACTIONS
+
+  ADD_ACTION: (state, { entryIndex, itemIndex, action }) => {
+    if (entryIndex != null) {
+      state.entries[entryIndex].actions.push(action);
+    } else if (itemIndex != null) {
+      state.items[itemIndex].actions.push(action);
+    }
+  },
+
+  UPDATE_ACTION: (state, { entryIndex, itemIndex, actionIndex, action }) => {
+    if (entryIndex != null) {
+      Object.assign(state.entries[entryIndex].actions[actionIndex], action);
+    } else if (itemIndex != null) {
+      Object.assign(state.item[itemIndex].actions[actionIndex], action);
+    }
+  },
+
+  DELETE_ACTION: (state, { entryIndex, itemIndex, actionIndex }) => {
+    if (entryIndex != null) {
+      state.entries[entryIndex].actions.splice(actionIndex, 1);
+    } else if (itemIndex != null) {
+      state.items[itemIndex].actions.splice(actionIndex, 1);
+    }
+  },
+
+  // UTILS
+
+  RESET_STORE: (state) => {
+    Object.assign(state, initialState())
   },
 
 }
