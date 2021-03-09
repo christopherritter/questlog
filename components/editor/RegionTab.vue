@@ -61,7 +61,6 @@
             :locations="[newRegion]"
             :mapOptions="mapOptions"
             @mark-location="markLocation($event)"
-            @move-location="moveLocation($event)"
           />
           <div class="d-flex">
             <v-btn outlined dark @click="$emit('change-tab', 'about')">
@@ -109,7 +108,6 @@ export default {
   props: ["region"],
   created() {
     this.fetchRegion();
-    // this.$refs.regionMap.map.scrollWheelZoom.disable()
   },
   components: { LeafletMap },
   methods: {
@@ -119,23 +117,7 @@ export default {
       Object.assign(this.newRegion, this.region);
     },
     markLocation(event) {
-      console.log("mark location")
-      // this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
-    },
-    // moveLocation(event) {
-    //   const latLng = event.location.target.getLatLng();
-    //   this.newRegion.coordinates = [latLng.lat, latLng.lng];
-    // },
-    moveLocation(location) {
-      // const index = this.locations.indexOf(location);
-      const coordinates = [location.coordinates[0], location.coordinates[1]];
-      // this.newLocation.coordinates = coordinates;
-      // this.$store.commit("SET_COORDINATES", { coordinates, index });
-      console.log("Move Location");
-
-      // this.newRegion.coordinates = coordinates;
-      console.log(coordinates);
-      // this.$store.commit("SET_COORDINATES", { coordinates });
+      this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
     },
     updateRegion() {
       this.$store.commit("SET_REGION", this.newRegion);
