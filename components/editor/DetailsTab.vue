@@ -17,6 +17,7 @@
       <v-checkbox
         v-model="newDetails.isAnonymous"
         label="Publish anonymously"
+        @change="toggleAnonymous"
       ></v-checkbox>
       <v-textarea
         name="input-7-1"
@@ -83,7 +84,7 @@
         >
           Publish
         </v-btn>
-        <v-btn dark color="primary" class="ml-2" @click="publishQuest()" v-else>
+        <v-btn dark :disabled="newDetails.title == '' || newDetails.description == '' " color="primary" class="ml-2" @click="publishQuest()" v-else>
           Create
         </v-btn>
       </div>
@@ -139,8 +140,21 @@ export default {
     ...mapMutations(["SET_QUEST"]),
     fetchDetails() {
       Object.assign(this.newDetails, this.quest);
-      this.newDetails.author = this.user.name;
-      this.newDetails.authorId = this.user.userId;
+      // if (this.newDetails.authorId == '' && this.newDetails.isAnonymous) {
+      //   console.log("Switching to Anon")
+      //   this.newDetails.author = "Anonymous";
+      // } else if (this.newDetails.authorId == '') {
+      //   console.log("Getting your name")
+      //   this.newDetails.author = this.user.name;
+      // }
+      // this.newDetails.authorId = this.user.userId;
+    },
+    toggleAnonymous(newVal) {
+      if (newVal) {
+        this.newDetails.author = "Anonymous"
+      } else {
+        this.newDetails.author = this.user.name;
+      }
     },
     updateDetails() {
       this.$store.commit("SET_QUEST", this.newDetails);
