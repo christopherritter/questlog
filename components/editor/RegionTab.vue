@@ -59,7 +59,7 @@
             :center="newRegion.coordinates"
             :zoom="newRegion.zoom"
             :locations="[newRegion]"
-            :draggable="true"
+            :mapOptions="mapOptions"
             @mark-location="markLocation($event)"
             @move-location="moveLocation($event)"
           />
@@ -98,10 +98,12 @@ export default {
         name: "",
         coordinates: [39.828175, -98.5795],
         zoom: 18,
-        draggable: true
+      },
+      mapOptions: {
+        dragging: false,
       },
       loading: false,
-      error: null
+      error: null,
     };
   },
   props: ["region"],
@@ -117,11 +119,23 @@ export default {
       Object.assign(this.newRegion, this.region);
     },
     markLocation(event) {
-      this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
+      console.log("mark location")
+      // this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
     },
-    moveLocation(event) {
-      const latLng = event.location.target.getLatLng();
-      this.newRegion.coordinates = [latLng.lat, latLng.lng];
+    // moveLocation(event) {
+    //   const latLng = event.location.target.getLatLng();
+    //   this.newRegion.coordinates = [latLng.lat, latLng.lng];
+    // },
+    moveLocation(location) {
+      // const index = this.locations.indexOf(location);
+      const coordinates = [location.coordinates[0], location.coordinates[1]];
+      // this.newLocation.coordinates = coordinates;
+      // this.$store.commit("SET_COORDINATES", { coordinates, index });
+      console.log("Move Location");
+
+      // this.newRegion.coordinates = coordinates;
+      console.log(coordinates);
+      // this.$store.commit("SET_COORDINATES", { coordinates });
     },
     updateRegion() {
       this.$store.commit("SET_REGION", this.newRegion);

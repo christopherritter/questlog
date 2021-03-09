@@ -79,8 +79,15 @@ export default {
     state.locations = locations;
   },
 
-  SET_COORDINATES: (state, location) => {
-    state.locations[location.index].coordinates = location.coordinates;
+  SET_COORDINATES: (state, { coordinates, index }) => {
+    console.log("Setting coordinates")
+    if (index !== null) {
+      console.log("Location no. " + index)
+      state.locations[index].coordinates = coordinates;
+    } else {
+      console.log("Setting region")
+      state.quest.region.coordinates = [coordinates[0], coordinates[1]];
+    }
   },
 
   SET_LOCATIONS: (state, locations) => {
