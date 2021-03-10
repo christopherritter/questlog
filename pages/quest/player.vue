@@ -1,8 +1,11 @@
 <template>
   <v-container fluid class="fill-height pa-0">
     <v-layout class="fill-height">
-      <v-flex class="flex-grow-0 flex-shrink-0" :style="{ width: sidebarWidth }">
-        <v-navigation-drawer light touchless permanent width="100%">
+      <v-flex
+        class="flex-grow-0 flex-shrink-0"
+        :style="{ width: sidebarWidth }"
+      >
+        <v-navigation-drawer v-model="showSidebar" light touchless width="100%">
           <!-- Replaced width above -->
           <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
           <!-- Replaced permanent above -->
@@ -18,6 +21,7 @@
             @view-location="viewLocation($event)"
             @select-action="selectAction($event)"
             @view-objective="dialog = true"
+            @hide-sidebar="hideSidebar()"
           />
           <QuestDialog
             :dialog="dialog"
@@ -29,7 +33,10 @@
           />
         </v-navigation-drawer>
       </v-flex>
-      <v-flex style="z-index: 0" class="flex-grow-1 flex-shrink-1">
+      <v-flex
+        class="flex-grow-1 flex-shrink-1"
+        :style="{ width: mapWidth, zIndex: 0 }"
+      >
         <LeafletMap
           id="QuestMap"
           ref="qMap"
@@ -41,7 +48,10 @@
           @clear-location="clearLocation()"
         />
       </v-flex>
-      <v-flex class="flex-grow-0 flex-shrink-0" :style="{ width: journalWidth }">
+      <v-flex
+        class="flex-grow-0 flex-shrink-0"
+        :style="{ width: journalWidth }"
+      >
         <v-btn
           fab
           color="cyan accent-2"
@@ -52,7 +62,7 @@
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
-        <v-navigation-drawer touchless v-model="showJournal" right width="100%">
+        <v-navigation-drawer v-model="showJournal" touchless right width="100%">
           <QuestJournal />
         </v-navigation-drawer>
       </v-flex>
@@ -97,23 +107,31 @@ export default {
       items: state => state.actions
     }),
     sidebarWidth() {
-      if (Object.keys(this.selectedLocation).length !== 0) {
+      if (this.showSidebar) {
         return this.$vuetify.breakpoint.smAndUp ? "450px" : "85vw";
       } else {
         return "0";
       }
     },
-    // mapWidth() {
-    //   if (!this.quest) {
-    //     return "100%";
-    //   } else if (this.location) {
-    //     return "100%";
-    //   } else {
-    //     return "100vw";
-    //   }
-    // },
+    mapWidth() {
+      if (
+        !this.quest ||
+        this.showSidebar ||
+        this.showJournal ||
+        this.showBackpack
+      ) {
+        return "100%";
+      } else {
+        return "100vw";
+      }
+    },
     journalWidth() {
       if (!this.showJournal) {
+        return 0;
+      }
+    },
+    backpackWidth() {
+      if (!this.showBackpack) {
         return 0;
       }
     }
@@ -126,6 +144,7 @@ export default {
 
       this.selectedLocation = location;
       this.selectedActions(locationId);
+      this.showSidebar = true;
       this.zoom = location.zoom;
 
       this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
@@ -172,6 +191,11 @@ export default {
       if (event.type == "Move") {
         this.viewLocation(event.target);
       }
+    },
+    hideSidebar() {
+      this.$nextTick(() => {
+        this.showSidebar = false;
+      });
     },
     restartQuest() {
       this.dialog = false;

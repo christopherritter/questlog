@@ -2,9 +2,17 @@
   <v-sheet>
     <v-img v-if="location.image" height="240" :src="location.image"></v-img>
 
-    <v-card-title>
-      {{ location.name }}
-    </v-card-title>
+    <v-row no-gutters>
+      <v-card-title>
+        {{ location.name }}
+      </v-card-title>
+      <v-spacer></v-spacer>
+      <v-btn class="ma-3" fab dark x-small outlined color="grey" @click="$emit('hide-sidebar')">
+        <v-icon dark>
+          mdi-close
+        </v-icon>
+      </v-btn>
+    </v-row>
 
     <v-layout v-if="localObjectives.length > 0">
       <v-flex class="px-4">
@@ -77,8 +85,8 @@ export default {
               objectiveId: objectiveId,
               bool: true
             });
-            localObjectives.push(this.objectives[index])
-          })
+            localObjectives.push(this.objectives[index]);
+          });
         }
       }
 
@@ -103,7 +111,7 @@ export default {
         }
       }
       return -1;
-    },
+    }
   }
 };
 </script>
