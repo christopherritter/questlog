@@ -10,13 +10,28 @@
         </div>
         <h1 class="display-3 mb-3">{{ quest.title }}</h1>
         <h3 class="subtitle-1 mb-8 mb-lg-12">by {{ quest.author }}</h3>
-        <v-btn color="primary" class="mr-2" large @click="$emit('play-quest')">Play</v-btn>
-        <v-btn outlined class="mr-2" large @click="$emit('read-quest')">Read</v-btn>
+        <v-btn
+          color="primary"
+          class="mr-2"
+          large
+          @click="$emit('play-quest')"
+          :disabled="loading"
+          >Play</v-btn
+        >
+        <v-btn
+          outlined
+          class="mr-2"
+          large
+          @click="$emit('read-quest')"
+          :disabled="loading"
+          >Read</v-btn
+        >
         <v-btn
           v-if="authUser && authUser.uid == quest.authorId"
           outlined
           large
           @click="$emit('edit-quest')"
+          :disabled="loading"
           >Edit</v-btn
         >
       </v-col>
@@ -31,13 +46,13 @@
 import { mapState } from "vuex";
 export default {
   name: "QuestHeader",
-  props: ["quest"],
+  props: ["quest", "loading"],
   computed: {
     ...mapState({
       categories: state => state.categories,
       authUser: state => state.authUser
     })
-  },
+  }
 };
 </script>
 

@@ -5,6 +5,7 @@
         <QuestHeader
           v-if="quest"
           :quest="quest"
+          :loading="loading"
           @play-quest="playQuest()"
           @read-quest="readQuest()"
           @edit-quest="editQuest()"
