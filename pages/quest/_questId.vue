@@ -5,6 +5,7 @@
         <QuestHeader
           v-if="quest"
           :quest="quest"
+          @play-quest="playQuest()"
           @read-quest="readQuest()"
           @edit-quest="editQuest()"
         />
@@ -98,10 +99,6 @@
                 <div v-if="error" class="error">
                   {{ error }}
                 </div>
-
-                <!-- <div v-if="quest">
-                  <p v-for="(location, index) in quest.locations" :key="index">{{ location.coordinates[0]}}, {{ location.coordinates[1]}}</p>
-                </div> -->
 
                 <LeafletMap
                   v-if="quest"
@@ -208,30 +205,8 @@ export default {
             draggable: location.draggable,
           };
 
-          // Only uncomment these two (or the bottom two)
-
-          // if (location.entries) {
-          //   location.entries.forEach(entry => {
-          //     this.createEntry(entry).then(result => {
-          //       newLocation.entries.push(result.entryId);
-          //       this.entries.push(result)
-          //     })
-          //   });
-          // }
-
-          // if (location.items) {
-          //   location.items.forEach(item => {
-          //     this.createItem(item).then(result => {
-          //       newLocation.items.push(result.itemId);
-          //       this.items.push(result)
-          //     })
-          //   });
-          // }
-
           this.locations.push(newLocation);
         });
-
-        // Only uncomment these two (or the top two)
 
         const entries = await entriesRef.get();
         entries.forEach(entry => {
@@ -253,6 +228,10 @@ export default {
         entries: this.entries,
         items: this.items
       });
+    },
+    playQuest() {
+      this.setQuest();
+      this.$router.push("/quest/player");
     },
     readQuest() {
       this.setQuest();
