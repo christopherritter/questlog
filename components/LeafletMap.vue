@@ -2,6 +2,7 @@
   <div id="map-wrap">
     <client-only>
       <l-map
+        id="lMap"
         ref="lMap"
         :zoom="zoom"
         :center="[center[0], center[1]]"
@@ -38,3 +39,9 @@ export default {
   }
 };
 </script>
+
+<style>
+  #lMap {
+    z-index: inherit;
+  }
+</style>

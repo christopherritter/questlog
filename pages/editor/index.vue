@@ -8,8 +8,8 @@
           you can publish it to share with other adventurers.
         </p>
         <p v-else>
-          Fill out the form below then click on the create button to start building
-          your quest.
+          Fill out the form below then click on the create button to start
+          building your quest.
         </p>
       </v-col>
     </v-row>
@@ -41,18 +41,21 @@
                 :quest="quest"
                 :locations="locations"
                 @change-tab="changeTab($event)"
+                @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
             <v-tab-item value="region">
               <RegionTab
                 :region="quest.region"
                 @change-tab="changeTab($event)"
+                @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
             <v-tab-item value="objectives">
               <ObjectivesTab
                 :objectives="objectives"
                 @change-tab="changeTab($event)"
+                @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
             <v-tab-item value="locations">
@@ -60,6 +63,7 @@
                 :region="quest.region"
                 :locations="locations"
                 @change-tab="changeTab($event)"
+                @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
             <v-tab-item value="entries">
@@ -68,6 +72,7 @@
                 :locations="locations"
                 :entries="entries"
                 @change-tab="changeTab($event)"
+                @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
             <v-tab-item value="items">
@@ -76,9 +81,26 @@
                 :locations="locations"
                 :items="items"
                 @change-tab="changeTab($event)"
+                @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
           </v-tabs>
+          <v-dialog v-model="dialogDelete" max-width="375px" class="z-index:50">
+            <v-card light>
+              <v-card-title class="headline"
+                >Are you sure you want to delete this item?</v-card-title
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="dialogDelete = false"
+                  >Cancel</v-btn
+                >
+                <v-btn color="blue darken-1" text @click="deleteQuest()"
+                  >OK</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-form>
       </v-col>
     </v-row>
@@ -86,7 +108,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import DetailsTab from "@/components/editor/DetailsTab.vue";
 import RegionTab from "@/components/editor/RegionTab.vue";
 import ObjectivesTab from "@/components/editor/ObjectivesTab.vue";
@@ -101,7 +123,8 @@ export default {
   data() {
     return {
       tab: "details",
-      updatedQuest: false
+      updatedQuest: false,
+      dialogDelete: false,
     };
   },
   components: {
@@ -119,20 +142,25 @@ export default {
       objectives: state => state.objectives,
       locations: state => state.locations,
       entries: state => state.entries,
-      items: state => state.items,
+      items: state => state.items
     }),
     questSaved() {
       if (this.quest.questId) return true;
       return false;
-    }
-    // questSaved() {
-    //   if (Object.keys(this.quest).length === 0) return false;
-    //   return true;
-    // }
+    },
   },
   methods: {
+    ...mapMutations([
+      "CLEAR_QUEST"
+    ]),
     changeTab(tab) {
       this.tab = tab;
+    },
+    async deleteQuest() {
+      const questId = this.quest.questId;
+      const res = await this.$fire.firestore.collection('quests').doc(questId).delete();
+      this.$store.commit("CLEAR_QUEST");
+      this.dialogDelete = false;
     }
   }
 };

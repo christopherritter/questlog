@@ -100,6 +100,9 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
+            <v-btn dark class="mr-2" @click="$emit('delete-quest')" color="danger">
+              Delete
+            </v-btn>
             <v-btn dark @click="publishQuest()" color="primary" class="ml-2">
               Publish
             </v-btn>

@@ -1,11 +1,11 @@
 export default () => ({
   authUser: null,
   user: null,
-  quest: null,
-  objectives: null,
-  locations: null,
-  entries: null,
-  items: null,
+  quest: {},
+  objectives: [],
+  locations: [],
+  entries: [],
+  items: [],
   categories: [{
       id: 0,
       name: "family-friendly",

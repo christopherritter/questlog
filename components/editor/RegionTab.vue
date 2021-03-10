@@ -75,6 +75,9 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
+            <v-btn dark class="mr-2" @click="$emit('delete-quest')" color="danger">
+              Delete
+            </v-btn>
             <v-btn dark @click="publishQuest()" color="primary">
               Publish
             </v-btn>
@@ -136,5 +139,6 @@ export default {
 <style>
 #RegionMap {
   height: calc(100% - 56px);
+  z-index: 0;
 }
 </style>

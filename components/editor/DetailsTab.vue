@@ -76,6 +76,15 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn
+          v-if="questSaved"
+          dark
+          class="mr-2"
+          @click="$emit('delete-quest')"
+          color="danger"
+        >
+          Delete
+        </v-btn>
+        <v-btn
           dark
           color="primary"
           class="ml-2"
@@ -84,7 +93,14 @@
         >
           Publish
         </v-btn>
-        <v-btn dark :disabled="newDetails.title == '' || newDetails.description == '' " color="primary" class="ml-2" @click="publishQuest()" v-else>
+        <v-btn
+          dark
+          :disabled="newDetails.title == '' || newDetails.description == ''"
+          color="primary"
+          class="ml-2"
+          @click="publishQuest()"
+          v-else
+        >
           Create
         </v-btn>
       </div>
@@ -108,7 +124,7 @@ export default {
         image: "",
         categories: [],
         startingPoint: "",
-        questId: "",
+        questId: ""
       },
       loading: false,
       error: null
@@ -121,7 +137,7 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user,
-      categories: state => state.categories,
+      categories: state => state.categories
     }),
     questSaved() {
       if (Object.keys(this.quest).length === 0) return false;
@@ -130,7 +146,19 @@ export default {
   },
   watch: {
     quest(val, oldVal) {
-      if (val.questId.length > 0 && val.questId != oldVal.questId ) {
+      if (!val.questId) {
+        this.newDetails = {
+          title: "",
+          isAnonymous: false,
+          description: "",
+          image: "",
+          categories: [],
+          startingPoint: "",
+          questId: ""
+        }
+        this.fetchDetails();
+        this.$emit('change-tab', 'details')
+      } else if (val.questId.length > 0 && val.questId != oldVal.questId) {
         this.newDetails.questId = val.questId;
       }
     }
@@ -140,18 +168,16 @@ export default {
     ...mapMutations(["SET_QUEST"]),
     fetchDetails() {
       Object.assign(this.newDetails, this.quest);
-      // if (this.newDetails.authorId == '' && this.newDetails.isAnonymous) {
-      //   console.log("Switching to Anon")
-      //   this.newDetails.author = "Anonymous";
-      // } else if (this.newDetails.authorId == '') {
-      //   console.log("Getting your name")
-      //   this.newDetails.author = this.user.name;
-      // }
-      // this.newDetails.authorId = this.user.userId;
+      if (this.newDetails.isAnonymous) {
+        this.newDetails.author = "Anonymous";
+      } else {
+        this.newDetails.author = this.user.name;
+      }
+      this.newDetails.authorId = this.user.userId;
     },
     toggleAnonymous(newVal) {
       if (newVal) {
-        this.newDetails.author = "Anonymous"
+        this.newDetails.author = "Anonymous";
       } else {
         this.newDetails.author = this.user.name;
       }
