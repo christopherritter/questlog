@@ -7,7 +7,7 @@
         {{ location.name }}
       </v-card-title>
       <v-spacer></v-spacer>
-      <v-btn class="ma-3" fab dark x-small outlined color="grey" @click="$emit('hide-sidebar')">
+      <v-btn class="mx-3 my-4" fab dark x-small outlined color="grey" @click="$emit('hide-sidebar')">
         <v-icon dark>
           mdi-close
         </v-icon>

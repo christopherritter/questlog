@@ -1,10 +1,8 @@
 <template>
   <v-container fluid class="fill-height pa-0">
     <v-layout class="fill-height">
-      <v-flex
-        class="flex-grow-0 flex-shrink-0"
-        :style="{ width: sidebarWidth }"
-      >
+
+      <v-flex :style="{ width: sidebarWidth }">
         <v-navigation-drawer v-model="showSidebar" light touchless width="100%">
           <!-- Replaced width above -->
           <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
@@ -33,39 +31,38 @@
           />
         </v-navigation-drawer>
       </v-flex>
-      <v-flex
-        class="flex-grow-1 flex-shrink-1"
-        :style="{ width: mapWidth, zIndex: 0 }"
-      >
+
+      <v-flex grow shrink :style="{ width: mapWidth, position: 'relative' }">
+        <v-flex style="position: absolute; bottom: 0; right: 0; z-index: 100">
+          <v-btn fab color="blue-grey" @click="showJournal = !showJournal" class="mb-2 mr-2" style="display:block">
+            <v-icon>mdi-book</v-icon>
+          </v-btn>
+          <v-btn fab color="blue-grey" @click="showBackpack = !showBackpack" class="mb-2 mr-2" style="display:block">
+            <v-icon>mdi-bag-personal</v-icon>
+          </v-btn>
+        </v-flex>
         <LeafletMap
           id="QuestMap"
           ref="qMap"
           class="fill-height"
+          style="z-index: 0; position: relative"
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
           :locations="locations"
           @select-location="viewLocation($event.locationId)"
           @clear-location="clearLocation()"
         />
+
       </v-flex>
-      <v-flex
-        class="flex-grow-0 flex-shrink-0"
-        :style="{ width: journalWidth }"
-      >
-        <v-btn
-          fab
-          color="cyan accent-2"
-          bottom
-          right
-          absolute
-          @click="showJournal = !showJournal"
-        >
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-        <v-navigation-drawer v-model="showJournal" touchless right width="100%">
-          <QuestJournal />
-        </v-navigation-drawer>
+
+      <v-flex :style="{ width: journalWidth }">
+
+          <v-navigation-drawer v-model="showJournal" touchless right width="100%">
+            <QuestJournal />
+          </v-navigation-drawer>
+
       </v-flex>
+
     </v-layout>
   </v-container>
 </template>
