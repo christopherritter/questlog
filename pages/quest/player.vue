@@ -2,7 +2,7 @@
   <v-container fluid :class="{ 'fill-height': fillHeight, 'pa-0': true }">
     <v-row no-gutters :class="{ 'fill-height': fillHeight }">
       <v-col cols="12" md="3" lg="4" v-if="showSidebar" :order="$vuetify.breakpoint.smAndUp ? 1 : 2">
-        <v-navigation-drawer v-model="showSidebar" light touchless width="100%">
+        <v-navigation-drawer v-model="showSidebar" light touchless stateless width="100%">
           <!-- Replaced width above -->
           <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
           <!-- Replaced permanent above -->
@@ -20,7 +20,8 @@
             @view-objective="dialog = true"
             @hide-sidebar="hideSidebar()"
           />
-          <QuestDialog
+        </v-navigation-drawer>
+        <QuestDialog
             :dialog="dialog"
             :quest="quest"
             :objectives="objectives"
@@ -28,7 +29,6 @@
             @close-dialog="dialog = false"
             @restart-quest="restartQuest()"
           />
-        </v-navigation-drawer>
       </v-col>
 
       <v-col col="auto" :order="$vuetify.breakpoint.smAndUp ? 2 : 1">
@@ -70,8 +70,8 @@
         />
       </v-col>
 
-      <v-col cols="12" md="3" lg="4" v-if="showJournal">
-        <v-navigation-drawer v-model="showJournal" touchless right width="100%">
+      <v-col cols="12" md="3" lg="4" v-if="showJournal" order="3">
+        <v-navigation-drawer v-model="showJournal" touchless stateless width="100%">
           <QuestJournal />
         </v-navigation-drawer>
       </v-col>
