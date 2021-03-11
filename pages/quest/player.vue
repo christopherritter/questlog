@@ -45,7 +45,16 @@
       </v-col>
 
       <v-col col="auto" :order="$vuetify.breakpoint.smAndUp ? 2 : 1">
-        <v-flex class="fabButtons">
+        <v-flex class="fabButtons" v-if="$vuetify.breakpoint.smAndUp">
+          <v-btn
+            fab
+            color="blue-grey"
+            @click="toggleLegend()"
+            class="mt-2 mr-2"
+            style="display:block"
+          >
+            <v-icon>mdi-map</v-icon>
+          </v-btn>
           <v-btn
             fab
             color="blue-grey"
@@ -87,6 +96,24 @@
         cols="12"
         md="3"
         lg="4"
+        v-if="$vuetify.breakpoint.smAndUp ? showLegend : true"
+        order="3"
+      >
+        <v-navigation-drawer
+          id="LegendDrawer"
+          v-model="showLegend"
+          touchless
+          stateless
+          width="100%"
+        >
+          <QuestLegend :locations="locations" />
+        </v-navigation-drawer>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="3"
+        lg="4"
         v-if="$vuetify.breakpoint.smAndUp ? showJournal : true"
         order="3"
       >
@@ -97,7 +124,7 @@
           stateless
           width="100%"
         >
-          <QuestJournal />
+          <QuestJournal :objectives="objectives" />
         </v-navigation-drawer>
       </v-col>
 
@@ -115,7 +142,7 @@
           stateless
           width="100%"
         >
-          <QuestBackpack />
+          <QuestBackpack :items="items" />
         </v-navigation-drawer>
       </v-col>
     </v-row>
@@ -125,6 +152,7 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 import QuestSidebar from "@/components/quest/QuestSidebar.vue";
+import QuestLegend from "@/components/quest/QuestLegend.vue";
 import QuestJournal from "@/components/quest/QuestJournal.vue";
 import QuestBackpack from "@/components/quest/QuestBackpack.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
@@ -138,6 +166,7 @@ export default {
       selectedLocation: {},
       locationActions: [],
       showSidebar: true,
+      showLegend: false,
       showJournal: false,
       showBackpack: false,
       dialog: false,
@@ -150,13 +179,14 @@ export default {
       this.viewLocation(this.quest.startingPoint);
     }
     if (this.$vuetify.breakpoint.mobile) {
-      console.log("Small and up")
+      this.showLegend = true;
       this.showJournal = true;
       this.showBackpack = true;
     }
   },
   components: {
     QuestSidebar,
+    QuestLegend,
     QuestJournal,
     QuestBackpack,
     QuestDialog,
@@ -237,6 +267,10 @@ export default {
     },
     hideSidebar() {
       this.showSidebar = false;
+      this.$refs.qMap.offsetMap();
+    },
+    toggleLegend() {
+      this.showLegend = !this.showLegend;
       this.$refs.qMap.offsetMap();
     },
     toggleJournal() {
