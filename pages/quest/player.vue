@@ -1,8 +1,21 @@
 <template>
   <v-container fluid :class="{ 'fill-height': fillHeight, 'pa-0': true }">
     <v-row no-gutters :class="{ 'fill-height': fillHeight }">
-      <v-col cols="12" md="3" lg="4" v-if="showSidebar" :order="$vuetify.breakpoint.smAndUp ? 1 : 2">
-        <v-navigation-drawer v-model="showSidebar" light touchless stateless width="100%">
+      <v-col
+        cols="12"
+        md="3"
+        lg="4"
+        v-if="$vuetify.breakpoint.smAndUp ? showSidebar : true"
+        :order="$vuetify.breakpoint.smAndUp ? 1 : 2"
+      >
+        <v-navigation-drawer
+          id="SidebarDrawer"
+          v-model="showSidebar"
+          light
+          touchless
+          stateless
+          width="100%"
+        >
           <!-- Replaced width above -->
           <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
           <!-- Replaced permanent above -->
@@ -22,13 +35,13 @@
           />
         </v-navigation-drawer>
         <QuestDialog
-            :dialog="dialog"
-            :quest="quest"
-            :objectives="objectives"
-            @open-dialog="dialog = true"
-            @close-dialog="dialog = false"
-            @restart-quest="restartQuest()"
-          />
+          :dialog="dialog"
+          :quest="quest"
+          :objectives="objectives"
+          @open-dialog="dialog = true"
+          @close-dialog="dialog = false"
+          @restart-quest="restartQuest()"
+        />
       </v-col>
 
       <v-col col="auto" :order="$vuetify.breakpoint.smAndUp ? 2 : 1">
@@ -70,9 +83,39 @@
         />
       </v-col>
 
-      <v-col cols="12" md="3" lg="4" v-if="showJournal" order="3">
-        <v-navigation-drawer v-model="showJournal" touchless stateless width="100%">
+      <v-col
+        cols="12"
+        md="3"
+        lg="4"
+        v-if="$vuetify.breakpoint.smAndUp ? showJournal : true"
+        order="3"
+      >
+        <v-navigation-drawer
+          id="JournalDrawer"
+          v-model="showJournal"
+          touchless
+          stateless
+          width="100%"
+        >
           <QuestJournal />
+        </v-navigation-drawer>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="3"
+        lg="4"
+        v-if="$vuetify.breakpoint.smAndUp ? showBackpack : true"
+        order="4"
+      >
+        <v-navigation-drawer
+          id="BackpackDrawer"
+          v-model="showBackpack"
+          touchless
+          stateless
+          width="100%"
+        >
+          <QuestBackpack />
         </v-navigation-drawer>
       </v-col>
     </v-row>
@@ -83,6 +126,7 @@
 import { mapState, mapMutations } from "vuex";
 import QuestSidebar from "@/components/quest/QuestSidebar.vue";
 import QuestJournal from "@/components/quest/QuestJournal.vue";
+import QuestBackpack from "@/components/quest/QuestBackpack.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
 import LeafletMap from "@/components/LeafletMap.vue";
 
@@ -105,8 +149,19 @@ export default {
     if (this.quest.startingPoint.length > 0) {
       this.viewLocation(this.quest.startingPoint);
     }
+    if (this.$vuetify.breakpoint.mobile) {
+      console.log("Small and up")
+      this.showJournal = true;
+      this.showBackpack = true;
+    }
   },
-  components: { QuestSidebar, QuestJournal, QuestDialog, LeafletMap },
+  components: {
+    QuestSidebar,
+    QuestJournal,
+    QuestBackpack,
+    QuestDialog,
+    LeafletMap
+  },
   computed: {
     ...mapState({
       quest: state => state.quest,
@@ -118,7 +173,7 @@ export default {
     fillHeight() {
       if (this.$vuetify.breakpoint.smAndUp) return true;
       return false;
-    }
+    },
   },
   methods: {
     ...mapMutations(["SET_OBJECTIVE"]),
@@ -216,6 +271,6 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 100
+  z-index: 100;
 }
 </style>

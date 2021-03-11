@@ -1,5 +1,6 @@
 <template>
   <v-list dense>
+    <v-subheader>JOURNAL</v-subheader>
     <v-list-item v-for="item in items" :key="item.title">
       <v-list-item-icon>
         <v-icon>{{ item.icon }}</v-icon>
