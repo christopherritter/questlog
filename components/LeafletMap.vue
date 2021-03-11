@@ -35,10 +35,6 @@ export default {
       this.offsetMap();
       this.$nextTick(() => {
         var coords = [coordinates[0], coordinates[1]];
-        // var mapSize = this.$refs.lMap.mapObject.getSize();
-        // var offset = this.$refs.lMap.mapObject.getSize().x*0.15;
-        // console.log("Map size")
-        // console.log(mapSize)
         this.$refs.lMap.mapObject.setView(coords);
       });
     },

@@ -1,8 +1,7 @@
 <template>
-  <v-container fluid class="fill-height pa-0">
-    <v-row no-gutters class="fill-height">
-
-      <v-col sm="3" v-if="showSidebar" :style="{ width: sidebarWidth }">
+  <v-container fluid :class="{ 'fill-height': fillHeight, 'pa-0': true }">
+    <v-row no-gutters :class="{ 'fill-height': fillHeight }">
+      <v-col cols="12" md="3" lg="4" v-if="showSidebar" :order="$vuetify.breakpoint.smAndUp ? 1 : 2">
         <v-navigation-drawer v-model="showSidebar" light touchless width="100%">
           <!-- Replaced width above -->
           <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
@@ -10,7 +9,7 @@
           <!-- :permanent="selectedLocation != null ? true : false" -->
           <QuestSidebar
             id="QuestSidebar"
-            class="fill-height"
+            :class="{ 'fill-height': fillHeight }"
             :objectives="objectives"
             :location="selectedLocation"
             :entries="entries"
@@ -32,37 +31,50 @@
         </v-navigation-drawer>
       </v-col>
 
-      <v-col col="auto">
-        <v-flex style="position: absolute; bottom: 0; right: 0; z-index: 100">
-          <v-btn fab color="blue-grey" @click="showJournal = !showJournal; $refs.qMap.offsetMap();" class="mb-2 mr-2" style="display:block">
+      <v-col col="auto" :order="$vuetify.breakpoint.smAndUp ? 2 : 1">
+        <v-flex class="fabButtons">
+          <v-btn
+            fab
+            color="blue-grey"
+            @click="toggleJournal()"
+            class="mt-2 mr-2"
+            style="display:block"
+          >
             <v-icon>mdi-book</v-icon>
           </v-btn>
-          <v-btn fab color="blue-grey" @click="showBackpack = !showBackpack" class="mb-2 mr-2" style="display:block">
+          <v-btn
+            fab
+            color="blue-grey"
+            @click="toggleBackpack()"
+            class="mt-2 mr-2"
+            style="display:block"
+          >
             <v-icon>mdi-bag-personal</v-icon>
           </v-btn>
         </v-flex>
         <LeafletMap
           id="QuestMap"
           ref="qMap"
-          class="fill-height"
-          :style="{'z-index': 0, position: 'relative', width: mapWidth }"
+          :class="{ 'fill-height': fillHeight }"
+          :style="{
+            'z-index': 0,
+            position: 'relative',
+            width: $vuetify.breakpoint.smAndUp ? '100%' : '100vw',
+            height: $vuetify.breakpoint.smAndUp ? '100%' : '175px'
+          }"
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
           :locations="locations"
           @select-location="viewLocation($event.locationId)"
           @clear-location="clearLocation()"
         />
-
       </v-col>
 
-      <v-col sm="3" v-if="showJournal" :style="{ width: journalWidth }">
-
-          <v-navigation-drawer v-model="showJournal" touchless right width="100%">
-            <QuestJournal />
-          </v-navigation-drawer>
-
+      <v-col cols="12" md="3" lg="4" v-if="showJournal">
+        <v-navigation-drawer v-model="showJournal" touchless right width="100%">
+          <QuestJournal />
+        </v-navigation-drawer>
       </v-col>
-
     </v-row>
   </v-container>
 </template>
@@ -103,34 +115,9 @@ export default {
       entries: state => state.entries,
       items: state => state.actions
     }),
-    sidebarWidth() {
-      if (this.showSidebar) {
-        return this.$vuetify.breakpoint.smAndUp ? "450px" : "85vw";
-      } else {
-        return "0";
-      }
-    },
-    mapWidth() {
-      if (
-        !this.quest ||
-        this.showSidebar ||
-        this.showJournal ||
-        this.showBackpack
-      ) {
-        return "100%";
-      } else {
-        return "100vw";
-      }
-    },
-    journalWidth() {
-      if (!this.showJournal) {
-        return 0;
-      }
-    },
-    backpackWidth() {
-      if (!this.showBackpack) {
-        return 0;
-      }
+    fillHeight() {
+      if (this.$vuetify.breakpoint.smAndUp) return true;
+      return false;
     }
   },
   methods: {
@@ -189,8 +176,20 @@ export default {
         this.viewLocation(event.target);
       }
     },
+    mapWidth() {
+      if (this.$vuetify.breakpoint.smAndUp) return "100%";
+      return "100vw";
+    },
     hideSidebar() {
       this.showSidebar = false;
+      this.$refs.qMap.offsetMap();
+    },
+    toggleJournal() {
+      this.showJournal = !this.showJournal;
+      this.$refs.qMap.offsetMap();
+    },
+    toggleBackpack() {
+      this.showBackpack = !this.showBackpack;
       this.$refs.qMap.offsetMap();
     },
     restartQuest() {
@@ -212,5 +211,11 @@ export default {
 <style scoped>
 #QuestSidebar {
   max-height: calc(100vh - 100px);
+}
+.fabButtons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100
 }
 </style>
