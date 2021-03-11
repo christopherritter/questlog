@@ -1,8 +1,8 @@
 <template>
   <v-container fluid class="fill-height pa-0">
-    <v-layout class="fill-height">
+    <v-row no-gutters class="fill-height">
 
-      <v-flex :style="{ width: sidebarWidth }">
+      <v-col sm="3" v-if="showSidebar" :style="{ width: sidebarWidth }">
         <v-navigation-drawer v-model="showSidebar" light touchless width="100%">
           <!-- Replaced width above -->
           <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
@@ -30,11 +30,11 @@
             @restart-quest="restartQuest()"
           />
         </v-navigation-drawer>
-      </v-flex>
+      </v-col>
 
-      <v-flex grow shrink :style="{ width: mapWidth, position: 'relative', transition: 'all .5s linear' }">
+      <v-col col="auto">
         <v-flex style="position: absolute; bottom: 0; right: 0; z-index: 100">
-          <v-btn fab color="blue-grey" @click="showJournal = !showJournal" class="mb-2 mr-2" style="display:block">
+          <v-btn fab color="blue-grey" @click="showJournal = !showJournal; $refs.qMap.offsetMap();" class="mb-2 mr-2" style="display:block">
             <v-icon>mdi-book</v-icon>
           </v-btn>
           <v-btn fab color="blue-grey" @click="showBackpack = !showBackpack" class="mb-2 mr-2" style="display:block">
@@ -45,7 +45,7 @@
           id="QuestMap"
           ref="qMap"
           class="fill-height"
-          style="z-index: 0; position: relative"
+          :style="{'z-index': 0, position: 'relative', width: mapWidth }"
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
           :locations="locations"
@@ -53,17 +53,17 @@
           @clear-location="clearLocation()"
         />
 
-      </v-flex>
+      </v-col>
 
-      <v-flex :style="{ width: journalWidth }">
+      <v-col sm="3" v-if="showJournal" :style="{ width: journalWidth }">
 
           <v-navigation-drawer v-model="showJournal" touchless right width="100%">
             <QuestJournal />
           </v-navigation-drawer>
 
-      </v-flex>
+      </v-col>
 
-    </v-layout>
+    </v-row>
   </v-container>
 </template>
 
@@ -190,9 +190,8 @@ export default {
       }
     },
     hideSidebar() {
-      this.$nextTick(() => {
-        this.showSidebar = false;
-      });
+      this.showSidebar = false;
+      this.$refs.qMap.offsetMap();
     },
     restartQuest() {
       this.dialog = false;

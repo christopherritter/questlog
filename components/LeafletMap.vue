@@ -32,8 +32,19 @@ export default {
   props: ["center", "zoom", "locations", "draggable", "mapOptions"],
   methods: {
     panTo(coordinates) {
+      this.offsetMap();
       this.$nextTick(() => {
-        this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
+        var coords = [coordinates[0], coordinates[1]];
+        // var mapSize = this.$refs.lMap.mapObject.getSize();
+        // var offset = this.$refs.lMap.mapObject.getSize().x*0.15;
+        // console.log("Map size")
+        // console.log(mapSize)
+        this.$refs.lMap.mapObject.setView(coords);
+      });
+    },
+    offsetMap() {
+      this.$nextTick(() => {
+        this.$refs.lMap.mapObject.invalidateSize();
       });
     }
   }
@@ -41,7 +52,7 @@ export default {
 </script>
 
 <style>
-  #lMap {
-    z-index: inherit;
-  }
+#lMap {
+  z-index: inherit;
+}
 </style>
