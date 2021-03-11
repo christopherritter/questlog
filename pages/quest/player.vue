@@ -82,7 +82,7 @@
             'z-index': 0,
             position: 'relative',
             width: $vuetify.breakpoint.smAndUp ? '100%' : '100vw',
-            height: $vuetify.breakpoint.smAndUp ? '100%' : '175px'
+            height: $vuetify.breakpoint.smAndUp ? '100%' : '88px'
           }"
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
