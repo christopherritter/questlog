@@ -3,8 +3,8 @@
     <v-row no-gutters :class="{ 'fill-height': fillHeight }">
       <v-col
         cols="12"
-        md="3"
-        lg="4"
+        md="4"
+        lg="3"
         v-if="$vuetify.breakpoint.smAndUp ? showSidebar : true"
         :order="$vuetify.breakpoint.smAndUp ? 1 : 2"
       >
@@ -44,35 +44,37 @@
         />
       </v-col>
 
-      <v-col col="auto" :order="$vuetify.breakpoint.smAndUp ? 2 : 1">
-        <v-flex class="fabButtons" v-if="$vuetify.breakpoint.smAndUp">
-          <v-btn
-            fab
-            color="blue-grey"
-            @click="toggleLegend()"
-            class="mt-2 mr-2"
-            style="display:block"
+      <v-col col="auto" :order="$vuetify.breakpoint.smAndUp ? 2 : 1" style="position:relative">
+        <v-flex class="fabButtons d-flex flex-row mb-6">
+          <v-flex
+            class="d-flex flex-row-reverse"
+            v-if="$vuetify.breakpoint.smAndUp"
           >
-            <v-icon>mdi-map</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            color="blue-grey"
-            @click="toggleJournal()"
-            class="mt-2 mr-2"
-            style="display:block"
-          >
-            <v-icon>mdi-book</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            color="blue-grey"
-            @click="toggleBackpack()"
-            class="mt-2 mr-2"
-            style="display:block"
-          >
-            <v-icon>mdi-bag-personal</v-icon>
-          </v-btn>
+            <v-btn
+              fab
+              color="blue-grey"
+              @click="toggleLegend()"
+              class="mt-2 mr-2"
+            >
+              <v-icon>mdi-map</v-icon>
+            </v-btn>
+            <v-btn
+              fab
+              color="blue-grey"
+              @click="toggleJournal()"
+              class="mt-2 mr-2"
+            >
+              <v-icon>mdi-book</v-icon>
+            </v-btn>
+            <v-btn
+              fab
+              color="blue-grey"
+              @click="toggleBackpack()"
+              class="mt-2 mr-2"
+            >
+              <v-icon>mdi-bag-personal</v-icon>
+            </v-btn>
+          </v-flex>
         </v-flex>
         <LeafletMap
           id="QuestMap"
@@ -94,8 +96,8 @@
 
       <v-col
         cols="12"
-        md="3"
-        lg="4"
+        md="4"
+        lg="3"
         v-if="$vuetify.breakpoint.smAndUp ? showLegend : true"
         order="3"
       >
@@ -112,8 +114,8 @@
 
       <v-col
         cols="12"
-        md="3"
-        lg="4"
+        md="4"
+        lg="3"
         v-if="$vuetify.breakpoint.smAndUp ? showJournal : true"
         order="3"
       >
@@ -130,8 +132,8 @@
 
       <v-col
         cols="12"
-        md="3"
-        lg="4"
+        md="4"
+        lg="3"
         v-if="$vuetify.breakpoint.smAndUp ? showBackpack : true"
         order="4"
       >
@@ -203,7 +205,7 @@ export default {
     fillHeight() {
       if (this.$vuetify.breakpoint.smAndUp) return true;
       return false;
-    },
+    }
   },
   methods: {
     ...mapMutations(["SET_OBJECTIVE"]),
@@ -271,13 +273,19 @@ export default {
     },
     toggleLegend() {
       this.showLegend = !this.showLegend;
+      this.showJournal = false;
+      this.showBackpack = false;
       this.$refs.qMap.offsetMap();
     },
     toggleJournal() {
+      this.showLegend = false;
       this.showJournal = !this.showJournal;
+      this.showBackpack = false;
       this.$refs.qMap.offsetMap();
     },
     toggleBackpack() {
+      this.showLegend = false;
+      this.showJournal = false;
       this.showBackpack = !this.showBackpack;
       this.$refs.qMap.offsetMap();
     },
@@ -302,9 +310,10 @@ export default {
   max-height: calc(100vh - 100px);
 }
 .fabButtons {
-  position: absolute;
-  top: 0;
+  display: block;
+  float: left;
   right: 0;
-  z-index: 100;
+  position: absolute;
+  z-index: 10;
 }
 </style>
