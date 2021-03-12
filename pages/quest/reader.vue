@@ -5,8 +5,8 @@
         cols="12"
         md="4"
         lg="3"
-        v-if="$vuetify.breakpoint.smAndUp ? showSidebar : true"
-        :order="$vuetify.breakpoint.smAndUp ? 1 : 2"
+        v-if="$vuetify.breakpoint.mdAndUp ? showSidebar : true"
+        :order="$vuetify.breakpoint.mdAndUp ? 1 : 2"
       >
         <v-navigation-drawer
           id="SidebarDrawer"
@@ -17,7 +17,7 @@
           stateless
         >
           <!-- Replaced width above -->
-          <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
+          <!-- :width="$vuetify.breakpoint.mdAndUp ? 450 : '85vw'" -->
           <!-- Replaced permanent above -->
           <!-- :permanent="selectedLocation != null ? true : false" -->
           <QuestSidebar
@@ -43,11 +43,11 @@
         />
       </v-col>
 
-      <v-col col="auto" :order="$vuetify.breakpoint.smAndUp ? 2 : 1" style="position:relative">
+      <v-col col="auto" :order="$vuetify.breakpoint.mdAndUp ? 2 : 1" style="position:relative">
         <v-flex class="tabButtons mb-6">
           <v-flex
             class="d-flex flex-column justify-end"
-            v-if="$vuetify.breakpoint.smAndUp"
+            v-if="$vuetify.breakpoint.mdAndUp"
           >
             <v-btn
               fab
@@ -85,8 +85,8 @@
           :style="{
             'z-index': 0,
             position: 'relative',
-            width: $vuetify.breakpoint.smAndUp ? '100%' : '100vw',
-            height: $vuetify.breakpoint.smAndUp ? '100%' : '88px'
+            width: $vuetify.breakpoint.mdAndUp ? '100%' : '100vw',
+            height: $vuetify.breakpoint.mdAndUp ? '100%' : '88px'
           }"
           :mapOptions="mapOptions"
           :center="quest.region.coordinates"
@@ -101,7 +101,7 @@
         cols="12"
         md="4"
         lg="3"
-        v-if="$vuetify.breakpoint.smAndUp ? showLegend : true"
+        v-if="$vuetify.breakpoint.mdAndUp ? showLegend : true"
         order="3"
       >
         <v-navigation-drawer
@@ -119,7 +119,7 @@
         cols="12"
         md="4"
         lg="3"
-        v-if="$vuetify.breakpoint.smAndUp ? showJournal : true"
+        v-if="$vuetify.breakpoint.mdAndUp ? showJournal : true"
         order="3"
       >
         <v-navigation-drawer
@@ -137,7 +137,7 @@
         cols="12"
         md="4"
         lg="3"
-        v-if="$vuetify.breakpoint.smAndUp ? showBackpack : true"
+        v-if="$vuetify.breakpoint.mdAndUp ? showBackpack : true"
         order="4"
       >
         <v-navigation-drawer
@@ -183,23 +183,15 @@ export default {
         boxZoom: false,
         keyboard: false,
       },
-      windowSize: {
-        x: 0,
-        y: 0,
-      },
       dialog: false,
       loading: false,
       error: null,
     };
   },
   mounted() {
+    this.questHelpers();
     if (this.quest.startingPoint.length > 0) {
       this.viewLocation(this.quest.startingPoint);
-    }
-    if (this.$vuetify.breakpoint.mobile) {
-      this.showLegend = true;
-      this.showJournal = true;
-      this.showBackpack = true;
     }
   },
   components: {
@@ -219,12 +211,21 @@ export default {
       items: state => state.actions
     }),
     fillHeight() {
-      if (this.$vuetify.breakpoint.smAndUp) return true;
+      if (this.$vuetify.breakpoint.mdAndUp) return true;
       return false;
-    }
+    },
   },
   methods: {
     ...mapMutations(["SET_OBJECTIVE"]),
+    questHelpers() {
+      console.log("Quest helpers")
+      if (this.$vuetify.breakpoint.smAndDown) {
+        console.log("Sm And Down")
+        this.showLegend = false;
+        this.showJournal = false;
+        this.showBackpack = false;
+      }
+    },
     viewLocation(locationId) {
       const locationIndex = this.findLocation(locationId);
       const location = this.locations[locationIndex];
@@ -280,7 +281,7 @@ export default {
       }
     },
     mapWidth() {
-      if (this.$vuetify.breakpoint.smAndUp) return "100%";
+      if (this.$vuetify.breakpoint.mdAndUp) return "100%";
       return "100vw";
     },
     hideSidebar() {

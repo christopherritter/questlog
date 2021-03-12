@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels v-model="panels" :disabled="$vuetify.breakpoint.smAndUp" tile flat>
+  <v-expansion-panels v-model="panels" :disabled="$vuetify.breakpoint.mdAndUp" tile flat>
     <v-expansion-panel>
       <v-expansion-panel-header>
         Backpack
@@ -26,14 +26,20 @@ export default {
   name: "QuestBackpack",
   data() {
     return {
-      panels: 0
+      panels: null
     }
   },
   mounted() {
-    if (this.$vuetify.breakpoint.mobile) {
-      this.panels = null;
-    }
+    this.setPanels()
   },
-  props: ["items"]
+  props: ["items"],
+  methods: {
+    setPanels() {
+      console.log("Setting backpack panel");
+      if (this.$vuetify.breakpoint.smAndDown) {
+        this.panels = 0;
+      }
+    },
+  }
 };
 </script>

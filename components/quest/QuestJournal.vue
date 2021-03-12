@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels v-model="panels" :disabled="$vuetify.breakpoint.smAndUp" tile flat>
+  <v-expansion-panels v-model="panels" :disabled="$vuetify.breakpoint.mdAndUp" tile flat>
     <v-expansion-panel>
       <v-expansion-panel-header>
         Journal
@@ -34,10 +34,16 @@ export default {
     }
   },
   mounted() {
-    if (this.$vuetify.breakpoint.mobile) {
-      this.panels = null;
-    }
+    this.setPanels();
   },
-  props: ["objectives"]
+  props: ["objectives"],
+  methods: {
+    setPanels() {
+      console.log("Setting journal panel");
+      if (this.$vuetify.breakpoint.smAndDown) {
+        this.panels = 0;
+      }
+    },
+  }
 };
 </script>
