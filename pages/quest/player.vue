@@ -11,10 +11,10 @@
         <v-navigation-drawer
           id="SidebarDrawer"
           v-model="showSidebar"
+          width="100%"
           light
           touchless
           stateless
-          width="100%"
         >
           <!-- Replaced width above -->
           <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
@@ -22,7 +22,6 @@
           <!-- :permanent="selectedLocation != null ? true : false" -->
           <QuestSidebar
             id="QuestSidebar"
-            :class="{ 'fill-height': fillHeight }"
             :objectives="objectives"
             :location="selectedLocation"
             :entries="entries"
@@ -108,9 +107,9 @@
         <v-navigation-drawer
           id="LegendDrawer"
           v-model="showLegend"
+          width="100%"
           touchless
           stateless
-          width="100%"
         >
           <QuestLegend :locations="locations" />
         </v-navigation-drawer>
@@ -126,9 +125,9 @@
         <v-navigation-drawer
           id="JournalDrawer"
           v-model="showJournal"
+          width="100%"
           touchless
           stateless
-          width="100%"
         >
           <QuestJournal :objectives="objectives" />
         </v-navigation-drawer>
@@ -144,9 +143,9 @@
         <v-navigation-drawer
           id="BackpackDrawer"
           v-model="showBackpack"
+          width="100%"
           touchless
           stateless
-          width="100%"
         >
           <QuestBackpack :items="items" />
         </v-navigation-drawer>
@@ -183,6 +182,10 @@ export default {
         scrollWheelZoom: false,
         boxZoom: false,
         keyboard: false,
+      },
+      windowSize: {
+        x: 0,
+        y: 0,
       },
       dialog: false,
       loading: false,
@@ -313,13 +316,16 @@ export default {
           bool: false
         });
       }
-    }
+    },
   }
 };
 </script>
 
 <style scoped>
-#QuestSidebar {
+#SidebarDrawer,
+#LegendDrawer,
+#JournalDrawer,
+#BackpackDrawer {
   max-height: calc(100vh - 100px);
 }
 .tabButtons {
