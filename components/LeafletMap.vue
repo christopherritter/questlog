@@ -6,8 +6,10 @@
         ref="lMap"
         :zoom="zoom"
         :center="[center[0], center[1]]"
-        @click="$emit('mark-location', $event)"
         :options="mapOptions"
+        @click="$emit('mark-location', $event)"
+        @locationfound="onLocationFound"
+        @locationerror="onLocationError"
       >
         <l-tile-layer
           url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -45,8 +47,22 @@ export default {
     },
     locatePlayer() {
       this.$nextTick(() => {
-        this.$refs.lMap.mapObject.locate({setView: true, maxZoom: 18});
+        this.$refs.lMap.mapObject.locate({ setView: true, maxZoom: 18 });
       });
+    },
+    onLocationFound(e) {
+      var radius = e.accuracy / 2;
+
+      this.$L.marker(e.latlng)
+        .addTo(this.$refs.lMap.mapObject)
+        .bindPopup("You are within " + radius + " meters from this point")
+        .openPopup();
+
+      this.$L.circle(e.latlng, radius).addTo(this.$refs.lMap.mapObject);
+    },
+    onLocationError(e) {
+      console.log("Location error")
+      alert(e.message);
     }
   }
 };

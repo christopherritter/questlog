@@ -5,7 +5,7 @@
         cols="12"
         md="4"
         lg="3"
-        v-if="$vuetify.breakpoint.mdAndUp ? showSidebar : true"
+        v-if="showSidebar"
         :order="$vuetify.breakpoint.mdAndUp ? 1 : 2"
       >
         <v-navigation-drawer
@@ -82,7 +82,7 @@
             'z-index': 0,
             position: 'relative',
             width: $vuetify.breakpoint.mdAndUp ? '100%' : '100vw',
-            height: $vuetify.breakpoint.mdAndUp ? '100%' : '88px'
+            height: $vuetify.breakpoint.mdAndUp ? '100%' : mapHeight,
           }"
           :mapOptions="mapOptions"
           :center="quest.region.coordinates"
@@ -196,6 +196,13 @@ export default {
     QuestDialog,
     LeafletMap
   },
+  watch: {
+    selectedLocation(val) {
+      if (Object.keys(val).length <= 0) {
+        this.showSidebar = false;
+      }
+    }
+  },
   computed: {
     ...mapState({
       quest: state => state.quest,
@@ -207,6 +214,10 @@ export default {
     fillHeight() {
       if (this.$vuetify.breakpoint.mdAndUp) return true;
       return false;
+    },
+    mapHeight() {
+      if (Object.keys(this.selectedLocation).length <= 0) return '280px'
+      return '88px'
     }
   },
   methods: {
@@ -222,7 +233,6 @@ export default {
       this.$nextTick(() => {
         this.$refs.qMap.locatePlayer();
       });
-
     },
     viewLocation(locationId) {
       const locationIndex = this.findLocation(locationId);
