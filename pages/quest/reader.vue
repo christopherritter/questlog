@@ -16,10 +16,6 @@
           touchless
           stateless
         >
-          <!-- Replaced width above -->
-          <!-- :width="$vuetify.breakpoint.mdAndUp ? 450 : '85vw'" -->
-          <!-- Replaced permanent above -->
-          <!-- :permanent="selectedLocation != null ? true : false" -->
           <QuestSidebar
             id="QuestSidebar"
             :objectives="objectives"
@@ -101,7 +97,7 @@
         cols="12"
         md="4"
         lg="3"
-        v-if="$vuetify.breakpoint.mdAndUp ? showLegend : true"
+        v-if="$vuetify.breakpoint.smAndDown ? true : showLegend"
         order="3"
       >
         <v-navigation-drawer
@@ -119,7 +115,7 @@
         cols="12"
         md="4"
         lg="3"
-        v-if="$vuetify.breakpoint.mdAndUp ? showJournal : true"
+        v-if="$vuetify.breakpoint.smAndDown ? true : showJournal"
         order="3"
       >
         <v-navigation-drawer
@@ -137,7 +133,7 @@
         cols="12"
         md="4"
         lg="3"
-        v-if="$vuetify.breakpoint.mdAndUp ? showBackpack : true"
+        v-if="$vuetify.breakpoint.smAndDown ? true : showBackpack"
         order="4"
       >
         <v-navigation-drawer
@@ -174,15 +170,6 @@ export default {
       showLegend: false,
       showJournal: false,
       showBackpack: false,
-      mapOptions: {
-        zoomControl: false,
-        dragging: false,
-        touchZoom: false,
-        doubleClickZoom: false,
-        scrollWheelZoom: false,
-        boxZoom: false,
-        keyboard: false,
-      },
       dialog: false,
       loading: false,
       error: null,
@@ -213,16 +200,15 @@ export default {
     fillHeight() {
       if (this.$vuetify.breakpoint.mdAndUp) return true;
       return false;
-    },
+    }
   },
   methods: {
     ...mapMutations(["SET_OBJECTIVE"]),
     questHelpers() {
       if (this.$vuetify.breakpoint.smAndDown) {
-        console.log("Sm And Down")
-        this.showLegend = false;
-        this.showJournal = false;
-        this.showBackpack = false;
+        this.showLegend = true;
+        this.showJournal = true;
+        this.showBackpack = true;
       }
     },
     viewLocation(locationId) {

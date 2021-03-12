@@ -215,7 +215,6 @@ export default {
     ...mapMutations(["SET_OBJECTIVE"]),
     questHelpers() {
       if (this.$vuetify.breakpoint.smAndDown) {
-        console.log("Sm And Down")
         this.showLegend = true;
         this.showJournal = true;
         this.showBackpack = true;
