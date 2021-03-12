@@ -89,6 +89,7 @@
             width: $vuetify.breakpoint.smAndUp ? '100%' : '100vw',
             height: $vuetify.breakpoint.smAndUp ? '100%' : '88px'
           }"
+          :mapOptions="mapOptions"
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
           :locations="locations"
@@ -174,9 +175,18 @@ export default {
       showLegend: false,
       showJournal: false,
       showBackpack: false,
+      mapOptions: {
+        zoomControl: false,
+        dragging: false,
+        touchZoom: false,
+        doubleClickZoom: false,
+        scrollWheelZoom: false,
+        boxZoom: false,
+        keyboard: false,
+      },
       dialog: false,
       loading: false,
-      error: null
+      error: null,
     };
   },
   mounted() {

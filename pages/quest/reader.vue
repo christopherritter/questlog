@@ -1,23 +1,39 @@
 <template>
-  <v-container fluid class="fill-height pa-0">
-    <v-layout class="fill-height">
-      <v-navigation-drawer light :width="sidebarWidth" touchless permanent>
-        <!-- Replaced width above -->
-        <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
-        <!-- Replaced permanent above -->
-        <!-- :permanent="selectedLocation != null ? true : false" -->
-        <QuestSidebar
-          id="QuestSidebar"
-          class="fill-height"
-          :objectives="objectives"
-          :location="selectedLocation"
-          :entries="entries"
-          :items="items"
-          :actions="locationActions"
-          @view-location="viewLocation($event)"
-          @select-action="selectAction($event)"
-          @view-objective="dialog = true"
-        />
+  <v-container fluid :class="{ 'fill-height': fillHeight, 'pa-0': true }">
+    <v-row no-gutters :class="{ 'fill-height': fillHeight }">
+      <v-col
+        cols="12"
+        md="4"
+        lg="3"
+        v-if="$vuetify.breakpoint.smAndUp ? showSidebar : true"
+        :order="$vuetify.breakpoint.smAndUp ? 1 : 2"
+      >
+        <v-navigation-drawer
+          id="SidebarDrawer"
+          v-model="showSidebar"
+          light
+          touchless
+          stateless
+          width="100%"
+        >
+          <!-- Replaced width above -->
+          <!-- :width="$vuetify.breakpoint.smAndUp ? 450 : '85vw'" -->
+          <!-- Replaced permanent above -->
+          <!-- :permanent="selectedLocation != null ? true : false" -->
+          <QuestSidebar
+            id="QuestSidebar"
+            :class="{ 'fill-height': fillHeight }"
+            :objectives="objectives"
+            :location="selectedLocation"
+            :entries="entries"
+            :items="items"
+            :actions="locationActions"
+            @view-location="viewLocation($event)"
+            @select-action="selectAction($event)"
+            @view-objective="dialog = true"
+            @hide-sidebar="hideSidebar()"
+          />
+        </v-navigation-drawer>
         <QuestDialog
           :dialog="dialog"
           :quest="quest"
@@ -26,28 +42,126 @@
           @close-dialog="dialog = false"
           @restart-quest="restartQuest()"
         />
-      </v-navigation-drawer>
-      <v-flex style="z-index: 0">
+      </v-col>
+
+      <v-col col="auto" :order="$vuetify.breakpoint.smAndUp ? 2 : 1" style="position:relative">
+        <v-flex class="tabButtons mb-6">
+          <v-flex
+            class="d-flex flex-column justify-end"
+            v-if="$vuetify.breakpoint.smAndUp"
+          >
+            <v-btn
+              fab
+              color="red"
+              elevation="3"
+              @click="toggleLegend()"
+              class="tabButton mt-2"
+            >
+              <v-icon>mdi-map</v-icon>
+            </v-btn>
+            <v-btn
+              fab
+              color="blue"
+              elevation="3"
+              @click="toggleJournal()"
+              class="tabButton mt-2"
+            >
+              <v-icon>mdi-book</v-icon>
+            </v-btn>
+            <v-btn
+              fab
+              color="green"
+              elevation="3"
+              @click="toggleBackpack()"
+              class="tabButton mt-2"
+            >
+              <v-icon>mdi-bag-personal</v-icon>
+            </v-btn>
+          </v-flex>
+        </v-flex>
         <LeafletMap
           id="QuestMap"
           ref="qMap"
-          class="fill-height"
+          :class="{ 'fill-height': fillHeight }"
+          :style="{
+            'z-index': 0,
+            position: 'relative',
+            width: $vuetify.breakpoint.smAndUp ? '100%' : '100vw',
+            height: $vuetify.breakpoint.smAndUp ? '100%' : '88px'
+          }"
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
           :locations="locations"
           @select-location="viewLocation($event.locationId)"
           @clear-location="clearLocation()"
         />
-      </v-flex>
-    </v-layout>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="4"
+        lg="3"
+        v-if="$vuetify.breakpoint.smAndUp ? showLegend : true"
+        order="3"
+      >
+        <v-navigation-drawer
+          id="LegendDrawer"
+          v-model="showLegend"
+          touchless
+          stateless
+          width="100%"
+        >
+          <QuestLegend :locations="locations" />
+        </v-navigation-drawer>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="4"
+        lg="3"
+        v-if="$vuetify.breakpoint.smAndUp ? showJournal : true"
+        order="3"
+      >
+        <v-navigation-drawer
+          id="JournalDrawer"
+          v-model="showJournal"
+          touchless
+          stateless
+          width="100%"
+        >
+          <QuestJournal :objectives="objectives" />
+        </v-navigation-drawer>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="4"
+        lg="3"
+        v-if="$vuetify.breakpoint.smAndUp ? showBackpack : true"
+        order="4"
+      >
+        <v-navigation-drawer
+          id="BackpackDrawer"
+          v-model="showBackpack"
+          touchless
+          stateless
+          width="100%"
+        >
+          <QuestBackpack :items="items" />
+        </v-navigation-drawer>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
 import QuestSidebar from "@/components/quest/QuestSidebar.vue";
-import LeafletMap from "@/components/LeafletMap.vue";
+import QuestLegend from "@/components/quest/QuestLegend.vue";
+import QuestJournal from "@/components/quest/QuestJournal.vue";
+import QuestBackpack from "@/components/quest/QuestBackpack.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
+import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
   name: "QuestReader",
@@ -56,6 +170,10 @@ export default {
     return {
       selectedLocation: {},
       locationActions: [],
+      showSidebar: true,
+      showLegend: false,
+      showJournal: false,
+      showBackpack: false,
       dialog: false,
       loading: false,
       error: null
@@ -65,8 +183,20 @@ export default {
     if (this.quest.startingPoint.length > 0) {
       this.viewLocation(this.quest.startingPoint);
     }
+    if (this.$vuetify.breakpoint.mobile) {
+      this.showLegend = true;
+      this.showJournal = true;
+      this.showBackpack = true;
+    }
   },
-  components: { QuestSidebar, LeafletMap, QuestDialog },
+  components: {
+    QuestSidebar,
+    QuestLegend,
+    QuestJournal,
+    QuestBackpack,
+    QuestDialog,
+    LeafletMap
+  },
   computed: {
     ...mapState({
       quest: state => state.quest,
@@ -75,21 +205,9 @@ export default {
       entries: state => state.entries,
       items: state => state.actions
     }),
-    sidebarWidth() {
-      if (Object.keys(this.selectedLocation).length !== 0) {
-        return this.$vuetify.breakpoint.smAndUp ? 450 : "85vw";
-      } else {
-        return 0;
-      }
-    },
-    mapWidth() {
-      if (!this.quest) {
-        return "100%";
-      } else if (this.location) {
-        return "100%";
-      } else {
-        return "100vw";
-      }
+    fillHeight() {
+      if (this.$vuetify.breakpoint.smAndUp) return true;
+      return false;
     }
   },
   methods: {
@@ -100,6 +218,7 @@ export default {
 
       this.selectedLocation = location;
       this.selectedActions(locationId);
+      this.showSidebar = true;
       this.zoom = location.zoom;
 
       this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
@@ -147,6 +266,32 @@ export default {
         this.viewLocation(event.target);
       }
     },
+    mapWidth() {
+      if (this.$vuetify.breakpoint.smAndUp) return "100%";
+      return "100vw";
+    },
+    hideSidebar() {
+      this.showSidebar = false;
+      this.$refs.qMap.offsetMap();
+    },
+    toggleLegend() {
+      this.showLegend = !this.showLegend;
+      this.showJournal = false;
+      this.showBackpack = false;
+      this.$refs.qMap.offsetMap();
+    },
+    toggleJournal() {
+      this.showLegend = false;
+      this.showJournal = !this.showJournal;
+      this.showBackpack = false;
+      this.$refs.qMap.offsetMap();
+    },
+    toggleBackpack() {
+      this.showLegend = false;
+      this.showJournal = false;
+      this.showBackpack = !this.showBackpack;
+      this.$refs.qMap.offsetMap();
+    },
     restartQuest() {
       this.dialog = false;
       if (this.quest.startingPoint.length > 0) {
@@ -166,5 +311,18 @@ export default {
 <style scoped>
 #QuestSidebar {
   max-height: calc(100vh - 100px);
+}
+.tabButtons {
+  display: block;
+  float: left;
+  right: 0;
+  position: absolute;
+  z-index: 10;
+}
+.tabButton {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 12px;
 }
 </style>
