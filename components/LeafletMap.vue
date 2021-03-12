@@ -49,6 +49,6 @@ export default {
 
 <style>
 #lMap {
-  z-index: inherit;
+  z-index: 0;
 }
 </style>
