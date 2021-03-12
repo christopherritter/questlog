@@ -45,32 +45,35 @@
       </v-col>
 
       <v-col col="auto" :order="$vuetify.breakpoint.smAndUp ? 2 : 1" style="position:relative">
-        <v-flex class="fabButtons d-flex flex-row mb-6">
+        <v-flex class="tabButtons mb-6">
           <v-flex
-            class="d-flex flex-row-reverse"
+            class="d-flex flex-column justify-end"
             v-if="$vuetify.breakpoint.smAndUp"
           >
             <v-btn
               fab
-              color="blue-grey"
+              color="red"
+              elevation="3"
               @click="toggleLegend()"
-              class="mt-2 mr-2"
+              class="tabButton mt-2"
             >
               <v-icon>mdi-map</v-icon>
             </v-btn>
             <v-btn
               fab
-              color="blue-grey"
+              color="blue"
+              elevation="3"
               @click="toggleJournal()"
-              class="mt-2 mr-2"
+              class="tabButton mt-2"
             >
               <v-icon>mdi-book</v-icon>
             </v-btn>
             <v-btn
               fab
-              color="blue-grey"
+              color="green"
+              elevation="3"
               @click="toggleBackpack()"
-              class="mt-2 mr-2"
+              class="tabButton mt-2"
             >
               <v-icon>mdi-bag-personal</v-icon>
             </v-btn>
@@ -309,11 +312,17 @@ export default {
 #QuestSidebar {
   max-height: calc(100vh - 100px);
 }
-.fabButtons {
+.tabButtons {
   display: block;
   float: left;
   right: 0;
   position: absolute;
   z-index: 10;
+}
+.tabButton {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 12px;
 }
 </style>
