@@ -42,6 +42,11 @@ export default {
       this.$nextTick(() => {
         this.$refs.lMap.mapObject.invalidateSize();
       });
+    },
+    locatePlayer() {
+      this.$nextTick(() => {
+        this.$refs.lMap.mapObject.locate({setView: true, maxZoom: 18});
+      });
     }
   }
 };

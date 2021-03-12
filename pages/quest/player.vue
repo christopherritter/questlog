@@ -166,7 +166,7 @@ export default {
     return {
       selectedLocation: {},
       locationActions: [],
-      showSidebar: true,
+      showSidebar: false,
       showLegend: false,
       showJournal: false,
       showBackpack: false,
@@ -184,11 +184,9 @@ export default {
       error: null,
     };
   },
-  mounted() {
+  created() {
     this.questHelpers();
-    if (this.quest.startingPoint.length > 0) {
-      this.viewLocation(this.quest.startingPoint);
-    }
+    this.beginQuest();
   },
   components: {
     QuestSidebar,
@@ -219,6 +217,12 @@ export default {
         this.showJournal = true;
         this.showBackpack = true;
       }
+    },
+    beginQuest() {
+      this.$nextTick(() => {
+        this.$refs.qMap.locatePlayer();
+      });
+
     },
     viewLocation(locationId) {
       const locationIndex = this.findLocation(locationId);
