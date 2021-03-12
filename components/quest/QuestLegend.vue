@@ -35,7 +35,6 @@ export default {
   props: ["locations"],
   methods: {
     setPanels() {
-      console.log("Setting legend panel");
       if (this.$vuetify.breakpoint.smAndDown) {
         this.panels = 0;
       }

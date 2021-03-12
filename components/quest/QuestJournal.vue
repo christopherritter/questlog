@@ -39,7 +39,6 @@ export default {
   props: ["objectives"],
   methods: {
     setPanels() {
-      console.log("Setting journal panel");
       if (this.$vuetify.breakpoint.smAndDown) {
         this.panels = 0;
       }

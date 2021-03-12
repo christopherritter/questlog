@@ -35,7 +35,6 @@ export default {
   props: ["items"],
   methods: {
     setPanels() {
-      console.log("Setting backpack panel");
       if (this.$vuetify.breakpoint.smAndDown) {
         this.panels = 0;
       }

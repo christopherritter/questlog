@@ -218,7 +218,6 @@ export default {
   methods: {
     ...mapMutations(["SET_OBJECTIVE"]),
     questHelpers() {
-      console.log("Quest helpers")
       if (this.$vuetify.breakpoint.smAndDown) {
         console.log("Sm And Down")
         this.showLegend = false;
