@@ -90,6 +90,7 @@
           :locations="locations"
           @select-location="viewLocation($event.locationId)"
           @clear-location="clearLocation()"
+          @position-found="positionFound($event)"
         />
       </v-col>
 
@@ -164,6 +165,8 @@ export default {
   layout: "fluid",
   data() {
     return {
+      currentPosition: null,
+      currentAccuracy: null,
       selectedLocation: {},
       locationActions: [],
       showSidebar: false,
@@ -233,6 +236,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.qMap.locatePlayer();
       });
+    },
+    positionFound(e) {
+      this.currentPosition = [e.latitude, e.longitude];
+      this.currentAccuracy = e.accuracy;
     },
     viewLocation(locationId) {
       const locationIndex = this.findLocation(locationId);

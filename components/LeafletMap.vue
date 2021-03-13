@@ -32,6 +32,11 @@
 export default {
   name: "LeafletMap",
   props: ["center", "zoom", "locations", "draggable", "mapOptions"],
+  data() {
+    return {
+      marker: undefined,
+    };
+  },
   methods: {
     panTo(coordinates) {
       this.offsetMap();
@@ -47,22 +52,30 @@ export default {
     },
     locatePlayer() {
       this.$nextTick(() => {
-        this.$refs.lMap.mapObject.locate({ setView: true, maxZoom: 18 });
+        this.$refs.lMap.mapObject.locate({
+          setView: true,
+          maxZoom: 18,
+          watch: true
+        });
       });
     },
     onLocationFound(e) {
-      var radius = e.accuracy / 2;
+      if (!this.marker) {
+        this.marker = new this.$L
+          .marker([e.latitude, e.longitude])
+          .bindPopup("You are here :)");
 
-      this.$L.marker(e.latlng)
-        .addTo(this.$refs.lMap.mapObject)
-        .bindPopup("You are within " + radius + " meters from this point")
-        .openPopup();
-
-      this.$L.circle(e.latlng, radius).addTo(this.$refs.lMap.mapObject);
+        this.$refs.lMap.mapObject.addLayer(this.marker);
+      } else {
+        this.marker.setLatLng(e.latlng);
+      }
     },
-    onLocationError(e) {
-      console.log("Location error")
-      alert(e.message);
+    onLocationError() {
+      console.log("Location error");
+      if (this.marker) {
+        this.$refs.lMap.mapObject.removeLayer(marker);
+        this.marker = undefined;
+      }
     }
   }
 };
