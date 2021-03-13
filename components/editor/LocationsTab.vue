@@ -63,8 +63,6 @@
                 label="Image"
                 outlined
               ></v-text-field>
-              <!-- <v-select :items="markers" label="Marker" outlined></v-select> -->
-              <!-- <v-select :items="entries" label="Entries" outlined></v-select> -->
               <v-row>
                 <v-col cols="12" class="d-flex pt-1">
                   <v-btn
@@ -236,8 +234,6 @@ export default {
         image: "",
         marker: null,
         draggable: true,
-        entries: [],
-        items: []
       },
       selectedLocation: null,
       selectedView: 0,
@@ -315,20 +311,23 @@ export default {
         image: location.image,
         marker: location.marker,
         draggable: location.draggable,
-        entries: location.entries,
-        items: location.items
       };
       this.selectedLocation = index;
     },
-    moveLocation(location) {
-      const index = this.locations.indexOf(location);
-      const coordinates = location.coordinates;
+    moveLocation(e) {
+      const locationId = this.newLocation.locationId;
+      const index = this.findWithAttr(locationId);
+      const coords = e.target.getLatLng();
+      const coordinates = [coords.lat, coords.lng];
+
       this.newLocation.coordinates = coordinates;
       this.$store.commit("SET_COORDINATES", { coordinates, index });
     },
     updateLocation() {
       const locationId = this.newLocation.locationId;
       const locationIndex = this.findWithAttr(locationId);
+      console.log("Update location id " + locationId)
+      console.log("Update location index " + locationId)
       this.$store.commit("UPDATE_LOCATION", {
         selectedLocation: locationIndex,
         newLocation: this.newLocation
@@ -351,8 +350,6 @@ export default {
         image: "",
         marker: null,
         draggable: true,
-        entries: [],
-        items: []
       };
       this.selectedLocation = null;
     },

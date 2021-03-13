@@ -21,7 +21,7 @@
           :draggable="draggable"
           @click="$emit('select-location', location)"
           @dragstart="$emit('select-location', location)"
-          @dragend="$emit('move-location', location)"
+          @dragend="$emit('move-location', $event)"
         ></l-marker>
       </l-map>
     </client-only>
