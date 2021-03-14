@@ -326,8 +326,7 @@ export default {
     updateLocation() {
       const locationId = this.newLocation.locationId;
       const locationIndex = this.findWithAttr(locationId);
-      console.log("Update location id " + locationId)
-      console.log("Update location index " + locationId)
+
       this.$store.commit("UPDATE_LOCATION", {
         selectedLocation: locationIndex,
         newLocation: this.newLocation
