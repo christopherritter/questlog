@@ -53,8 +53,7 @@ export default {
     locatePlayer() {
       this.$nextTick(() => {
         this.$refs.lMap.mapObject.locate({
-          setView: true,
-          maxZoom: 19,
+          setView: false,
           watch: true,
           timeout: 60000,
           enableHighAccuracy: true
@@ -71,6 +70,7 @@ export default {
       } else {
         this.marker.setLatLng(e.latlng);
       }
+      this.$emit('position-changed', e.latlng);
     },
     onLocationError() {
       console.log("Location error");

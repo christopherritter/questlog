@@ -39,7 +39,11 @@
         />
       </v-col>
 
-      <v-col col="auto" :order="$vuetify.breakpoint.mdAndUp ? 2 : 1" style="position:relative">
+      <v-col
+        col="auto"
+        :order="$vuetify.breakpoint.mdAndUp ? 2 : 1"
+        style="position:relative"
+      >
         <v-flex class="tabButtons mb-6">
           <v-flex
             class="d-flex flex-column justify-end"
@@ -82,15 +86,16 @@
             'z-index': 0,
             position: 'relative',
             width: $vuetify.breakpoint.mdAndUp ? '100%' : '100vw',
-            height: $vuetify.breakpoint.mdAndUp ? '100%' : mapHeight,
+            height: $vuetify.breakpoint.mdAndUp ? '100%' : mapHeight
           }"
           :mapOptions="mapOptions"
-          :center="quest.region.coordinates"
+          :center="center"
           :zoom="zoom"
           :locations="locations"
           @select-location="viewLocation($event.locationId)"
           @clear-location="clearLocation()"
           @position-found="positionFound($event)"
+          @position-changed="positionChanged($event)"
         />
       </v-col>
 
@@ -168,6 +173,7 @@ export default {
       currentPosition: null,
       currentAccuracy: null,
       selectedLocation: {},
+      center: [39.828175, -98.5795],
       zoom: 19,
       locationActions: [],
       showSidebar: false,
@@ -181,11 +187,20 @@ export default {
         doubleClickZoom: false,
         scrollWheelZoom: false,
         boxZoom: false,
-        keyboard: false,
+        keyboard: false
       },
+
+      firstLatLng: null,
+      firstPoint: null,
+      secondLatLng: null,
+      secondPoint: null,
+      distance: null,
+      length: null,
+      polyline: null,
+
       dialog: false,
-      loading: false,
-      error: null,
+      loading: true,
+      error: null
     };
   },
   created() {
@@ -220,8 +235,8 @@ export default {
       return false;
     },
     mapHeight() {
-      if (Object.keys(this.selectedLocation).length <= 0) return '280px'
-      return '88px'
+      if (Object.keys(this.selectedLocation).length <= 0) return "280px";
+      return "88px";
     }
   },
   methods: {
@@ -232,6 +247,7 @@ export default {
         this.showJournal = true;
         this.showBackpack = true;
       }
+      this.center = this.quest.region.coordinates;
     },
     beginQuest() {
       this.$nextTick(() => {
@@ -239,8 +255,17 @@ export default {
       });
     },
     positionFound(e) {
-      this.currentPosition = [e.latitude, e.longitude];
+      console.log("Position found:")
+      this.currentPosition = this.center = [e.latitude, e.longitude];
       this.currentAccuracy = e.accuracy;
+
+    },
+    positionChanged(e) {
+      console.log("Position changed:")
+      this.currentPosition = [e.lat, e.lng];
+      if (Object.keys(this.selectedLocation).length <= 0) {
+        this.center = [e.lat, e.lng];
+      }
     },
     viewLocation(locationId) {
       const locationIndex = this.findLocation(locationId);
@@ -253,6 +278,12 @@ export default {
 
       this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
     },
+    // refreshDistanceAndLength() {
+    //   _distance = L.GeometryUtil.distance(_map, _firstLatLng, _secondLatLng);
+    //   _length = L.GeometryUtil.length([_firstPoint, _secondPoint]);
+    //   document.getElementById('distance').innerHTML = _distance;
+    //   document.getElementById('length').innerHTML = _length;
+    // },
     clearLocation() {
       this.selectedLocation = {};
       this.locationActions = [];
@@ -293,7 +324,7 @@ export default {
     },
     selectAction(event) {
       if (event.type == "Move") {
-        console.log("Go to location.")
+        console.log("Go to location.");
         // this.viewLocation(event.target);
       }
     },
@@ -303,6 +334,7 @@ export default {
     },
     hideSidebar() {
       this.showSidebar = false;
+      this.clearLocation();
       this.$refs.qMap.offsetMap();
     },
     toggleLegend() {
@@ -334,7 +366,7 @@ export default {
           bool: false
         });
       }
-    },
+    }
   }
 };
 </script>
