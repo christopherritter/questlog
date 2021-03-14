@@ -20,7 +20,7 @@
             <v-row>
               <v-col cols="12">
                 <v-row>
-                  <v-col cols="12" md="6">
+                  <v-col col="auto">
                     <h2 class="pt-8 pb-4">Description</h2>
 
                     <p v-if="quest">{{ quest.description }}</p>
@@ -35,33 +35,33 @@
                     > -->
 
                     <v-row class="mt-4 mb-1 body-2">
-                      <!-- <v-col class="py-1" cols="3" xs="3" md="3"
-                        ><strong>Objectives</strong></v-col
-                      >
-                      <v-col class="py-1" cols="3" xs="3" md="3">{{
-                        objectives.length
-                      }}</v-col> -->
-                      <v-col class="py-1" cols="3" xs="3" md="3"
-                        ><strong>Locations</strong></v-col
-                      >
-                      <v-col class="py-1" cols="3" xs="3" md="3">{{
-                        locations.length
-                      }}</v-col>
-                      <!-- <v-col class="py-1" cols="3" xs="3" md="3"
-                        ><strong>Entries</strong></v-col
-                      >
-                      <v-col class="py-1" cols="3" xs="3" md="3">{{
-                        quest.entries.length
-                      }}</v-col>
-                      <v-col class="py-1" cols="3" xs="3" md="3"
-                        ><strong>Items</strong></v-col
-                      >
-                      <v-col class="py-1" cols="3" xs="3" md="3">{{
-                        quest.items.length
-                      }}</v-col> -->
+                      <v-col class="py-1" cols="4" md="2">
+                        <strong>Objectives</strong>
+                      </v-col>
+                      <v-col class="py-1" cols="2" md="1">
+                        {{ objectives.length }}
+                      </v-col>
+                      <v-col class="py-1" cols="4" md="2">
+                        <strong>Locations</strong>
+                      </v-col>
+                      <v-col class="py-1" cols="2" md="1">
+                        {{ locations.length }}
+                      </v-col>
+                      <v-col class="py-1" cols="4" md="2">
+                        <strong>Entries</strong>
+                      </v-col>
+                      <v-col class="py-1" cols="2" md="1">
+                        {{ entries.length }}
+                      </v-col>
+                      <v-col class="py-1" cols="4" md="2">
+                        <strong>Items</strong>
+                      </v-col>
+                      <v-col class="py-1" cols="2" md="1">
+                        {{ items.length }}
+                      </v-col>
                     </v-row>
                   </v-col>
-                  <v-col cols="12" md="6">
+                  <v-col v-if="objectives.length > 0" cols="12" md="6">
                     <v-sheet
                       rounded
                       color="grey lighten-4"
@@ -203,7 +203,7 @@ export default {
             marker: location.marker,
             order: location.order,
             locationId: location.locationId,
-            draggable: location.draggable,
+            draggable: location.draggable
           };
 
           this.locations.push(newLocation);
@@ -255,8 +255,8 @@ export default {
         entryId: entryResult.id
       });
 
-      console.log("Created entry " + entryResult.id)
-      return newEntry
+      console.log("Created entry " + entryResult.id);
+      return newEntry;
     },
     async createItem(item) {
       const db = this.$fire.firestore;
@@ -271,8 +271,8 @@ export default {
         itemId: itemResult.id
       });
 
-      console.log("Created item " + itemResult.id)
-      return newItem
+      console.log("Created item " + itemResult.id);
+      return newItem;
     }
   }
 };
