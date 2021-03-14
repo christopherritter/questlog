@@ -50,7 +50,7 @@
               <v-slider
                 v-model="newLocation.zoom"
                 min="0"
-                max="18"
+                max="19"
                 thumb-label
               ></v-slider>
               <v-text-field
@@ -229,7 +229,7 @@ export default {
         isLandmark: false,
         isStartingPoint: false,
         coordinates: [null, null],
-        zoom: 18,
+        zoom: 19,
         order: 0,
         image: "",
         marker: null,
@@ -345,7 +345,7 @@ export default {
         isLandmark: false,
         isStartingPoint: false,
         coordinates: [null, null],
-        zoom: 18,
+        zoom: 19,
         order: 0,
         image: "",
         marker: null,

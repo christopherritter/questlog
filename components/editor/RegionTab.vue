@@ -32,7 +32,7 @@
               <v-slider
                 v-model="newRegion.zoom"
                 min="0"
-                max="18"
+                max="19"
                 thumb-label
               ></v-slider>
               <v-row>

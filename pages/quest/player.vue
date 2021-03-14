@@ -86,7 +86,7 @@
           }"
           :mapOptions="mapOptions"
           :center="quest.region.coordinates"
-          :zoom="quest.region.zoom"
+          :zoom="zoom"
           :locations="locations"
           @select-location="viewLocation($event.locationId)"
           @clear-location="clearLocation()"
@@ -168,6 +168,7 @@ export default {
       currentPosition: null,
       currentAccuracy: null,
       selectedLocation: {},
+      zoom: 19,
       locationActions: [],
       showSidebar: false,
       showLegend: false,
@@ -292,7 +293,8 @@ export default {
     },
     selectAction(event) {
       if (event.type == "Move") {
-        this.viewLocation(event.target);
+        console.log("Go to location.")
+        // this.viewLocation(event.target);
       }
     },
     mapWidth() {

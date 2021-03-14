@@ -158,7 +158,7 @@ export default {
         quest.region = {
           name: "Center of America",
           coordinates: [39.828175, -98.5795],
-          zoom: 18,
+          zoom: 19,
           draggable: true
         }
       }

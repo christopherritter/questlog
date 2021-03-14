@@ -54,8 +54,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.lMap.mapObject.locate({
           setView: true,
-          maxZoom: 18,
-          watch: true
+          maxZoom: 19,
+          watch: true,
+          timeout: 60000,
+          enableHighAccuracy: true
         });
       });
     },
