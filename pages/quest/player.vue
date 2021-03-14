@@ -255,13 +255,10 @@ export default {
       });
     },
     positionFound(e) {
-      console.log("Position found:")
       this.currentPosition = this.center = [e.latitude, e.longitude];
       this.currentAccuracy = e.accuracy;
-
     },
     positionChanged(e) {
-      console.log("Position changed:")
       this.currentPosition = [e.lat, e.lng];
       if (Object.keys(this.selectedLocation).length <= 0) {
         this.center = [e.lat, e.lng];
