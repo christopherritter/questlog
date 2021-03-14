@@ -68,10 +68,10 @@
                       class="pa-6"
                       v-if="quest"
                     >
-                      <h3 class="mb-2">Objectives</h3>
+                      <h3 class="mb-2">Main objectives:</h3>
 
                       <v-list-item
-                        v-for="objective in objectives"
+                        v-for="objective in primaryObjectives"
                         :key="objective.objectiveId"
                         dense
                       >
@@ -162,10 +162,16 @@ export default {
   computed: {
     ...mapState({
       categories: state => state.categories
-    })
+    }),
+    primaryObjectives() {
+      let primaryObjectives = this.objectives.filter(function (e) {
+          return e.isPrimary == true;
+      });
+      return primaryObjectives;
+    }
   },
   methods: {
-    ...mapActions(["setQuest"]),
+    ...mapActions(["setQuest", "findWithAttr"]),
     async fetchQuest() {
       this.error = this.quest = null;
       this.loading = true;
