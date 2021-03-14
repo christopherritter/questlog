@@ -84,7 +84,6 @@
             width: $vuetify.breakpoint.mdAndUp ? '100%' : '100vw',
             height: $vuetify.breakpoint.mdAndUp ? '100%' : '88px'
           }"
-          :mapOptions="mapOptions"
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
           :locations="locations"
