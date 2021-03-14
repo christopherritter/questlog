@@ -165,7 +165,7 @@ export default {
     return {
       selectedLocation: {},
       locationActions: [],
-      showSidebar: true,
+      showSidebar: false,
       showLegend: false,
       showJournal: false,
       showBackpack: false,
@@ -176,7 +176,7 @@ export default {
   },
   mounted() {
     this.questHelpers();
-    if (this.quest.startingPoint.length > 0) {
+    if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
       this.viewLocation(this.quest.startingPoint);
     }
   },

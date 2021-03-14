@@ -33,6 +33,7 @@
         item-text="name"
         item-value="locationId"
         outlined
+        clearable
       ></v-autocomplete>
       <v-text-field
         v-model="newDetails.image"

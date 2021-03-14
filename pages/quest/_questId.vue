@@ -35,28 +35,28 @@
                     > -->
 
                     <v-row class="mt-4 mb-1 body-2">
-                      <v-col class="py-1" cols="4" md="2">
+                      <v-col class="py-1" cols="4" lg="2">
                         <strong>Objectives</strong>
                       </v-col>
-                      <v-col class="py-1" cols="2" md="1">
+                      <v-col class="py-1" cols="2" lg="1">
                         {{ objectives.length }}
                       </v-col>
-                      <v-col class="py-1" cols="4" md="2">
+                      <v-col class="py-1" cols="4" lg="2">
                         <strong>Locations</strong>
                       </v-col>
-                      <v-col class="py-1" cols="2" md="1">
+                      <v-col class="py-1" cols="2" lg="1">
                         {{ locations.length }}
                       </v-col>
-                      <v-col class="py-1" cols="4" md="2">
+                      <v-col class="py-1" cols="4" lg="2">
                         <strong>Entries</strong>
                       </v-col>
-                      <v-col class="py-1" cols="2" md="1">
+                      <v-col class="py-1" cols="2" lg="1">
                         {{ entries.length }}
                       </v-col>
-                      <v-col class="py-1" cols="4" md="2">
+                      <v-col class="py-1" cols="4" lg="2">
                         <strong>Items</strong>
                       </v-col>
-                      <v-col class="py-1" cols="2" md="1">
+                      <v-col class="py-1" cols="2" lg="1">
                         {{ items.length }}
                       </v-col>
                     </v-row>
@@ -71,7 +71,7 @@
                       <h3 class="mb-2">Objectives</h3>
 
                       <v-list-item
-                        v-for="objective in quest.objectives"
+                        v-for="objective in objectives"
                         :key="objective.objectiveId"
                         dense
                       >

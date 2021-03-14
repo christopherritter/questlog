@@ -325,7 +325,7 @@ export default {
     },
     restartQuest() {
       this.dialog = false;
-      if (this.quest.startingPoint.length > 0) {
+      if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
         this.viewLocation(this.quest.startingPoint);
       }
       for (let i = 0; i < this.objectives.length; i++) {
