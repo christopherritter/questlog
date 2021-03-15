@@ -38,7 +38,8 @@ export default {
   props: ["center", "zoom", "locations", "draggable", "mapOptions"],
   data() {
     return {
-      marker: undefined
+      marker: undefined,
+      position: undefined,
     };
   },
   methods: {
@@ -59,16 +60,24 @@ export default {
       });
     },
     onLocationFound(e) {
+      const map = this.$refs.lMap.mapObject;
+      var position = { lat: 0, lng: 0 };
+      var distance = map
+        .latLngToLayerPoint(position)
+        .distanceTo(map.latLngToLayerPoint(e.latlng));
+
       if (!this.marker) {
         this.marker = new this.$L.marker([e.latitude, e.longitude]).bindPopup(
           "You are here :)"
         );
-
         this.$refs.lMap.mapObject.addLayer(this.marker);
       } else {
         this.marker.setLatLng(e.latlng);
       }
-      this.$emit("position-changed", e);
+      if (distance > 5) {
+        position = e.latlng;
+        this.$emit("position-changed", e);
+      }
     },
     onLocationError() {
       console.log("Location error");
