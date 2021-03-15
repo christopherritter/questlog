@@ -163,7 +163,7 @@
                       <v-list-item
                         v-for="location in filterByTerm"
                         :key="location.locationId"
-                        @click="selectLocation(location)"
+                        @click="selectLocation({location})"
                       >
                         <v-list-item-avatar color="light-blue darken-1">
                           <v-icon class="white--text" dark>
@@ -298,19 +298,19 @@ export default {
       this.$store.dispatch("addLocation", this.newLocation);
       this.clearLocation();
     },
-    selectLocation(location) {
-      const index = this.locations.indexOf(location);
+    selectLocation(e) {
+      const index = this.locations.indexOf(e.location);
       this.newLocation = {
-        locationId: location.locationId,
-        name: location.name,
-        isLandmark: location.isLandmark,
-        isStartingPoint: location.isStartingPoint,
-        coordinates: location.coordinates,
-        zoom: location.zoom,
-        order: location.order,
-        image: location.image,
-        marker: location.marker,
-        draggable: location.draggable,
+        locationId: e.location.locationId,
+        name: e.location.name,
+        isLandmark: e.location.isLandmark,
+        isStartingPoint: e.location.isStartingPoint,
+        coordinates: e.location.coordinates,
+        zoom: e.location.zoom,
+        order: e.location.order,
+        image: e.location.image,
+        marker: e.location.marker,
+        draggable: e.location.draggable,
       };
       this.selectedLocation = index;
     },

@@ -19,8 +19,12 @@
           :key="index"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
-          @click="$emit('select-location', location)"
-          @dragstart="$emit('select-location', location)"
+          @click="
+            $emit('select-location', { event: $event, location: location })
+          "
+          @dragstart="
+            $emit('select-location', { event: $event, location: location })
+          "
           @dragend="$emit('move-location', $event)"
         ></l-marker>
       </l-map>
@@ -34,43 +38,37 @@ export default {
   props: ["center", "zoom", "locations", "draggable", "mapOptions"],
   data() {
     return {
-      marker: undefined,
+      marker: undefined
     };
   },
   methods: {
     panTo(coordinates) {
+      var coords = [coordinates[0], coordinates[1]];
+      this.$refs.lMap.mapObject.setView(coords);
       this.offsetMap();
-      this.$nextTick(() => {
-        var coords = [coordinates[0], coordinates[1]];
-        this.$refs.lMap.mapObject.setView(coords);
-      });
     },
     offsetMap() {
-      this.$nextTick(() => {
-        this.$refs.lMap.mapObject.invalidateSize();
-      });
+      this.$refs.lMap.mapObject.invalidateSize();
     },
     locatePlayer() {
-      this.$nextTick(() => {
-        this.$refs.lMap.mapObject.locate({
-          setView: false,
-          watch: true,
-          timeout: 60000,
-          enableHighAccuracy: true
-        });
+      this.$refs.lMap.mapObject.locate({
+        setView: false,
+        watch: true,
+        timeout: 60000,
+        enableHighAccuracy: true
       });
     },
     onLocationFound(e) {
       if (!this.marker) {
-        this.marker = new this.$L
-          .marker([e.latitude, e.longitude])
-          .bindPopup("You are here :)");
+        this.marker = new this.$L.marker([e.latitude, e.longitude]).bindPopup(
+          "You are here :)"
+        );
 
         this.$refs.lMap.mapObject.addLayer(this.marker);
       } else {
         this.marker.setLatLng(e.latlng);
       }
-      this.$emit('position-changed', e.latlng);
+      this.$emit("position-changed", e.latlng);
     },
     onLocationError() {
       console.log("Location error");

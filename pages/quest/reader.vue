@@ -87,7 +87,7 @@
           :center="quest.region.coordinates"
           :zoom="quest.region.zoom"
           :locations="locations"
-          @select-location="viewLocation($event.locationId)"
+          @select-location="viewLocation($event)"
           @clear-location="clearLocation()"
         />
       </v-col>
@@ -174,10 +174,10 @@ export default {
       error: null,
     };
   },
-  mounted() {
+  created() {
     this.questHelpers();
     if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
-      this.viewLocation(this.quest.startingPoint);
+      this.viewLocation({ location: { locationId: this.quest.startingPoint } });
     } else {
       this.center = this.quest.region.coordinates;
       this.zoom = this.quest.region.zoom;
@@ -213,16 +213,18 @@ export default {
         this.showBackpack = true;
       }
     },
-    viewLocation(locationId) {
-      const locationIndex = this.findLocation(locationId);
+    viewLocation(e) {
+      const locationIndex = this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
 
       this.selectedLocation = location;
-      this.selectedActions(locationId);
+      this.selectedActions(location.locationId);
       this.showSidebar = true;
       this.zoom = location.zoom;
 
-      this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
+      this.$nextTick(() => {
+        this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
+      });
     },
     clearLocation() {
       this.selectedLocation = {};
@@ -262,9 +264,9 @@ export default {
       }
       this.locationActions = selectedActions;
     },
-    selectAction(event) {
-      if (event.type == "Move") {
-        this.viewLocation(event.target);
+    selectAction(e) {
+      if (e.type == "Move") {
+        this.viewLocation({ location: { locationId: e.target } });
       }
     },
     mapWidth() {
@@ -306,7 +308,7 @@ export default {
     restartQuest() {
       this.dialog = false;
       if (this.quest.startingPoint.length > 0) {
-        this.viewLocation(this.quest.startingPoint);
+        this.viewLocation({ location: { locationId: this.quest.startingPoint } });
       }
       for (let i = 0; i < this.objectives.length; i++) {
         this.$store.commit("SET_OBJECTIVE", {

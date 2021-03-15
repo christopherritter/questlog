@@ -92,7 +92,7 @@
           :center="center"
           :zoom="zoom"
           :locations="locations"
-          @select-location="viewLocation($event.locationId)"
+          @select-location="viewLocation($event)"
           @clear-location="clearLocation()"
           @position-found="positionFound($event)"
           @position-changed="positionChanged($event)"
@@ -203,7 +203,7 @@ export default {
       error: null
     };
   },
-  created() {
+  mounted() {
     this.questHelpers();
     this.beginQuest();
   },
@@ -216,8 +216,8 @@ export default {
     LeafletMap
   },
   watch: {
-    selectedLocation(val) {
-      if (Object.keys(val).length <= 0) {
+    selectedLocation(e) {
+      if (Object.keys(e).length <= 0) {
         this.showSidebar = false;
       }
     }
@@ -265,16 +265,18 @@ export default {
         this.center = [e.lat, e.lng];
       }
     },
-    viewLocation(locationId) {
-      const locationIndex = this.findLocation(locationId);
+    viewLocation(e) {
+      const locationIndex = this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
 
       this.selectedLocation = location;
-      this.selectedActions(locationId);
+      this.selectedActions(location.locationId);
       this.showSidebar = true;
       this.zoom = location.zoom;
 
-      this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
+      this.$nextTick(() => {
+        this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
+      });
     },
     // refreshDistanceAndLength() {
     //   _distance = L.GeometryUtil.distance(_map, _firstLatLng, _secondLatLng);
@@ -323,7 +325,7 @@ export default {
     selectAction(event) {
       if (event.type == "Move") {
         console.log("Go to location.");
-        // this.viewLocation(event.target);
+        // this.viewLocation({ location: { locationId: e.target } });
       }
     },
     mapWidth() {
@@ -366,7 +368,7 @@ export default {
     restartQuest() {
       this.dialog = false;
       if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
-        this.viewLocation(this.quest.startingPoint);
+        this.viewLocation({ location: { locationId: this.quest.startingPoint } });
       }
       for (let i = 0; i < this.objectives.length; i++) {
         this.$store.commit("SET_OBJECTIVE", {
