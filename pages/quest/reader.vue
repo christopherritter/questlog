@@ -40,7 +40,7 @@
       </v-col>
 
       <v-col col="auto" :order="$vuetify.breakpoint.mdAndUp ? 2 : 1" style="position:relative">
-        <v-flex class="tabButtons mb-6">
+        <v-flex class="tabButtons mb-6" v-if="loading">
           <v-flex
             class="d-flex flex-column justify-end"
             v-if="$vuetify.breakpoint.mdAndUp"
@@ -170,7 +170,7 @@ export default {
       showJournal: false,
       showBackpack: false,
       dialog: false,
-      loading: false,
+      loading: true,
       error: null,
     };
   },
@@ -178,6 +178,9 @@ export default {
     this.questHelpers();
     if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
       this.viewLocation(this.quest.startingPoint);
+    } else {
+      this.center = this.quest.region.coordinates;
+      this.zoom = this.quest.region.zoom;
     }
   },
   components: {
@@ -274,6 +277,16 @@ export default {
     },
     toggleLegend() {
       this.showLegend = !this.showLegend;
+      if (this.showLegend) {
+        this.center = this.quest.region.coordinates;
+        this.zoom = this.quest.region.zoom;
+      } else if (Object.keys(this.selectedLocation).length > 0) {
+        this.center = this.selectedLocation.coordinates;
+        this.zoom = this.selectedLocation.zoom;
+      } else {
+        this.center = this.currentPosition;
+        this.zoom = 19;
+      }
       this.showJournal = false;
       this.showBackpack = false;
       this.$refs.qMap.offsetMap();

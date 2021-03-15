@@ -44,7 +44,7 @@
         :order="$vuetify.breakpoint.mdAndUp ? 2 : 1"
         style="position:relative"
       >
-        <v-flex class="tabButtons mb-6">
+        <v-flex class="tabButtons mb-6" v-if="loading">
           <v-flex
             class="d-flex flex-column justify-end"
             v-if="$vuetify.breakpoint.mdAndUp"
@@ -253,11 +253,12 @@ export default {
       this.$nextTick(() => {
         this.$refs.qMap.locatePlayer();
       });
+      this.zoom = 19;
     },
-    positionFound(e) {
-      this.currentPosition = this.center = [e.latitude, e.longitude];
-      this.currentAccuracy = e.accuracy;
-    },
+    // positionFound(e) {
+    //   this.currentPosition = this.center = [e.latitude, e.longitude];
+    //   this.currentAccuracy = e.accuracy;
+    // },
     positionChanged(e) {
       this.currentPosition = [e.lat, e.lng];
       if (Object.keys(this.selectedLocation).length <= 0) {
@@ -336,6 +337,16 @@ export default {
     },
     toggleLegend() {
       this.showLegend = !this.showLegend;
+      if (this.showLegend) {
+        this.center = this.quest.region.coordinates;
+        this.zoom = this.quest.region.zoom;
+      } else if (Object.keys(this.selectedLocation).length > 0) {
+        this.center = this.selectedLocation.coordinates;
+        this.zoom = this.selectedLocation.zoom;
+      } else {
+        this.center = this.currentPosition;
+        this.zoom = 19;
+      }
       this.showJournal = false;
       this.showBackpack = false;
       this.$refs.qMap.offsetMap();

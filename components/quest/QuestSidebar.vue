@@ -8,7 +8,6 @@
       </v-card-title>
       <v-spacer></v-spacer>
       <v-btn
-        v-if="$vuetify.breakpoint.mdAndUp"
         class="mx-3 my-4"
         fab
         dark
