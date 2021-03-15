@@ -96,6 +96,7 @@
           @clear-location="clearLocation()"
           @position-found="positionFound($event)"
           @position-changed="positionChanged($event)"
+          @distance-changed="distanceChanged($event)"
         />
       </v-col>
 
@@ -260,9 +261,12 @@ export default {
       this.zoom = 19;
     },
     positionChanged(e) {
-      this.currentPosition = [e.lat, e.lng];
+      this.currentPosition = [e.latitude, e.longitude];
+      this.firstLatLng = e.latlng;
+      // this.firstPoint = e.layerPoint;
+
       if (Object.keys(this.selectedLocation).length <= 0 && !this.showLegend) {
-        this.center = [e.lat, e.lng];
+        this.center = [e.latitude, e.longitude];
       }
     },
     viewLocation(e) {
@@ -274,16 +278,26 @@ export default {
       this.showSidebar = true;
       this.zoom = location.zoom;
 
+      this.secondLatLng = e.event.latlng;
+      // this.secondPoint = e.event.layerPoint;
+
       this.$nextTick(() => {
         this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
+        this.refreshDistanceAndLength();
       });
     },
-    // refreshDistanceAndLength() {
-    //   _distance = L.GeometryUtil.distance(_map, _firstLatLng, _secondLatLng);
-    //   _length = L.GeometryUtil.length([_firstPoint, _secondPoint]);
-    //   document.getElementById('distance').innerHTML = _distance;
-    //   document.getElementById('length').innerHTML = _length;
-    // },
+    distanceChanged(e) {
+      this.distance = e;
+    },
+    refreshDistanceAndLength() {
+      if (this.firstLatLng && this.secondLatLng) {
+        this.$nextTick(() => {
+          this.$refs.qMap.refreshDistanceAndLength(this.firstLatLng, this.secondLatLng);
+        });
+        // this.distance = this.$L.GeometryUtil.distance(this.firstLatLng, this.secondLatLng);
+        // this.length = this.L.GeometryUtil.length([this.firstPoint, this.secondPoint]);
+      }
+    },
     clearLocation() {
       this.selectedLocation = {};
       this.locationActions = [];

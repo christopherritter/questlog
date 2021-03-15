@@ -68,7 +68,7 @@ export default {
       } else {
         this.marker.setLatLng(e.latlng);
       }
-      this.$emit("position-changed", e.latlng);
+      this.$emit("position-changed", e);
     },
     onLocationError() {
       console.log("Location error");
@@ -76,6 +76,14 @@ export default {
         this.$refs.lMap.mapObject.removeLayer(marker);
         this.marker = undefined;
       }
+    },
+    refreshDistanceAndLength(latlngA, latlngB) {
+      var map = this.$refs.lMap.mapObject;
+      var distance = map
+        .latLngToLayerPoint(latlngA)
+        .distanceTo(map.latLngToLayerPoint(latlngB));
+
+      this.$emit("distance-changed", distance);
     }
   }
 };
