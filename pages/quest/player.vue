@@ -253,15 +253,15 @@ export default {
       this.$nextTick(() => {
         this.$refs.qMap.locatePlayer();
       });
+    },
+    positionFound(e) {
+      this.currentPosition = [e.latitude, e.longitude];
+      this.currentAccuracy = e.accuracy;
       this.zoom = 19;
     },
-    // positionFound(e) {
-    //   this.currentPosition = this.center = [e.latitude, e.longitude];
-    //   this.currentAccuracy = e.accuracy;
-    // },
     positionChanged(e) {
       this.currentPosition = [e.lat, e.lng];
-      if (Object.keys(this.selectedLocation).length <= 0) {
+      if (Object.keys(this.selectedLocation).length <= 0 && !this.showLegend) {
         this.center = [e.lat, e.lng];
       }
     },
