@@ -45,7 +45,7 @@
       <v-list-item
         v-for="(action, index) in actions"
         :key="index"
-        @click="$emit('select-action', action)"
+        @click="selectAction(action)"
       >
         <v-list-item-icon>
           <v-icon>{{ action.icon }}</v-icon>
@@ -119,6 +119,11 @@ export default {
         }
       }
       return -1;
+    },
+    selectAction(action) {
+      console.log("Action select")
+      console.log(action)
+      this.$emit('select-action', action)
     }
   }
 };

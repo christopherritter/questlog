@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import QuestSidebar from "@/components/quest/QuestSidebar.vue";
 import QuestLegend from "@/components/quest/QuestLegend.vue";
 import QuestJournal from "@/components/quest/QuestJournal.vue";
@@ -241,6 +241,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["findWithAttr"]),
     ...mapMutations(["SET_OBJECTIVE"]),
     questHelpers() {
       if (this.$vuetify.breakpoint.smAndDown) {
@@ -278,12 +279,8 @@ export default {
       this.showSidebar = true;
       this.zoom = location.zoom;
 
-      this.secondLatLng = e.event.latlng;
-      // this.secondPoint = e.event.layerPoint;
-
       this.$nextTick(() => {
         this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
-        this.refreshDistanceAndLength();
       });
     },
     distanceChanged(e) {
@@ -336,9 +333,18 @@ export default {
       }
       this.locationActions = selectedActions;
     },
-    selectAction(event) {
-      if (event.type == "Move") {
-        console.log("Go to location.");
+    async selectAction(action) {
+      var locationIndex = await this.findWithAttr({
+        array: this.locations,
+        attr: "locationId",
+        value: action.target
+      });
+      var location = this.locations[locationIndex];
+      if (action.type == "Move") {
+        this.secondLatLng = { lat: location.coordinates[0], lng: location.coordinates[1]};
+        // this.secondPoint = e.event.layerPoint;
+        await this.refreshDistanceAndLength();
+        console.log("Location is " + Math.ceil(this.distance * 3.28084) + " feet away.");
         // this.viewLocation({ location: { locationId: e.target } });
       }
     },
