@@ -227,8 +227,8 @@ export default {
       return false;
     },
     mapHeight() {
-      if (!this.showLocation) return "280px";
-      return "88px";
+      if (!this.showLocation) return "64vh";
+      return "32vh";
     }
   },
   methods: {
@@ -264,10 +264,11 @@ export default {
 
       this.$nextTick(() => {
         this.showSidebar = true;
+        this.showLocation = true;
+        this.$refs.qMap.fitBounds(this.center);
         this.$refs.qMap.redrawMap();
         this.center = location.coordinates;
         this.zoom = location.zoom;
-        this.showLocation = true;
       });
     },
     clearLocation() {
@@ -341,12 +342,12 @@ export default {
     },
     hideSidebar() {
       this.$nextTick(() => {
-        this.center = this.currentPosition;
-        this.zoom = 19;
-        this.showLocation = false;
         this.showSidebar = false;
+        this.showLocation = false;
         this.$refs.qMap.fitBounds(this.center);
         this.$refs.qMap.redrawMap();
+        this.center = this.currentPosition;
+        this.zoom = 19;
       });
     },
     toggleLegend() {
@@ -391,6 +392,14 @@ export default {
 #JournalDrawer,
 #BackpackDrawer {
   max-height: calc(100vh - 100px);
+}
+@media only screen and (min-width: 960px) {
+  #SidebarDrawer,
+  #LegendDrawer,
+  #JournalDrawer,
+  #BackpackDrawer {
+    max-height: 100%;
+  }
 }
 .tabButtons {
   display: block;
