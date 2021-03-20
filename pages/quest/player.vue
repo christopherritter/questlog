@@ -242,8 +242,8 @@ export default {
       }
     },
     beginQuest() {
-      // this.center = this.quest.region.coordinates;
-      // this.zoom = this.quest.region.zoom;
+      this.center = this.quest.region.coordinates;
+      this.zoom = this.quest.region.zoom;
       this.$nextTick(() => {
         this.$refs.qMap.locatePlayer();
       });
@@ -344,7 +344,7 @@ export default {
       this.$nextTick(() => {
         this.showSidebar = false;
         this.showLocation = false;
-        this.$refs.qMap.fitBounds(this.center);
+        this.$refs.qMap.fitBounds(this.currentPosition);
         this.$refs.qMap.redrawMap();
         this.center = this.currentPosition;
         this.zoom = 19;

@@ -5,7 +5,7 @@
         cols="12"
         md="4"
         lg="3"
-        v-if="$vuetify.breakpoint.mdAndUp ? showSidebar : true"
+        v-if="showSidebar"
         :order="$vuetify.breakpoint.mdAndUp ? 1 : 2"
       >
         <v-navigation-drawer
@@ -39,8 +39,12 @@
         />
       </v-col>
 
-      <v-col col="auto" :order="$vuetify.breakpoint.mdAndUp ? 2 : 1" style="position:relative">
-        <v-flex class="tabButtons mb-6" v-if="loading">
+      <v-col
+        col="auto"
+        :order="$vuetify.breakpoint.mdAndUp ? 2 : 1"
+        style="position:relative"
+      >
+        <v-flex class="tabButtons mb-6">
           <v-flex
             class="d-flex flex-column justify-end"
             v-if="$vuetify.breakpoint.mdAndUp"
@@ -82,13 +86,15 @@
             'z-index': 0,
             position: 'relative',
             width: $vuetify.breakpoint.mdAndUp ? '100%' : '100vw',
-            height: $vuetify.breakpoint.mdAndUp ? '100%' : '88px'
+            height: $vuetify.breakpoint.mdAndUp ? '100%' : mapHeight
           }"
-          :center="quest.region.coordinates"
-          :zoom="quest.region.zoom"
+          :mapOptions="mapOptions"
+          :center="center"
+          :zoom="zoom"
           :locations="locations"
           @select-location="viewLocation($event)"
           @clear-location="clearLocation()"
+
         />
       </v-col>
 
@@ -150,7 +156,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import QuestSidebar from "@/components/quest/QuestSidebar.vue";
 import QuestLegend from "@/components/quest/QuestLegend.vue";
 import QuestJournal from "@/components/quest/QuestJournal.vue";
@@ -159,29 +165,37 @@ import QuestDialog from "@/components/quest/QuestDialog.vue";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
-  name: "QuestReader",
+  name: "QuestPlayer",
   layout: "fluid",
   data() {
     return {
+      // currentPosition: null,
+      // currentAccuracy: null,
       selectedLocation: {},
+      center: this.$L.latLng(39.828175, -98.5795),
+      zoom: 19,
       locationActions: [],
       showSidebar: false,
       showLegend: false,
       showJournal: false,
       showBackpack: false,
+      showLocation: false,
+      mapOptions: {
+        zoomControl: false,
+        dragging: false,
+        touchZoom: false,
+        doubleClickZoom: false,
+        scrollWheelZoom: false,
+        boxZoom: false,
+        keyboard: false
+      },
       dialog: false,
-      loading: true,
-      error: null,
+      error: null
     };
   },
-  created() {
+  mounted() {
     this.questHelpers();
-    if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
-      this.viewLocation({ location: { locationId: this.quest.startingPoint } });
-    } else {
-      this.center = this.quest.region.coordinates;
-      this.zoom = this.quest.region.zoom;
-    }
+    this.beginQuest();
   },
   components: {
     QuestSidebar,
@@ -190,6 +204,15 @@ export default {
     QuestBackpack,
     QuestDialog,
     LeafletMap
+  },
+  watch: {
+    selectedLocation(val) {
+      if (Object.keys(val).length) {
+        this.showSidebar = true;
+      } else {
+        this.showSidebar = false;
+      }
+    }
   },
   computed: {
     ...mapState({
@@ -202,9 +225,14 @@ export default {
     fillHeight() {
       if (this.$vuetify.breakpoint.mdAndUp) return true;
       return false;
+    },
+    mapHeight() {
+      if (!this.showLocation) return "64vh";
+      return "32vh";
     }
   },
   methods: {
+    ...mapActions(["findWithAttr"]),
     ...mapMutations(["SET_OBJECTIVE"]),
     questHelpers() {
       if (this.$vuetify.breakpoint.smAndDown) {
@@ -213,17 +241,34 @@ export default {
         this.showBackpack = true;
       }
     },
-    viewLocation(e) {
+    beginQuest() {
+      this.center = this.quest.region.coordinates;
+      this.zoom = this.quest.region.zoom;
+      // this.$nextTick(() => {
+      //   this.$refs.qMap.locatePlayer();
+      // });
+    },
+    // positionChanged(e) {
+    //   this.currentPosition = this.$L.latLng(e.lat, e.lng);
+    //   if (!this.showLocation) {
+    //     this.center = this.currentPosition;
+    //     this.zoom = 19;
+    //   }
+    // },
+    async viewLocation(e) {
       const locationIndex = this.findLocation(e.location.locationId);
-      const location = this.locations[locationIndex];
+      const location = await this.locations[locationIndex];
 
       this.selectedLocation = location;
       this.selectedActions(location.locationId);
-      this.showSidebar = true;
-      this.zoom = location.zoom;
 
       this.$nextTick(() => {
-        this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
+        this.showSidebar = true;
+        this.showLocation = true;
+        this.$refs.qMap.fitBounds(this.center);
+        this.$refs.qMap.redrawMap();
+        this.center = location.coordinates;
+        this.zoom = location.zoom;
       });
     },
     clearLocation() {
@@ -264,9 +309,31 @@ export default {
       }
       this.locationActions = selectedActions;
     },
-    selectAction(e) {
-      if (e.type == "Move") {
-        this.viewLocation({ location: { locationId: e.target } });
+    async selectAction(action) {
+      if (action.type == "Move") {
+        var locationIndex = await this.findWithAttr({
+          array: this.locations,
+          attr: "locationId",
+          value: action.target
+        });
+        var location = this.locations[locationIndex];
+        var secondLatLng = {
+          lat: location.coordinates[0],
+          lng: location.coordinates[1]
+        };
+
+        this.$nextTick(() => {
+          this.$refs.qMap.fitBounds(secondLatLng);
+        });
+
+        // this.secondLatLng = secondLatLng;
+        // this.secondPoint = e.event.layerPoint;
+        // console.log(
+        //   "Location is " +
+        //     Math.ceil(this.distanceFromLocation(secondLatLng) * 3.28084) +
+        //     " feet away."
+        // );
+        // this.viewLocation({ location: { locationId: e.target } });
       }
     },
     mapWidth() {
@@ -274,41 +341,39 @@ export default {
       return "100vw";
     },
     hideSidebar() {
-      this.showSidebar = false;
-      this.$refs.qMap.offsetMap();
+      this.$nextTick(() => {
+        this.showSidebar = false;
+        this.showLocation = false;
+        this.$refs.qMap.fitBounds(this.selectedLocation.coordinates);
+        this.$refs.qMap.redrawMap();
+        this.center = this.selectedLocation.coordinates;
+        this.zoom = 19;
+      });
     },
     toggleLegend() {
       this.showLegend = !this.showLegend;
-      if (this.showLegend) {
-        this.center = this.quest.region.coordinates;
-        this.zoom = this.quest.region.zoom;
-      } else if (Object.keys(this.selectedLocation).length > 0) {
-        this.center = this.selectedLocation.coordinates;
-        this.zoom = this.selectedLocation.zoom;
-      } else {
-        this.center = this.currentPosition;
-        this.zoom = 19;
-      }
       this.showJournal = false;
       this.showBackpack = false;
-      this.$refs.qMap.offsetMap();
+      this.$refs.qMap.redrawMap();
     },
     toggleJournal() {
       this.showLegend = false;
       this.showJournal = !this.showJournal;
       this.showBackpack = false;
-      this.$refs.qMap.offsetMap();
+      this.$refs.qMap.redrawMap();
     },
     toggleBackpack() {
       this.showLegend = false;
       this.showJournal = false;
       this.showBackpack = !this.showBackpack;
-      this.$refs.qMap.offsetMap();
+      this.$refs.qMap.redrawMap();
     },
     restartQuest() {
       this.dialog = false;
-      if (this.quest.startingPoint.length > 0) {
-        this.viewLocation({ location: { locationId: this.quest.startingPoint } });
+      if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
+        this.viewLocation({
+          location: { locationId: this.quest.startingPoint }
+        });
       }
       for (let i = 0; i < this.objectives.length; i++) {
         this.$store.commit("SET_OBJECTIVE", {
@@ -316,7 +381,7 @@ export default {
           bool: false
         });
       }
-    },
+    }
   }
 };
 </script>
@@ -327,6 +392,14 @@ export default {
 #JournalDrawer,
 #BackpackDrawer {
   max-height: calc(100vh - 100px);
+}
+@media only screen and (min-width: 960px) {
+  #SidebarDrawer,
+  #LegendDrawer,
+  #JournalDrawer,
+  #BackpackDrawer {
+    max-height: 100%;
+  }
 }
 .tabButtons {
   display: block;
