@@ -5,8 +5,10 @@
         id="lMap"
         ref="lMap"
         :zoom="zoom"
-        :center="[center[0], center[1]]"
+        :center="center"
         :options="mapOptions"
+        @update:center="centerUpdate"
+        @update:zoom="zoomUpdate"
         @click="$emit('mark-location', $event)"
         @locationfound="onLocationFound"
         @locationerror="onLocationError"
@@ -19,9 +21,7 @@
           :key="index"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
-          @click="
-            $emit('select-location', { event: $event, location: location })
-          "
+          @click="selectLocation({ event: $event, location: location })"
           @dragstart="
             $emit('select-location', { event: $event, location: location })
           "
@@ -38,45 +38,87 @@ export default {
   props: ["center", "zoom", "locations", "draggable", "mapOptions"],
   data() {
     return {
-      marker: undefined,
-      position: undefined,
+      marker: null,
+      currentPosition: null,
+      currentZoom: null,
+      previousPosition: null,
+      firstLatLng: null,
+      secondLatLng: null,
+      firstPoint: null,
+      secondPoint: null,
+      distance: null,
+      length: null,
+      polyline: null
     };
   },
   methods: {
-    panTo(coordinates) {
-      var coords = [coordinates[0], coordinates[1]];
-      this.$refs.lMap.mapObject.setView(coords);
-      this.offsetMap();
+    zoomUpdate(zoom) {
+      this.currentZoom = zoom;
     },
-    offsetMap() {
-      this.$refs.lMap.mapObject.invalidateSize();
+    centerUpdate(center) {
+      console.log("center update")
+      this.currentPosition = center;
+    },
+    panTo(coordinates) {
+      // this.$nextTick(() => {
+      this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
+      // });
+    },
+    redrawMap() {
+      this.$nextTick(() => {
+        this.$refs.lMap.mapObject.invalidateSize();
+        this.fitBounds(this.center);
+      });
     },
     locatePlayer() {
+      // this.$nextTick(() => {
       this.$refs.lMap.mapObject.locate({
         setView: false,
         watch: true,
         timeout: 60000,
         enableHighAccuracy: true
       });
+      // });
     },
     onLocationFound(e) {
-      const map = this.$refs.lMap.mapObject;
-      var position = { lat: 0, lng: 0 };
-      var distance = map
-        .latLngToLayerPoint(position)
-        .distanceTo(map.latLngToLayerPoint(e.latlng));
+      if (this.previousPosition === null) {
+        console.log("PREVIOUS POSITION NULL");
+        this.currentPosition = e.latlng;
+        this.previousPosition = {
+          lat: this.currentPosition.lat,
+          lng: this.currentPosition.lng
+        };
+        this.$emit("position-changed", e.latlng);
+        console.log(this.previousPosition);
+      } else {
+        this.previousPosition = {
+          lat: this.currentPosition.lat,
+          lng: this.currentPosition.lng
+        };
+        this.currentPosition = e.latlng;
+
+        this.$nextTick(() => {
+          var map = this.$refs.lMap.mapObject;
+          var distance = map
+            .latLngToLayerPoint(this.currentPosition)
+            .distanceTo(map.latLngToLayerPoint(this.previousPosition));
+
+          if (distance > 0) {
+            console.log("POSITION CHANGED " + distance + " METERS.");
+            console.log(this.currentPosition);
+            console.log(this.previousPosition);
+            this.$emit("position-changed", e.latlng);
+          }
+        });
+      }
 
       if (!this.marker) {
         this.marker = new this.$L.marker([e.latitude, e.longitude]).bindPopup(
-          "You are here :)"
+          "You are here."
         );
         this.$refs.lMap.mapObject.addLayer(this.marker);
       } else {
         this.marker.setLatLng(e.latlng);
-      }
-      if (distance > 5) {
-        position = e.latlng;
-        this.$emit("position-changed", e);
       }
     },
     onLocationError() {
@@ -86,13 +128,74 @@ export default {
         this.marker = undefined;
       }
     },
-    refreshDistanceAndLength(latlngA, latlngB) {
-      var map = this.$refs.lMap.mapObject;
-      var distance = map
-        .latLngToLayerPoint(latlngA)
-        .distanceTo(map.latLngToLayerPoint(latlngB));
+    async selectLocation({ event, location }) {
+      console.log("Select location");
+      console.log(location);
+      console.log(event);
 
-      this.$emit("distance-changed", distance);
+      this.firstLatLng = this.$L.latLng(
+        location.coordinates[0],
+        location.coordinates[1]
+      );
+
+      if (this.currentPosition != null) {
+        await this.distanceFromLocation();
+
+        if (this.distance < 1000) {
+          this.$emit("select-location", { event, location });
+        } else {
+          console.log("too far away " + this.distance);
+          // console.log(event);
+          // this.marker = new this.$L.marker([
+          //   location.coordinates[0],
+          //   location.coordinates[1]
+          // ]).bindPopup("Too far away.");
+          // this.$refs.lMap.mapObject.addLayer(this.marker);
+        }
+      }
+    },
+    fitBounds(latlng) {
+      console.log("fit bounds");
+      var firstLatLng = this.$L.latLng(
+        this.firstLatLng.lat,
+        this.firstLatLng.lng
+      );
+      var secondLatLng = this.$L.latLng(latlng.lat, latlng.lng);
+      const group = this.$L.latLngBounds([firstLatLng, secondLatLng]);
+      console.log(firstLatLng);
+      console.log(secondLatLng);
+      console.log(group);
+
+      this.$nextTick(() => {
+        this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });
+      });
+
+      console.log("What's the center?");
+      console.log(this.center);
+    },
+    distanceFromLocation() {
+      console.log("getting distance between these");
+      var currentPosition = this.currentPosition;
+      var firstLatLng = this.firstLatLng;
+      console.log(currentPosition);
+      console.log(firstLatLng);
+      this.$nextTick(() => {
+        var map = this.$refs.lMap.mapObject;
+        var distance = map
+          .latLngToLayerPoint(currentPosition)
+          .distanceTo(map.latLngToLayerPoint(firstLatLng));
+
+        console.log(distance);
+        this.distance = distance;
+        return distance;
+      });
+    },
+    clearDestination() {
+      this.secondLatLng = null;
+      this.secondPoint = null;
+      this.distance = null;
+      this.length = null;
+      this.polyline = null;
     }
   }
 };

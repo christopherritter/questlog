@@ -44,7 +44,7 @@
         :order="$vuetify.breakpoint.mdAndUp ? 2 : 1"
         style="position:relative"
       >
-        <v-flex class="tabButtons mb-6" v-if="loading">
+        <v-flex class="tabButtons mb-6">
           <v-flex
             class="d-flex flex-column justify-end"
             v-if="$vuetify.breakpoint.mdAndUp"
@@ -94,9 +94,7 @@
           :locations="locations"
           @select-location="viewLocation($event)"
           @clear-location="clearLocation()"
-          @position-found="positionFound($event)"
           @position-changed="positionChanged($event)"
-          @distance-changed="distanceChanged($event)"
         />
       </v-col>
 
@@ -174,13 +172,14 @@ export default {
       currentPosition: null,
       currentAccuracy: null,
       selectedLocation: {},
-      center: [39.828175, -98.5795],
+      center: this.$L.latLng(39.828175, -98.5795),
       zoom: 19,
       locationActions: [],
       showSidebar: false,
       showLegend: false,
       showJournal: false,
       showBackpack: false,
+      showLocation: false,
       mapOptions: {
         zoomControl: false,
         dragging: false,
@@ -190,17 +189,7 @@ export default {
         boxZoom: false,
         keyboard: false
       },
-
-      firstLatLng: null,
-      firstPoint: null,
-      secondLatLng: null,
-      secondPoint: null,
-      distance: null,
-      length: null,
-      polyline: null,
-
       dialog: false,
-      loading: true,
       error: null
     };
   },
@@ -217,8 +206,10 @@ export default {
     LeafletMap
   },
   watch: {
-    selectedLocation(e) {
-      if (Object.keys(e).length <= 0) {
+    selectedLocation(val) {
+      if (Object.keys(val).length) {
+        this.showSidebar = true;
+      } else {
         this.showSidebar = false;
       }
     }
@@ -236,7 +227,7 @@ export default {
       return false;
     },
     mapHeight() {
-      if (Object.keys(this.selectedLocation).length <= 0) return "280px";
+      if (!this.showLocation) return "280px";
       return "88px";
     }
   },
@@ -249,51 +240,38 @@ export default {
         this.showJournal = true;
         this.showBackpack = true;
       }
-      this.center = this.quest.region.coordinates;
     },
     beginQuest() {
+      // this.center = this.quest.region.coordinates;
+      // this.zoom = this.quest.region.zoom;
       this.$nextTick(() => {
         this.$refs.qMap.locatePlayer();
       });
     },
-    positionFound(e) {
-      this.currentPosition = [e.latitude, e.longitude];
-      this.currentAccuracy = e.accuracy;
-      this.zoom = 19;
-    },
     positionChanged(e) {
-      this.currentPosition = [e.latitude, e.longitude];
-      this.firstLatLng = e.latlng;
-      // this.firstPoint = e.layerPoint;
-
-      if (Object.keys(this.selectedLocation).length <= 0 && !this.showLegend) {
-        this.center = [e.latitude, e.longitude];
+      this.currentPosition = this.$L.latLng(e.lat, e.lng);
+      console.log(e)
+      if (!this.showLocation) {
+        console.log("updating position");
+        this.center = this.currentPosition;
+        this.zoom = 19;
+        console.log(this.currentPosition);
       }
     },
-    viewLocation(e) {
+    async viewLocation(e) {
       const locationIndex = this.findLocation(e.location.locationId);
-      const location = this.locations[locationIndex];
+      const location = await this.locations[locationIndex];
 
       this.selectedLocation = location;
       this.selectedActions(location.locationId);
-      this.showSidebar = true;
-      this.zoom = location.zoom;
 
       this.$nextTick(() => {
-        this.$refs.qMap.panTo([location.coordinates[0], location.coordinates[1]]);
+        this.showSidebar = true;
+        this.$refs.qMap.redrawMap();
+        this.center = location.coordinates;
+        this.zoom = location.zoom;
+        this.showLocation = true;
       });
-    },
-    distanceChanged(e) {
-      this.distance = e;
-    },
-    refreshDistanceAndLength() {
-      if (this.firstLatLng && this.secondLatLng) {
-        this.$nextTick(() => {
-          this.$refs.qMap.refreshDistanceAndLength(this.firstLatLng, this.secondLatLng);
-        });
-        // this.distance = this.$L.GeometryUtil.distance(this.firstLatLng, this.secondLatLng);
-        // this.length = this.L.GeometryUtil.length([this.firstPoint, this.secondPoint]);
-      }
     },
     clearLocation() {
       this.selectedLocation = {};
@@ -334,17 +312,30 @@ export default {
       this.locationActions = selectedActions;
     },
     async selectAction(action) {
-      var locationIndex = await this.findWithAttr({
-        array: this.locations,
-        attr: "locationId",
-        value: action.target
-      });
-      var location = this.locations[locationIndex];
       if (action.type == "Move") {
-        this.secondLatLng = { lat: location.coordinates[0], lng: location.coordinates[1]};
+        var locationIndex = await this.findWithAttr({
+          array: this.locations,
+          attr: "locationId",
+          value: action.target
+        });
+        var location = this.locations[locationIndex];
+        var secondLatLng = {
+          lat: location.coordinates[0],
+          lng: location.coordinates[1]
+        };
+
+        console.log("show bounds true");
+        this.$nextTick(() => {
+          this.$refs.qMap.fitBounds(secondLatLng);
+        });
+
+        // this.secondLatLng = secondLatLng;
         // this.secondPoint = e.event.layerPoint;
-        await this.refreshDistanceAndLength();
-        console.log("Location is " + Math.ceil(this.distance * 3.28084) + " feet away.");
+        // console.log(
+        //   "Location is " +
+        //     Math.ceil(this.distanceFromLocation(secondLatLng) * 3.28084) +
+        //     " feet away."
+        // );
         // this.viewLocation({ location: { locationId: e.target } });
       }
     },
@@ -353,42 +344,38 @@ export default {
       return "100vw";
     },
     hideSidebar() {
-      this.showSidebar = false;
-      this.clearLocation();
-      this.$refs.qMap.offsetMap();
+      this.$nextTick(() => {
+        this.center = this.currentPosition;
+        this.zoom = 19;
+        this.showLocation = false;
+        this.showSidebar = false;
+        this.$refs.qMap.redrawMap();
+      });
     },
     toggleLegend() {
       this.showLegend = !this.showLegend;
-      if (this.showLegend) {
-        this.center = this.quest.region.coordinates;
-        this.zoom = this.quest.region.zoom;
-      } else if (Object.keys(this.selectedLocation).length > 0) {
-        this.center = this.selectedLocation.coordinates;
-        this.zoom = this.selectedLocation.zoom;
-      } else {
-        this.center = this.currentPosition;
-        this.zoom = 19;
-      }
       this.showJournal = false;
       this.showBackpack = false;
-      this.$refs.qMap.offsetMap();
+      this.$refs.qMap.redrawMap();
     },
     toggleJournal() {
       this.showLegend = false;
       this.showJournal = !this.showJournal;
       this.showBackpack = false;
-      this.$refs.qMap.offsetMap();
+      this.$refs.qMap.redrawMap();
     },
     toggleBackpack() {
       this.showLegend = false;
       this.showJournal = false;
       this.showBackpack = !this.showBackpack;
-      this.$refs.qMap.offsetMap();
+      this.$refs.qMap.redrawMap();
     },
     restartQuest() {
       this.dialog = false;
       if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
-        this.viewLocation({ location: { locationId: this.quest.startingPoint } });
+        this.viewLocation({
+          location: { locationId: this.quest.startingPoint }
+        });
       }
       for (let i = 0; i < this.objectives.length; i++) {
         this.$store.commit("SET_OBJECTIVE", {

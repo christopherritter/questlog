@@ -121,8 +121,6 @@ export default {
       return -1;
     },
     selectAction(action) {
-      console.log("Action select")
-      console.log(action)
       this.$emit('select-action', action)
     }
   }
