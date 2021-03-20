@@ -56,40 +56,32 @@ export default {
       this.currentZoom = zoom;
     },
     centerUpdate(center) {
-      console.log("center update")
       this.currentPosition = center;
     },
     panTo(coordinates) {
-      // this.$nextTick(() => {
       this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
-      // });
     },
     redrawMap() {
       this.$nextTick(() => {
         this.$refs.lMap.mapObject.invalidateSize();
-        this.fitBounds(this.center);
       });
     },
     locatePlayer() {
-      // this.$nextTick(() => {
       this.$refs.lMap.mapObject.locate({
         setView: false,
         watch: true,
         timeout: 60000,
         enableHighAccuracy: true
       });
-      // });
     },
     onLocationFound(e) {
       if (this.previousPosition === null) {
-        console.log("PREVIOUS POSITION NULL");
         this.currentPosition = e.latlng;
         this.previousPosition = {
           lat: this.currentPosition.lat,
           lng: this.currentPosition.lng
         };
         this.$emit("position-changed", e.latlng);
-        console.log(this.previousPosition);
       } else {
         this.previousPosition = {
           lat: this.currentPosition.lat,
@@ -104,9 +96,6 @@ export default {
             .distanceTo(map.latLngToLayerPoint(this.previousPosition));
 
           if (distance > 0) {
-            console.log("POSITION CHANGED " + distance + " METERS.");
-            console.log(this.currentPosition);
-            console.log(this.previousPosition);
             this.$emit("position-changed", e.latlng);
           }
         });
@@ -122,17 +111,12 @@ export default {
       }
     },
     onLocationError() {
-      console.log("Location error");
       if (this.marker) {
         this.$refs.lMap.mapObject.removeLayer(marker);
         this.marker = undefined;
       }
     },
     async selectLocation({ event, location }) {
-      console.log("Select location");
-      console.log(location);
-      console.log(event);
-
       this.firstLatLng = this.$L.latLng(
         location.coordinates[0],
         location.coordinates[1]
@@ -155,37 +139,27 @@ export default {
       }
     },
     fitBounds(latlng) {
-      console.log("fit bounds");
       var firstLatLng = this.$L.latLng(
         this.firstLatLng.lat,
         this.firstLatLng.lng
       );
       var secondLatLng = this.$L.latLng(latlng.lat, latlng.lng);
       const group = this.$L.latLngBounds([firstLatLng, secondLatLng]);
-      console.log(firstLatLng);
-      console.log(secondLatLng);
-      console.log(group);
 
       this.$nextTick(() => {
         this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });
       });
-
-      console.log("What's the center?");
-      console.log(this.center);
     },
     distanceFromLocation() {
-      console.log("getting distance between these");
       var currentPosition = this.currentPosition;
       var firstLatLng = this.firstLatLng;
-      console.log(currentPosition);
-      console.log(firstLatLng);
+
       this.$nextTick(() => {
         var map = this.$refs.lMap.mapObject;
         var distance = map
           .latLngToLayerPoint(currentPosition)
           .distanceTo(map.latLngToLayerPoint(firstLatLng));
 
-        console.log(distance);
         this.distance = distance;
         return distance;
       });

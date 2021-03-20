@@ -250,12 +250,9 @@ export default {
     },
     positionChanged(e) {
       this.currentPosition = this.$L.latLng(e.lat, e.lng);
-      console.log(e)
       if (!this.showLocation) {
-        console.log("updating position");
         this.center = this.currentPosition;
         this.zoom = 19;
-        console.log(this.currentPosition);
       }
     },
     async viewLocation(e) {
@@ -324,7 +321,6 @@ export default {
           lng: location.coordinates[1]
         };
 
-        console.log("show bounds true");
         this.$nextTick(() => {
           this.$refs.qMap.fitBounds(secondLatLng);
         });
@@ -349,6 +345,7 @@ export default {
         this.zoom = 19;
         this.showLocation = false;
         this.showSidebar = false;
+        this.$refs.qMap.fitBounds(this.center);
         this.$refs.qMap.redrawMap();
       });
     },
