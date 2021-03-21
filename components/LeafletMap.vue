@@ -7,8 +7,6 @@
         :zoom="zoom"
         :center="center"
         :options="mapOptions"
-        @update:center="centerUpdate"
-        @update:zoom="zoomUpdate"
         @click="$emit('mark-location', $event)"
         @locationfound="onLocationFound"
         @locationerror="onLocationError"
@@ -52,14 +50,20 @@ export default {
     };
   },
   methods: {
-    zoomUpdate(zoom) {
-      this.currentZoom = zoom;
-    },
-    centerUpdate(center) {
-      this.currentPosition = center;
-    },
-    panTo(coordinates) {
-      this.$refs.lMap.mapObject.setView([coordinates[0], coordinates[1]]);
+    // zoomUpdate(zoom) {
+    //   console.log("updating the zoom")
+    //   console.log(zoom)
+    //   this.currentZoom = zoom;
+    // },
+    // centerUpdate(center) {
+    //   console.log("updating the center")
+    //   console.log(center)
+    //   this.currentPosition = center;
+    // },
+    panTo(latlng, zoom) {
+      console.log("pan to: ");
+      console.log(latlng);
+      this.$refs.lMap.mapObject.setView(latlng, zoom);
     },
     redrawMap() {
       this.$nextTick(() => {
@@ -117,12 +121,15 @@ export default {
       }
     },
     async selectLocation({ event, location }) {
+      console.log("select location");
       this.firstLatLng = this.$L.latLng(
         location.coordinates[0],
         location.coordinates[1]
       );
 
-      if (this.currentPosition != null) {
+      if (!this.currentPosition) {
+        this.$emit("select-location", { event, location });
+      } else {
         await this.distanceFromLocation();
 
         if (this.distance < 1000) {
@@ -139,16 +146,32 @@ export default {
       }
     },
     fitBounds(latlng) {
-      var firstLatLng = this.$L.latLng(
-        this.firstLatLng.lat,
-        this.firstLatLng.lng
-      );
-      var secondLatLng = this.$L.latLng(latlng.lat, latlng.lng);
-      const group = this.$L.latLngBounds([firstLatLng, secondLatLng]);
+      if (!this.firstLatLng) {
+        console.log("no first latlng");
+        var firstLatLng = this.$L.latLng(latlng.lat, latlng.lng);
+        const group = this.$L.latLngBounds([firstLatLng]);
 
-      this.$nextTick(() => {
-        this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });
-      });
+        console.log(firstLatLng);
+
+        // this.$nextTick(() => {
+        //   this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });
+        // });
+      } else {
+        console.log("fitting bounds");
+        var firstLatLng = this.$L.latLng(
+          this.firstLatLng.lat,
+          this.firstLatLng.lng
+        );
+        var secondLatLng = this.$L.latLng(latlng.lat, latlng.lng);
+        const group = this.$L.latLngBounds([firstLatLng, secondLatLng]);
+
+        console.log(firstLatLng);
+        console.log(secondLatLng);
+
+        this.$nextTick(() => {
+          this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });
+        });
+      }
     },
     distanceFromLocation() {
       var currentPosition = this.currentPosition;

@@ -1,6 +1,15 @@
 <template>
   <v-container fluid :class="{ 'fill-height': fillHeight, 'pa-0': true }">
     <v-row no-gutters :class="{ 'fill-height': fillHeight }">
+      <QuestDialog
+        :dialog="dialog"
+        :quest="quest"
+        :objectives="objectives"
+        @open-dialog="dialog = true"
+        @close-dialog="dialog = false"
+        @restart-quest="restartQuest()"
+      />
+
       <v-col
         cols="12"
         md="4"
@@ -29,14 +38,6 @@
             @hide-sidebar="hideSidebar()"
           />
         </v-navigation-drawer>
-        <QuestDialog
-          :dialog="dialog"
-          :quest="quest"
-          :objectives="objectives"
-          @open-dialog="dialog = true"
-          @close-dialog="dialog = false"
-          @restart-quest="restartQuest()"
-        />
       </v-col>
 
       <v-col
@@ -170,9 +171,8 @@ export default {
   data() {
     return {
       currentPosition: null,
-      currentAccuracy: null,
       selectedLocation: {},
-      center: this.$L.latLng(39.828175, -98.5795),
+      center: {},
       zoom: 19,
       locationActions: [],
       showSidebar: false,
@@ -244,20 +244,34 @@ export default {
     beginQuest() {
       this.center = this.quest.region.coordinates;
       this.zoom = this.quest.region.zoom;
+      // this.dialog = true;
       this.$nextTick(() => {
         this.$refs.qMap.locatePlayer();
       });
     },
     positionChanged(e) {
+      console.log("position changed");
+      console.log(e);
       this.currentPosition = this.$L.latLng(e.lat, e.lng);
+      if (!this.currentPosition) {
+        this.currentPosition = this.$L.latLng(
+          this.quest.region.coordinates[0],
+          this.quest.region.coordinates[1]
+        );
+      }
       if (!this.showLocation) {
         this.center = this.currentPosition;
         this.zoom = 19;
+        this.$refs.qMap.panTo(this.currentPosition);
       }
     },
-    async viewLocation(e) {
+    viewLocation(e) {
       const locationIndex = this.findLocation(e.location.locationId);
-      const location = await this.locations[locationIndex];
+      const location = this.locations[locationIndex];
+      const latlng = this.$L.latLng(
+        location.coordinates[0],
+        location.coordinates[1]
+      );
 
       this.selectedLocation = location;
       this.selectedActions(location.locationId);
@@ -265,10 +279,13 @@ export default {
       this.$nextTick(() => {
         this.showSidebar = true;
         this.showLocation = true;
-        this.$refs.qMap.fitBounds(this.center);
+
+        // this.center = location.coordinates;
+        // this.zoom = location.zoom;
+        this.$refs.qMap.panTo(latlng, location.zoom);
         this.$refs.qMap.redrawMap();
-        this.center = location.coordinates;
-        this.zoom = location.zoom;
+        // this.$refs.qMap.fitBounds(location.coordinates);
+
       });
     },
     clearLocation() {
@@ -317,10 +334,10 @@ export default {
           value: action.target
         });
         var location = this.locations[locationIndex];
-        var secondLatLng = {
-          lat: location.coordinates[0],
-          lng: location.coordinates[1]
-        };
+        var secondLatLng = this.$L.latLng(
+          location.coordinates[0],
+          location.coordinates[1]
+        );
 
         this.$nextTick(() => {
           this.$refs.qMap.fitBounds(secondLatLng);
@@ -344,10 +361,12 @@ export default {
       this.$nextTick(() => {
         this.showSidebar = false;
         this.showLocation = false;
-        this.$refs.qMap.fitBounds(this.currentPosition);
-        this.$refs.qMap.redrawMap();
+
         this.center = this.currentPosition;
         this.zoom = 19;
+
+        this.$refs.qMap.fitBounds(this.center);
+        this.$refs.qMap.redrawMap();
       });
     },
     toggleLegend() {

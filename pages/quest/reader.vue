@@ -1,6 +1,15 @@
 <template>
   <v-container fluid :class="{ 'fill-height': fillHeight, 'pa-0': true }">
     <v-row no-gutters :class="{ 'fill-height': fillHeight }">
+      <QuestDialog
+        :dialog="dialog"
+        :quest="quest"
+        :objectives="objectives"
+        @open-dialog="dialog = true"
+        @close-dialog="dialog = false"
+        @restart-quest="restartQuest()"
+      />
+
       <v-col
         cols="12"
         md="4"
@@ -29,14 +38,6 @@
             @hide-sidebar="hideSidebar()"
           />
         </v-navigation-drawer>
-        <QuestDialog
-          :dialog="dialog"
-          :quest="quest"
-          :objectives="objectives"
-          @open-dialog="dialog = true"
-          @close-dialog="dialog = false"
-          @restart-quest="restartQuest()"
-        />
       </v-col>
 
       <v-col
@@ -94,7 +95,6 @@
           :locations="locations"
           @select-location="viewLocation($event)"
           @clear-location="clearLocation()"
-
         />
       </v-col>
 
@@ -165,14 +165,13 @@ import QuestDialog from "@/components/quest/QuestDialog.vue";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
-  name: "QuestPlayer",
+  name: "QuestReader",
   layout: "fluid",
   data() {
     return {
       // currentPosition: null,
-      // currentAccuracy: null,
       selectedLocation: {},
-      center: this.$L.latLng(39.828175, -98.5795),
+      center: {},
       zoom: 19,
       locationActions: [],
       showSidebar: false,
@@ -181,13 +180,13 @@ export default {
       showBackpack: false,
       showLocation: false,
       mapOptions: {
-        zoomControl: false,
-        dragging: false,
-        touchZoom: false,
-        doubleClickZoom: false,
-        scrollWheelZoom: false,
-        boxZoom: false,
-        keyboard: false
+        zoomControl: true,
+        dragging: true,
+        touchZoom: true,
+        doubleClickZoom: true,
+        scrollWheelZoom: true,
+        boxZoom: true,
+        keyboard: true
       },
       dialog: false,
       error: null
@@ -244,20 +243,24 @@ export default {
     beginQuest() {
       this.center = this.quest.region.coordinates;
       this.zoom = this.quest.region.zoom;
-      // this.$nextTick(() => {
-      //   this.$refs.qMap.locatePlayer();
-      // });
+      // this.dialog = true;
+      if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
+        this.viewLocation({
+          location: { locationId: this.quest.startingPoint }
+        });
+      }
     },
-    // positionChanged(e) {
-    //   this.currentPosition = this.$L.latLng(e.lat, e.lng);
-    //   if (!this.showLocation) {
-    //     this.center = this.currentPosition;
-    //     this.zoom = 19;
-    //   }
-    // },
-    async viewLocation(e) {
+    viewLocation(e) {
+      console.log("view location");
+
       const locationIndex = this.findLocation(e.location.locationId);
-      const location = await this.locations[locationIndex];
+      const location = this.locations[locationIndex];
+      const latlng = this.$L.latLng(
+        location.coordinates[0],
+        location.coordinates[1]
+      );
+
+      console.log(latlng);
 
       this.selectedLocation = location;
       this.selectedActions(location.locationId);
@@ -265,10 +268,9 @@ export default {
       this.$nextTick(() => {
         this.showSidebar = true;
         this.showLocation = true;
-        this.$refs.qMap.fitBounds(this.center);
+
+        this.$refs.qMap.panTo(latlng, location.zoom);
         this.$refs.qMap.redrawMap();
-        this.center = location.coordinates;
-        this.zoom = location.zoom;
       });
     },
     clearLocation() {
@@ -317,14 +319,14 @@ export default {
           value: action.target
         });
         var location = this.locations[locationIndex];
-        var secondLatLng = {
-          lat: location.coordinates[0],
-          lng: location.coordinates[1]
-        };
+        // var secondLatLng = this.$L.latLng(
+        //   location.coordinates[0],
+        //   location.coordinates[1]
+        // );
 
-        this.$nextTick(() => {
-          this.$refs.qMap.fitBounds(secondLatLng);
-        });
+        // this.$nextTick(() => {
+        // this.$refs.qMap.fitBounds(secondLatLng);
+        // });
 
         // this.secondLatLng = secondLatLng;
         // this.secondPoint = e.event.layerPoint;
@@ -333,7 +335,7 @@ export default {
         //     Math.ceil(this.distanceFromLocation(secondLatLng) * 3.28084) +
         //     " feet away."
         // );
-        // this.viewLocation({ location: { locationId: e.target } });
+        this.viewLocation({ location });
       }
     },
     mapWidth() {
@@ -341,14 +343,16 @@ export default {
       return "100vw";
     },
     hideSidebar() {
-      this.$nextTick(() => {
-        this.showSidebar = false;
-        this.showLocation = false;
-        this.$refs.qMap.fitBounds(this.selectedLocation.coordinates);
-        this.$refs.qMap.redrawMap();
-        this.center = this.selectedLocation.coordinates;
-        this.zoom = 19;
-      });
+      var latlng = this.$L.latLng(
+        this.selectedLocation.coordinates[0],
+        this.selectedLocation.coordinates[1]
+      );
+
+      this.showSidebar = false;
+      this.showLocation = false;
+
+      this.$refs.qMap.panTo(latlng, 19);
+      this.$refs.qMap.redrawMap();
     },
     toggleLegend() {
       this.showLegend = !this.showLegend;
