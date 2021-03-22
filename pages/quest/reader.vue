@@ -251,16 +251,12 @@ export default {
       }
     },
     viewLocation(e) {
-      console.log("view location");
-
       const locationIndex = this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
       const latlng = this.$L.latLng(
         location.coordinates[0],
         location.coordinates[1]
       );
-
-      console.log(latlng);
 
       this.selectedLocation = location;
       this.selectedActions(location.locationId);

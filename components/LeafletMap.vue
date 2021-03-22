@@ -50,19 +50,7 @@ export default {
     };
   },
   methods: {
-    // zoomUpdate(zoom) {
-    //   console.log("updating the zoom")
-    //   console.log(zoom)
-    //   this.currentZoom = zoom;
-    // },
-    // centerUpdate(center) {
-    //   console.log("updating the center")
-    //   console.log(center)
-    //   this.currentPosition = center;
-    // },
     panTo(latlng, zoom) {
-      console.log("pan to: ");
-      console.log(latlng);
       this.$refs.lMap.mapObject.setView(latlng, zoom);
     },
     redrawMap() {
@@ -121,7 +109,6 @@ export default {
       }
     },
     async selectLocation({ event, location }) {
-      console.log("select location");
       this.firstLatLng = this.$L.latLng(
         location.coordinates[0],
         location.coordinates[1]
@@ -148,25 +135,13 @@ export default {
     fitBounds(latlng) {
       if (!this.firstLatLng) {
         console.log("no first latlng");
-        var firstLatLng = this.$L.latLng(latlng.lat, latlng.lng);
-        const group = this.$L.latLngBounds([firstLatLng]);
-
-        console.log(firstLatLng);
-
-        // this.$nextTick(() => {
-        //   this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });
-        // });
       } else {
-        console.log("fitting bounds");
         var firstLatLng = this.$L.latLng(
           this.firstLatLng.lat,
           this.firstLatLng.lng
         );
         var secondLatLng = this.$L.latLng(latlng.lat, latlng.lng);
         const group = this.$L.latLngBounds([firstLatLng, secondLatLng]);
-
-        console.log(firstLatLng);
-        console.log(secondLatLng);
 
         this.$nextTick(() => {
           this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });

@@ -250,8 +250,6 @@ export default {
       });
     },
     positionChanged(e) {
-      console.log("position changed");
-      console.log(e);
       this.currentPosition = this.$L.latLng(e.lat, e.lng);
       if (!this.currentPosition) {
         this.currentPosition = this.$L.latLng(
@@ -280,12 +278,8 @@ export default {
         this.showSidebar = true;
         this.showLocation = true;
 
-        // this.center = location.coordinates;
-        // this.zoom = location.zoom;
         this.$refs.qMap.panTo(latlng, location.zoom);
         this.$refs.qMap.redrawMap();
-        // this.$refs.qMap.fitBounds(location.coordinates);
-
       });
     },
     clearLocation() {
