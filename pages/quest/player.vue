@@ -257,11 +257,7 @@ export default {
           this.quest.region.coordinates[1]
         );
       }
-      if (!this.showLocation) {
-        this.center = this.currentPosition;
-        this.zoom = 19;
-        this.$refs.qMap.panTo(this.currentPosition);
-      }
+      this.$refs.qMap.panTo(this.currentPosition, 19);
     },
     viewLocation(e) {
       const locationIndex = this.findLocation(e.location.locationId);
@@ -274,13 +270,11 @@ export default {
       this.selectedLocation = location;
       this.selectedActions(location.locationId);
 
-      this.$nextTick(() => {
-        this.showSidebar = true;
-        this.showLocation = true;
+      this.showSidebar = true;
+      this.showLocation = true;
 
-        this.$refs.qMap.panTo(latlng, location.zoom);
-        this.$refs.qMap.redrawMap();
-      });
+      this.$refs.qMap.redrawMap();
+      this.$refs.qMap.panTo(latlng, location.zoom);
     },
     clearLocation() {
       this.selectedLocation = {};
@@ -336,15 +330,6 @@ export default {
         this.$nextTick(() => {
           this.$refs.qMap.fitBounds(secondLatLng);
         });
-
-        // this.secondLatLng = secondLatLng;
-        // this.secondPoint = e.event.layerPoint;
-        // console.log(
-        //   "Location is " +
-        //     Math.ceil(this.distanceFromLocation(secondLatLng) * 3.28084) +
-        //     " feet away."
-        // );
-        // this.viewLocation({ location: { locationId: e.target } });
       }
     },
     mapWidth() {
@@ -352,16 +337,16 @@ export default {
       return "100vw";
     },
     hideSidebar() {
-      this.$nextTick(() => {
-        this.showSidebar = false;
-        this.showLocation = false;
+      var latlng = this.$L.latLng(
+        this.currentPosition.lat,
+        this.currentPosition.lng
+      );
 
-        this.center = this.currentPosition;
-        this.zoom = 19;
+      this.showSidebar = false;
+      this.showLocation = false;
 
-        this.$refs.qMap.fitBounds(this.center);
-        this.$refs.qMap.redrawMap();
-      });
+      this.$refs.qMap.redrawMap();
+      this.$refs.qMap.panTo(latlng, 19);
     },
     toggleLegend() {
       this.showLegend = !this.showLegend;

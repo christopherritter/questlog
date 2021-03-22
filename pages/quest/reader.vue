@@ -261,13 +261,11 @@ export default {
       this.selectedLocation = location;
       this.selectedActions(location.locationId);
 
-      this.$nextTick(() => {
-        this.showSidebar = true;
-        this.showLocation = true;
+      this.showSidebar = true;
+      this.showLocation = true;
 
-        this.$refs.qMap.panTo(latlng, location.zoom);
-        this.$refs.qMap.redrawMap();
-      });
+      this.$refs.qMap.redrawMap();
+      this.$refs.qMap.panTo(latlng, location.zoom);
     },
     clearLocation() {
       this.selectedLocation = {};
@@ -315,22 +313,7 @@ export default {
           value: action.target
         });
         var location = this.locations[locationIndex];
-        // var secondLatLng = this.$L.latLng(
-        //   location.coordinates[0],
-        //   location.coordinates[1]
-        // );
 
-        // this.$nextTick(() => {
-        // this.$refs.qMap.fitBounds(secondLatLng);
-        // });
-
-        // this.secondLatLng = secondLatLng;
-        // this.secondPoint = e.event.layerPoint;
-        // console.log(
-        //   "Location is " +
-        //     Math.ceil(this.distanceFromLocation(secondLatLng) * 3.28084) +
-        //     " feet away."
-        // );
         this.viewLocation({ location });
       }
     },
@@ -347,8 +330,8 @@ export default {
       this.showSidebar = false;
       this.showLocation = false;
 
-      this.$refs.qMap.panTo(latlng, 19);
       this.$refs.qMap.redrawMap();
+      this.$refs.qMap.panTo(latlng, 19);
     },
     toggleLegend() {
       this.showLegend = !this.showLegend;

@@ -51,7 +51,9 @@ export default {
   },
   methods: {
     panTo(latlng, zoom) {
-      this.$refs.lMap.mapObject.setView(latlng, zoom);
+      this.$nextTick(() => {
+        this.$refs.lMap.mapObject.setView(latlng, zoom);
+      });
     },
     redrawMap() {
       this.$nextTick(() => {
