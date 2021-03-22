@@ -24,7 +24,14 @@
             $emit('select-location', { event: $event, location: location })
           "
           @dragend="$emit('move-location', $event)"
-        ></l-marker>
+        >
+          <l-icon
+            v-if="location.marker"
+            :icon-url="require(`~/assets/img/${location.marker}`)"
+            :icon-size="dynamicSize"
+            :icon-anchor="dynamicAnchor"
+          ></l-icon>
+        </l-marker>
       </l-map>
     </client-only>
   </div>
@@ -37,6 +44,7 @@ export default {
   data() {
     return {
       marker: null,
+      iconSize: 48,
       currentPosition: null,
       currentZoom: null,
       previousPosition: null,
@@ -48,6 +56,14 @@ export default {
       length: null,
       polyline: null
     };
+  },
+  computed: {
+    dynamicSize() {
+      return [this.iconSize * 0.85, this.iconSize * 0.85];
+    },
+    dynamicAnchor() {
+      return [this.iconSize / 2, this.iconSize / 2];
+    }
   },
   methods: {
     panTo(latlng, zoom) {
@@ -61,11 +77,13 @@ export default {
       });
     },
     locatePlayer() {
-      this.$refs.lMap.mapObject.locate({
-        setView: false,
-        watch: true,
-        timeout: 60000,
-        enableHighAccuracy: true
+      this.$nextTick(() => {
+        this.$refs.lMap.mapObject.locate({
+          setView: false,
+          watch: true,
+          timeout: 60000,
+          enableHighAccuracy: true
+        });
       });
     },
     onLocationFound(e) {
