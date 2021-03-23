@@ -15,10 +15,12 @@
           url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
         ></l-tile-layer>
         <l-marker
-          v-for="(location, index) in locations"
-          :key="index"
+          v-for="location in locations"
+          :key="location.locationId"
+          :name="location.locationId"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
+          :options="{ opacity: dynamicOpacity(location.distance) }"
           @click="selectLocation({ event: $event, location: location })"
           @dragstart="
             $emit('select-location', { event: $event, location: location })
@@ -38,6 +40,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "LeafletMap",
   props: ["center", "zoom", "locations", "draggable", "mapOptions"],
@@ -66,6 +69,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["SET_DISTANCE"]),
     panTo(latlng, zoom) {
       this.$nextTick(() => {
         this.$refs.lMap.mapObject.setView(latlng, zoom);
@@ -107,8 +111,20 @@ export default {
             .latLngToLayerPoint(this.currentPosition)
             .distanceTo(map.latLngToLayerPoint(this.previousPosition));
 
-          if (distance > 0) {
+          if (distance > 1) {
             this.$emit("position-changed", e.latlng);
+            this.locations.forEach(location => {
+              console.log("location name: " + location.name)
+              var locationIndex = this.locations.findIndex(function(obj) {
+                return obj.locationId === location.locationId;
+              });
+              var distance = this.distanceFromLocation(location);
+
+              this.$store.commit("SET_DISTANCE", {
+                index: locationIndex,
+                distance: Math.ceil(distance)
+              });
+            });
           }
         });
       }
@@ -168,19 +184,26 @@ export default {
         });
       }
     },
-    distanceFromLocation() {
+    distanceFromLocation(location) {
       var currentPosition = this.currentPosition;
-      var firstLatLng = this.firstLatLng;
+      var location;
 
-      this.$nextTick(() => {
-        var map = this.$refs.lMap.mapObject;
-        var distance = map
-          .latLngToLayerPoint(currentPosition)
-          .distanceTo(map.latLngToLayerPoint(firstLatLng));
+      if (!location) {
+        location = this.firstLatLng;
+      } else {
+        location = this.$L.latLng(
+          location.coordinates[0],
+          location.coordinates[1]
+        );
+      }
 
-        this.distance = distance;
-        return distance;
-      });
+      var map = this.$refs.lMap.mapObject;
+      var distance = map
+        .latLngToLayerPoint(currentPosition)
+        .distanceTo(map.latLngToLayerPoint(location));
+
+      this.distance = distance;
+      return distance;
     },
     clearDestination() {
       this.secondLatLng = null;
@@ -188,6 +211,19 @@ export default {
       this.distance = null;
       this.length = null;
       this.polyline = null;
+    },
+    dynamicOpacity(distance) {
+      if (distance > 100) {
+        return 0;
+      } else if (distance >= 50) {
+        return 0.25;
+      } else if (distance >= 25) {
+        return 0.5
+      } else if (distance >= 10) {
+        return 0.75
+      } else {
+        return 1
+      }
     }
   }
 };

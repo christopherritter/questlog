@@ -66,9 +66,9 @@ export default {
     state.locations.push(location);
   },
 
-  UPDATE_LOCATION: (state, location) => {
-    Object.assign(state.locations[location.selectedLocation],
-      location.newLocation);
+  UPDATE_LOCATION: (state, { selectedLocation, newLocation }) => {
+    Object.assign(state.locations[selectedLocation],
+      newLocation);
   },
 
   SET_LOCATION: (state, location) => {
@@ -87,8 +87,8 @@ export default {
     }
   },
 
-  SET_LOCATIONS: (state, locations) => {
-    state.locations = locations;
+  SET_DISTANCE: (state, { index, distance }) => {
+    state.locations[index].distance = distance;
   },
 
   // ENTRIES

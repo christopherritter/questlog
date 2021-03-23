@@ -199,20 +199,20 @@ export default {
         const locations = await locationsRef.get();
         locations.forEach(result => {
           var location = result.data();
-          var newLocation = {
-            name: location.name,
-            isLandmark: location.isLandmark,
-            isStartingPoint: location.isStartingPoint,
-            coordinates: location.coordinates,
-            zoom: location.zoom,
-            image: location.image,
-            marker: location.marker,
-            order: location.order,
-            locationId: location.locationId,
-            draggable: location.draggable
-          };
+          // var newLocation = {
+          //   name: location.name,
+          //   isLandmark: location.isLandmark,
+          //   isStartingPoint: location.isStartingPoint,
+          //   coordinates: location.coordinates,
+          //   zoom: location.zoom,
+          //   image: location.image,
+          //   marker: location.marker,
+          //   order: location.order,
+          //   locationId: location.locationId,
+          //   draggable: location.draggable
+          // };
 
-          this.locations.push(newLocation);
+          this.locations.push(location);
         });
 
         const entries = await entriesRef.get();

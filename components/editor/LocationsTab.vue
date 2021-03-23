@@ -234,6 +234,7 @@ export default {
         image: "",
         marker: null,
         draggable: true,
+        distance: 0,
       },
       selectedLocation: null,
       selectedView: 0,
