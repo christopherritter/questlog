@@ -87,8 +87,9 @@ export default {
     }
   },
 
-  SET_DISTANCE: (state, { index, distance }) => {
+  SET_DISTANCE: (state, { index, distance, opacity }) => {
     state.locations[index].distance = distance;
+    state.locations[index].opacity = opacity;
   },
 
   // ENTRIES
