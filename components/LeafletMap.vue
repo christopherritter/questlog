@@ -114,7 +114,6 @@ export default {
           if (distance > 1) {
             this.$emit("position-changed", e.latlng);
             this.locations.forEach(location => {
-              console.log("location name: " + location.name)
               var locationIndex = this.locations.findIndex(function(obj) {
                 return obj.locationId === location.locationId;
               });

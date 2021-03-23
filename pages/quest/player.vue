@@ -257,7 +257,9 @@ export default {
           this.quest.region.coordinates[1]
         );
       }
-      this.$refs.qMap.panTo(this.currentPosition, 19);
+      if (!this.showLocation) {
+        this.$refs.qMap.panTo(this.currentPosition, 19);
+      }
     },
     viewLocation(e) {
       const locationIndex = this.findLocation(e.location.locationId);
