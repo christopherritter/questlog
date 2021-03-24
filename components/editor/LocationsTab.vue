@@ -58,6 +58,12 @@
                 label="Order"
                 outlined
               ></v-text-field>
+              <v-select
+                v-model="newLocation.marker"
+                :items="markers"
+                label="Marker"
+                outlined
+              ></v-select>
               <v-text-field
                 v-model="newLocation.image"
                 label="Image"
@@ -163,7 +169,7 @@
                       <v-list-item
                         v-for="location in filterByTerm"
                         :key="location.locationId"
-                        @click="selectLocation({location})"
+                        @click="selectLocation({ location })"
                       >
                         <v-list-item-avatar color="light-blue darken-1">
                           <v-icon class="white--text" dark>
@@ -177,7 +183,11 @@
                           ></v-list-item-title>
                         </v-list-item-content>
 
-                        <v-list-item-avatar rounded color="grey darken-2" size="36">
+                        <v-list-item-avatar
+                          rounded
+                          color="grey darken-2"
+                          size="36"
+                        >
                           <span class="white--text title">{{
                             location.order
                           }}</span>
@@ -202,7 +212,12 @@
               Next
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn dark class="mr-2" @click="$emit('delete-quest')" color="danger">
+            <v-btn
+              dark
+              class="mr-2"
+              @click="$emit('delete-quest')"
+              color="danger"
+            >
               Delete
             </v-btn>
             <v-btn dark @click="publishQuest()" color="primary">
@@ -216,7 +231,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
@@ -234,8 +249,86 @@ export default {
         image: "",
         marker: null,
         draggable: true,
-        distance: 0,
+        distance: 0
       },
+      markers: [
+        {
+          text: "Barn",
+          value: "barn",
+        },
+        {
+          text: "Boom gate",
+          value: "boom-gate",
+        },
+        {
+          text: "Corn",
+          value: "corn",
+        },
+        {
+          text: "Fire",
+          value: "fire",
+        },
+        {
+          text: "Gate",
+          value: "gate",
+        },
+        {
+          text: "House",
+          value: "home",
+        },
+        {
+          text: "House (outline)",
+          value: "home-outline",
+        },
+        {
+          text: "Paper roll",
+          value: "paper-roll",
+        },
+        {
+          text: "Information",
+          value: "information",
+        },
+        {
+          text: "Parking",
+          value: "parking",
+        },
+        {
+          text: "Road",
+          value: "road-variant",
+        },
+        {
+          text: "School",
+          value: "school",
+        },
+        {
+          text: "Caution sign",
+          value: "sign-caution",
+        },
+        {
+          text: "Real estate sign",
+          value: "sign-real-estate",
+        },
+        {
+          text: "Sign",
+          value: "sign-text",
+        },
+        {
+          text: "Smog",
+          value: "smog",
+        },
+        {
+          text: "Tractor",
+          value: "tractor-variant",
+        },
+        {
+          text: "Traffic light",
+          value: "traffic-light",
+        },
+        {
+          text: "Trail",
+          value: "routes",
+        },
+      ],
       selectedLocation: null,
       selectedView: 0,
       searchTerm: "",
@@ -246,9 +339,6 @@ export default {
   props: ["region", "locations"],
   components: { LeafletMap },
   computed: {
-    ...mapState({
-      markers: state => state.markers
-    }),
     filterByTerm() {
       let searchTerm = this.searchTerm.toLowerCase();
       let locations = this.locations.slice();
@@ -256,7 +346,7 @@ export default {
       return locations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
-    },
+    }
     // orderItems() {
     //   const orderItems = [];
     //   var i;
@@ -273,13 +363,11 @@ export default {
 
       if (val === "Alphabetically") {
         // locations.sort((a, b) => (a.name > b.name ? 1 : -1));
-
         // if (locations != this.locations) {
         //   this.$store.commit("SET_LOCATIONS", locations);
         // }
       } else if (val === "Numerically") {
         // locations.sort((a, b) => (a.order > b.order ? 1 : -1));
-
         // if (locations != this.locations) {
         //   this.$store.commit("SET_LOCATIONS", locations);
         // }
@@ -289,7 +377,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addLocation", "updateLocation", "deleteLocation", "publishQuest"]),
+    ...mapActions([
+      "addLocation",
+      "updateLocation",
+      "deleteLocation",
+      "publishQuest"
+    ]),
     ...mapMutations(["UPDATE_LOCATION", "SET_COORDINATES", "SET_LOCATIONS"]),
     markLocation(location) {
       this.clearLocation();
@@ -311,7 +404,7 @@ export default {
         order: e.location.order,
         image: e.location.image,
         marker: e.location.marker,
-        draggable: e.location.draggable,
+        draggable: e.location.draggable
       };
       this.selectedLocation = index;
     },
@@ -349,7 +442,7 @@ export default {
         order: 0,
         image: "",
         marker: null,
-        draggable: true,
+        draggable: true
       };
       this.selectedLocation = null;
     },

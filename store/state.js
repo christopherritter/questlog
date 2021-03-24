@@ -23,43 +23,4 @@ export default () => ({
       name: "adventure",
     }
   ],
-  markers: {
-    default: 'marker.png',
-    barn: 'barn.png',
-    house: 'house.png',
-    school: 'school.png',
-    road: 'road.png',
-    trail: 'trail.png',
-    parking: 'parking.png',
-    corn: 'corn.png',
-    tractor: 'tractor.png',
-    info: 'info.png',
-    restroom: 'restroom.png',
-    smog: 'smog.png',
-    houseOutline: 'house-outline.png',
-    fire: 'fire.png',
-    gate: 'gate.png'
-  },
-  actionTypes: [
-    // "Look",
-    "Move",
-    // "Place",
-    // "Take",
-    // "Use",
-  ],
-  icons: [
-    'mdi-car-side',
-    'mdi-directions-fork',
-    'mdi-door',
-    'mdi-eye',
-    'mdi-hand-right',
-    'mdi-run',
-    'mdi-walk',
-    'mdi-barn',
-    'mdi-home',
-    'mdi-corn',
-    'mdi-smog',
-    'mdi-tractor-variant',
-    'mdi-fire'
-  ],
 })
