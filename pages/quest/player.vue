@@ -113,7 +113,7 @@
           touchless
           stateless
         >
-          <QuestLegend :locations="locations" />
+          <QuestLegend :locations="locations" @view-location="viewLocation($event)" />
         </v-navigation-drawer>
       </v-col>
 
