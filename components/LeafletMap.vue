@@ -20,13 +20,16 @@
           :name="location.locationId"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
-          :options="{ opacity: location.opacity }"
+
           @click="selectLocation({ event: $event, location: location })"
           @dragstart="
             $emit('select-location', { event: $event, location: location })
           "
           @dragend="$emit('move-location', $event)"
         >
+        <!-- removed from l-marker above -->
+        <!-- :options="{ opacity: location.opacity }" -->
+
           <l-icon
             v-if="location.marker"
             :icon-url="require(`~/assets/img/${location.marker}.svg`)"
@@ -118,13 +121,13 @@ export default {
                 return obj.locationId === location.locationId;
               });
               var distance = this.distanceFromLocation(location);
-              var opacity = this.dynamicOpacity(location.distance);
-              console.log("verify opacity " + opacity);
+              // var opacity = this.dynamicOpacity(location.distance);
+              // console.log("verify opacity " + opacity);
 
               this.$store.commit("SET_DISTANCE", {
                 index: locationIndex,
                 distance: Math.ceil(distance),
-                opacity: opacity,
+                // opacity: opacity,
               });
             });
           }
@@ -215,7 +218,6 @@ export default {
       this.polyline = null;
     },
     dynamicOpacity(distance) {
-      console.log("dynamic opacity " + distance)
       if (distance > 100) {
         return 0;
       } else if (distance >= 50) {
