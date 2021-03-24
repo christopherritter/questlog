@@ -29,7 +29,7 @@
         >
           <l-icon
             v-if="location.marker"
-            :icon-url="require(`~/assets/img/${location.marker}`)"
+            :icon-url="require(`~/assets/img/${location.marker}.svg`)"
             :icon-size="dynamicSize"
             :icon-anchor="dynamicAnchor"
           ></l-icon>
@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       marker: null,
-      iconSize: 48,
+      iconSize: 32,
       currentPosition: null,
       currentZoom: null,
       previousPosition: null,
@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     dynamicSize() {
-      return [this.iconSize * 0.85, this.iconSize * 0.85];
+      return [this.iconSize, this.iconSize];
     },
     dynamicAnchor() {
       return [this.iconSize / 2, this.iconSize / 2];
