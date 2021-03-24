@@ -387,6 +387,9 @@ export default {
 </script>
 
 <style scoped>
+.container.fill-height > .row {
+  max-width: 100%;
+}
 #SidebarDrawer,
 #LegendDrawer,
 #JournalDrawer,
