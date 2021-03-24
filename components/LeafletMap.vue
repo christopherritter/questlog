@@ -20,22 +20,26 @@
           :name="location.locationId"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
-
           @click="selectLocation({ event: $event, location: location })"
           @dragstart="
             $emit('select-location', { event: $event, location: location })
           "
           @dragend="$emit('move-location', $event)"
         >
-        <!-- removed from l-marker above -->
-        <!-- :options="{ opacity: location.opacity }" -->
+          <!-- removed from l-marker above -->
+          <!-- :options="{ opacity: location.opacity }" -->
 
           <l-icon
             v-if="location.marker"
             :icon-url="require(`~/assets/img/${location.marker}.svg`)"
             :icon-size="dynamicSize"
             :icon-anchor="dynamicAnchor"
-          ></l-icon>
+            :tooltip-anchor="[16, 0]"
+          >
+          </l-icon>
+          <l-tooltip>
+            {{ location.name }}
+          </l-tooltip>
         </l-marker>
       </l-map>
     </client-only>
@@ -69,7 +73,7 @@ export default {
     },
     dynamicAnchor() {
       return [this.iconSize / 2, this.iconSize / 2];
-    }
+    },
   },
   methods: {
     ...mapMutations(["SET_DISTANCE"]),
@@ -126,7 +130,7 @@ export default {
 
               this.$store.commit("SET_DISTANCE", {
                 index: locationIndex,
-                distance: Math.ceil(distance),
+                distance: Math.ceil(distance)
                 // opacity: opacity,
               });
             });
@@ -223,11 +227,11 @@ export default {
       } else if (distance >= 50) {
         return 0.25;
       } else if (distance >= 25) {
-        return 0.5
+        return 0.5;
       } else if (distance >= 10) {
-        return 0.75
+        return 0.75;
       } else {
-        return 1
+        return 1;
       }
     }
   }
