@@ -112,7 +112,7 @@
           touchless
           stateless
         >
-          <QuestLegend :locations="locations" @view-location="viewLocation($event)" />
+          <QuestLegend :locations="locations" />
         </v-navigation-drawer>
       </v-col>
 
@@ -335,9 +335,18 @@ export default {
     },
     toggleLegend() {
       this.showLegend = !this.showLegend;
+      if (this.showLegend) {
+        this.zoom = this.quest.region.zoom;
+      } else {
+        this.zoom = 19;
+      }
+
       this.showJournal = false;
       this.showBackpack = false;
       this.$refs.qMap.redrawMap();
+      if (this.showLocation) {
+        this.$refs.qMap.panTo(this.selectedLocation.coordinates, 19);
+      }
     },
     toggleJournal() {
       this.showLegend = false;
@@ -379,7 +388,7 @@ export default {
 #BackpackDrawer {
   max-height: calc(100vh - 100px);
 }
-@media only screen and (min-width: 960px) {
+@media only screen and (max-width: 960px) {
   #SidebarDrawer,
   #LegendDrawer,
   #JournalDrawer,

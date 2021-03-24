@@ -113,7 +113,7 @@
           touchless
           stateless
         >
-          <QuestLegend :locations="locations" @view-location="viewLocation($event)" />
+          <QuestLegend :locations="locations" />
         </v-navigation-drawer>
       </v-col>
 
@@ -257,7 +257,7 @@ export default {
           this.quest.region.coordinates[1]
         );
       }
-      if (!this.showLocation) {
+      if (!this.showLocation && !this.showLegend) {
         this.$refs.qMap.panTo(this.currentPosition, 19);
       }
     },
@@ -334,6 +334,17 @@ export default {
         });
       }
     },
+    previewLocation(location) {
+      console.log(location)
+      var latLng = this.$L.latLng(
+        location.coordinates[0],
+        location.coordinates[1]
+      );
+
+      this.$nextTick(() => {
+        this.$refs.qMap.fitBounds(latLng);
+      });
+    },
     mapWidth() {
       if (this.$vuetify.breakpoint.mdAndUp) return "100%";
       return "100vw";
@@ -351,10 +362,22 @@ export default {
       this.$refs.qMap.panTo(latlng, 19);
     },
     toggleLegend() {
+      var latlng, zoom;
       this.showLegend = !this.showLegend;
+      if (this.showLegend) {
+        latlng = this.quest.region.coordinates;
+        zoom = this.quest.region.zoom;
+      } else {
+        latlng = this.$L.latLng(
+          this.currentPosition.lat,
+          this.currentPosition.lng
+        );
+        zoom = 19;
+      }
       this.showJournal = false;
       this.showBackpack = false;
       this.$refs.qMap.redrawMap();
+      this.$refs.qMap.panTo(latlng, zoom);
     },
     toggleJournal() {
       this.showLegend = false;
@@ -396,7 +419,7 @@ export default {
 #BackpackDrawer {
   max-height: calc(100vh - 100px);
 }
-@media only screen and (min-width: 960px) {
+@media only screen and (max-width: 960px) {
   #SidebarDrawer,
   #LegendDrawer,
   #JournalDrawer,
