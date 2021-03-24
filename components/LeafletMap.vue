@@ -178,20 +178,21 @@ export default {
       }
     },
     fitBounds(latlng) {
+      var firstLatLng;
       if (!this.firstLatLng) {
-        console.log("no first latlng");
+        firstLatLng = this.currentPosition;
       } else {
-        var firstLatLng = this.$L.latLng(
+        firstLatLng = this.$L.latLng(
           this.firstLatLng.lat,
           this.firstLatLng.lng
         );
-        var secondLatLng = this.$L.latLng(latlng.lat, latlng.lng);
-        const group = this.$L.latLngBounds([firstLatLng, secondLatLng]);
-
-        this.$nextTick(() => {
-          this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });
-        });
       }
+      var secondLatLng = this.$L.latLng(latlng.lat, latlng.lng);
+      const group = this.$L.latLngBounds([firstLatLng, secondLatLng]);
+
+      this.$nextTick(() => {
+        this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });
+      });
     },
     distanceFromLocation(location) {
       var currentPosition = this.currentPosition;

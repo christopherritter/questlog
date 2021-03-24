@@ -32,7 +32,6 @@
             :entries="entries"
             :items="items"
             :actions="locationActions"
-            @view-location="viewLocation($event)"
             @select-action="selectAction($event)"
             @view-objective="dialog = true"
             @hide-sidebar="hideSidebar()"
@@ -93,7 +92,7 @@
           :center="center"
           :zoom="zoom"
           :locations="locations"
-          @select-location="viewLocation($event)"
+          @select-location="previewLocation($event)"
           @clear-location="clearLocation()"
           @position-changed="positionChanged($event)"
         />
@@ -113,7 +112,7 @@
           touchless
           stateless
         >
-          <QuestLegend :locations="locations" />
+          <QuestLegend :locations="locations" @view-location="previewLocation($event)" />
         </v-navigation-drawer>
       </v-col>
 
@@ -292,6 +291,30 @@ export default {
       }
       return -1;
     },
+    previewLocation({ location }) {
+      console.log(location)
+      var latLng = this.$L.latLng(
+        location.coordinates[0],
+        location.coordinates[1]
+      );
+      var zoom = location.zoom;
+      if (location.distance > 100) {
+
+        this.showLocation = true;
+        this.$nextTick(() => {
+          this.$refs.qMap.fitBounds(latLng);
+        });
+      } else {
+        this.selectedLocation = location;
+        this.selectedActions(location.locationId);
+
+        this.showSidebar = true;
+        this.showLocation = true;
+
+        this.$refs.qMap.redrawMap();
+        this.$refs.qMap.panTo(latLng, zoom);
+      }
+    },
     findEntry(entryId) {
       const array = this.entries;
       const attr = "entryId";
@@ -334,37 +357,31 @@ export default {
         });
       }
     },
-    previewLocation(location) {
-      console.log(location)
-      var latLng = this.$L.latLng(
-        location.coordinates[0],
-        location.coordinates[1]
-      );
-
-      this.$nextTick(() => {
-        this.$refs.qMap.fitBounds(latLng);
-      });
-    },
     mapWidth() {
       if (this.$vuetify.breakpoint.mdAndUp) return "100%";
       return "100vw";
     },
     hideSidebar() {
-      var latlng = this.$L.latLng(
-        this.currentPosition.lat,
-        this.currentPosition.lng
-      );
-
+      var latlng, zoom;
+      if (this.showLegend) {
+        latlng = this.quest.region.coordinates;
+        zoom = this.quest.region.zoom;
+      } else {
+        latlng = this.$L.latLng(
+          this.currentPosition.lat,
+          this.currentPosition.lng
+        );
+        zoom = 19;
+      }
       this.showSidebar = false;
       this.showLocation = false;
-
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.panTo(latlng, 19);
+      this.$refs.qMap.panTo(latlng, zoom);
     },
     toggleLegend() {
       var latlng, zoom;
       this.showLegend = !this.showLegend;
-      if (this.showLegend) {
+      if (this.showLegend || !this.showLocation) {
         latlng = this.quest.region.coordinates;
         zoom = this.quest.region.zoom;
       } else {

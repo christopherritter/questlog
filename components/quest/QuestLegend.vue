@@ -6,7 +6,7 @@
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <v-list>
-          <v-list-item v-for="location in locations" :key="location.locationId" class="px-0" @click="$emit('view-location', {location})">
+          <v-list-item v-for="location in locations" :key="location.locationId" class="px-0" @click="$emit('view-location', { location })">
             <v-list-item-icon>
               <v-icon v-if="location.marker">{{ 'mdi-' + location.marker }}</v-icon>
               <v-icon v-else>mdi-map-marker</v-icon>

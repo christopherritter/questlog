@@ -32,7 +32,6 @@
             :entries="entries"
             :items="items"
             :actions="locationActions"
-            @view-location="viewLocation($event)"
             @select-action="selectAction($event)"
             @view-objective="dialog = true"
             @hide-sidebar="hideSidebar()"
@@ -112,7 +111,10 @@
           touchless
           stateless
         >
-          <QuestLegend :locations="locations" />
+          <QuestLegend
+            :locations="locations"
+            @view-location="viewLocation($event)"
+          />
         </v-navigation-drawer>
       </v-col>
 
@@ -322,31 +324,41 @@ export default {
       return "100vw";
     },
     hideSidebar() {
-      var latlng = this.$L.latLng(
-        this.selectedLocation.coordinates[0],
-        this.selectedLocation.coordinates[1]
-      );
+      var latlng, zoom;
+      if (this.showLegend) {
+        latlng = this.quest.region.coordinates;
+        zoom = this.quest.region.zoom;
+      } else {
+        latlng = this.$L.latLng(
+          this.selectedLocation.coordinates[0],
+          this.selectedLocation.coordinates[1]
+        );
+        zoom = 19;
+      }
 
       this.showSidebar = false;
       this.showLocation = false;
 
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.panTo(latlng, 19);
+      this.$refs.qMap.panTo(latlng, zoom);
     },
     toggleLegend() {
+      var latlng, zoom;
       this.showLegend = !this.showLegend;
-      if (this.showLegend) {
-        this.zoom = this.quest.region.zoom;
+      if (this.showLegend || !this.showLocation) {
+        latlng = this.quest.region.coordinates;
+        zoom = this.quest.region.zoom;
       } else {
-        this.zoom = 19;
+        latlng = latlng = this.$L.latLng(
+          this.selectedLocation.coordinates[0],
+          this.selectedLocation.coordinates[1]
+        );
+        zoom = 19;
       }
-
       this.showJournal = false;
       this.showBackpack = false;
       this.$refs.qMap.redrawMap();
-      if (this.showLocation) {
-        this.$refs.qMap.panTo(this.selectedLocation.coordinates, 19);
-      }
+      this.$refs.qMap.panTo(latlng, zoom);
     },
     toggleJournal() {
       this.showLegend = false;
