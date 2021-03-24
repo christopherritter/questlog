@@ -38,7 +38,7 @@
           >
           </l-icon>
           <l-tooltip>
-            {{ location.name }}
+            <h3>{{ location.name }}</h3>
           </l-tooltip>
         </l-marker>
       </l-map>
