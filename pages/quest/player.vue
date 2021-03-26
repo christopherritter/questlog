@@ -92,9 +92,11 @@
           :center="center"
           :zoom="zoom"
           :locations="locations"
-          @select-location="previewLocation($event)"
+          @select-location="viewLocation($event)"
+          @preview-location="previewLocation($event)"
           @clear-location="clearLocation()"
           @position-changed="positionChanged($event)"
+          @popupclose="popupClose()"
         />
       </v-col>
 
@@ -112,7 +114,10 @@
           touchless
           stateless
         >
-          <QuestLegend :locations="locations" @view-location="previewLocation($event)" />
+          <QuestLegend
+            :locations="locations"
+            @view-location="previewLocation($event)"
+          />
         </v-navigation-drawer>
       </v-col>
 
@@ -179,6 +184,7 @@ export default {
       showJournal: false,
       showBackpack: false,
       showLocation: false,
+      preview: false,
       mapOptions: {
         zoomControl: false,
         dragging: false,
@@ -256,7 +262,7 @@ export default {
           this.quest.region.coordinates[1]
         );
       }
-      if (!this.showLocation && !this.showLegend) {
+      if (!this.showLocation && !this.showLegend && !this.preview) {
         this.$refs.qMap.panTo(this.currentPosition, 19);
       }
     },
@@ -292,28 +298,21 @@ export default {
       return -1;
     },
     previewLocation({ location }) {
-      console.log(location)
-      var latLng = this.$L.latLng(
-        location.coordinates[0],
-        location.coordinates[1]
-      );
-      var zoom = location.zoom;
-      if (location.distance > 100) {
+      // this.$nextTick(() => {
+        var latLng = this.$L.latLng(
+          location.coordinates[0],
+          location.coordinates[1]
+        );
 
-        this.showLocation = true;
-        this.$nextTick(() => {
+        this.preview = true;
+        // this.$refs.qMap.openPopup(location.locationId);
+
+        // this.$nextTick(() => {
+          this.hideSidebar();
           this.$refs.qMap.fitBounds(latLng);
-        });
-      } else {
-        this.selectedLocation = location;
-        this.selectedActions(location.locationId);
 
-        this.showSidebar = true;
-        this.showLocation = true;
-
-        this.$refs.qMap.redrawMap();
-        this.$refs.qMap.panTo(latLng, zoom);
-      }
+        // });
+      // });
     },
     findEntry(entryId) {
       const array = this.entries;
@@ -351,6 +350,7 @@ export default {
           location.coordinates[0],
           location.coordinates[1]
         );
+        this.preview = true;
 
         this.$nextTick(() => {
           this.$refs.qMap.fitBounds(secondLatLng);
@@ -366,12 +366,14 @@ export default {
       if (this.showLegend) {
         latlng = this.quest.region.coordinates;
         zoom = this.quest.region.zoom;
+        // this.preview = true;
       } else {
         latlng = this.$L.latLng(
           this.currentPosition.lat,
           this.currentPosition.lng
         );
         zoom = 19;
+        // this.preview = false;
       }
       this.showSidebar = false;
       this.showLocation = false;
@@ -384,12 +386,14 @@ export default {
       if (this.showLegend || !this.showLocation) {
         latlng = this.quest.region.coordinates;
         zoom = this.quest.region.zoom;
+        this.preview = true;
       } else {
         latlng = this.$L.latLng(
           this.currentPosition.lat,
           this.currentPosition.lng
         );
         zoom = 19;
+        this.preview = false;
       }
       this.showJournal = false;
       this.showBackpack = false;
@@ -407,6 +411,22 @@ export default {
       this.showJournal = false;
       this.showBackpack = !this.showBackpack;
       this.$refs.qMap.redrawMap();
+    },
+    popupClose() {
+      var latlng, zoom;
+      if (this.showLegend) {
+        latlng = this.quest.region.coordinates;
+        zoom = this.quest.region.zoom;
+      } else {
+        latlng = this.$L.latLng(
+          this.currentPosition.lat,
+          this.currentPosition.lng
+        );
+        zoom = 19;
+      }
+      this.preview = false;
+      this.$refs.qMap.redrawMap();
+      this.$refs.qMap.panTo(latlng, zoom);
     },
     restartQuest() {
       this.dialog = false;

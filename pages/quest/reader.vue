@@ -93,6 +93,7 @@
           :zoom="zoom"
           :locations="locations"
           @select-location="viewLocation($event)"
+          @preview-location="viewLocation($event)"
           @clear-location="clearLocation()"
         />
       </v-col>

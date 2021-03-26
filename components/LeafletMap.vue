@@ -18,6 +18,7 @@
           v-for="location in locations"
           :key="location.locationId"
           :name="location.locationId"
+          :ref="location.locationId"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
           @click="selectLocation({ event: $event, location: location })"
@@ -25,21 +26,28 @@
             $emit('select-location', { event: $event, location: location })
           "
           @dragend="$emit('move-location', $event)"
+          @popupclose="popupClose"
         >
-          <!-- removed from l-marker above -->
-          <!-- :options="{ opacity: location.opacity }" -->
-
           <l-icon
             v-if="location.marker"
             :icon-url="require(`~/assets/img/${location.marker}.svg`)"
             :icon-size="dynamicSize"
             :icon-anchor="dynamicAnchor"
+            :popup-anchor="[0, -16]"
             :tooltip-anchor="[16, 0]"
           >
           </l-icon>
-          <l-tooltip>
+
+          <l-tooltip v-if="this.$vuetify.breakpoint.mdAndUp">
             <h3>{{ location.name }}</h3>
           </l-tooltip>
+
+          <l-popup>
+            <!-- <h3>
+              {{ location.name }}
+              is {{ Math.ceil(location.distance * 3.281) }} feet away.
+            </h3> -->
+          </l-popup>
         </l-marker>
       </l-map>
     </client-only>
@@ -58,11 +66,9 @@ export default {
       currentPosition: null,
       currentZoom: null,
       previousPosition: null,
-      firstLatLng: null,
-      secondLatLng: null,
       firstPoint: null,
       secondPoint: null,
-      distance: null,
+      // distance: 0,
       length: null,
       polyline: null
     };
@@ -73,7 +79,7 @@ export default {
     },
     dynamicAnchor() {
       return [this.iconSize / 2, this.iconSize / 2];
-    },
+    }
   },
   methods: {
     ...mapMutations(["SET_DISTANCE"]),
@@ -106,42 +112,39 @@ export default {
         };
         this.$emit("position-changed", e.latlng);
       } else {
+        // this.$nextTick(() => {
         this.previousPosition = {
           lat: this.currentPosition.lat,
           lng: this.currentPosition.lng
         };
         this.currentPosition = e.latlng;
+        var map = this.$refs.lMap.mapObject;
+        var distance = map
+          .latLngToLayerPoint(this.currentPosition)
+          .distanceTo(map.latLngToLayerPoint(this.previousPosition));
 
-        this.$nextTick(() => {
-          var map = this.$refs.lMap.mapObject;
-          var distance = map
-            .latLngToLayerPoint(this.currentPosition)
-            .distanceTo(map.latLngToLayerPoint(this.previousPosition));
+        if (distance > 1) {
+          this.$emit("position-changed", e.latlng);
+          // this.locations.forEach(location => {
+          //   var locationIndex = this.locations.findIndex(function(obj) {
+          //     return obj.locationId === location.locationId;
+          //   });
+          //   var distance = this.distanceFromLocation(location);
+          //   // var opacity = this.dynamicOpacity(distance);
+          //   // console.log("verify opacity " + opacity);
 
-          if (distance > 1) {
-            this.$emit("position-changed", e.latlng);
-            this.locations.forEach(location => {
-              var locationIndex = this.locations.findIndex(function(obj) {
-                return obj.locationId === location.locationId;
-              });
-              var distance = this.distanceFromLocation(location);
-              // var opacity = this.dynamicOpacity(location.distance);
-              // console.log("verify opacity " + opacity);
-
-              this.$store.commit("SET_DISTANCE", {
-                index: locationIndex,
-                distance: Math.ceil(distance)
-                // opacity: opacity,
-              });
-            });
-          }
-        });
+          //   this.$store.commit("SET_DISTANCE", {
+          //     index: locationIndex,
+          //     distance: distance,
+          //     // opacity: opacity,
+          //   });
+          // });
+        }
+        // });
       }
 
       if (!this.marker) {
-        this.marker = new this.$L.marker([e.latitude, e.longitude]).bindPopup(
-          "You are here."
-        );
+        this.marker = new this.$L.marker([e.latitude, e.longitude]);
         this.$refs.lMap.mapObject.addLayer(this.marker);
       } else {
         this.marker.setLatLng(e.latlng);
@@ -153,74 +156,67 @@ export default {
         this.marker = undefined;
       }
     },
-    async selectLocation({ event, location }) {
-      this.firstLatLng = this.$L.latLng(
-        location.coordinates[0],
-        location.coordinates[1]
-      );
-
+    selectLocation({ event, location }) {
+      console.log("select location")
+      const map = this.$refs.lMap.mapObject;
       if (!this.currentPosition) {
         this.$emit("select-location", { event, location });
       } else {
-        await this.distanceFromLocation();
-
-        if (this.distance < 1000) {
+        console.log("getting distance from location")
+        var distance = this.distanceFromLocation(location);
+        if (distance <= 50) {
+          console.log("distance is " + distance + " meters")
+          this.$refs[location.locationId][0].mapObject.unbindPopup();
           this.$emit("select-location", { event, location });
         } else {
-          console.log("too far away " + this.distance);
-          // console.log(event);
-          // this.marker = new this.$L.marker([
-          //   location.coordinates[0],
-          //   location.coordinates[1]
-          // ]).bindPopup("Too far away.");
-          // this.$refs.lMap.mapObject.addLayer(this.marker);
+          console.log("distance is greater than 50 meters.")
+          this.$refs[location.locationId][0].mapObject
+            .bindPopup("<h3>" + location.name + " is " + distance + " meters away.</h3>")
+            .addTo(map);
+          this.$emit("preview-location", { event, location });
         }
       }
     },
     fitBounds(latlng) {
-      var firstLatLng;
-      if (!this.firstLatLng) {
-        firstLatLng = this.currentPosition;
-      } else {
-        firstLatLng = this.$L.latLng(
-          this.firstLatLng.lat,
-          this.firstLatLng.lng
-        );
-      }
-      var secondLatLng = this.$L.latLng(latlng.lat, latlng.lng);
-      const group = this.$L.latLngBounds([firstLatLng, secondLatLng]);
+      var currentPosition = this.$L.latLng(
+        this.currentPosition.lat,
+        this.currentPosition.lng
+      );
+      var destination = this.$L.latLng(latlng.lat, latlng.lng);
+      const group = this.$L.latLngBounds([currentPosition, destination]);
 
       this.$nextTick(() => {
         this.$refs.lMap.mapObject.fitBounds(group, { padding: [30, 30] });
       });
     },
     distanceFromLocation(location) {
-      var currentPosition = this.currentPosition;
-      var location;
-
-      if (!location) {
-        location = this.firstLatLng;
+      var currentPosition, destination;
+      currentPosition = this.currentPosition;
+      if (!currentPosition) {
+        return;
       } else {
-        location = this.$L.latLng(
+        destination = this.$L.latLng(
           location.coordinates[0],
           location.coordinates[1]
         );
       }
-
       var map = this.$refs.lMap.mapObject;
       var distance = map
         .latLngToLayerPoint(currentPosition)
-        .distanceTo(map.latLngToLayerPoint(location));
-
-      this.distance = distance;
-      return distance;
+        .distanceTo(map.latLngToLayerPoint(destination));
+      return Math.ceil(distance);
     },
     clearDestination() {
-      this.secondLatLng = null;
       this.secondPoint = null;
-      this.distance = null;
       this.length = null;
       this.polyline = null;
+    },
+    openPopup(locationId) {
+      console.log("open popup")
+      this.$refs[locationId][0].mapObject.openPopup();
+    },
+    popupClose() {
+      this.$emit("popupclose");
     },
     dynamicOpacity(distance) {
       if (distance > 100) {
