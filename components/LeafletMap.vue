@@ -157,19 +157,15 @@ export default {
       }
     },
     selectLocation({ event, location }) {
-      console.log("select location")
       const map = this.$refs.lMap.mapObject;
       if (!this.currentPosition) {
         this.$emit("select-location", { event, location });
       } else {
-        console.log("getting distance from location")
         var distance = this.distanceFromLocation(location);
         if (distance <= 50) {
-          console.log("distance is " + distance + " meters")
           this.$refs[location.locationId][0].mapObject.unbindPopup();
           this.$emit("select-location", { event, location });
         } else {
-          console.log("distance is greater than 50 meters.")
           this.$refs[location.locationId][0].mapObject
             .bindPopup("<h3>" + location.name + " is " + distance + " meters away.</h3>")
             .addTo(map);
