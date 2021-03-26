@@ -34,7 +34,7 @@
             :actions="locationActions"
             @select-action="selectAction($event)"
             @view-objective="dialog = true"
-            @hide-sidebar="hideSidebar()"
+            @hide-sidebar="preview = false; hideSidebar();"
           />
         </v-navigation-drawer>
       </v-col>
@@ -96,7 +96,7 @@
           @preview-location="previewLocation($event)"
           @clear-location="clearLocation()"
           @position-changed="positionChanged($event)"
-          @popupclose="popupClose()"
+          @popupclose="preview = false; popupClose()"
         />
       </v-col>
 
@@ -424,7 +424,6 @@ export default {
         );
         zoom = 19;
       }
-      this.preview = false;
       this.$refs.qMap.redrawMap();
       this.$refs.qMap.panTo(latlng, zoom);
     },
