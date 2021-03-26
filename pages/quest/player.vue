@@ -262,7 +262,7 @@ export default {
           this.quest.region.coordinates[1]
         );
       }
-      if (!this.showLocation && !this.showLegend && !this.preview) {
+      if (!this.showLocation && !this.preview) {
         this.$refs.qMap.panTo(this.currentPosition, 19);
       }
     },
@@ -363,7 +363,7 @@ export default {
     },
     hideSidebar() {
       var latlng, zoom;
-      if (this.showLegend) {
+      if (this.preview) {
         latlng = this.quest.region.coordinates;
         zoom = this.quest.region.zoom;
         // this.preview = true;
@@ -414,7 +414,7 @@ export default {
     },
     popupClose() {
       var latlng, zoom;
-      if (this.showLegend) {
+      if (this.preview) {
         latlng = this.quest.region.coordinates;
         zoom = this.quest.region.zoom;
       } else {

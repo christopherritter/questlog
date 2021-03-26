@@ -38,7 +38,7 @@
           >
           </l-icon>
 
-          <l-tooltip v-if="this.$vuetify.breakpoint.mdAndUp">
+          <l-tooltip v-if="$vuetify.breakpoint.mdAndUp">
             <h3>{{ location.name }}</h3>
           </l-tooltip>
 
