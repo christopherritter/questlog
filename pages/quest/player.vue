@@ -280,6 +280,8 @@ export default {
       this.showSidebar = true;
       this.showLocation = true;
 
+      window.scrollTo(0, 0);
+
       this.$refs.qMap.redrawMap();
       this.$refs.qMap.panTo(latlng, location.zoom);
     },
@@ -298,21 +300,17 @@ export default {
       return -1;
     },
     previewLocation({ location }) {
-      // this.$nextTick(() => {
-        var latLng = this.$L.latLng(
-          location.coordinates[0],
-          location.coordinates[1]
-        );
+      var latLng = this.$L.latLng(
+        location.coordinates[0],
+        location.coordinates[1]
+      );
 
-        this.preview = true;
-        // this.$refs.qMap.openPopup(location.locationId);
+      this.preview = true;
 
-        // this.$nextTick(() => {
-          this.hideSidebar();
-          this.$refs.qMap.fitBounds(latLng);
+      window.scrollTo(0, 0);
 
-        // });
-      // });
+      this.hideSidebar();
+      this.$refs.qMap.fitBounds(latLng);
     },
     findEntry(entryId) {
       const array = this.entries;
