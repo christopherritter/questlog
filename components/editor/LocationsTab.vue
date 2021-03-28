@@ -63,6 +63,7 @@
                 :items="markers"
                 label="Marker"
                 outlined
+                return-object
               ></v-select>
               <v-text-field
                 v-model="newLocation.image"
@@ -173,7 +174,7 @@
                       >
                         <v-list-item-avatar color="light-blue darken-1">
                           <v-icon class="white--text" dark>
-                            mdi-map-marker
+                            {{ location.marker }}
                           </v-icon>
                         </v-list-item-avatar>
 
@@ -231,7 +232,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
@@ -251,84 +252,6 @@ export default {
         draggable: true,
         distance: 0
       },
-      markers: [
-        {
-          text: "Barn",
-          value: "barn",
-        },
-        {
-          text: "Boom gate",
-          value: "boom-gate",
-        },
-        {
-          text: "Corn",
-          value: "corn",
-        },
-        {
-          text: "Fire",
-          value: "fire",
-        },
-        {
-          text: "Gate",
-          value: "gate",
-        },
-        {
-          text: "House",
-          value: "home",
-        },
-        {
-          text: "House (outline)",
-          value: "home-outline",
-        },
-        {
-          text: "Paper roll",
-          value: "paper-roll",
-        },
-        {
-          text: "Information",
-          value: "information",
-        },
-        {
-          text: "Parking",
-          value: "parking",
-        },
-        {
-          text: "Road",
-          value: "road-variant",
-        },
-        {
-          text: "School",
-          value: "school",
-        },
-        {
-          text: "Caution sign",
-          value: "sign-caution",
-        },
-        {
-          text: "Real estate sign",
-          value: "sign-real-estate",
-        },
-        {
-          text: "Sign",
-          value: "sign-text",
-        },
-        {
-          text: "Smog",
-          value: "smog",
-        },
-        {
-          text: "Tractor",
-          value: "tractor-variant",
-        },
-        {
-          text: "Traffic light",
-          value: "traffic-light",
-        },
-        {
-          text: "Trail",
-          value: "routes",
-        },
-      ],
       selectedLocation: null,
       selectedView: 0,
       searchTerm: "",
@@ -339,6 +262,9 @@ export default {
   props: ["region", "locations"],
   components: { LeafletMap },
   computed: {
+    ...mapState({
+      markers: state => state.markers,
+    }),
     filterByTerm() {
       let searchTerm = this.searchTerm.toLowerCase();
       let locations = this.locations.slice();

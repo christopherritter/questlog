@@ -43,6 +43,7 @@
                 :objectives="objectives"
                 :locations="locations"
                 :actions="newEntry.actions"
+                :items="items"
                 @add-action="addAction($event)"
                 @edit-action="editAction($event)"
                 @delete-action="deleteAction($event)"
@@ -260,7 +261,7 @@ export default {
       sort: ["Alphabetically", "Numerically"]
     };
   },
-  props: ["objectives", "locations", "entries"],
+  props: ["objectives", "locations", "entries", "items"],
   computed: {
     sortedEntries() {
       var sortedEntries = [];

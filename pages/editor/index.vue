@@ -71,6 +71,7 @@
                 :objectives="objectives"
                 :locations="locations"
                 :entries="entries"
+                :items="items"
                 @change-tab="changeTab($event)"
                 @delete-quest="dialogDelete = true"
               />

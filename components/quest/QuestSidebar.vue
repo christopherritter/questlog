@@ -48,7 +48,7 @@
         @click="selectAction(action)"
       >
         <v-list-item-icon>
-          <v-icon>{{ action.icon }}</v-icon>
+          <v-icon>{{ action.marker }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>

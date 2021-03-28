@@ -3,7 +3,7 @@
     <v-subheader class="px-0">Actions</v-subheader>
     <v-list-item class="px-0" v-for="action in actions" :key="action.text">
       <v-list-item-avatar color="grey darken-3">
-        <v-icon dark v-text="action.icon"></v-icon>
+        <v-icon dark>{{ action.marker }}</v-icon>
       </v-list-item-avatar>
 
       <v-list-item-content>
@@ -52,16 +52,16 @@
                   ></v-text-field>
                 </v-col>
 
-                <v-col cols="12" sm="12">
+                <!-- <v-col cols="12" sm="12">
                   <v-select
-                    v-model="editedAction.icon"
-                    :items="icons"
-                    label="Icon"
+                    v-model="editedAction.marker"
+                    :items="markers"
+                    label="Marker"
                     outlined
                     light
                     hide-details="auto"
                   ></v-select>
-                </v-col>
+                </v-col> -->
 
                 <v-col cols="12" sm="4">
                   <v-select
@@ -71,11 +71,37 @@
                     outlined
                     hide-details="auto"
                     light
+                    v-on:change="selectMarker"
                   ></v-select>
                 </v-col>
                 <v-col cols="12" sm="8">
                   <v-autocomplete
                     v-model="editedAction.target"
+                    v-if="editedAction.type == 'move'"
+                    :items="locations"
+                    label="Target"
+                    item-text="name"
+                    item-value="locationId"
+                    hide-details="auto"
+                    outlined
+                    light
+                    @change="fetchTargetName($event)"
+                  ></v-autocomplete>
+                  <v-autocomplete
+                    v-model="editedAction.target"
+                    v-else-if="editedAction.type == 'look' || editedAction.type == 'open' || editedAction.type == 'take'"
+                    :items="items"
+                    label="Target"
+                    item-text="name"
+                    item-value="locationId"
+                    hide-details="auto"
+                    outlined
+                    light
+                    @change="fetchTargetName($event)"
+                  ></v-autocomplete>
+                  <v-autocomplete
+                    v-model="editedAction.target"
+                    v-else
                     :items="locations"
                     label="Target"
                     item-text="name"
@@ -136,7 +162,7 @@ export default {
         type: "",
         target: "",
         targetName: "",
-        icon: "",
+        marker: ""
       },
       editedIndex: -1,
       defaultAction: {
@@ -144,20 +170,24 @@ export default {
         type: "",
         target: "",
         targetName: "",
-        icon: "",
+        marker: ""
       },
       dialog: false,
       dialogDelete: false
     };
   },
-  props: ["objectives", "locations", "actions"],
+  props: ["objectives", "locations", "items", "actions"],
   computed: {
     ...mapState({
       types: state => state.actionTypes,
-      icons: state => state.icons,
+      markers: state => state.markers
     })
   },
   methods: {
+    selectMarker() {
+      let result = this.types.find(type => type.value == this.editedAction.type);
+      this.editedAction.marker = result.marker;
+    },
     save() {
       if (this.editedIndex > -1) {
         this.$emit("edit-action", {
@@ -203,7 +233,7 @@ export default {
         this.editedAction = Object.assign({}, this.defaultAction);
         this.editedIndex = -1;
       });
-    },
+    }
   }
 };
 </script>

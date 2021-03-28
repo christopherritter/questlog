@@ -346,7 +346,7 @@ export default {
       this.locationActions = selectedActions;
     },
     async selectAction(action) {
-      if (action.type == "Move") {
+      if (action.type == "move") {
         var locationIndex = await this.findWithAttr({
           array: this.locations,
           attr: "locationId",

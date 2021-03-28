@@ -225,7 +225,7 @@ export default {
       objectives: state => state.objectives,
       locations: state => state.locations,
       entries: state => state.entries,
-      items: state => state.actions
+      items: state => state.items
     }),
     fillHeight() {
       if (this.$vuetify.breakpoint.mdAndUp) return true;
@@ -312,7 +312,7 @@ export default {
       this.locationActions = selectedActions;
     },
     async selectAction(action) {
-      if (action.type == "Move") {
+      if (action.type == "move") {
         var locationIndex = await this.findWithAttr({
           array: this.locations,
           attr: "locationId",
