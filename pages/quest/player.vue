@@ -34,7 +34,10 @@
             :actions="locationActions"
             @select-action="selectAction($event)"
             @view-objective="dialog = true"
-            @hide-sidebar="preview = false; hideSidebar();"
+            @hide-sidebar="
+              preview = false;
+              hideSidebar();
+            "
           />
         </v-navigation-drawer>
       </v-col>
@@ -96,7 +99,10 @@
           @preview-location="previewLocation($event)"
           @clear-location="clearLocation()"
           @position-changed="positionChanged($event)"
-          @popupclose="preview = false; popupClose()"
+          @popupclose="
+            preview = false;
+            popupClose();
+          "
         />
       </v-col>
 
@@ -135,7 +141,10 @@
           touchless
           stateless
         >
-          <QuestJournal :objectives="objectives" />
+          <QuestJournal
+            :objectives="objectives"
+            @view-objective="dialog = true"
+          />
         </v-navigation-drawer>
       </v-col>
 

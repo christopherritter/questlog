@@ -133,7 +133,10 @@
           touchless
           stateless
         >
-          <QuestJournal :objectives="objectives" />
+          <QuestJournal
+            :objectives="objectives"
+            @view-objective="dialog = true"
+          />
         </v-navigation-drawer>
       </v-col>
 
