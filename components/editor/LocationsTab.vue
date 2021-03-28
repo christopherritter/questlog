@@ -63,7 +63,6 @@
                 :items="markers"
                 label="Marker"
                 outlined
-                return-object
               ></v-select>
               <v-text-field
                 v-model="newLocation.image"
@@ -174,7 +173,7 @@
                       >
                         <v-list-item-avatar color="light-blue darken-1">
                           <v-icon class="white--text" dark>
-                            {{ location.marker }}
+                            {{ "mdi-" + location.marker }}
                           </v-icon>
                         </v-list-item-avatar>
 

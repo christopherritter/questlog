@@ -71,7 +71,7 @@
                     outlined
                     hide-details="auto"
                     light
-                    v-on:change="selectMarker"
+                    @change="selectMarker"
                   ></v-select>
                 </v-col>
                 <v-col cols="12" sm="8">
@@ -90,27 +90,21 @@
                   <v-autocomplete
                     v-model="editedAction.target"
                     v-else-if="editedAction.type == 'look' || editedAction.type == 'open' || editedAction.type == 'take'"
-                    :items="items"
-                    label="Target"
+                    :items="objectives"
+                    label="Objective"
                     item-text="name"
-                    item-value="locationId"
+                    item-value="objectiveId"
                     hide-details="auto"
                     outlined
                     light
                     @change="fetchTargetName($event)"
                   ></v-autocomplete>
                   <v-autocomplete
-                    v-model="editedAction.target"
                     v-else
-                    :items="locations"
                     label="Target"
-                    item-text="name"
-                    item-value="locationId"
                     hide-details="auto"
                     outlined
-                    light
-                    :disabled="editedAction.type == ''"
-                    @change="fetchTargetName($event)"
+                    disabled
                   ></v-autocomplete>
                 </v-col>
               </v-row>
@@ -205,9 +199,14 @@ export default {
       this.dialog = true;
     },
     fetchTargetName(event) {
-      if (this.editedAction.type == "Move") {
+      if (this.editedAction.type == "move") {
         var targets = this.locations.filter(
           target => target.locationId == event
+        );
+        this.editedAction.targetName = targets[0].name;
+      } else if (this.editedAction.type == "look" || this.editedAction.type == "open" || this.editedAction.type == "take") {
+        var targets = this.objectives.filter(
+          target => target.objectiveId == event
         );
         this.editedAction.targetName = targets[0].name;
       }

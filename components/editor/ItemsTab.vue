@@ -245,8 +245,8 @@ export default {
   data() {
     return {
       newItem: {
-        title: "",
-        text: "",
+        name: "",
+        description: "",
         location: "",
         order: 1,
         actions: [],
@@ -326,9 +326,9 @@ export default {
     },
     clearItem() {
       this.newItem = {
-        title: "",
+        name: "",
         location: "",
-        text: "",
+        description: "",
         order: 1,
         actions: [],
         requirements: [],
