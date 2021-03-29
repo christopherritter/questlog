@@ -76,14 +76,14 @@ export default {
       const res = await newUserRef.set(newUser);
 
       commit("SET_USER", newUser);
-      this.$router.push("/");
+      // this.$router.push("/");
     } else {
       var profile = doc.data();
       if (profile.name.length <= 0) this.$router.push({
         name: 'profile'
       });
       commit("SET_USER", profile);
-      this.$router.push("/");
+      // this.$router.push("/");
     }
 
   },
