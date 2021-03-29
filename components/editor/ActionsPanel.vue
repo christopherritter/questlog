@@ -89,7 +89,7 @@
                   ></v-autocomplete>
                   <v-autocomplete
                     v-model="editedAction.target"
-                    v-else-if="editedAction.type == 'take'"
+                    v-else-if="editedAction.type == 'take' || editedAction.type == 'use'"
                     :items="items"
                     label="Items"
                     item-text="name"
@@ -221,7 +221,7 @@ export default {
           target => target.objectiveId == event
         );
         this.editedAction.targetName = targets[0].name;
-      } else if (this.editedAction.type == "take") {
+      } else if (this.editedAction.type == "take" || this.editedAction.type == "use") {
         var targets = this.items.filter(
           target => target.itemId == event
         );

@@ -361,6 +361,9 @@ export default {
           });
           this.$store.commit("SET_OWNED", { index: itemIndex, bool: true });
           break;
+        case "use":
+          // enter case
+          break;
       }
     },
     mapWidth() {

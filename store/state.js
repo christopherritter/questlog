@@ -116,6 +116,11 @@ export default () => ({
       text: "Take",
       value: "take",
       marker: "mdi-bag-personal",
+    },
+    {
+      text: "Use",
+      value: "use",
+      marker: "mdi-hand-pointing-right"
     }
   ]
 })

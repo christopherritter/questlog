@@ -69,18 +69,32 @@ export default {
       var localObjectives = [];
 
       for (let e = 0; e < this.localEntries.length; e++) {
-        for (let o = 0; o < this.localEntries[e].objectives.length; o++) {
-          var localObjectives = [];
-
-          this.localEntries[e].objectives.forEach(objectiveId => {
-            var index = this.findObjective(objectiveId);
-            this.$store.dispatch("setObjective", {
-              objectiveId: objectiveId,
-              bool: true
-            });
-            localObjectives.push(this.objectives[index]);
+        if (this.localEntries[e].actions.length > 0) {
+          this.localEntries[e].actions.forEach(action => {
+            if (action.type != "use") {
+              for (let o = 0; o < this.localEntries[e].objectives.length; o++) {
+                this.localEntries[e].objectives.forEach(objectiveId => {
+                  gatherObjective(objectiveId);
+                });
+              }
+            }
           });
+        } else {
+          for (let o = 0; o < this.localEntries[e].objectives.length; o++) {
+            this.localEntries[e].objectives.forEach(objectiveId => {
+              gatherObjective(objectiveId);
+            });
+          }
         }
+      }
+
+      function gatherObjective(objectiveId) {
+        var index = this.findObjective(objectiveId);
+        this.$store.dispatch("setObjective", {
+          objectiveId: objectiveId,
+          bool: true
+        });
+        localObjectives.push(this.objectives[index]);
       }
 
       return localObjectives;
@@ -129,6 +143,12 @@ export default {
                   localEntries.push(entry);
                 }
               });
+            } else if (action.type == "use") {
+              items.forEach(item => {
+                if (item.isOwned) {
+                  localEntries.push(entry);
+                }
+              });
             } else {
               localEntries.push(entry);
             }
@@ -138,7 +158,7 @@ export default {
         }
       }
 
-      return localEntries.sort((a, b) => (a.order > b.order) ? 1 : -1);
+      return localEntries.sort((a, b) => (a.order > b.order ? 1 : -1));
     },
     localActions() {
       var localActions = [];
