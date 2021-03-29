@@ -72,11 +72,15 @@ export default {
       const locationId = this.location.locationId;
       var localEntries = [];
 
-      for (let e = 0; e < this.entries.length; e++) {
-        if (this.entries[e].location == locationId) {
-          localEntries.push(this.entries[e]);
+      this.entries.forEach(entry => {
+        if (entry.location == locationId) {
+          if (entry.requirements.length > 0) {
+            entry.requirements.forEach(result => console.log(result));
+          } else {
+            localEntries.push(entry);
+          }
         }
-      }
+      });
 
       return localEntries;
     },

@@ -237,7 +237,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["findWithAttr"]),
+    ...mapActions(["findWithAttr", "setObjective"]),
     ...mapMutations(["SET_OBJECTIVE"]),
     questHelpers() {
       if (this.$vuetify.breakpoint.smAndDown) {
@@ -312,7 +312,12 @@ export default {
       this.locationActions = selectedActions;
     },
     async selectAction(action) {
-      if (action.type == "move") {
+      if (action.type == "look") {
+        this.$store.dispatch("setObjective", {
+          objectiveId: action.target,
+          bool: true
+        });
+      } else if (action.type == "move") {
         var locationIndex = await this.findWithAttr({
           array: this.locations,
           attr: "locationId",
@@ -384,7 +389,7 @@ export default {
         });
       }
       for (let i = 0; i < this.objectives.length; i++) {
-        this.$store.commit("SET_OBJECTIVE", {
+        this.$store.dispatch("SET_OBJECTIVE", {
           index: i,
           bool: false
         });

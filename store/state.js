@@ -113,11 +113,6 @@ export default () => ({
       marker: "mdi-walk",
     },
     {
-      text: "Open",
-      value: "open",
-      marker: "mdi-hand-pointing-right",
-    },
-    {
       text: "Take",
       value: "take",
       marker: "mdi-bag-personal",
