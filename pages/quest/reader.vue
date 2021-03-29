@@ -236,7 +236,7 @@ export default {
   },
   methods: {
     ...mapActions(["findWithAttr", "setObjective"]),
-    ...mapMutations(["SET_OBJECTIVE"]),
+    ...mapMutations(["SET_OBJECTIVE", "SET_OWNED"]),
     questHelpers() {
       if (this.$vuetify.breakpoint.smAndDown) {
         this.showLegend = true;
@@ -263,8 +263,6 @@ export default {
       );
 
       this.selectedLocation = location;
-      // this.selectedActions(location.locationId);
-
       this.showSidebar = true;
       this.showLocation = true;
 
@@ -294,35 +292,31 @@ export default {
       }
       return -1;
     },
-    // selectedActions(locationId) {
-    //   var selectedActions = [];
-    //   for (var e = 0; e < this.entries.length; e++) {
-    //     if (this.entries[e].location == locationId) {
-    //       let entryActions = this.entries[e].actions;
-    //       for (let a = 0; a < entryActions.length; a++) {
-    //         let action = {};
-    //         Object.assign(action, entryActions[a]);
-    //         selectedActions.push(action);
-    //       }
-    //     }
-    //   }
-    //   this.locationActions = selectedActions;
-    // },
     async selectAction(action) {
-      if (action.type == "look") {
-        this.$store.dispatch("setObjective", {
-          objectiveId: action.target,
-          bool: true
-        });
-      } else if (action.type == "move") {
-        var locationIndex = await this.findWithAttr({
-          array: this.locations,
-          attr: "locationId",
-          value: action.target
-        });
-        var location = this.locations[locationIndex];
-
-        this.viewLocation({ location });
+      switch (action.type) {
+        case "look":
+          this.$store.dispatch("setObjective", {
+            objectiveId: action.target,
+            bool: true
+          });
+          break;
+        case "move":
+          var locationIndex = await this.findWithAttr({
+            array: this.locations,
+            attr: "locationId",
+            value: action.target
+          });
+          var location = this.locations[locationIndex];
+          this.viewLocation({ location });
+          break;
+        case "take":
+          var itemIndex = await this.findWithAttr({
+            array: this.items,
+            attr: "itemId",
+            value: action.target
+          });
+          this.$store.commit("SET_OWNED", itemIndex);
+          break;
       }
     },
     mapWidth() {

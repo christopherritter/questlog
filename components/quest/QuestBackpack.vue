@@ -6,7 +6,7 @@
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <v-list>
-          <v-list-item v-for="item in items" :key="item.itemId" class="px-0">
+          <v-list-item v-for="item in personalItems" :key="item.itemId" class="px-0">
             <v-list-item-icon>
               <v-icon>mdi-bag-personal</v-icon>
             </v-list-item-icon>
@@ -26,13 +26,19 @@ export default {
   name: "QuestBackpack",
   data() {
     return {
-      panels: null
+      panels: 0
     }
   },
   mounted() {
     this.setPanels()
   },
   props: ["items"],
+  computed: {
+    personalItems() {
+      var personalItems = this.items.filter(item => item.isOwned == true);
+      return personalItems;
+    }
+  },
   methods: {
     setPanels() {
       if (this.$vuetify.breakpoint.smAndDown) {

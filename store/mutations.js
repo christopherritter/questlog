@@ -116,6 +116,10 @@ export default {
     Object.assign(state.items[obj.index], obj.item);
   },
 
+  SET_OWNED: (state, index) => {
+    state.items[index].isOwned = true;
+  },
+
   SET_ITEMS: (state, items) => {
     state.items = items;
   },

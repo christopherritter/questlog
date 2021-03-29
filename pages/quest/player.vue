@@ -282,8 +282,6 @@ export default {
       );
 
       this.selectedLocation = location;
-      // this.selectedActions(location.locationId);
-
       this.showSidebar = true;
       this.showLocation = true;
 
@@ -328,42 +326,41 @@ export default {
       }
       return -1;
     },
-    // selectedActions(locationId) {
-    //   var selectedActions = [];
-    //   for (var e = 0; e < this.entries.length; e++) {
-    //     if (this.entries[e].location == locationId) {
-    //       let entryActions = this.entries[e].actions;
-    //       for (let a = 0; a < entryActions.length; a++) {
-    //         let action = {};
-    //         Object.assign(action, entryActions[a]);
-    //         selectedActions.push(action);
-    //       }
-    //     }
-    //   }
-    //   this.locationActions = selectedActions;
-    // },
     async selectAction(action) {
-      if (action.type == "look") {
-        this.$store.dispatch("setObjective", {
-          objectiveId: action.target,
-          bool: true
-        });
-      } else if (action.type == "move") {
-        var locationIndex = await this.findWithAttr({
-          array: this.locations,
-          attr: "locationId",
-          value: action.target
-        });
-        var location = this.locations[locationIndex];
-        var secondLatLng = this.$L.latLng(
-          location.coordinates[0],
-          location.coordinates[1]
-        );
-        this.preview = true;
+      switch (action.type) {
+        case "look":
+          this.$store.dispatch("setObjective", {
+            objectiveId: action.target,
+            bool: true
+          });
+          break;
+        case "move":
+          var locationIndex = await this.findWithAttr({
+            array: this.locations,
+            attr: "locationId",
+            value: action.target
+          });
+          var location = this.locations[locationIndex];
+          var secondLatLng = this.$L.latLng(
+            location.coordinates[0],
+            location.coordinates[1]
+          );
+          this.preview = true;
+          // this.showSidebar = false;
+          // this.showLocation = false;
 
-        this.$nextTick(() => {
-          this.$refs.qMap.fitBounds(secondLatLng);
-        });
+          this.$nextTick(() => {
+            this.$refs.qMap.fitBounds(secondLatLng);
+          });
+          break;
+        case "take":
+          var itemIndex = await this.findWithAttr({
+            array: this.items,
+            attr: "itemId",
+            value: action.target
+          });
+          this.$store.commit("SET_OWNED", itemIndex);
+          break;
       }
     },
     mapWidth() {

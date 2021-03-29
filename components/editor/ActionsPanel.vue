@@ -89,7 +89,19 @@
                   ></v-autocomplete>
                   <v-autocomplete
                     v-model="editedAction.target"
-                    v-else-if="editedAction.type == 'look' || editedAction.type == 'open' || editedAction.type == 'take'"
+                    v-else-if="editedAction.type == 'take'"
+                    :items="items"
+                    label="Items"
+                    item-text="name"
+                    item-value="itemId"
+                    hide-details="auto"
+                    outlined
+                    light
+                    @change="fetchTargetName($event)"
+                  ></v-autocomplete>
+                  <v-autocomplete
+                    v-model="editedAction.target"
+                    v-else-if="editedAction.type == 'look'"
                     :items="objectives"
                     label="Objective"
                     item-text="name"
@@ -204,9 +216,14 @@ export default {
           target => target.locationId == event
         );
         this.editedAction.targetName = targets[0].name;
-      } else if (this.editedAction.type == "look" || this.editedAction.type == "open" || this.editedAction.type == "take") {
+      } else if (this.editedAction.type == "look") {
         var targets = this.objectives.filter(
           target => target.objectiveId == event
+        );
+        this.editedAction.targetName = targets[0].name;
+      } else if (this.editedAction.type == "take") {
+        var targets = this.items.filter(
+          target => target.itemId == event
         );
         this.editedAction.targetName = targets[0].name;
       }
