@@ -86,34 +86,61 @@ export default {
       return localObjectives;
     },
     localEntries() {
+      const items = this.items;
       const locationId = this.location.locationId;
       var localEntries = [];
 
       this.entries.forEach(entry => {
         if (entry.location == locationId) {
-          if (entry.requirements.length > 0) {
-            entry.requirements.forEach(requirementId => {
+          if (entry.expiration.length > 0) {
+            entry.expiration.forEach(expirationId => {
               this.objectives.forEach(objective => {
-                if (requirementId == objective.objectiveId && objective.isComplete) {
-                  localEntries.push(entry);
+                if (
+                  expirationId == objective.objectiveId &&
+                  !objective.isComplete
+                ) {
+                  checkOwnedItems(entry);
                 }
               });
             });
-          } else if (entry.expiration.length > 0) {
-            entry.expiration.forEach(expirationId => {
+          } else if (entry.requirements.length > 0) {
+            entry.requirements.forEach(requirementId => {
               this.objectives.forEach(objective => {
-                if (expirationId == objective.objectiveId && !objective.isComplete) {
-                  localEntries.push(entry);
+                if (
+                  requirementId == objective.objectiveId &&
+                  objective.isComplete
+                ) {
+                  checkOwnedItems(entry);
                 }
               });
             });
           } else {
-            localEntries.push(entry);
+            console.log("no restrictions")
+            console.log(entry)
+            checkOwnedItems(entry);
           }
         }
       });
 
-      return localEntries;
+      function checkOwnedItems(entry) {
+        if (entry.actions.length > 0) {
+          entry.actions.forEach(action => {
+            if (action.type == "take") {
+              items.forEach(item => {
+                if (!item.isOwned) {
+                  localEntries.push(entry);
+                }
+              });
+            } else {
+              localEntries.push(entry);
+            }
+          });
+        } else {
+          localEntries.push(entry);
+        }
+      }
+
+      return localEntries.sort((a, b) => (a.order > b.order) ? 1 : -1);
     },
     localActions() {
       var localActions = [];
@@ -126,7 +153,7 @@ export default {
         }
       }
       return localActions;
-    },
+    }
   },
   methods: {
     ...mapActions(["setObjective", "findWithAttr"]),
