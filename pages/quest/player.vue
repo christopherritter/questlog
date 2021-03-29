@@ -245,7 +245,7 @@ export default {
   },
   methods: {
     ...mapActions(["findWithAttr", "setObjective"]),
-    ...mapMutations(["SET_OBJECTIVE"]),
+    ...mapMutations(["SET_OBJECTIVE", "SET_OWNED"]),
     questHelpers() {
       if (this.$vuetify.breakpoint.smAndDown) {
         this.showLegend = true;
@@ -359,7 +359,7 @@ export default {
             attr: "itemId",
             value: action.target
           });
-          this.$store.commit("SET_OWNED", itemIndex);
+          this.$store.commit("SET_OWNED", { index: itemIndex, bool: true });
           break;
       }
     },
@@ -440,8 +440,14 @@ export default {
           location: { locationId: this.quest.startingPoint }
         });
       }
-      for (let i = 0; i < this.objectives.length; i++) {
+      for (let o = 0; o < this.objectives.length; o++) {
         this.$store.commit("SET_OBJECTIVE", {
+          index: o,
+          bool: false
+        });
+      }
+      for (let i = 0; i < this.items.length; i++) {
+        this.$store.commit("SET_OWNED", {
           index: i,
           bool: false
         });

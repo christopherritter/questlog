@@ -115,8 +115,6 @@ export default {
               });
             });
           } else {
-            console.log("no restrictions")
-            console.log(entry)
             checkOwnedItems(entry);
           }
         }
