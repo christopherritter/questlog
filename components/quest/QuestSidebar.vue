@@ -38,12 +38,12 @@
     </v-layout>
 
     <div v-for="(entry, index) in localEntries" :key="index">
-      <v-card-text v-if="entryAllowed(entry)">{{ entry.text }}</v-card-text>
+      <v-card-text>{{ entry.text }}</v-card-text>
     </div>
 
     <v-list>
       <v-list-item
-        v-for="(action, index) in actions"
+        v-for="(action, index) in localActions"
         :key="index"
         @click="selectAction(action)"
       >
@@ -63,27 +63,8 @@
 import { mapActions } from "vuex";
 export default {
   name: "QuestSidebar",
-  data() {
-    return {};
-  },
-  props: ["objectives", "location", "entries", "items", "actions"],
+  props: ["objectives", "location", "entries", "items"],
   computed: {
-    localEntries() {
-      const locationId = this.location.locationId;
-      var localEntries = [];
-
-      this.entries.forEach(entry => {
-        if (entry.location == locationId) {
-          if (entry.requirements.length > 0) {
-            entry.requirements.forEach(result => console.log(result));
-          } else {
-            localEntries.push(entry);
-          }
-        }
-      });
-
-      return localEntries;
-    },
     localObjectives() {
       var localObjectives = [];
 
@@ -103,17 +84,52 @@ export default {
       }
 
       return localObjectives;
-    }
+    },
+    localEntries() {
+      const locationId = this.location.locationId;
+      var localEntries = [];
+
+      this.entries.forEach(entry => {
+        if (entry.location == locationId) {
+          if (entry.requirements.length > 0) {
+            entry.requirements.forEach(requirementId => {
+              this.objectives.forEach(objective => {
+                if (requirementId == objective.objectiveId && objective.isComplete) {
+                  localEntries.push(entry);
+                }
+              });
+            });
+          } else if (entry.expiration.length > 0) {
+            entry.expiration.forEach(expirationId => {
+              this.objectives.forEach(objective => {
+                if (expirationId == objective.objectiveId && !objective.isComplete) {
+                  localEntries.push(entry);
+                }
+              });
+            });
+          } else {
+            localEntries.push(entry);
+          }
+        }
+      });
+
+      return localEntries;
+    },
+    localActions() {
+      var localActions = [];
+      for (var e = 0; e < this.localEntries.length; e++) {
+        let entryActions = this.localEntries[e].actions;
+        for (let a = 0; a < entryActions.length; a++) {
+          let action = {};
+          Object.assign(action, entryActions[a]);
+          localActions.push(action);
+        }
+      }
+      return localActions;
+    },
   },
   methods: {
     ...mapActions(["setObjective", "findWithAttr"]),
-    entryAllowed(entry) {
-      //   const expiration = entry.expiration;
-      //   const requirements = entry.requirements;
-      //   if (expiration.length <= 0 && requirements.length <= 0) {
-      return true;
-      //   }
-    },
     findObjective(objectiveId) {
       const array = this.objectives;
       const attr = "objectiveId";
@@ -125,7 +141,7 @@ export default {
       return -1;
     },
     selectAction(action) {
-      this.$emit('select-action', action)
+      this.$emit("select-action", action);
     }
   }
 };

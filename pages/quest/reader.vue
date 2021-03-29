@@ -31,7 +31,6 @@
             :location="selectedLocation"
             :entries="entries"
             :items="items"
-            :actions="locationActions"
             @select-action="selectAction($event)"
             @view-objective="dialog = true"
             @hide-sidebar="hideSidebar()"
@@ -179,7 +178,6 @@ export default {
       selectedLocation: {},
       center: {},
       zoom: 19,
-      locationActions: [],
       showSidebar: false,
       showLegend: false,
       showJournal: false,
@@ -265,7 +263,7 @@ export default {
       );
 
       this.selectedLocation = location;
-      this.selectedActions(location.locationId);
+      // this.selectedActions(location.locationId);
 
       this.showSidebar = true;
       this.showLocation = true;
@@ -275,7 +273,6 @@ export default {
     },
     clearLocation() {
       this.selectedLocation = {};
-      this.locationActions = [];
     },
     findLocation(locationId) {
       const array = this.locations;
@@ -297,20 +294,20 @@ export default {
       }
       return -1;
     },
-    selectedActions(locationId) {
-      var selectedActions = [];
-      for (var e = 0; e < this.entries.length; e++) {
-        if (this.entries[e].location == locationId) {
-          let entryActions = this.entries[e].actions;
-          for (let a = 0; a < entryActions.length; a++) {
-            let action = {};
-            Object.assign(action, entryActions[a]);
-            selectedActions.push(action);
-          }
-        }
-      }
-      this.locationActions = selectedActions;
-    },
+    // selectedActions(locationId) {
+    //   var selectedActions = [];
+    //   for (var e = 0; e < this.entries.length; e++) {
+    //     if (this.entries[e].location == locationId) {
+    //       let entryActions = this.entries[e].actions;
+    //       for (let a = 0; a < entryActions.length; a++) {
+    //         let action = {};
+    //         Object.assign(action, entryActions[a]);
+    //         selectedActions.push(action);
+    //       }
+    //     }
+    //   }
+    //   this.locationActions = selectedActions;
+    // },
     async selectAction(action) {
       if (action.type == "look") {
         this.$store.dispatch("setObjective", {
