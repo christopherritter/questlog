@@ -164,9 +164,11 @@ export default {
       var localActions = [];
       for (var e = 0; e < this.localEntries.length; e++) {
         let entryActions = this.localEntries[e].actions;
+        let entryId = this.localEntries[e].entryId;
         for (let a = 0; a < entryActions.length; a++) {
           let action = {};
           Object.assign(action, entryActions[a]);
+          action.entry = entryId;
           localActions.push(action);
         }
       }

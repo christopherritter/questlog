@@ -318,7 +318,18 @@ export default {
           this.$store.commit("SET_OWNED", { index: itemIndex, bool: true });
           break;
         case "use":
-          // enter case
+          var entryIndex = await this.findWithAttr({
+            array: this.entries,
+            attr: "entryId",
+            value: action.entry
+          });
+          var entry = this.entries[entryIndex];
+          entry.objectives.forEach(objectiveId => {
+            this.$store.dispatch("setObjective", {
+              objectiveId: objectiveId,
+              bool: true
+            });
+          });
           break;
       }
     },
