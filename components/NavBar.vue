@@ -25,7 +25,7 @@
       }}</v-btn>
     </span>
     <span v-else class="hidden-sm-and-down">
-      <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
+      <v-btn v-show="false" plain nuxt to="/quests">Find a Quest</v-btn>
       <v-btn plain @click="questEditor()">Build your Own!</v-btn>
     </span>
 
