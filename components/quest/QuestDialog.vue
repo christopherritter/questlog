@@ -19,7 +19,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn color="green darken-1" text nuxt to="/quests">
+        <v-btn color="green darken-1" text nuxt to="/">
           Find a Quest
           <v-icon right dark>
             mdi-arrow-right
