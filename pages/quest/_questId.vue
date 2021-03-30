@@ -261,7 +261,6 @@ export default {
         entryId: entryResult.id
       });
 
-      console.log("Created entry " + entryResult.id);
       return newEntry;
     },
     async createItem(item) {
@@ -277,7 +276,6 @@ export default {
         itemId: itemResult.id
       });
 
-      console.log("Created item " + itemResult.id);
       return newItem;
     }
   }

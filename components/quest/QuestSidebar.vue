@@ -143,7 +143,6 @@ export default {
             if (action.type == "take") {
               items.forEach(item => {
                 if (!item.isOwned) {
-                  console.log("item is not owned");
                   localEntries.push(entry);
                   checkedItem = true;
                 }
@@ -151,19 +150,16 @@ export default {
             } else if (action.type == "use") {
               items.forEach(item => {
                 if (item.isOwned) {
-                  console.log("item is owned");
                   localEntries.push(entry);
                   checkedItem = true;
                 }
               });
             } else if (!checkedItem) {
-              console.log("no take/use");
               localEntries.push(entry);
               checkedItem = true;
             }
           });
         } else {
-          console.log("no actions");
           localEntries.push(entry);
           checkedItem = true;
         }

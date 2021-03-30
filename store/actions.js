@@ -61,7 +61,6 @@ export default {
 
     const doc = await userRef.get();
     if (!doc.exists) {
-      // console.log('No such document!');
       const newUserRef = this.$fire.firestore.collection('users').doc(uid);
 
       var newUser = {
