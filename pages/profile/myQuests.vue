@@ -5,7 +5,7 @@
         <h1>Custom Quests</h1>
       </v-col>
     </v-row>
-    <v-row class="pb-4 pb-md-12">
+    <!-- <v-row class="pb-4 pb-md-12">
       <v-col cols="12" md="4" class="pb-0">
         <v-autocomplete
           append-icon=""
@@ -55,7 +55,7 @@
           hide-details
         ></v-combobox
       ></v-col>
-    </v-row>
+    </v-row> -->
     <v-row v-if="quests">
       <v-col
         cols="12"
