@@ -70,6 +70,14 @@
                 <v-list-item-title>Profile</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
+            <v-list-item :to="{ path: '/profile/myQuests' }">
+              <v-list-item-icon>
+                <v-icon>mdi-feather</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Custom Quests</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
             <v-list-item @click="logout">
               <v-list-item-icon>
                 <v-icon>mdi-logout</v-icon>
