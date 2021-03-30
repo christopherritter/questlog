@@ -79,7 +79,7 @@ export default {
             this.formData.password
           )
           // .then(() => this.$router.push({ name: 'profile' }));
-          // .then(() => this.$router.back());
+          .then(() => this.$router.back());
       } catch (e) {
         alert(e);
       }

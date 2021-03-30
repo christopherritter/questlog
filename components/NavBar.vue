@@ -30,7 +30,7 @@
     </span>
 
     <v-spacer />
-    <span v-if="$store.state.authUser" class="hidden-sm-and-down">
+    <span v-if="$store.state.authUser">
       <!-- <v-btn icon nuxt to="/profile/myFavorites">
         <v-icon>mdi-heart</v-icon>
       </v-btn>
