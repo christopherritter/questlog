@@ -31,13 +31,13 @@
 
     <v-spacer />
     <span v-if="$store.state.authUser" class="hidden-sm-and-down">
-      <v-btn icon nuxt to="/profile/myFavorites">
+      <!-- <v-btn icon nuxt to="/profile/myFavorites">
         <v-icon>mdi-heart</v-icon>
       </v-btn>
       <v-btn icon nuxt to="/profile/myQuests">
         <v-icon>mdi-feather</v-icon>
       </v-btn>
-      <!-- <v-btn icon nuxt to="/profile">
+      <v-btn icon nuxt to="/profile">
         <v-icon>mdi-account-box</v-icon>
       </v-btn> -->
       <v-menu close-on-click offset-y>

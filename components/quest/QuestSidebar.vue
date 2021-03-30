@@ -66,35 +66,37 @@ export default {
   props: ["objectives", "location", "entries", "items"],
   computed: {
     localObjectives() {
+      var localEntries = this.localEntries;
       var localObjectives = [];
 
-      for (let e = 0; e < this.localEntries.length; e++) {
-        if (this.localEntries[e].actions.length > 0) {
-          this.localEntries[e].actions.forEach(action => {
+      for (let e = 0; e < localEntries.length; e++) {
+        if (localEntries[e].actions.length > 0) {
+          localEntries[e].actions.forEach(action => {
             if (action.type != "use") {
-              for (let o = 0; o < this.localEntries[e].objectives.length; o++) {
-                this.localEntries[e].objectives.forEach(objectiveId => {
-                  gatherObjective(objectiveId);
+              for (let o = 0; o < localEntries[e].objectives.length; o++) {
+                localEntries[e].objectives.forEach(objectiveId => {
+                  var index = this.findObjective(objectiveId);
+                  this.$store.dispatch("setObjective", {
+                    objectiveId: objectiveId,
+                    bool: true
+                  });
+                  localObjectives.push(this.objectives[index]);
                 });
               }
             }
           });
         } else {
-          for (let o = 0; o < this.localEntries[e].objectives.length; o++) {
-            this.localEntries[e].objectives.forEach(objectiveId => {
-              gatherObjective(objectiveId);
+          for (let o = 0; o < localEntries[e].objectives.length; o++) {
+            localEntries[e].objectives.forEach(objectiveId => {
+              var index = this.findObjective(objectiveId);
+              this.$store.dispatch("setObjective", {
+                objectiveId: objectiveId,
+                bool: true
+              });
+              localObjectives.push(this.objectives[index]);
             });
           }
         }
-      }
-
-      function gatherObjective(objectiveId) {
-        var index = this.findObjective(objectiveId);
-        this.$store.dispatch("setObjective", {
-          objectiveId: objectiveId,
-          bool: true
-        });
-        localObjectives.push(this.objectives[index]);
       }
 
       return localObjectives;
@@ -135,27 +137,37 @@ export default {
       });
 
       function checkOwnedItems(entry) {
-        if (entry.actions.length > 0) {
+        var checkedItem = false;
+        if (entry.actions.length > -1) {
           entry.actions.forEach(action => {
             if (action.type == "take") {
               items.forEach(item => {
                 if (!item.isOwned) {
+                  console.log("item is not owned");
                   localEntries.push(entry);
+                  checkedItem = true;
                 }
               });
             } else if (action.type == "use") {
               items.forEach(item => {
                 if (item.isOwned) {
+                  console.log("item is owned");
                   localEntries.push(entry);
+                  checkedItem = true;
                 }
               });
-            } else {
+            } else if (!checkedItem) {
+              console.log("no take/use");
               localEntries.push(entry);
+              checkedItem = true;
             }
           });
         } else {
+          console.log("no actions");
           localEntries.push(entry);
+          checkedItem = true;
         }
+        checkedItem = false;
       }
 
       return localEntries.sort((a, b) => (a.order > b.order ? 1 : -1));
