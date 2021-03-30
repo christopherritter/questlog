@@ -104,44 +104,44 @@ export default {
       });
     },
     onLocationFound(e) {
-      if (this.previousPosition === null) {
-        this.currentPosition = e.latlng;
-        this.previousPosition = {
-          lat: this.currentPosition.lat,
-          lng: this.currentPosition.lng
-        };
+      // if (this.previousPosition === null) {
+      //   this.currentPosition = e.latlng;
+      //   this.previousPosition = {
+      //     lat: this.currentPosition.lat,
+      //     lng: this.currentPosition.lng
+      //   };
         this.$emit("position-changed", e.latlng);
-      } else {
-        // this.$nextTick(() => {
-        this.previousPosition = {
-          lat: this.currentPosition.lat,
-          lng: this.currentPosition.lng
-        };
-        this.currentPosition = e.latlng;
-        var map = this.$refs.lMap.mapObject;
-        var distance = map
-          .latLngToLayerPoint(this.currentPosition)
-          .distanceTo(map.latLngToLayerPoint(this.previousPosition));
+      // } else {
+      //   // this.$nextTick(() => {
+      //   this.previousPosition = {
+      //     lat: this.currentPosition.lat,
+      //     lng: this.currentPosition.lng
+      //   };
+      //   this.currentPosition = e.latlng;
+      //   var map = this.$refs.lMap.mapObject;
+      //   var distance = map
+      //     .latLngToLayerPoint(this.currentPosition)
+      //     .distanceTo(map.latLngToLayerPoint(this.previousPosition));
 
-        if (distance > 1) {
-          this.$emit("position-changed", e.latlng);
-          // this.locations.forEach(location => {
-          //   var locationIndex = this.locations.findIndex(function(obj) {
-          //     return obj.locationId === location.locationId;
-          //   });
-          //   var distance = this.distanceFromLocation(location);
-          //   // var opacity = this.dynamicOpacity(distance);
-          //   // console.log("verify opacity " + opacity);
+      //   if (distance > 1) {
+      //     this.$emit("position-changed", e.latlng);
+      //     // this.locations.forEach(location => {
+      //     //   var locationIndex = this.locations.findIndex(function(obj) {
+      //     //     return obj.locationId === location.locationId;
+      //     //   });
+      //     //   var distance = this.distanceFromLocation(location);
+      //     //   // var opacity = this.dynamicOpacity(distance);
+      //     //   // console.log("verify opacity " + opacity);
 
-          //   this.$store.commit("SET_DISTANCE", {
-          //     index: locationIndex,
-          //     distance: distance,
-          //     // opacity: opacity,
-          //   });
-          // });
-        }
-        // });
-      }
+      //     //   this.$store.commit("SET_DISTANCE", {
+      //     //     index: locationIndex,
+      //     //     distance: distance,
+      //     //     // opacity: opacity,
+      //     //   });
+      //     // });
+      //   }
+      //   // });
+      // }
 
       if (!this.marker) {
         this.marker = new this.$L.marker([e.latitude, e.longitude]);
