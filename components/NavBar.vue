@@ -25,18 +25,18 @@
       }}</v-btn>
     </span>
     <span v-else class="hidden-sm-and-down">
-      <v-btn plain nuxt to="/quests">Find a Quest</v-btn>
+      <!-- <v-btn plain nuxt to="/quests">Find a Quest</v-btn> -->
       <v-btn plain @click="questEditor()">Build your Own!</v-btn>
     </span>
 
     <v-spacer />
-    <span v-if="$store.state.authUser" class="hidden-sm-and-down">
-      <v-btn icon nuxt to="/profile/myFavorites">
+    <span v-if="$store.state.authUser">
+      <!-- <v-btn icon nuxt to="/profile/myFavorites">
         <v-icon>mdi-heart</v-icon>
-      </v-btn>
-      <v-btn icon nuxt to="/profile/myQuests">
+      </v-btn> -->
+      <!-- <v-btn icon nuxt to="/profile/myQuests">
         <v-icon>mdi-feather</v-icon>
-      </v-btn>
+      </v-btn> -->
       <!-- <v-btn icon nuxt to="/profile">
         <v-icon>mdi-account-box</v-icon>
       </v-btn> -->
@@ -62,12 +62,20 @@
                 <v-list-item-title v-text="item.text"></v-list-item-title>
               </v-list-item-content>
             </v-list-item> -->
-            <v-list-item :to="{ name: 'profile' }">
+            <v-list-item nuxt :to="{ path: '/profile' }">
               <v-list-item-icon>
                 <v-icon>mdi-account</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>Profile</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item nuxt :to="{ path: '/profile/myQuests' }">
+              <v-list-item-icon>
+                <v-icon>mdi-feather</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Quests</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
             <v-list-item @click="logout">
