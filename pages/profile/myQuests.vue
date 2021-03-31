@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <h1>Custom Quests</h1>
+        <h1>My Quests</h1>
       </v-col>
     </v-row>
     <!-- <v-row class="pb-4 pb-md-12">

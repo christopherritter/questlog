@@ -75,7 +75,7 @@
                 <v-icon>mdi-feather</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>Custom Quests</v-list-item-title>
+                <v-list-item-title>My Quests</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
             <v-list-item @click="logout">
