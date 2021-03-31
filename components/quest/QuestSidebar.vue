@@ -138,7 +138,7 @@ export default {
 
       function checkOwnedItems(entry) {
         var checkedItem = false;
-        if (entry.actions.length > -1) {
+        if (entry.actions.length > 0) {
           entry.actions.forEach(action => {
             if (action.type == "take") {
               items.forEach(item => {
