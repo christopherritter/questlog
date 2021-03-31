@@ -494,7 +494,7 @@ export default {
   float: left;
   right: 0;
   position: absolute;
-  z-index: 10;
+  z-index: 5;
 }
 .tabButton {
   border-top-left-radius: 12px;
