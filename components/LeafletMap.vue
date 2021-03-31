@@ -42,16 +42,16 @@
             <h3>{{ location.name }}</h3>
           </l-tooltip>
 
-          <l-popup
+          <!-- <l-popup
             v-if="
               $route.name === 'quest-player' || $route.name === 'quest-reader'
             "
           >
-            <!-- <h3>
+            <h3>
               {{ location.name }}
               is {{ Math.ceil(location.distance * 3.281) }} feet away.
-            </h3> -->
-          </l-popup>
+            </h3>
+          </l-popup> -->
         </l-marker>
       </l-map>
     </client-only>
@@ -109,7 +109,7 @@ export default {
     },
     onLocationFound(e) {
       // if (this.previousPosition === null) {
-      //   this.currentPosition = e.latlng;
+        this.currentPosition = e.latlng;
       //   this.previousPosition = {
       //     lat: this.currentPosition.lat,
       //     lng: this.currentPosition.lng
@@ -172,10 +172,10 @@ export default {
         } else {
           this.$refs[location.locationId][0].mapObject
             .bindPopup(
-              "<h3>" + location.name + "</h3>"
+              "<h3>" + Math.ceil(distance * 3.281) + " feet away.</h3>"
             )
             .addTo(map);
-          this.$emit("preview-location", { event, location });
+          // this.$emit("preview-location", { event, location });
         }
       }
     },
