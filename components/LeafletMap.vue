@@ -169,14 +169,15 @@ export default {
         if (distance <= 50) {
           this.$refs[location.locationId][0].mapObject.unbindPopup();
           this.$emit("select-location", { event, location });
-        } else {
-          this.$refs[location.locationId][0].mapObject
-            .bindPopup(
-              "<h3>" + Math.ceil(distance * 3.281) + " feet away.</h3>"
-            )
-            .addTo(map);
-          // this.$emit("preview-location", { event, location });
         }
+        // else {
+        //   this.$refs[location.locationId][0].mapObject
+        //     .bindPopup(
+        //       "<h3>" + Math.ceil(distance * 3.281) + " feet away.</h3>"
+        //     )
+        //     .addTo(map);
+        //   // this.$emit("preview-location", { event, location });
+        // }
       }
     },
     fitBounds(latlng) {
