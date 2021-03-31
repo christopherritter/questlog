@@ -121,6 +121,7 @@ export default {
         author: "",
         authorId: "",
         isAnonymous: false,
+        isFeatured: false,
         description: "",
         image: "",
         categories: [],
@@ -151,6 +152,7 @@ export default {
         this.newDetails = {
           title: "",
           isAnonymous: false,
+          isFeatured: false,
           description: "",
           image: "",
           categories: [],

@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" sm="12" md="6" class="my-4">
-        <div class="d-flex flex-row mb-2 mt-4">
+      <v-col cols="12" sm="12" md="6" class="my-12">
+        <div v-if="quest.isFeatured || $route.path === '/quest/lNVAf14Ngq3JBSwaK0IA'" class="d-flex flex-row mb-2">
           <v-icon medium color="green darken-2">mdi-crown</v-icon>
           <h5 class="featured-quest green--text text--darken-2 mt-1 ml-1">
             Featured Quest

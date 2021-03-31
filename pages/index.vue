@@ -107,7 +107,7 @@ export default {
       var featuredQuests = [];
 
       for (let q = 0; q < this.quests.length; q++) {
-        if (this.quests[q].featured) {
+        if (this.quests[q].isFeatured) {
           featuredQuests.push(this.quests[q]);
         }
       }
