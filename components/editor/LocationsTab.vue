@@ -129,6 +129,7 @@
           <LeafletMap
             v-if="selectedView === 0"
             id="LocationMap"
+            ref="lMap"
             class="mb-5"
             :center="region.coordinates"
             :zoom="newLocation.zoom"
@@ -332,6 +333,7 @@ export default {
         draggable: e.location.draggable
       };
       this.selectedLocation = index;
+      this.$refs.lMap.panTo(e.location.coordinates, e.location.zoom);
     },
     moveLocation(e) {
       const locationId = this.newLocation.locationId;

@@ -42,7 +42,11 @@
             <h3>{{ location.name }}</h3>
           </l-tooltip>
 
-          <l-popup>
+          <l-popup
+            v-if="
+              $route.name === 'quest-player' || $route.name === 'quest-reader'
+            "
+          >
             <!-- <h3>
               {{ location.name }}
               is {{ Math.ceil(location.distance * 3.281) }} feet away.
@@ -110,7 +114,7 @@ export default {
       //     lat: this.currentPosition.lat,
       //     lng: this.currentPosition.lng
       //   };
-        this.$emit("position-changed", e.latlng);
+      this.$emit("position-changed", e.latlng);
       // } else {
       //   // this.$nextTick(() => {
       //   this.previousPosition = {
@@ -167,7 +171,9 @@ export default {
           this.$emit("select-location", { event, location });
         } else {
           this.$refs[location.locationId][0].mapObject
-            .bindPopup("<h3>" + location.name + " is " + distance + " meters away.</h3>")
+            .bindPopup(
+              "<h3>" + location.name + "</h3>"
+            )
             .addTo(map);
           this.$emit("preview-location", { event, location });
         }
@@ -208,7 +214,7 @@ export default {
       this.polyline = null;
     },
     openPopup(locationId) {
-      console.log("open popup")
+      console.log("open popup");
       this.$refs[locationId][0].mapObject.openPopup();
     },
     popupClose() {
