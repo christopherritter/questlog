@@ -29,7 +29,7 @@
                 v-model="newLocation.isLandmark"
                 label="Landmark Location"
               ></v-checkbox>
-              <h4 class="mt-1 mb-6">Coordinates</h4>
+              <!-- <h4 class="mt-1 mb-6">Coordinates</h4>
               <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
@@ -42,6 +42,15 @@
                   <v-text-field
                     v-model="newLocation.coordinates[1]"
                     label="Longitude"
+                    outlined
+                  ></v-text-field>
+                </v-col>
+              </v-row> -->
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newLocation.coords"
+                    label="Coordinates"
                     outlined
                   ></v-text-field>
                 </v-col>
@@ -244,13 +253,13 @@ export default {
         name: "",
         isLandmark: false,
         isStartingPoint: false,
+        coords: "",
         coordinates: [null, null],
         zoom: 19,
         order: 0,
         image: "",
         marker: null,
         draggable: true,
-        distance: 0
       },
       selectedLocation: null,
       selectedView: 0,
@@ -300,6 +309,18 @@ export default {
       }
 
       this.clearLocation();
+    },
+    "newLocation.coords"(val) {
+      const locationId = this.newLocation.locationId;
+      const index = this.findWithAttr(locationId);
+      var coordinates = val.split(', ');
+      var zoom = this.newLocation.zoom;
+
+      if (coordinates.length == 2) {
+        this.newLocation.coordinates = coordinates;
+        // this.$store.commit("SET_COORDINATES", { coordinates, index });
+        // this.$refs.lMap.panTo(coordinates, zoom);
+      }
     }
   },
   methods: {
@@ -311,11 +332,23 @@ export default {
     ]),
     ...mapMutations(["UPDATE_LOCATION", "SET_COORDINATES", "SET_LOCATIONS"]),
     markLocation(location) {
+      var locationArr = [location.latlng.lat, location.latlng.lng];
       this.clearLocation();
-      this.newLocation.coordinates = [location.latlng.lat, location.latlng.lng];
+      this.newLocation.coords = locationArr.toString(", ");
     },
     addLocation() {
-      this.$store.dispatch("addLocation", this.newLocation);
+      this.$store.dispatch("addLocation", {
+        locationId: this.newLocation.locationId,
+        name: this.newLocation.name,
+        isLandmark: this.newLocation.isLandmark,
+        isStartingPoint: this.newLocation.isStartingPoint,
+        coordinates: this.newLocation.coordinates,
+        zoom: this.newLocation.zoom,
+        order: this.newLocation.order,
+        image: this.newLocation.image,
+        marker: this.newLocation.marker,
+        draggable: this.newLocation.draggable,
+      });
       this.clearLocation();
     },
     selectLocation(e) {
@@ -325,7 +358,7 @@ export default {
         name: e.location.name,
         isLandmark: e.location.isLandmark,
         isStartingPoint: e.location.isStartingPoint,
-        coordinates: e.location.coordinates,
+        coords: e.location.coordinates.join(", "),
         zoom: e.location.zoom,
         order: e.location.order,
         image: e.location.image,
@@ -341,7 +374,8 @@ export default {
       const coords = e.target.getLatLng();
       const coordinates = [coords.lat, coords.lng];
 
-      this.newLocation.coordinates = coordinates;
+      this.newLocation.coords = coordinates.toString(", ");
+      // this.newLocation.coordinates = coordinates;
       this.$store.commit("SET_COORDINATES", { coordinates, index });
     },
     updateLocation() {
@@ -364,6 +398,7 @@ export default {
         name: "",
         isLandmark: false,
         isStartingPoint: false,
+        coords: "",
         coordinates: [null, null],
         zoom: 19,
         order: 0,

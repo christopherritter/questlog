@@ -11,8 +11,8 @@
                 label="Name"
                 outlined
               ></v-text-field>
-              <h4 class="mt-1 mb-6">Coordinates</h4>
-              <!-- <v-row>
+              <!-- <h4 class="mt-1 mb-6">Coordinates</h4>
+              <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model="newRegion.coordinates[0]"

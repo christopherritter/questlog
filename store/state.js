@@ -33,12 +33,44 @@ export default () => ({
       value: "boom-gate",
     },
     {
+      text: "Cannabis",
+      value: "cannabis",
+    },
+    {
+      text: "Caution sign",
+      value: "sign-caution",
+    },
+    {
+      text: "Church",
+      value: "church",
+    },
+    {
       text: "Corn",
       value: "corn",
     },
     {
+      text: "Door",
+      value: "door",
+    },
+    {
+      text: "Drama",
+      value: "drama-masks",
+    },
+    {
+      text: "Easter egg",
+      value: "egg-easter",
+    },
+    {
+      text: "Flower",
+      value: "flower-tulip",
+    },
+    {
       text: "Fire",
       value: "fire",
+    },
+    {
+      text: "Food",
+      value: "food",
     },
     {
       text: "Gate",
@@ -57,12 +89,24 @@ export default () => ({
       value: "paper-roll",
     },
     {
+      text: "Pine tree",
+      value: "pine-tree",
+    },
+    {
+      text: "Rabbit",
+      value: "rabbit",
+    },
+    {
       text: "Information",
       value: "information",
     },
     {
       text: "Parking",
       value: "parking",
+    },
+    {
+      text: "Real estate sign",
+      value: "sign-real-estate",
     },
     {
       text: "Road",
@@ -73,12 +117,12 @@ export default () => ({
       value: "school",
     },
     {
-      text: "Caution sign",
-      value: "sign-caution",
+      text: "Seesaw",
+      value: "seesaw",
     },
     {
-      text: "Real estate sign",
-      value: "sign-real-estate",
+      text: "Sprout",
+      value: "sprout",
     },
     {
       text: "Sign",
@@ -99,6 +143,14 @@ export default () => ({
     {
       text: "Trail",
       value: "routes",
+    },
+    {
+      text: "Tree",
+      value: "tree",
+    },
+    {
+      text: "Wall",
+      value: "wall",
     },
   ],
   actionTypes: [
