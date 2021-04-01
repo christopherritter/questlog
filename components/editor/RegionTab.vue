@@ -113,6 +113,8 @@ export default {
       },
       mapOptions: {
         dragging: false,
+        minZoom: 16,
+        maxZoom: 19,
       },
       loading: false,
       error: null,

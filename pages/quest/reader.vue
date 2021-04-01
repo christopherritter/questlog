@@ -190,7 +190,9 @@ export default {
         doubleClickZoom: true,
         scrollWheelZoom: true,
         boxZoom: true,
-        keyboard: true
+        keyboard: true,
+        minZoom: 16,
+        maxZoom: 19,
       },
       dialog: false,
       error: null

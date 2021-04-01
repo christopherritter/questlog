@@ -145,7 +145,9 @@ export default {
         scrollWheelZoom: false,
         boxZoom: false,
         keyboard: false,
-        tap: false
+        tap: false,
+        minZoom: 16,
+        maxZoom: 19,
       },
       loading: false,
       error: null
