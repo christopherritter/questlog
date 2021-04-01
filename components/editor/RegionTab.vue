@@ -12,7 +12,7 @@
                 outlined
               ></v-text-field>
               <h4 class="mt-1 mb-6">Coordinates</h4>
-              <v-row>
+              <!-- <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model="newRegion.coordinates[0]"
@@ -24,6 +24,15 @@
                   <v-text-field
                     v-model="newRegion.coordinates[1]"
                     label="Longitude"
+                    outlined
+                  ></v-text-field>
+                </v-col>
+              </v-row> -->
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newRegion.coords"
+                    label="Coordinates"
                     outlined
                   ></v-text-field>
                 </v-col>
@@ -40,7 +49,7 @@
                   <v-btn
                     dark
                     outlined
-                    :disabled="!newRegion.coordinates == null"
+                    :disabled="newRegion.coords == ''"
                     @click="updateRegion()"
                     >Update</v-btn
                   >
@@ -98,6 +107,7 @@ export default {
     return {
       newRegion: {
         name: "",
+        coords: "",
         coordinates: [39.828175, -98.5795],
         zoom: 18,
       },
@@ -113,11 +123,21 @@ export default {
     this.fetchRegion();
   },
   components: { LeafletMap },
+  watch: {
+    "newRegion.coords"(val) {
+      var coordsArr = val.split(', ');
+      this.newRegion.coordinates = coordsArr;
+    }
+  },
   methods: {
     ...mapActions(["publishQuest"]),
     ...mapMutations(["SET_REGION"]),
     fetchRegion() {
-      Object.assign(this.newRegion, this.region);
+      Object.assign(this.newRegion, {
+        name: this.region.name,
+        coords: this.region.coordinates.join(', '),
+        zoom: this.region.zoom,
+      });
     },
     markLocation(event) {
       this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
@@ -129,7 +149,11 @@ export default {
       this.fetchRegion();
     },
     publishQuest() {
-      this.$store.commit("SET_REGION", this.newRegion);
+      this.$store.commit("SET_REGION", {
+        name: this.region.name,
+        coordinates: this.region.coordinates,
+        zoom: this.region.zoom,
+      });
       this.$store.dispatch("publishQuest");
     }
   }
