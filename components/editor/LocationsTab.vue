@@ -352,6 +352,7 @@ export default {
       this.clearLocation();
     },
     selectLocation(e) {
+      console.log(e)
       const index = this.locations.indexOf(e.location);
       this.newLocation = {
         locationId: e.location.locationId,
@@ -366,7 +367,9 @@ export default {
         draggable: e.location.draggable
       };
       this.selectedLocation = index;
-      this.$refs.lMap.panTo(e.location.coordinates, e.location.zoom);
+      if (this.selectedView === 0) {
+        this.$refs.lMap.panTo(e.location.coordinates, e.location.zoom);
+      }
     },
     moveLocation(e) {
       const locationId = this.newLocation.locationId;

@@ -21,6 +21,7 @@
           :ref="location.locationId"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
+          :class="{ 'location.isLandmark': marker }"
           @click="selectLocation({ event: $event, location: location })"
           @dragstart="
             $emit('select-location', { event: $event, location: location })
@@ -29,13 +30,16 @@
           @popupclose="popupClose"
         >
           <l-icon
-            v-if="location.marker"
+            v-if="location.marker && location.isLandmark"
             :icon-url="require(`~/assets/img/${location.marker}.svg`)"
             :icon-size="dynamicSize"
             :icon-anchor="dynamicAnchor"
             :popup-anchor="[0, -16]"
             :tooltip-anchor="[16, 0]"
-          >
+          />
+
+          <l-icon v-else>
+            <div class="marker">{{ parseInt(location.order, 10) }}</div>
           </l-icon>
 
           <l-tooltip v-if="$vuetify.breakpoint.mdAndUp">
@@ -53,6 +57,16 @@
             </h3>
           </l-popup> -->
         </l-marker>
+        <!-- <l-circle-marker
+          v-for="location in nonLandmarks"
+          :key="location.locationId"
+          :name="location.locationId"
+          :ref="location.locationId"
+          :lat-lng="[location.coordinates[0], location.coordinates[1]]"
+          :radius="circle.radius"
+          :color="circle.color"
+          :draggable="draggable"
+        /> -->
       </l-map>
     </client-only>
   </div>
@@ -74,10 +88,32 @@ export default {
       secondPoint: null,
       // distance: 0,
       length: null,
-      polyline: null
+      polyline: null,
+      circle: {
+        radius: 6,
+        color: "red"
+      }
     };
   },
   computed: {
+    landmarks() {
+      var landmarkLocations = [];
+      this.locations.forEach(location => {
+        if (location.isLandmark === true) {
+          landmarkLocations.push(location);
+        }
+      });
+      return landmarkLocations;
+    },
+    nonLandmarks() {
+      var nonlandmarkLocations = [];
+      this.locations.forEach(location => {
+        if (location.isLandmark === false) {
+          nonlandmarkLocations.push(location);
+        }
+      });
+      return nonlandmarkLocations;
+    },
     dynamicSize() {
       return [this.iconSize, this.iconSize];
     },
@@ -109,7 +145,7 @@ export default {
     },
     onLocationFound(e) {
       // if (this.previousPosition === null) {
-        this.currentPosition = e.latlng;
+      this.currentPosition = e.latlng;
       //   this.previousPosition = {
       //     lat: this.currentPosition.lat,
       //     lng: this.currentPosition.lng
@@ -241,5 +277,15 @@ export default {
 <style>
 #lMap {
   z-index: 0;
+}
+.marker {
+  background-color: red;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
 }
 </style>
