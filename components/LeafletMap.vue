@@ -13,7 +13,7 @@
       >
         <l-tile-layer
           url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-          :options="{ minZoom: 16, maxZoom: 19, maxNativeZoom: 18, }"
+          :options="{ minZoom: 16, maxZoom: 18, maxNativeZoom: 18, }"
         ></l-tile-layer>
         <l-marker
           v-for="location in locations"

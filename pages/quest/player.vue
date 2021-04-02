@@ -394,7 +394,7 @@ export default {
           this.currentPosition.lat,
           this.currentPosition.lng
         );
-        zoom = 19;
+        zoom = 18;
         // this.preview = false;
       }
       this.showSidebar = false;
@@ -414,7 +414,7 @@ export default {
           this.currentPosition.lat,
           this.currentPosition.lng
         );
-        zoom = 19;
+        zoom = 18;
         this.preview = false;
       }
       this.showJournal = false;
@@ -444,7 +444,7 @@ export default {
           this.currentPosition.lat,
           this.currentPosition.lng
         );
-        zoom = 19;
+        zoom = 18;
       }
       this.$refs.qMap.redrawMap();
       this.$refs.qMap.panTo(latlng, zoom);

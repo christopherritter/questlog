@@ -177,7 +177,7 @@ export default {
       // currentPosition: null,
       selectedLocation: {},
       center: {},
-      zoom: 19,
+      zoom: 18,
       showSidebar: false,
       showLegend: false,
       showJournal: false,
@@ -349,7 +349,7 @@ export default {
           this.selectedLocation.coordinates[0],
           this.selectedLocation.coordinates[1]
         );
-        zoom = 19;
+        zoom = 18;
       }
 
       this.showSidebar = false;
@@ -369,7 +369,7 @@ export default {
           this.selectedLocation.coordinates[0],
           this.selectedLocation.coordinates[1]
         );
-        zoom = 19;
+        zoom = 18;
       }
       this.showJournal = false;
       this.showBackpack = false;
