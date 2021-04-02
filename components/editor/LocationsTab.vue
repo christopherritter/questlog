@@ -317,7 +317,7 @@ export default {
       var zoom = this.newLocation.zoom;
 
       if (coordinates.length == 2) {
-        this.newLocation.coordinates = coordinates;
+        this.newLocation.coordinates = [Number(coordinates[0]), Number(coordinates[1])];
         // this.$store.commit("SET_COORDINATES", { coordinates, index });
         // this.$refs.lMap.panTo(coordinates, zoom);
       }

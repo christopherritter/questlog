@@ -41,7 +41,7 @@
               <v-slider
                 v-model="newRegion.zoom"
                 min="0"
-                max="19"
+                max="18"
                 thumb-label
               ></v-slider>
               <v-row>
@@ -114,7 +114,7 @@ export default {
       mapOptions: {
         dragging: false,
         minZoom: 16,
-        maxZoom: 19,
+        maxZoom: 18,
       },
       loading: false,
       error: null,
@@ -128,7 +128,7 @@ export default {
   watch: {
     "newRegion.coords"(val) {
       var coordsArr = val.split(', ');
-      this.newRegion.coordinates = coordsArr;
+      this.newRegion.coordinates = [Number(coordsArr[0]), Number(coordsArr[1])];
     }
   },
   methods: {

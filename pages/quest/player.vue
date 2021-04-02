@@ -201,7 +201,7 @@ export default {
         boxZoom: false,
         keyboard: false,
         minZoom: 16,
-        maxZoom: 19,
+        maxZoom: 18,
       },
       dialog: false,
       error: null

@@ -102,7 +102,7 @@
                 </div>
 
                 <LeafletMap
-                  v-if="quest"
+                  v-if="!loading"
                   id="QuestMap"
                   class="mb-16"
                   :center="quest.region.coordinates"
@@ -123,6 +123,7 @@
 import { mapState, mapActions } from "vuex";
 import QuestHeader from "@/components/quest/QuestHeader.vue";
 import LeafletMap from "@/components/LeafletMap.vue";
+// import GoogleMap from "@/components/GoogleMap.vue";
 
 export default {
   name: "quest",
@@ -147,7 +148,7 @@ export default {
         keyboard: false,
         tap: false,
         minZoom: 16,
-        maxZoom: 19,
+        maxZoom: 18,
       },
       loading: false,
       error: null
