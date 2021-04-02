@@ -352,7 +352,6 @@ export default {
       this.clearLocation();
     },
     selectLocation(e) {
-      console.log(e)
       const index = this.locations.indexOf(e.location);
       this.newLocation = {
         locationId: e.location.locationId,
