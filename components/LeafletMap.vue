@@ -22,7 +22,7 @@
           :ref="location.locationId"
           :lat-lng="[location.coordinates[0], location.coordinates[1]]"
           :draggable="draggable"
-          :class="{ 'location.isLandmark': marker }"
+
           @click="selectLocation({ event: $event, location: location })"
           @dragstart="
             $emit('select-location', { event: $event, location: location })
@@ -30,14 +30,20 @@
           @dragend="$emit('move-location', $event)"
           @popupclose="popupClose"
         >
+        <!-- removed from l-marker -->
+        <!-- :class="{ marker : 'location.isLandmark' }" -->
+
           <l-icon
-            v-if="location.marker && location.isLandmark"
+            v-if="location.marker"
             :icon-url="require(`~/assets/img/${location.marker}.svg`)"
             :icon-size="dynamicSize"
             :icon-anchor="dynamicAnchor"
             :popup-anchor="[0, -16]"
             :tooltip-anchor="[16, 0]"
           />
+
+          <!-- removed from l-icon v-if -->
+          <!--  && location.isLandmark -->
 
           <l-icon v-else>
             <div class="marker">{{ parseInt(location.order, 10) }}</div>
@@ -285,8 +291,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 16px;
-  height: 16px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
 }
 </style>
