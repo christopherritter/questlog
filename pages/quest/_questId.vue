@@ -108,7 +108,6 @@
                   :center="quest.region.coordinates"
                   :zoom="quest.region.zoom"
                   :locations="locations"
-                  :mapOptions="mapOptions"
                 />
               </v-col>
             </v-row>

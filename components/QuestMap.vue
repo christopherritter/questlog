@@ -1,12 +1,11 @@
 <template>
   <MglMap
     id="MapBoxMap"
+    ref="MglMap"
     :accessToken="accessToken"
     :mapStyle.sync="mapStyle"
-    :center="[125.6, 10.1]"
+    :center="[-90.96, -0.47]"
     :zoom="7.5"
-    :options="mapOptions"
-    @mousedown="markLocation($event)"
   >
     <!-- <MglMarker
       v-for="location in locations"
@@ -24,8 +23,11 @@
     <MglGeojsonLayer
       :sourceId="geoJsonSource.data.id"
       :source="geoJsonSource"
-      layerId="myLayerId"
+      layerId="geoJsonLayerId"
       :layer="geoJsonlayer"
+      @click="handleClick"
+      @mouseover="handleClick"
+      @mouseout="handleClick"
     />
   </MglMap>
 </template>
@@ -40,25 +42,46 @@ export default {
     return {
       map: null,
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
-      mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
+      mapStyle: "mapbox://styles/mapbox/streets-v11",
       geoJsonSource: {
         type: "geojson",
         data: {
-          id: "test",
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [125.6, 10.1]
-          },
-          properties: {
-            name: "Dinagat Islands"
-          }
+          id: "geojsonData",
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "Point",
+                coordinates: [-91.395263671875, -0.9145729757782163]
+              }
+            },
+            {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "Point",
+                coordinates: [-90.32958984375, -0.6344474832838974]
+              }
+            },
+            {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "Point",
+                coordinates: [-91.34033203125, 0.01647949196029245]
+              }
+            }
+          ]
         }
       },
       geoJsonlayer: {
-        type: "circle",
-        paint: {
-          "circle-color": "#00ffff"
+        id: "geoJsonLayerId",
+        type: "symbol",
+        source: "geojsonData",
+        layout: {
+          "icon-image": "ae-f-route-3"
         }
       },
       markerCoordinates: [-90.96, -0.47]
@@ -72,6 +95,7 @@ export default {
   props: ["center", "zoom", "locations", "mapOptions", "draggable"],
   methods: {
     handleClick(e) {
+      console.log("Handle click")
       console.log(e);
     },
     reverseCoords(coords) {
@@ -88,6 +112,11 @@ export default {
       } else {
         this.map.panTo(e.lngLat);
       }
+    },
+    flyTo(e) {
+      this.$refs.MglMap.flyTo({
+        center: e.features[0].geometry.coordinates
+      });
     },
     markLocation(e) {
       console.log("mark location from QuestMap");
