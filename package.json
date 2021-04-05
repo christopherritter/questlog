@@ -13,9 +13,11 @@
     "@nuxtjs/firebase": "^7.4.1",
     "core-js": "^3.8.3",
     "firebase": "^8.2.5",
+    "mapbox-gl": "^2.2.0",
     "nuxt": "^2.14.12",
     "nuxt-gmaps": "^1.2.10",
-    "nuxt-leaflet": "^0.0.25"
+    "nuxt-leaflet": "^0.0.25",
+    "vue-mapbox": "^0.4.1"
   },
   "devDependencies": {
     "@nuxtjs/google-analytics": "^2.4.0",

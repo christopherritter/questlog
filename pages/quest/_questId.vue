@@ -101,7 +101,7 @@
                   {{ error }}
                 </div>
 
-                <LeafletMap
+                <QuestMap
                   v-if="!loading"
                   id="QuestMap"
                   class="mb-16"
@@ -122,8 +122,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import QuestHeader from "@/components/quest/QuestHeader.vue";
-import LeafletMap from "@/components/LeafletMap.vue";
-// import GoogleMap from "@/components/GoogleMap.vue";
+import QuestMap from "@/components/QuestMap.vue";
 
 export default {
   name: "quest",
@@ -154,7 +153,7 @@ export default {
       error: null
     };
   },
-  components: { QuestHeader, LeafletMap },
+  components: { QuestHeader, QuestMap },
   created() {
     this.fetchQuest();
   },
