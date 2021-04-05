@@ -1,7 +1,7 @@
 <template>
   <MglMap
     id="MapBoxMap"
-    ref="MglMap"
+    ref="QuestMap"
     :accessToken="accessToken"
     :mapStyle.sync="mapStyle"
     :center="[-90.96, -0.47]"
@@ -25,9 +25,7 @@
       :source="geoJsonSource"
       layerId="geoJsonLayerId"
       :layer="geoJsonlayer"
-      @click="handleClick"
-      @mouseover="handleClick"
-      @mouseout="handleClick"
+      @click="panTo($event)"
     />
   </MglMap>
 </template>
@@ -106,17 +104,16 @@ export default {
         this.map.resize();
       });
     },
+    // panTo(e) {
+    //   if (Array.isArray(e)) {
+    //     this.map.panTo([e[1], e[0]]);
+    //   } else {
+    //     this.map.panTo(e.lngLat);
+    //   }
+    // },
     panTo(e) {
-      if (Array.isArray(e)) {
-        this.map.panTo([e[1], e[0]]);
-      } else {
-        this.map.panTo(e.lngLat);
-      }
-    },
-    flyTo(e) {
-      this.$refs.MglMap.flyTo({
-        center: e.features[0].geometry.coordinates
-      });
+      // console.log(this.$refs.QuestMap)
+      this.$refs.QuestMap.actions.panTo(e.mapboxEvent.lngLat);
     },
     markLocation(e) {
       console.log("mark location from QuestMap");
