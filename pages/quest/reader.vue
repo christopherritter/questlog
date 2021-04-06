@@ -77,7 +77,7 @@
             </v-btn>
           </v-flex>
         </v-flex>
-        <LeafletMap
+        <QuestMap
           id="QuestMap"
           ref="qMap"
           :class="{ 'fill-height': fillHeight }"
@@ -87,6 +87,7 @@
             width: $vuetify.breakpoint.mdAndUp ? '100%' : '100vw',
             height: $vuetify.breakpoint.mdAndUp ? '100%' : mapHeight
           }"
+          :mapStyle="mapStyle"
           :mapOptions="mapOptions"
           :center="center"
           :zoom="zoom"
@@ -167,7 +168,7 @@ import QuestLegend from "@/components/quest/QuestLegend.vue";
 import QuestJournal from "@/components/quest/QuestJournal.vue";
 import QuestBackpack from "@/components/quest/QuestBackpack.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
-import LeafletMap from "@/components/LeafletMap.vue";
+import QuestMap from "@/components/QuestMap.vue";
 
 export default {
   name: "QuestReader",
@@ -183,6 +184,7 @@ export default {
       showJournal: false,
       showBackpack: false,
       showLocation: false,
+      mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
       mapOptions: {
         zoomControl: true,
         dragging: true,
@@ -208,7 +210,7 @@ export default {
     QuestJournal,
     QuestBackpack,
     QuestDialog,
-    LeafletMap
+    QuestMap
   },
   watch: {
     selectedLocation(val) {

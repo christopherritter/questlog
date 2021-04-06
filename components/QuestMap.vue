@@ -20,9 +20,10 @@
       v-else
       :sourceId="geoJsonSource.data.id"
       :source="geoJsonSource"
-      layerId="geoJsonLayerId"
+      layerId="geojsonLocations"
       :layer="geoJsonlayer"
-      @click="panTo($event)"
+      @click="selectLocation($event)"
+      @mouseenter="hoverLocation($event)"
     />
   </MglMap>
 </template>
@@ -36,10 +37,10 @@ export default {
   data() {
     return {
       map: null,
+      canvas: null,
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
-      mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
       geoJsonlayer: {
-        id: "geoJsonLayerId",
+        id: "geojsonLocations",
         type: "symbol",
         source: "geojsonData",
         layout: {
@@ -58,7 +59,7 @@ export default {
     MglMarker,
     MglGeojsonLayer
   },
-  props: ["center", "zoom", "locations", "mapOptions", "draggable", "tab"],
+  props: ["center", "zoom", "locations", "mapStyle", "mapOptions", "draggable", "tab"],
   computed: {
     geoJsonSource() {
       var geoJson = {},
@@ -101,11 +102,11 @@ export default {
     reverseCoords(coords) {
       return [coords[1], coords[0]];
     },
-    redrawMap() {
-      this.$nextTick(() => {
-        this.map.resize();
-      });
-    },
+    // redrawMap() {
+    //   this.$nextTick(() => {
+    //     this.map.resize();
+    //   });
+    // },
     // panTo(e) {
     //   if (Array.isArray(e)) {
     //     this.map.panTo([e[1], e[0]]);
@@ -116,6 +117,13 @@ export default {
     panTo(e) {
       // console.log(this.$refs.QuestMap)
       this.$refs.QuestMap.actions.panTo(e.mapboxEvent.lngLat);
+    },
+    flyTo(e) {
+      this.$refs.QuestMap.actions.flyTo(e);
+    },
+    hoverLocation(e) {
+      console.log("hover location")
+      console.log(e)
     },
     markLocation(e) {
       console.log("mark location from QuestMap");
@@ -143,15 +151,24 @@ export default {
     },
     selectLocation(e) {
       console.log("select location from QuestMap");
-      console.log(e);
-      // var target = e.target.getElement();
-      // var lngLat = e.target.getLngLat();
-      // this.$emit("select-location", {
-      //   location: {
-      //     locationId: target.firstChild.id,
-      //     coordinates: [lngLat.lat, lngLat.lng]
-      //   }
-      // });
+      console.log(e)
+      var properties,
+          features = e.map.queryRenderedFeatures(e.mapboxEvent.point),
+          coordinates = e.mapboxEvent.lngLat;
+
+      features.forEach((feature) => {
+        if (feature.layer.id == "geojsonLocations") {
+          properties = feature.properties;
+          console.log(properties)
+        }
+      })
+
+      this.$emit("select-location", {
+        location: {
+          locationId: properties.locationId,
+          coordinates: coordinates
+        }
+      });
     },
     async moveLocation(e) {
       console.log("move location");
@@ -164,16 +181,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.marker {
-  background-color: #424242;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-}
-</style>

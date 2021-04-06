@@ -140,6 +140,7 @@
             id="LocationMap"
             ref="lMap"
             class="mb-5"
+            :mapStyle="mapStyle"
             :center="region.coordinates"
             :zoom="newLocation.zoom"
             :locations="locations"
@@ -248,6 +249,7 @@ export default {
   name: "LocationsTab",
   data() {
     return {
+      mapStyle: "mapbox://styles/christopherritter/ckn6i5asn0ck517pntqzp6nye",
       newLocation: {
         locationId: null,
         name: "",
@@ -352,22 +354,30 @@ export default {
       this.clearLocation();
     },
     selectLocation(e) {
-      const index = this.locations.indexOf(e.location);
+      console.log("select location")
+      console.log(e)
+      const index = this.findWithAttr(e.location.locationId);
+      var location = this.locations[index];
+
+      console.log(index)
+      console.log(location)
+
       this.newLocation = {
-        locationId: e.location.locationId,
-        name: e.location.name,
-        isLandmark: e.location.isLandmark,
-        isStartingPoint: e.location.isStartingPoint,
-        coords: e.location.coordinates.join(", "),
-        zoom: e.location.zoom,
-        order: e.location.order,
-        image: e.location.image,
-        marker: e.location.marker,
-        draggable: e.location.draggable
+        locationId: location.locationId,
+        name: location.name,
+        isLandmark: location.isLandmark,
+        isStartingPoint: location.isStartingPoint,
+        coords: e.location.coordinates.lat + ", " + e.location.coordinates.lng,
+        coordinates: e.location.coordinates,
+        zoom: location.zoom,
+        order: location.order,
+        image: location.image,
+        marker: location.marker,
+        draggable: location.draggable
       };
       this.selectedLocation = index;
       if (this.selectedView === 0) {
-        this.$refs.lMap.panTo(e.location.coordinates, e.location.zoom);
+        this.$refs.lMap.flyTo({ center: e.location.coordinates, zoom: location.zoom });
       }
     },
     moveLocation(e) {

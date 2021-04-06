@@ -68,6 +68,7 @@
             :center="newRegion.coordinates"
             :zoom="newRegion.zoom"
             :locations="[newRegion]"
+            :mapStyle="mapStyle"
             :mapOptions="mapOptions"
             :tab="tab"
             @mark-location="markLocation($event)"
@@ -112,6 +113,7 @@ export default {
         coordinates: [39.828175, -98.5795],
         zoom: 18,
       },
+      mapStyle: "mapbox://styles/christopherritter/ckn6i5asn0ck517pntqzp6nye",
       mapOptions: {
         dragging: false,
         minZoom: 16,

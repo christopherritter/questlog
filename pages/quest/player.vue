@@ -80,7 +80,7 @@
             </v-btn>
           </v-flex>
         </v-flex>
-        <LeafletMap
+        <QuestMap
           id="QuestMap"
           ref="qMap"
           :class="{ 'fill-height': fillHeight }"
@@ -175,7 +175,7 @@ import QuestLegend from "@/components/quest/QuestLegend.vue";
 import QuestJournal from "@/components/quest/QuestJournal.vue";
 import QuestBackpack from "@/components/quest/QuestBackpack.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
-import LeafletMap from "@/components/LeafletMap.vue";
+import QuestMap from "@/components/QuestMap.vue";
 
 export default {
   name: "QuestPlayer",
@@ -192,6 +192,7 @@ export default {
       showBackpack: false,
       showLocation: false,
       preview: false,
+      mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
       mapOptions: {
         zoomControl: false,
         dragging: false,
@@ -217,7 +218,7 @@ export default {
     QuestJournal,
     QuestBackpack,
     QuestDialog,
-    LeafletMap
+    QuestMap
   },
   watch: {
     selectedLocation(val) {

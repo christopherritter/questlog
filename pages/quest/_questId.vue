@@ -105,6 +105,7 @@
                   v-if="!loading"
                   id="QuestMap"
                   class="mb-16"
+                  :mapStyle="mapStyle"
                   :center="quest.region.coordinates"
                   :zoom="quest.region.zoom"
                   :locations="locations"
@@ -137,6 +138,7 @@ export default {
       locations: [],
       entries: [],
       items: [],
+      mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
       mapOptions: {
         dragging: false,
         touchZoom: false,
