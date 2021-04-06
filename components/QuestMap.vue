@@ -4,8 +4,8 @@
     ref="QuestMap"
     :accessToken="accessToken"
     :mapStyle.sync="mapStyle"
-    :center="[-90.96, -0.47]"
-    :zoom="7.5"
+    :center="reverseCoords(center)"
+    :zoom="zoom"
   >
     <!-- <MglMarker
       v-for="location in locations"
@@ -41,46 +41,32 @@ export default {
       map: null,
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
       mapStyle: "mapbox://styles/mapbox/streets-v11",
-      geoJsonSource: {
-        type: "geojson",
-        data: {
-          id: "geojsonData",
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "Point",
-                coordinates: [-91.395263671875, -0.9145729757782163]
-              }
-            },
-            {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "Point",
-                coordinates: [-90.32958984375, -0.6344474832838974]
-              }
-            },
-            {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "Point",
-                coordinates: [-91.34033203125, 0.01647949196029245]
-              }
-            }
-          ]
-        }
-      },
+      // geoJsonLayer: {
+      //   id: "geoJsonLayerId",
+      //   type: "symbol",
+      //   source: "geojsonData",
+      //   layout: {
+      //     "text-field": ["get", "name"],
+      //     "text-variable-anchor": ["top", "bottom", "left", "right"],
+      //     "text-radial-offset": 0.5,
+      //     "text-justify": "auto",
+      //     "icon-image": ["get", "marker"],
+      //   }
+      // },
       geoJsonlayer: {
         id: "geoJsonLayerId",
         type: "symbol",
         source: "geojsonData",
         layout: {
-          "icon-image": "ae-f-route-3"
-        }
+          "text-field": ["get", "name"],
+          "text-variable-anchor": ["top", "bottom", "left", "right"],
+          "text-radial-offset": 0.5,
+          "text-justify": "auto",
+          "icon-image": ["get", "marker"],
+        },
+        // layout: {
+        //   "icon-image": "ae-f-route-3"
+        // }
       },
       markerCoordinates: [-90.96, -0.47]
     };
@@ -91,11 +77,45 @@ export default {
     MglGeojsonLayer
   },
   props: ["center", "zoom", "locations", "mapOptions", "draggable"],
+  computed: {
+    geoJsonSource() {
+      var geoJson = {},
+        features = [];
+
+      this.locations.forEach(location => {
+        let feature = {
+          type: "Feature",
+          properties: {
+            image: location.image,
+            isLandmark: location.isLandmark,
+            isStartingPoint: location.isStartingPoint,
+            locationId: location.locationId,
+            marker: location.marker,
+            name: location.name,
+            order: location.order,
+            zoom: location.zoom
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [location.coordinates[1], location.coordinates[0]]
+          }
+        };
+        features.push(feature);
+      });
+
+      geoJson = {
+        type: "geojson",
+        data: {
+          id: "geojsonData",
+          type: "FeatureCollection",
+          features: features
+        }
+      };
+
+      return geoJson;
+    }
+  },
   methods: {
-    handleClick(e) {
-      console.log("Handle click")
-      console.log(e);
-    },
     reverseCoords(coords) {
       return [coords[1], coords[0]];
     },
