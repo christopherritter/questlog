@@ -41,18 +41,6 @@ export default {
       map: null,
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
       mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
-      // geoJsonLayer: {
-      //   id: "geoJsonLayerId",
-      //   type: "symbol",
-      //   source: "geojsonData",
-      //   layout: {
-      //     "text-field": ["get", "name"],
-      //     "text-variable-anchor": ["top", "bottom", "left", "right"],
-      //     "text-radial-offset": 0.5,
-      //     "text-justify": "auto",
-      //     "icon-image": ["get", "marker"],
-      //   }
-      // },
       geoJsonlayer: {
         id: "geoJsonLayerId",
         type: "symbol",
@@ -60,13 +48,10 @@ export default {
         layout: {
           "text-field": ["get", "name"],
           "text-variable-anchor": ["top", "bottom", "left", "right"],
-          "text-radial-offset": 0.5,
+          "text-radial-offset": 1.25,
           "text-justify": "auto",
           "icon-image": ["get", "marker"],
         },
-        // layout: {
-        //   "icon-image": "ae-f-route-3"
-        // }
       },
       markerCoordinates: [-90.96, -0.47]
     };
