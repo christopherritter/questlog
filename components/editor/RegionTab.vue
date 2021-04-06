@@ -61,7 +61,7 @@
           </v-row>
         </v-col>
         <v-col>
-          <LeafletMap
+          <QuestMap
             id="RegionMap"
             ref="regionMap"
             class="mb-5"
@@ -69,6 +69,7 @@
             :zoom="newRegion.zoom"
             :locations="[newRegion]"
             :mapOptions="mapOptions"
+            :tab="tab"
             @mark-location="markLocation($event)"
           />
           <div class="d-flex">
@@ -99,7 +100,7 @@
 
 <script>
 import { mapActions, mapMutations } from "vuex";
-import LeafletMap from "@/components/LeafletMap.vue";
+import QuestMap from "@/components/QuestMap.vue";
 
 export default {
   name: "RegionTab",
@@ -120,11 +121,11 @@ export default {
       error: null,
     };
   },
-  props: ["region"],
+  props: ["region", "tab"],
   created() {
     this.fetchRegion();
   },
-  components: { LeafletMap },
+  components: { QuestMap },
   watch: {
     "newRegion.coords"(val) {
       var coordsArr = val.split(', ');

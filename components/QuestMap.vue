@@ -7,20 +7,17 @@
     :center="reverseCoords(center)"
     :zoom="zoom"
   >
-    <!-- <MglMarker
-      v-for="location in locations"
-      :key="location.locationId"
-      :ref="location.locationId"
-      :lng-lat="reverseCoords(location.coordinates)"
+    <MglMarker
+      v-if="$route.name === 'editor' && tab === 'region'"
+      ref="regionMarker"
+      color="#ff392e"
+      :coordinates="reverseCoords(center)"
       :draggable="draggable"
       @dragstart="selectLocation($event)"
       @dragend="moveLocation($event)"
-    >
-      <v-icon :id="location.locationId" class="marker">{{
-        "mdi-" + location.marker
-      }}</v-icon>
-    </MglMarker> -->
+    />
     <MglGeojsonLayer
+      v-else
       :sourceId="geoJsonSource.data.id"
       :source="geoJsonSource"
       layerId="geoJsonLayerId"
@@ -50,8 +47,8 @@ export default {
           "text-variable-anchor": ["top", "bottom", "left", "right"],
           "text-radial-offset": 1.25,
           "text-justify": "auto",
-          "icon-image": ["get", "marker"],
-        },
+          "icon-image": ["get", "marker"]
+        }
       },
       markerCoordinates: [-90.96, -0.47]
     };
@@ -61,7 +58,7 @@ export default {
     MglMarker,
     MglGeojsonLayer
   },
-  props: ["center", "zoom", "locations", "mapOptions", "draggable"],
+  props: ["center", "zoom", "locations", "mapOptions", "draggable", "tab"],
   computed: {
     geoJsonSource() {
       var geoJson = {},

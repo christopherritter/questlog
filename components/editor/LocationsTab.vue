@@ -135,7 +135,7 @@
               </v-btn>
             </v-btn-toggle>
           </v-row>
-          <LeafletMap
+          <QuestMap
             v-if="selectedView === 0"
             id="LocationMap"
             ref="lMap"
@@ -242,7 +242,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import LeafletMap from "@/components/LeafletMap.vue";
+import QuestMap from "@/components/QuestMap.vue";
 
 export default {
   name: "LocationsTab",
@@ -269,7 +269,7 @@ export default {
     };
   },
   props: ["region", "locations"],
-  components: { LeafletMap },
+  components: { QuestMap },
   computed: {
     ...mapState({
       markers: state => state.markers,

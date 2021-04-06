@@ -47,6 +47,7 @@
             <v-tab-item value="region">
               <RegionTab
                 :region="quest.region"
+                :tab="tab"
                 @change-tab="changeTab($event)"
                 @delete-quest="dialogDelete = true"
               />
