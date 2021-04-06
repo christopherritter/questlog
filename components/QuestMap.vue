@@ -6,6 +6,7 @@
     :mapStyle.sync="mapStyle"
     :center="reverseCoords(center)"
     :zoom="zoom"
+    @load="onMapLoaded"
   >
     <MglMarker
       v-if="$route.name === 'editor' && tab === 'region'"
@@ -22,8 +23,10 @@
       :source="geoJsonSource"
       layerId="geojsonLocations"
       :layer="geoJsonlayer"
-      @click="selectLocation($event)"
-      @mouseenter="hoverLocation($event)"
+      @mouseenter="hoverLocation"
+      @mouseleave="leaveLocation"
+      @mousedown="clickLocation"
+      @mouseup="releaseLocation"
     />
   </MglMap>
 </template>
@@ -59,7 +62,15 @@ export default {
     MglMarker,
     MglGeojsonLayer
   },
-  props: ["center", "zoom", "locations", "mapStyle", "mapOptions", "draggable", "tab"],
+  props: [
+    "center",
+    "zoom",
+    "locations",
+    "mapStyle",
+    "mapOptions",
+    "draggable",
+    "tab"
+  ],
   computed: {
     geoJsonSource() {
       var geoJson = {},
@@ -99,6 +110,36 @@ export default {
     }
   },
   methods: {
+    onMapLoaded(event) {
+      this.canvas = event.map.getCanvasContainer();
+    },
+    onMove(e) {
+      var coords = e.lngLat;
+      console.log("onMove coords: " + coords)
+
+      // Set a UI indicator for dragging.
+      this.canvas.style.cursor = "grabbing";
+
+      // Update the Point feature in `geojson` coordinates
+      // and call setData to the source layer `point` on it.
+      // geojson.features[0].geometry.coordinates = [coords.lng, coords.lat];
+      // this.$refs.QuestMap.map.getSource("point").setData(geojson);
+    },
+    onUp(e) {
+      var coords = e.lngLat;
+      console.log("onUp to unbind events")
+
+      // Print the coordinates of where the point had
+      // finished being dragged to on the map.
+      // coordinates.style.display = "block";
+      // coordinates.innerHTML =
+      //   "Longitude: " + coords.lng + "<br />Latitude: " + coords.lat;
+      // canvas.style.cursor = "";
+
+      // Unbind mouse/touch events
+      this.$refs.QuestMap.map.off("mousemove", this.onMove);
+      this.$refs.QuestMap.map.off("touchmove", this.onMove);
+    },
     reverseCoords(coords) {
       return [coords[1], coords[0]];
     },
@@ -121,47 +162,35 @@ export default {
     flyTo(e) {
       this.$refs.QuestMap.actions.flyTo(e);
     },
-    hoverLocation(e) {
-      console.log("hover location")
-      console.log(e)
+    hoverLocation() {
+      this.canvas.style.cursor = "move";
     },
-    markLocation(e) {
-      console.log("mark location from QuestMap");
-      console.log(e);
-      // if (!e.originalEvent) {
-      //   console.log("no original event");
-      //   this.selectLocation(e);
-      // } else if (e.originalEvent.target.id === "") {
-      //   console.log("no target id");
-      //   this.map.panTo(e.lngLat);
-      //   // if (e.type == "click") {
-      //   //   this.$emit("clear-location");
-      //   // }
-      //   this.$emit("mark-location", e.lngLat);
-      // } else {
-      //   console.log("select location");
-      //   this.map.panTo(e.lngLat);
-      //   this.$emit("select-location", {
-      //     location: {
-      //       locationId: e.originalEvent.target.id,
-      //       coordinates: [e.lngLat.lat, e.lngLat.lng]
-      //     }
-      //   });
-      // }
+    leaveLocation() {
+      this.canvas.style.cursor = "";
+    },
+    clickLocation(e) {
+      console.log("click location");
+      console.log(e)
+      e.mapboxEvent.preventDefault();
+
+      this.canvas.style.cursor = "grab";
+
+      this.$refs.QuestMap.map.on("mousemove", this.onMove);
+      this.$refs.QuestMap.map.once("mouseup", this.onUp);
     },
     selectLocation(e) {
       console.log("select location from QuestMap");
-      console.log(e)
+      console.log(e);
       var properties,
-          features = e.map.queryRenderedFeatures(e.mapboxEvent.point),
-          coordinates = e.mapboxEvent.lngLat;
+        features = e.map.queryRenderedFeatures(e.mapboxEvent.point),
+        coordinates = e.mapboxEvent.lngLat;
 
-      features.forEach((feature) => {
+      features.forEach(feature => {
         if (feature.layer.id == "geojsonLocations") {
           properties = feature.properties;
-          console.log(properties)
+          console.log(properties);
         }
-      })
+      });
 
       this.$emit("select-location", {
         location: {
@@ -169,6 +198,10 @@ export default {
           coordinates: coordinates
         }
       });
+    },
+    releaseLocation(e) {
+      console.log("release location")
+      console.log(e)
     },
     async moveLocation(e) {
       console.log("move location");
