@@ -40,7 +40,7 @@ export default {
     return {
       map: null,
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
-      mapStyle: "mapbox://styles/mapbox/streets-v11",
+      mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
       // geoJsonLayer: {
       //   id: "geoJsonLayerId",
       //   type: "symbol",
