@@ -138,11 +138,11 @@
           <QuestMap
             v-if="selectedView === 0"
             id="LocationMap"
-            ref="lMap"
+            ref="qMap"
             class="mb-5"
             :mapStyle="mapStyle"
-            :center="region.coordinates"
-            :zoom="newLocation.zoom"
+            :center="currentCoords || region.coordinates"
+            :zoom="currentZoom || region.zoom"
             :locations="locations"
             :draggable="true"
             @select-location="selectLocation($event)"
@@ -256,14 +256,16 @@ export default {
         isLandmark: false,
         isStartingPoint: false,
         coords: "",
-        coordinates: [null, null],
-        zoom: 18,
+        coordinates: null,
+        zoom: null,
         order: 0,
         image: "",
         marker: null,
         draggable: true,
       },
       selectedLocation: null,
+      currentCoords: null,
+      currentZoom: null,
       selectedView: 0,
       searchTerm: "",
       sortLocations: "",
@@ -312,18 +314,21 @@ export default {
 
       this.clearLocation();
     },
-    "newLocation.coords"(val) {
-      const locationId = this.newLocation.locationId;
-      const index = this.findWithAttr(locationId);
-      var coordinates = val.split(', ');
-      var zoom = this.newLocation.zoom;
+    // "newLocation.coords"(val, oldVal) {
+    //   const locationId = this.newLocation.locationId;
+    //   const index = this.findWithAttr(locationId);
+    //   if (val) {
+    //     var coordinates = val.split(', ');
+    //   } else {
+    //     var coordinates = oldVal.split(', ');
+    //   }
 
-      if (coordinates.length == 2) {
-        this.newLocation.coordinates = [Number(coordinates[0]), Number(coordinates[1])];
-        // this.$store.commit("SET_COORDINATES", { coordinates, index });
-        // this.$refs.lMap.panTo(coordinates, zoom);
-      }
-    }
+    //   if (coordinates.length == 2) {
+    //     this.newLocation.coordinates = [Number(coordinates[0]), Number(coordinates[1])];
+    //     // this.$store.commit("SET_COORDINATES", { coordinates, index });
+    //     // this.$refs.qMap.panTo(coordinates);
+    //   }
+    // }
   },
   methods: {
     ...mapActions([
@@ -376,21 +381,28 @@ export default {
         draggable: location.draggable
       };
       this.selectedLocation = index;
-      if (this.selectedView === 0) {
-        this.$refs.lMap.flyTo({ center: e.location.coordinates, zoom: location.zoom });
-      }
+      // if (this.selectedView === 0) {
+        this.$refs.qMap.flyTo({ center: location.coordinates, zoom: location.zoom });
+      // }
     },
     moveLocation(e) {
+      console.log("move location")
+
+      console.log(e)
+
       const locationId = this.newLocation.locationId;
       const index = this.findWithAttr(locationId);
-      const coords = e.target.getLatLng();
+      const coords = e.lngLat;
       const coordinates = [coords.lat, coords.lng];
 
       this.newLocation.coords = coordinates.toString(", ");
-      // this.newLocation.coordinates = coordinates;
+      this.newLocation.coordinates = coordinates;
       this.$store.commit("SET_COORDINATES", { coordinates, index });
     },
     updateLocation() {
+      console.log('update location')
+      console.log(this.newLocation.coordinates)
+      console.log(this.newLocation.zoom)
       const locationId = this.newLocation.locationId;
       const locationIndex = this.findWithAttr(locationId);
 
@@ -398,6 +410,8 @@ export default {
         selectedLocation: locationIndex,
         newLocation: this.newLocation
       });
+
+      // this.$refs.qMap.flyTo({ coordinates: this.newLocation.coordinates, zoom: this.newLocation.zoom })
       this.clearLocation();
     },
     deleteLocation() {
@@ -411,8 +425,8 @@ export default {
         isLandmark: false,
         isStartingPoint: false,
         coords: "",
-        coordinates: [null, null],
-        zoom: 18,
+        coordinates: null,
+        zoom: null,
         order: 0,
         image: "",
         marker: null,

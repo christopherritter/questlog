@@ -25,8 +25,8 @@
       :layer="geoJsonlayer"
       @mouseenter="hoverLocation"
       @mouseleave="leaveLocation"
-      @mousedown="clickLocation"
-      @mouseup="releaseLocation"
+      @mousedown="selectLocation"
+      @touchstart="selectLocation"
     />
   </MglMap>
 </template>
@@ -42,6 +42,14 @@ export default {
       map: null,
       canvas: null,
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
+      geoJsonSource: {
+        type: "geojson",
+        data: {
+          id: "geojsonData",
+          type: "FeatureCollection",
+          features: []
+        }
+      },
       geoJsonlayer: {
         id: "geojsonLocations",
         type: "symbol",
@@ -54,7 +62,7 @@ export default {
           "icon-image": ["get", "marker"]
         }
       },
-      markerCoordinates: [-90.96, -0.47]
+      selectedFeature: null
     };
   },
   components: {
@@ -71,10 +79,14 @@ export default {
     "draggable",
     "tab"
   ],
-  computed: {
-    geoJsonSource() {
-      var geoJson = {},
-        features = [];
+  methods: {
+    ...mapMutations(["SET_COORDINATES"]),
+    onMapLoaded(event) {
+      this.canvas = event.map.getCanvasContainer();
+      this.fetchFeatures();
+    },
+    fetchFeatures() {
+      var features = [];
 
       this.locations.forEach(location => {
         let feature = {
@@ -97,25 +109,12 @@ export default {
         features.push(feature);
       });
 
-      geoJson = {
-        type: "geojson",
-        data: {
-          id: "geojsonData",
-          type: "FeatureCollection",
-          features: features
-        }
-      };
-
-      return geoJson;
-    }
-  },
-  methods: {
-    onMapLoaded(event) {
-      this.canvas = event.map.getCanvasContainer();
+      this.geoJsonSource.data.features = features;
     },
     onMove(e) {
-      var coords = e.lngLat;
-      console.log("onMove coords: " + coords)
+      var coords = e.lngLat,
+        index = this.selectedFeature,
+        geojson = this.geoJsonSource.data;
 
       // Set a UI indicator for dragging.
       this.canvas.style.cursor = "grabbing";
@@ -124,21 +123,34 @@ export default {
       // and call setData to the source layer `point` on it.
       // geojson.features[0].geometry.coordinates = [coords.lng, coords.lat];
       // this.$refs.QuestMap.map.getSource("point").setData(geojson);
+
+      geojson.features[index].geometry.coordinates = [ coords.lng, coords.lat ];
+      this.$refs.QuestMap.map.getSource("geojsonData").setData(geojson);
+      // this.$refs.QuestMap.map.getSource("geojsonData").setData({
+      //   data: this.geoJsonSource.data,
+      //   type: this.geoJsonSource.type,
+      // });
+
+      // console.log(index + " => " + coordinates)
+
+      // console.log(this.geoJsonSource.type);
+      // console.log(this.$refs.QuestMap.map.getSource("geojsonData"))
+
+      // this.$store.commit("SET_COORDINATES", { coordinates, index });
+      // this.$emit("move-location", { coordinates, index })
     },
     onUp(e) {
-      var coords = e.lngLat;
-      console.log("onUp to unbind events")
+      // reset cursor style
+      this.canvas.style.cursor = "";
 
-      // Print the coordinates of where the point had
-      // finished being dragged to on the map.
-      // coordinates.style.display = "block";
-      // coordinates.innerHTML =
-      //   "Longitude: " + coords.lng + "<br />Latitude: " + coords.lat;
-      // canvas.style.cursor = "";
 
       // Unbind mouse/touch events
       this.$refs.QuestMap.map.off("mousemove", this.onMove);
       this.$refs.QuestMap.map.off("touchmove", this.onMove);
+      this.$refs.QuestMap.actions.panTo(e.lngLat);
+      this.$emit("move-location", e)
+
+      this.selectedFeature = null;
     },
     reverseCoords(coords) {
       return [coords[1], coords[0]];
@@ -156,7 +168,6 @@ export default {
     //   }
     // },
     panTo(e) {
-      // console.log(this.$refs.QuestMap)
       this.$refs.QuestMap.actions.panTo(e.mapboxEvent.lngLat);
     },
     flyTo(e) {
@@ -168,16 +179,6 @@ export default {
     leaveLocation() {
       this.canvas.style.cursor = "";
     },
-    clickLocation(e) {
-      console.log("click location");
-      console.log(e)
-      e.mapboxEvent.preventDefault();
-
-      this.canvas.style.cursor = "grab";
-
-      this.$refs.QuestMap.map.on("mousemove", this.onMove);
-      this.$refs.QuestMap.map.once("mouseup", this.onUp);
-    },
     selectLocation(e) {
       console.log("select location from QuestMap");
       console.log(e);
@@ -185,12 +186,21 @@ export default {
         features = e.map.queryRenderedFeatures(e.mapboxEvent.point),
         coordinates = e.mapboxEvent.lngLat;
 
+      e.mapboxEvent.preventDefault();
+
+      this.canvas.style.cursor = "grab";
+
       features.forEach(feature => {
         if (feature.layer.id == "geojsonLocations") {
           properties = feature.properties;
           console.log(properties);
         }
       });
+
+      this.$refs.QuestMap.map.on("mousemove", this.onMove);
+      this.$refs.QuestMap.map.once("mouseup", this.onUp);
+
+      this.selectedFeature = this.findWithAttr(properties.locationId);
 
       this.$emit("select-location", {
         location: {
@@ -200,8 +210,8 @@ export default {
       });
     },
     releaseLocation(e) {
-      console.log("release location")
-      console.log(e)
+      console.log("release location");
+      console.log(e);
     },
     async moveLocation(e) {
       console.log("move location");
@@ -210,6 +220,16 @@ export default {
       //   console.log(lngLat);
       //   // this.map.panTo(lngLat);
       //   this.$emit("move-location", lngLat);
+    },
+    findWithAttr(value) {
+      const array = this.geoJsonSource.data.features;
+      const attr = "locationId";
+      for (var i = 0; i < array.length; i += 1) {
+        if (array[i].properties[attr] === value) {
+          return i;
+        }
+      }
+      return -1;
     }
   }
 };
