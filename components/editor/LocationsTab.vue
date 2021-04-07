@@ -314,21 +314,21 @@ export default {
 
       this.clearLocation();
     },
-    // "newLocation.coords"(val, oldVal) {
-    //   const locationId = this.newLocation.locationId;
-    //   const index = this.findWithAttr(locationId);
-    //   if (val) {
-    //     var coordinates = val.split(', ');
-    //   } else {
-    //     var coordinates = oldVal.split(', ');
-    //   }
+    "newLocation.coords"(val, oldVal) {
+      const locationId = this.newLocation.locationId;
+      const index = this.findWithAttr(locationId);
+      // if (val) {
+        var coordinates = val.split(', ');
+      // } else {
+      //   var coordinates = oldVal.split(', ');
+      // }
 
-    //   if (coordinates.length == 2) {
-    //     this.newLocation.coordinates = [Number(coordinates[0]), Number(coordinates[1])];
-    //     // this.$store.commit("SET_COORDINATES", { coordinates, index });
-    //     // this.$refs.qMap.panTo(coordinates);
-    //   }
-    // }
+      if (coordinates.length == 2) {
+        this.newLocation.coordinates = [Number(coordinates[0]), Number(coordinates[1])];
+        // this.$store.commit("SET_COORDINATES", { coordinates, index });
+        // this.$refs.qMap.panTo(coordinates);
+      }
+    }
   },
   methods: {
     ...mapActions([
@@ -381,9 +381,9 @@ export default {
         draggable: location.draggable
       };
       this.selectedLocation = index;
-      // if (this.selectedView === 0) {
+      if (this.selectedView === 0) {
         this.$refs.qMap.flyTo({ center: location.coordinates, zoom: location.zoom });
-      // }
+      }
     },
     moveLocation(e) {
       console.log("move location")

@@ -84,6 +84,7 @@ export default {
     onMapLoaded(event) {
       this.canvas = event.map.getCanvasContainer();
       this.fetchFeatures();
+      this.$emit("loaded");
     },
     fetchFeatures() {
       var features = [];
@@ -119,58 +120,40 @@ export default {
       // Set a UI indicator for dragging.
       this.canvas.style.cursor = "grabbing";
 
-      // Update the Point feature in `geojson` coordinates
-      // and call setData to the source layer `point` on it.
-      // geojson.features[0].geometry.coordinates = [coords.lng, coords.lat];
-      // this.$refs.QuestMap.map.getSource("point").setData(geojson);
-
-      geojson.features[index].geometry.coordinates = [ coords.lng, coords.lat ];
+      geojson.features[index].geometry.coordinates = [coords.lng, coords.lat];
       this.$refs.QuestMap.map.getSource("geojsonData").setData(geojson);
-      // this.$refs.QuestMap.map.getSource("geojsonData").setData({
-      //   data: this.geoJsonSource.data,
-      //   type: this.geoJsonSource.type,
-      // });
-
-      // console.log(index + " => " + coordinates)
-
-      // console.log(this.geoJsonSource.type);
-      // console.log(this.$refs.QuestMap.map.getSource("geojsonData"))
-
-      // this.$store.commit("SET_COORDINATES", { coordinates, index });
-      // this.$emit("move-location", { coordinates, index })
     },
     onUp(e) {
+      console.log("QuestMap onUp")
       // reset cursor style
       this.canvas.style.cursor = "";
-
 
       // Unbind mouse/touch events
       this.$refs.QuestMap.map.off("mousemove", this.onMove);
       this.$refs.QuestMap.map.off("touchmove", this.onMove);
       this.$refs.QuestMap.actions.panTo(e.lngLat);
-      this.$emit("move-location", e)
+      // this.$emit("move-location", e);
 
       this.selectedFeature = null;
     },
     reverseCoords(coords) {
       return [coords[1], coords[0]];
     },
-    // redrawMap() {
-    //   this.$nextTick(() => {
-    //     this.map.resize();
-    //   });
-    // },
-    // panTo(e) {
-    //   if (Array.isArray(e)) {
-    //     this.map.panTo([e[1], e[0]]);
-    //   } else {
-    //     this.map.panTo(e.lngLat);
-    //   }
-    // },
+    redrawMap() {
+      console.log("redraw map");
+      this.$nextTick(() => {
+        this.$refs.QuestMap.map.resize();
+      });
+    },
     panTo(e) {
-      this.$refs.QuestMap.actions.panTo(e.mapboxEvent.lngLat);
+      console.log("pan to")
+      console.log(e)
+      this.$refs.QuestMap.actions.panTo(e);
+      // this.$refs.QuestMap.actions.panTo(e.mapboxEvent.lngLat);
     },
     flyTo(e) {
+      console.log("fly to");
+      console.log(e);
       this.$refs.QuestMap.actions.flyTo(e);
     },
     hoverLocation() {
@@ -208,6 +191,8 @@ export default {
           coordinates: coordinates
         }
       });
+
+      this.redrawMap(); // imperfect solution
     },
     releaseLocation(e) {
       console.log("release location");
@@ -234,3 +219,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.mapboxgl-canvas-container {
+  height: 100vh;
+  width: 100vw;
+}
+</style>

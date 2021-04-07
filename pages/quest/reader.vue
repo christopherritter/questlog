@@ -81,12 +81,6 @@
           id="QuestMap"
           ref="qMap"
           :class="{ 'fill-height': fillHeight }"
-          :style="{
-            'z-index': 0,
-            position: 'relative',
-            width: $vuetify.breakpoint.mdAndUp ? '100%' : '100vw',
-            height: $vuetify.breakpoint.mdAndUp ? '100%' : mapHeight
-          }"
           :mapStyle="mapStyle"
           :mapOptions="mapOptions"
           :center="center"
@@ -95,6 +89,7 @@
           @select-location="viewLocation($event)"
           @preview-location="viewLocation($event)"
           @clear-location="clearLocation()"
+          @loaded="onLoad"
         />
       </v-col>
 
@@ -175,7 +170,7 @@ export default {
   layout: "fluid",
   data() {
     return {
-      // currentPosition: null,
+      isLoaded: false,
       selectedLocation: {},
       center: {},
       zoom: 18,
@@ -194,15 +189,11 @@ export default {
         boxZoom: true,
         keyboard: true,
         minZoom: 16,
-        maxZoom: 18,
+        maxZoom: 18
       },
       dialog: false,
       error: null
     };
-  },
-  mounted() {
-    this.questHelpers();
-    this.beginQuest();
   },
   components: {
     QuestSidebar,
@@ -211,6 +202,9 @@ export default {
     QuestBackpack,
     QuestDialog,
     QuestMap
+  },
+  created() {
+    this.questHelpers();
   },
   watch: {
     selectedLocation(val) {
@@ -241,7 +235,13 @@ export default {
   methods: {
     ...mapActions(["findWithAttr", "setObjective"]),
     ...mapMutations(["SET_OBJECTIVE", "SET_OWNED"]),
+    onLoad() {
+      this.beginQuest();
+    },
     questHelpers() {
+      this.center = this.quest.region.coordinates;
+      this.zoom = this.quest.region.zoom;
+      // this.dialog = true;
       if (this.$vuetify.breakpoint.smAndDown) {
         this.showLegend = true;
         this.showJournal = true;
@@ -249,29 +249,25 @@ export default {
       }
     },
     beginQuest() {
-      this.center = this.quest.region.coordinates;
-      this.zoom = this.quest.region.zoom;
-      // this.dialog = true;
       if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
         this.viewLocation({
           location: { locationId: this.quest.startingPoint }
         });
       }
+      this.$refs.qMap.redrawMap();
     },
     viewLocation(e) {
+      console.log("reader: view location");
+      console.log(e);
       const locationIndex = this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
-      const latlng = this.$L.latLng(
-        location.coordinates[0],
-        location.coordinates[1]
-      );
 
       this.selectedLocation = location;
       this.showSidebar = true;
       this.showLocation = true;
 
-      this.$refs.qMap.redrawMap();
-      this.$refs.qMap.panTo(latlng, location.zoom);
+      this.$refs.qMap.panTo([location.coordinates[1], location.coordinates[0]]);
+      // this.$refs.qMap.redrawMap();
     },
     clearLocation() {
       this.selectedLocation = {};
@@ -305,13 +301,20 @@ export default {
           });
           break;
         case "move":
+          console.log("move");
+          console.log(action.target);
           var locationIndex = await this.findWithAttr({
             array: this.locations,
             attr: "locationId",
             value: action.target
           });
           var location = this.locations[locationIndex];
-          this.viewLocation({ location });
+          this.viewLocation({
+            location: {
+              locationId: location.locationId,
+              coordinates: location.coordinates
+            }
+          });
           break;
         case "take":
           var itemIndex = await this.findWithAttr({
@@ -358,7 +361,7 @@ export default {
       this.showLocation = false;
 
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.panTo(latlng, zoom);
+      this.$refs.qMap.flyTo(latlng, zoom);
     },
     toggleLegend() {
       var latlng, zoom;
@@ -376,7 +379,7 @@ export default {
       this.showJournal = false;
       this.showBackpack = false;
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.panTo(latlng, zoom);
+      this.$refs.qMap.flyTo(latlng, zoom);
     },
     toggleJournal() {
       this.showLegend = false;
