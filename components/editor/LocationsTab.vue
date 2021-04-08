@@ -59,7 +59,7 @@
               <v-slider
                 v-model="newLocation.zoom"
                 min="0"
-                max="19"
+                max="22"
                 thumb-label
               ></v-slider>
               <v-text-field
@@ -141,8 +141,8 @@
             ref="qMap"
             class="mb-5"
             :mapStyle="mapStyle"
-            :center="currentCoords || region.coordinates"
-            :zoom="currentZoom || region.zoom"
+            :center="currentCoords"
+            :zoom="currentZoom"
             :locations="locations"
             :draggable="true"
             @select-location="selectLocation($event)"
@@ -264,8 +264,6 @@ export default {
         draggable: true,
       },
       selectedLocation: null,
-      currentCoords: null,
-      currentZoom: null,
       selectedView: 0,
       searchTerm: "",
       sortLocations: "",
@@ -285,7 +283,21 @@ export default {
       return locations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
-    }
+    },
+    currentCoords() {
+      if (this.selectedLocation == null) {
+        return this.region.coordinates;
+      } else {
+        return this.newLocation.coordinates;
+      }
+    },
+    currentZoom() {
+      if (this.selectedLocation == null) {
+        return this.region.zoom;
+      } else {
+        return this.newLocation.zoom;
+      }
+    },
     // orderItems() {
     //   const orderItems = [];
     //   var i;
