@@ -205,9 +205,6 @@ export default {
   created() {
     this.questHelpers();
   },
-  // updated() {
-  //   this.$nextTick().then(() => this.$refs.qMap.redrawMap());
-  // },
   watch: {
     selectedLocation(val) {
       if (Object.keys(val).length) {
@@ -215,7 +212,6 @@ export default {
       } else {
         this.showSidebar = false;
       }
-      // this.$refs.qMap.redrawMap();
     }
   },
   computed: {
@@ -240,7 +236,6 @@ export default {
     ...mapMutations(["SET_OBJECTIVE", "SET_OWNED"]),
     onLoad() {
       this.beginQuest();
-      this.$refs.qMap.redrawMap()
     },
     questHelpers() {
       this.center = this.quest.region.coordinates;
@@ -251,7 +246,6 @@ export default {
         this.showJournal = true;
         this.showBackpack = true;
       }
-      // this.$refs.qMap.redrawMap();
       this.isLoaded = true;
     },
     beginQuest() {
@@ -260,13 +254,9 @@ export default {
         this.viewLocation({
           location: { locationId: this.quest.startingPoint }
         });
-        // this.$refs.qMap.setCenter(coords);
       }
-      this.$refs.qMap.redrawMap();
     },
     async viewLocation(e) {
-      console.log("reader: view location");
-      console.log(e);
       const locationIndex = await this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
 
@@ -309,8 +299,6 @@ export default {
           });
           break;
         case "move":
-          console.log("move");
-          console.log(action.target);
           var locationIndex = await this.findWithAttr({
             array: this.locations,
             attr: "locationId",

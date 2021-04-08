@@ -69,12 +69,6 @@ export default {
   created() {
     this.map = null;
   },
-  watch: {
-    "canvas.clientWidth"(val) {
-      console.log("canvas changed");
-      console.log(val);
-    }
-  },
   components: {
     MglMap,
     MglMarker,
@@ -93,7 +87,6 @@ export default {
     ...mapMutations(["SET_COORDINATES"]),
     onMapLoaded(e) {
       this.canvas = e.map.getCanvasContainer();
-      console.log(this.canvas);
       this.fetchFeatures();
       this.$emit("loaded");
       this.map = Mapbox;
@@ -136,8 +129,6 @@ export default {
       this.$refs.QuestMap.map.getSource("geojsonData").setData(geojson);
     },
     onUp() {
-      console.log("QuestMap onUp");
-
       if (this.$route.name === "editor") {
         // reset cursor style
         this.canvas.style.cursor = "";
@@ -148,28 +139,20 @@ export default {
 
         this.selectedFeature = null;
       }
-
-      // this.$refs.QuestMap.actions.panTo(e.lngLat);
     },
     reverseCoords(coords) {
       return [coords[1], coords[0]];
     },
     redrawMap() {
-      console.log("redraw map");
       this.$nextTick().then(() => this.$refs.QuestMap.map.resize());
     },
     setCenter(coords) {
       this.$refs.QuestMap.map.setCenter(coords);
     },
     panTo(e) {
-      console.log("pan to");
-      console.log(e);
       this.$refs.QuestMap.actions.panTo(e);
-      // this.$refs.QuestMap.actions.panTo(e.mapboxEvent.lngLat);
     },
     flyTo(e) {
-      console.log("fly to");
-      console.log(e);
       this.$refs.QuestMap.actions.flyTo(e);
     },
     hoverLocation() {
@@ -179,8 +162,6 @@ export default {
       this.canvas.style.cursor = "";
     },
     selectLocation(e) {
-      console.log("select location from QuestMap");
-      console.log(e);
       var properties,
         features = e.map.queryRenderedFeatures(e.mapboxEvent.point),
         coordinates = e.mapboxEvent.lngLat;
@@ -190,7 +171,6 @@ export default {
       features.forEach(feature => {
         if (feature.layer.id == "geojsonLocations") {
           properties = feature.properties;
-          console.log(properties);
         }
       });
 
@@ -208,8 +188,6 @@ export default {
           coordinates: coordinates
         }
       });
-
-      // this.redrawMap();
     },
     releaseLocation(e) {
       console.log("release location");
