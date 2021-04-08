@@ -262,8 +262,6 @@ export default {
       // });
     },
     positionChanged(e) {
-      console.log("position changed")
-      console.log(e)
       this.currentPosition = e;
     },
     async viewLocation(e) {

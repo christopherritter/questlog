@@ -8,13 +8,14 @@
     :center="reverseCoords(center)"
     :zoom="zoom"
     @load="onMapLoaded"
+    @click="$emit('mark-location', $event)"
   >
     <MglGeolocateControl
       v-if="$route.name === 'quest-player'"
       position="bottom-right"
       :positionOptions="geolocateOptions.positionOptions"
       :trackUserLocation="true"
-      :fitBoundsOptions={maxZoom:19}
+      :fitBoundsOptions="{ maxZoom: 19 }"
       @geolocate="geolocate"
       @trackuserlocationstart="geolocateStart"
     />
@@ -23,8 +24,7 @@
       ref="regionMarker"
       color="#ff392e"
       :coordinates="reverseCoords(center)"
-      :draggable="draggable"
-      @dragstart="selectLocation($event)"
+      :draggable="true"
       @dragend="moveLocation($event)"
     />
     <MglGeojsonLayer
@@ -175,6 +175,8 @@ export default {
       this.$refs.QuestMap.actions.panTo(e);
     },
     flyTo(e) {
+      console.log("fly to")
+      console.log(e)
       this.$refs.QuestMap.actions.flyTo(e);
     },
     hoverLocation() {
@@ -215,13 +217,16 @@ export default {
       console.log("release location");
       console.log(e);
     },
-    async moveLocation(e) {
+    moveLocation(e) {
       console.log("move location");
       console.log(e);
+      var lngLat = e.marker.getLngLat();
+      this.panTo([ lngLat.lng, lngLat.lat ]);
+
       //   var lngLat = await e.target.getLngLat();
       //   console.log(lngLat);
       //   // this.map.panTo(lngLat);
-      //   this.$emit("move-location", lngLat);
+      this.$emit("move-location", [ lngLat.lng, lngLat.lat ]);
     },
     findWithAttr(value) {
       const array = this.geoJsonSource.data.features;
@@ -238,11 +243,20 @@ export default {
       console.log(e);
     },
     geolocate(e) {
-      console.log("geolocation event");
       if (e.mapboxEvent.coords) {
-        this.$emit('position-changed', [e.mapboxEvent.coords.longitude, e.mapboxEvent.coords.latitude]);
+        this.$emit("position-changed", [
+          e.mapboxEvent.coords.longitude,
+          e.mapboxEvent.coords.latitude
+        ]);
       }
-    },
+    }
   }
 };
 </script>
+
+<style scoped>
+#MapBoxMap {
+  height: 100%;
+  width: 100%;
+}
+</style>

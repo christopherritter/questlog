@@ -6,11 +6,11 @@
           <v-row>
             <v-col>
               <h1 class="mt-5 mb-4">Region</h1>
-              <v-text-field
+              <!-- <v-text-field
                 v-model="newRegion.name"
                 label="Name"
                 outlined
-              ></v-text-field>
+              ></v-text-field> -->
               <!-- <h4 class="mt-1 mb-6">Coordinates</h4>
               <v-row>
                 <v-col cols="12" md="6">
@@ -114,11 +114,7 @@ export default {
         zoom: 18,
       },
       mapStyle: "mapbox://styles/christopherritter/ckn6i5asn0ck517pntqzp6nye",
-      mapOptions: {
-        dragging: false,
-        minZoom: 16,
-        maxZoom: 18,
-      },
+      mapOptions: {},
       loading: false,
       error: null,
     };
@@ -145,7 +141,8 @@ export default {
       });
     },
     markLocation(event) {
-      this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
+      console.log(event)
+      // this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
     },
     updateRegion() {
       this.$store.commit("SET_REGION", this.newRegion);
@@ -167,7 +164,8 @@ export default {
 
 <style>
 #RegionMap {
-  height: calc(100% - 56px);
+  min-height: 540px;
+  /* height: calc(100% - 56px); */
   z-index: 0;
 }
 </style>
