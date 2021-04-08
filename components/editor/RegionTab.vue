@@ -72,6 +72,7 @@
             :mapOptions="mapOptions"
             :tab="tab"
             @mark-location="markLocation($event)"
+            @move-location="moveLocation($event)"
           />
           <div class="d-flex">
             <v-btn outlined dark @click="$emit('change-tab', 'about')">
@@ -140,9 +141,13 @@ export default {
         zoom: this.region.zoom,
       });
     },
-    markLocation(event) {
-      console.log(event)
-      // this.newRegion.coordinates = [event.latlng.lat, event.latlng.lng];
+    markLocation(e) {
+      var latLng = [e.mapboxEvent.lngLat.lat, e.mapboxEvent.lngLat.lng];
+      this.newRegion.coords = latLng.join(', ');
+    },
+    moveLocation(e) {
+      var latLng = [e[1], e[0]];
+      this.newRegion.coords = latLng.join(', ');
     },
     updateRegion() {
       this.$store.commit("SET_REGION", this.newRegion);

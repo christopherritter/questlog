@@ -386,10 +386,6 @@ export default {
       }
     },
     moveLocation(e) {
-      console.log("move location")
-
-      console.log(e)
-
       const locationId = this.newLocation.locationId;
       const index = this.findWithAttr(locationId);
       const coords = e.lngLat;
@@ -400,9 +396,6 @@ export default {
       this.$store.commit("SET_COORDINATES", { coordinates, index });
     },
     updateLocation() {
-      console.log('update location')
-      console.log(this.newLocation.coordinates)
-      console.log(this.newLocation.zoom)
       const locationId = this.newLocation.locationId;
       const locationIndex = this.findWithAttr(locationId);
 

@@ -218,14 +218,8 @@ export default {
       console.log(e);
     },
     moveLocation(e) {
-      console.log("move location");
-      console.log(e);
       var lngLat = e.marker.getLngLat();
       this.panTo([ lngLat.lng, lngLat.lat ]);
-
-      //   var lngLat = await e.target.getLngLat();
-      //   console.log(lngLat);
-      //   // this.map.panTo(lngLat);
       this.$emit("move-location", [ lngLat.lng, lngLat.lat ]);
     },
     findWithAttr(value) {
