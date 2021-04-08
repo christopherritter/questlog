@@ -142,6 +142,7 @@
             class="mb-5"
             :mapStyle="mapStyle"
             :center="currentCoords"
+            :pitch="newLocation.pitch"
             :zoom="currentZoom"
             :locations="locations"
             :draggable="true"
@@ -257,6 +258,7 @@ export default {
         isStartingPoint: false,
         coords: "",
         coordinates: null,
+        pitch: 60,
         zoom: null,
         order: 0,
         image: "",
@@ -362,6 +364,7 @@ export default {
         isLandmark: this.newLocation.isLandmark,
         isStartingPoint: this.newLocation.isStartingPoint,
         coordinates: this.newLocation.coordinates,
+        pitch: this.newLocation.pitch,
         zoom: this.newLocation.zoom,
         order: this.newLocation.order,
         image: this.newLocation.image,
@@ -386,6 +389,7 @@ export default {
         isStartingPoint: location.isStartingPoint,
         coords: e.location.coordinates.lat + ", " + e.location.coordinates.lng,
         coordinates: e.location.coordinates,
+        pitch: e.location.pitch || 60,
         zoom: location.zoom,
         order: location.order,
         image: location.image,
@@ -431,6 +435,7 @@ export default {
         isStartingPoint: false,
         coords: "",
         coordinates: null,
+        pitch: 60,
         zoom: null,
         order: 0,
         image: "",

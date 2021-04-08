@@ -66,6 +66,7 @@
             ref="regionMap"
             class="mb-5"
             :center="newRegion.coordinates"
+            :pitch="newRegion.pitch"
             :zoom="newRegion.zoom"
             :locations="[newRegion]"
             :mapStyle="mapStyle"
@@ -112,6 +113,7 @@ export default {
         name: "",
         coords: "",
         coordinates: [39.828175, -98.5795],
+        pitch: 60,
         zoom: 18,
       },
       mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",

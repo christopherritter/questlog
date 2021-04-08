@@ -6,6 +6,7 @@
     :mapStyle.sync="mapStyle"
     :mapOptions.sync="mapOptions"
     :center="reverseCoords(center)"
+    :pitch="pitch"
     :zoom="zoom"
     @load="onMapLoaded"
     @click="markLocation"
@@ -98,6 +99,7 @@ export default {
   },
   props: [
     "center",
+    "pitch",
     "zoom",
     "locations",
     "mapStyle",

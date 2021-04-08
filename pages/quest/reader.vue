@@ -90,6 +90,7 @@
           :mapStyle="mapStyle"
           :mapOptions="mapOptions"
           :center="center"
+          :pitch="pitch"
           :zoom="zoom"
           :locations="locations"
           @select-location="viewLocation($event)"
@@ -180,6 +181,7 @@ export default {
       isLoaded: false,
       selectedLocation: {},
       center: {},
+      pitch: 60,
       zoom: 18,
       showSidebar: false,
       showLegend: false,
