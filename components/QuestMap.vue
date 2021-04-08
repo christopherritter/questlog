@@ -4,10 +4,20 @@
     ref="QuestMap"
     :accessToken="accessToken"
     :mapStyle.sync="mapStyle"
+    :mapOptions.sync="mapOptions"
     :center="reverseCoords(center)"
     :zoom="zoom"
     @load="onMapLoaded"
   >
+    <MglGeolocateControl
+      v-if="$route.name === 'quest-player'"
+      position="bottom-right"
+      :positionOptions="geolocateOptions.positionOptions"
+      :trackUserLocation="true"
+      :fitBoundsOptions={maxZoom:19}
+      @geolocate="geolocate"
+      @trackuserlocationstart="geolocateStart"
+    />
     <MglMarker
       v-if="$route.name === 'editor' && tab === 'region'"
       ref="regionMarker"
@@ -34,7 +44,12 @@
 <script>
 import { mapMutations } from "vuex";
 import Mapbox from "mapbox-gl";
-import { MglMap, MglMarker, MglGeojsonLayer } from "vue-mapbox";
+import {
+  MglMap,
+  MglMarker,
+  MglGeojsonLayer,
+  MglGeolocateControl
+} from "vue-mapbox";
 
 export default {
   name: "QuestMap",
@@ -63,6 +78,12 @@ export default {
           "icon-image": ["get", "marker"]
         }
       },
+      geolocateOptions: {
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      },
       selectedFeature: null
     };
   },
@@ -72,7 +93,8 @@ export default {
   components: {
     MglMap,
     MglMarker,
-    MglGeojsonLayer
+    MglGeojsonLayer,
+    MglGeolocateControl
   },
   props: [
     "center",
@@ -210,7 +232,17 @@ export default {
         }
       }
       return -1;
-    }
+    },
+    geolocateStart(e) {
+      console.log("start geolocation tracking");
+      console.log(e);
+    },
+    geolocate(e) {
+      console.log("geolocation event");
+      if (e.mapboxEvent.coords) {
+        this.$emit('position-changed', [e.mapboxEvent.coords.longitude, e.mapboxEvent.coords.latitude]);
+      }
+    },
   }
 };
 </script>

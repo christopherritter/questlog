@@ -90,6 +90,7 @@
             width: $vuetify.breakpoint.mdAndUp ? '100%' : '100vw',
             height: $vuetify.breakpoint.mdAndUp ? '100%' : mapHeight
           }"
+          :mapStyle="mapStyle"
           :mapOptions="mapOptions"
           :center="center"
           :zoom="zoom"
@@ -102,6 +103,7 @@
             preview = false;
             popupClose();
           "
+          @loaded="onLoad"
         />
       </v-col>
 
@@ -194,23 +196,11 @@ export default {
       preview: false,
       mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
       mapOptions: {
-        zoomControl: false,
-        dragging: false,
-        touchZoom: false,
-        doubleClickZoom: false,
-        scrollWheelZoom: false,
-        boxZoom: false,
-        keyboard: false,
-        minZoom: 16,
-        maxZoom: 18,
+        trackResize: true
       },
       dialog: false,
       error: null
     };
-  },
-  mounted() {
-    this.questHelpers();
-    this.beginQuest();
   },
   components: {
     QuestSidebar,
@@ -219,6 +209,9 @@ export default {
     QuestBackpack,
     QuestDialog,
     QuestMap
+  },
+  created() {
+    this.questHelpers();
   },
   watch: {
     selectedLocation(val) {
@@ -249,40 +242,33 @@ export default {
   methods: {
     ...mapActions(["findWithAttr", "setObjective"]),
     ...mapMutations(["SET_OBJECTIVE", "SET_OWNED"]),
+    onLoad() {
+      this.beginQuest();
+    },
     questHelpers() {
+      this.center = this.quest.region.coordinates;
+      this.zoom = this.quest.region.zoom;
+      // this.dialog = true;
       if (this.$vuetify.breakpoint.smAndDown) {
         this.showLegend = true;
         this.showJournal = true;
         this.showBackpack = true;
       }
+      this.isLoaded = true;
     },
     beginQuest() {
-      this.center = this.quest.region.coordinates;
-      this.zoom = this.quest.region.zoom;
-      // this.dialog = true;
-      this.$nextTick(() => {
-        this.$refs.qMap.locatePlayer();
-      });
+      // this.$nextTick(() => {
+      //   this.$refs.qMap.locatePlayer();
+      // });
     },
     positionChanged(e) {
-      this.currentPosition = this.$L.latLng(e.lat, e.lng);
-      if (!this.currentPosition) {
-        this.currentPosition = this.$L.latLng(
-          this.quest.region.coordinates[0],
-          this.quest.region.coordinates[1]
-        );
-      }
-      if (!this.showLocation && !this.preview) {
-        this.$refs.qMap.panTo(this.currentPosition, 19);
-      }
+      console.log("position changed")
+      console.log(e)
+      this.currentPosition = e;
     },
-    viewLocation(e) {
-      const locationIndex = this.findLocation(e.location.locationId);
+    async viewLocation(e) {
+      const locationIndex = await this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
-      const latlng = this.$L.latLng(
-        location.coordinates[0],
-        location.coordinates[1]
-      );
 
       this.selectedLocation = location;
       this.showSidebar = true;
@@ -291,7 +277,7 @@ export default {
       window.scrollTo(0, 0);
 
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.panTo(latlng, location.zoom);
+      this.$nextTick().then(() => this.$refs.qMap.panTo([location.coordinates[1], location.coordinates[0]]));
     },
     clearLocation() {
       this.selectedLocation = {};
@@ -307,17 +293,18 @@ export default {
       return -1;
     },
     previewLocation({ location }) {
-      var latLng = this.$L.latLng(
-        location.coordinates[0],
-        location.coordinates[1]
-      );
+      console.log("preview location")
+      var lngLat = [
+        location.coordinates[1],
+        location.coordinates[0]
+      ];
 
       this.preview = true;
 
       window.scrollTo(0, 0);
 
       this.hideSidebar();
-      this.$refs.qMap.fitBounds(latLng);
+      this.$refs.qMap.fitBounds(lngLat);
     },
     findEntry(entryId) {
       const array = this.entries;
@@ -344,10 +331,10 @@ export default {
             value: action.target
           });
           var location = this.locations[locationIndex];
-          var secondLatLng = this.$L.latLng(
-            location.coordinates[0],
-            location.coordinates[1]
-          );
+          var secondLatLng = [
+            location.coordinates[1],
+            location.coordinates[0]
+          ];
           this.preview = true;
           // this.showSidebar = false;
           // this.showLocation = false;
@@ -404,24 +391,24 @@ export default {
       this.$refs.qMap.panTo(latlng, zoom);
     },
     toggleLegend() {
-      var latlng, zoom;
+      var lngLat, zoom;
       this.showLegend = !this.showLegend;
       if (this.showLegend || !this.showLocation) {
-        latlng = this.quest.region.coordinates;
+        lngLat = this.quest.region.coordinates;
         zoom = this.quest.region.zoom;
         this.preview = true;
       } else {
-        latlng = this.$L.latLng(
-          this.currentPosition.lat,
-          this.currentPosition.lng
-        );
+        lngLat = [
+          this.currentPosition.lng,
+          this.currentPosition.lat
+        ];
         zoom = 18;
         this.preview = false;
       }
       this.showJournal = false;
       this.showBackpack = false;
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.panTo(latlng, zoom);
+      this.$refs.qMap.flyTo(lngLat, zoom);
     },
     toggleJournal() {
       this.showLegend = false;
