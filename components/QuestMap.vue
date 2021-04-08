@@ -33,6 +33,7 @@
 
 <script>
 import { mapMutations } from "vuex";
+import Mapbox from "mapbox-gl";
 import { MglMap, MglMarker, MglGeojsonLayer } from "vue-mapbox";
 
 export default {
@@ -65,6 +66,15 @@ export default {
       selectedFeature: null
     };
   },
+  created() {
+    this.map = null;
+  },
+  watch: {
+    "canvas.clientWidth"(val) {
+      console.log("canvas changed");
+      console.log(val);
+    }
+  },
   components: {
     MglMap,
     MglMarker,
@@ -81,10 +91,12 @@ export default {
   ],
   methods: {
     ...mapMutations(["SET_COORDINATES"]),
-    onMapLoaded(event) {
-      this.canvas = event.map.getCanvasContainer();
+    onMapLoaded(e) {
+      this.canvas = e.map.getCanvasContainer();
+      console.log(this.canvas);
       this.fetchFeatures();
       this.$emit("loaded");
+      this.map = Mapbox;
     },
     fetchFeatures() {
       var features = [];
@@ -123,31 +135,35 @@ export default {
       geojson.features[index].geometry.coordinates = [coords.lng, coords.lat];
       this.$refs.QuestMap.map.getSource("geojsonData").setData(geojson);
     },
-    onUp(e) {
-      console.log("QuestMap onUp")
-      // reset cursor style
-      this.canvas.style.cursor = "";
+    onUp() {
+      console.log("QuestMap onUp");
 
-      // Unbind mouse/touch events
-      this.$refs.QuestMap.map.off("mousemove", this.onMove);
-      this.$refs.QuestMap.map.off("touchmove", this.onMove);
-      this.$refs.QuestMap.actions.panTo(e.lngLat);
-      // this.$emit("move-location", e);
+      if (this.$route.name === "editor") {
+        // reset cursor style
+        this.canvas.style.cursor = "";
 
-      this.selectedFeature = null;
+        // Unbind mouse/touch events
+        this.$refs.QuestMap.map.off("mousemove", this.onMove);
+        this.$refs.QuestMap.map.off("touchmove", this.onMove);
+
+        this.selectedFeature = null;
+      }
+
+      // this.$refs.QuestMap.actions.panTo(e.lngLat);
     },
     reverseCoords(coords) {
       return [coords[1], coords[0]];
     },
     redrawMap() {
       console.log("redraw map");
-      this.$nextTick(() => {
-        this.$refs.QuestMap.map.resize();
-      });
+      this.$nextTick().then(() => this.$refs.QuestMap.map.resize());
+    },
+    setCenter(coords) {
+      this.$refs.QuestMap.map.setCenter(coords);
     },
     panTo(e) {
-      console.log("pan to")
-      console.log(e)
+      console.log("pan to");
+      console.log(e);
       this.$refs.QuestMap.actions.panTo(e);
       // this.$refs.QuestMap.actions.panTo(e.mapboxEvent.lngLat);
     },
@@ -171,8 +187,6 @@ export default {
 
       e.mapboxEvent.preventDefault();
 
-      this.canvas.style.cursor = "grab";
-
       features.forEach(feature => {
         if (feature.layer.id == "geojsonLocations") {
           properties = feature.properties;
@@ -180,10 +194,13 @@ export default {
         }
       });
 
-      this.$refs.QuestMap.map.on("mousemove", this.onMove);
-      this.$refs.QuestMap.map.once("mouseup", this.onUp);
+      if (this.$route.name === "editor") {
+        this.canvas.style.cursor = "grab";
+        this.$refs.QuestMap.map.on("mousemove", this.onMove);
+        this.selectedFeature = this.findWithAttr(properties.locationId);
+      }
 
-      this.selectedFeature = this.findWithAttr(properties.locationId);
+      this.$refs.QuestMap.map.once("mouseup", this.onUp);
 
       this.$emit("select-location", {
         location: {
@@ -192,7 +209,7 @@ export default {
         }
       });
 
-      this.redrawMap(); // imperfect solution
+      // this.redrawMap();
     },
     releaseLocation(e) {
       console.log("release location");
@@ -219,10 +236,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.mapboxgl-canvas-container {
-  height: 100vh;
-  width: 100vw;
-}
-</style>
