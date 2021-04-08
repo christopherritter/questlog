@@ -114,7 +114,7 @@ export default {
         coordinates: [39.828175, -98.5795],
         zoom: 18,
       },
-      mapStyle: "mapbox://styles/christopherritter/ckn6i5asn0ck517pntqzp6nye",
+      mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
       mapOptions: {},
       loading: false,
       error: null,

@@ -8,7 +8,7 @@
     :center="reverseCoords(center)"
     :zoom="zoom"
     @load="onMapLoaded"
-    @click="$emit('mark-location', $event)"
+    @click="markLocation"
   >
     <MglGeolocateControl
       v-if="$route.name === 'quest-player'"
@@ -216,6 +216,11 @@ export default {
     releaseLocation(e) {
       console.log("release location");
       console.log(e);
+    },
+    markLocation(e) {
+      if (this.$route.name === 'editor' && this.tab === 'region') {
+        this.$emit('mark-location', e);
+      }
     },
     moveLocation(e) {
       var lngLat = e.marker.getLngLat();
