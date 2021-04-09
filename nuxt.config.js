@@ -84,7 +84,7 @@ export default {
       href: '/favicon.ico'
     },
     {
-      href: "https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.1/mapbox-gl.css",
+      href: "https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css",
       rel: "stylesheet",
       type: "text/css"
     }]
