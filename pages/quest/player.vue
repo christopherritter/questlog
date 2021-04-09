@@ -402,17 +402,14 @@ export default {
         zoom = this.quest.region.zoom;
         // this.preview = true;
       } else {
-        latlng = this.$L.latLng(
-          this.currentPosition.lat,
-          this.currentPosition.lng
-        );
-        zoom = 18;
+        latlng = this.currentPosition;
+        zoom = this.selectedLocation.zoom;
         // this.preview = false;
       }
       this.showSidebar = false;
       this.showLocation = false;
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.panTo(latlng, zoom);
+      this.$refs.qMap.flyTo({ center: latlng, zoom: zoom });
     },
     toggleLegend() {
       var lngLat, zoom;
@@ -452,14 +449,11 @@ export default {
         latlng = this.quest.region.coordinates;
         zoom = this.quest.region.zoom;
       } else {
-        latlng = this.$L.latLng(
-          this.currentPosition.lat,
-          this.currentPosition.lng
-        );
-        zoom = 18;
+        latlng = this.currentPosition;
+        zoom = this.selectedLocation.zoom;
       }
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.panTo(latlng, zoom);
+      this.$refs.qMap.flyTo({ center: latlng, zoom: zoom });
     },
     restartQuest() {
       this.dialog = false;
