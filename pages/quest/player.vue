@@ -269,8 +269,11 @@ export default {
       this.currentPosition = e;
     },
     async viewLocation(e) {
+      console.log("view location")
       const locationIndex = await this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
+
+      console.log( [location.coordinates[1], location.coordinates[0]])
 
       this.selectedLocation = location;
       this.bearing = location.bearing;
@@ -281,7 +284,7 @@ export default {
       window.scrollTo(0, 0);
 
       this.$refs.qMap.redrawMap();
-      this.$nextTick().then(() => this.$refs.qMap.panTo({
+      this.$nextTick().then(() => this.$refs.qMap.flyTo({
         center: [location.coordinates[1], location.coordinates[0]],
         zoom: location.zoom,
       }));
@@ -301,7 +304,11 @@ export default {
     },
     previewLocation({ location }) {
       console.log("preview location")
-      var lngLat = [
+      var currentLocation = [
+        this.selectedLocation.coordinates[1],
+        this.selectedLocation.coordinates[0]
+      ];
+      var targetLocation = [
         location.coordinates[1],
         location.coordinates[0]
       ];
@@ -311,7 +318,10 @@ export default {
       window.scrollTo(0, 0);
 
       this.hideSidebar();
-      this.$refs.qMap.fitBounds(lngLat);
+      this.$refs.qMap.fitBounds([
+        currentLocation,
+        targetLocation
+      ]);
     },
     findEntry(entryId) {
       const array = this.entries;
@@ -338,7 +348,11 @@ export default {
             value: action.target
           });
           var location = this.locations[locationIndex];
-          var secondLatLng = [
+          var currentLocation = [
+            this.selectedLocation.coordinates[1],
+            this.selectedLocation.coordinates[0]
+          ];
+          var targetLocation = [
             location.coordinates[1],
             location.coordinates[0]
           ];
@@ -347,7 +361,10 @@ export default {
           // this.showLocation = false;
 
           this.$nextTick(() => {
-            this.$refs.qMap.fitBounds(secondLatLng);
+            this.$refs.qMap.fitBounds([
+              currentLocation,
+              targetLocation
+            ]);
           });
           break;
         case "take":

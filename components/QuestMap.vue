@@ -16,8 +16,8 @@
       v-if="$route.name === 'quest-player'"
       position="bottom-right"
       :positionOptions="geolocateOptions.positionOptions"
+      :fitBoundsOptions="{ linear: true, maxZoom: 22 }"
       :trackUserLocation="true"
-      :fitBoundsOptions="{ maxZoom: 19 }"
       @geolocate="geolocate"
       @trackuserlocationstart="geolocateStart"
     />
@@ -179,8 +179,6 @@ export default {
       this.$refs.QuestMap.actions.panTo(e);
     },
     flyTo(e) {
-      console.log("fly to")
-      console.log(e)
       this.$refs.QuestMap.actions.flyTo(e);
     },
     hoverLocation() {
@@ -222,14 +220,14 @@ export default {
       console.log(e);
     },
     markLocation(e) {
-      if (this.$route.name === 'editor' && this.tab === 'region') {
-        this.$emit('mark-location', e);
+      if (this.$route.name === "editor" && this.tab === "region") {
+        this.$emit("mark-location", e);
       }
     },
     moveLocation(e) {
       var lngLat = e.marker.getLngLat();
-      this.panTo([ lngLat.lng, lngLat.lat ]);
-      this.$emit("move-location", [ lngLat.lng, lngLat.lat ]);
+      this.panTo([lngLat.lng, lngLat.lat]);
+      this.$emit("move-location", [lngLat.lng, lngLat.lat]);
     },
     findWithAttr(value) {
       const array = this.geoJsonSource.data.features;
@@ -252,6 +250,11 @@ export default {
           e.mapboxEvent.coords.latitude
         ]);
       }
+    },
+    fitBounds(e) {
+      this.$refs.QuestMap.map.fitBounds(e, {
+        padding: { top: 48, bottom: 48, left: 48, right: 48 }
+      });
     }
   }
 };
