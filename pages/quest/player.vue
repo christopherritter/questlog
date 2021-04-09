@@ -273,6 +273,8 @@ export default {
       const location = this.locations[locationIndex];
 
       this.selectedLocation = location;
+      this.bearing = location.bearing;
+      this.pitch = location.pitch;
       this.showSidebar = true;
       this.showLocation = true;
 

@@ -303,10 +303,11 @@ export default {
       if (this.newLocation.coordinates == null) {
         return this.region.coordinates;
       } else {
-        return [
-          this.newLocation.coordinates.lat,
-          this.newLocation.coordinates.lng
-        ];
+        // return [
+        //   this.newLocation.coordinates.lat,
+        //   this.newLocation.coordinates.lng
+        // ];
+        return this.newLocation.coordinates
       }
     },
     currentZoom() {
@@ -402,9 +403,9 @@ export default {
         isLandmark: location.isLandmark,
         isStartingPoint: location.isStartingPoint,
         // coords: e.location.coordinates.lat + ", " + e.location.coordinates.lng,
-        coordinates: e.location.coordinates,
-        pitch: e.location.pitch || 60,
-        bearing: e.location.bearing || 0,
+        coordinates: [e.location.coordinates.lat, e.location.coordinates.lng],
+        pitch: location.pitch,
+        bearing: location.bearing,
         zoom: location.zoom,
         order: location.order,
         image: location.image,
@@ -415,8 +416,8 @@ export default {
       if (this.selectedView === 0) {
         this.$refs.qMap.flyTo({
           center: [
-            Number(location.coordinates[0]),
-            Number(location.coordinates[1])
+            Number(location.coordinates[1]),
+            Number(location.coordinates[0])
           ],
           zoom: Number(location.zoom)
         });

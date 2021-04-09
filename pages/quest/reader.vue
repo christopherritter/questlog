@@ -91,6 +91,7 @@
           :mapOptions="mapOptions"
           :center="center"
           :pitch="pitch"
+          :bearing="bearing"
           :zoom="zoom"
           :locations="locations"
           @select-location="viewLocation($event)"
@@ -181,6 +182,7 @@ export default {
       isLoaded: false,
       selectedLocation: {},
       center: {},
+      bearing: 0,
       pitch: 60,
       zoom: 18,
       showSidebar: false,
@@ -263,6 +265,8 @@ export default {
       const location = this.locations[locationIndex];
 
       this.selectedLocation = location;
+      this.bearing = location.bearing;
+      this.pitch = location.pitch;
       this.showSidebar = true;
       this.showLocation = true;
 
