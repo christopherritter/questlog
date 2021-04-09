@@ -267,7 +267,10 @@ export default {
       this.showLocation = true;
 
       this.$refs.qMap.redrawMap()
-      this.$nextTick().then(() => this.$refs.qMap.panTo([location.coordinates[1], location.coordinates[0]]));
+      this.$nextTick().then(() => this.$refs.qMap.flyTo({
+        center: [location.coordinates[1], location.coordinates[0]],
+        zoom: location.zoom,
+      }));
     },
     clearLocation() {
       this.selectedLocation = {};

@@ -46,7 +46,7 @@
                   ></v-text-field>
                 </v-col>
               </v-row> -->
-              <v-row>
+              <!-- <v-row>
                 <v-col cols="12">
                   <v-text-field
                     v-model="newLocation.coords"
@@ -54,11 +54,22 @@
                     outlined
                   ></v-text-field>
                 </v-col>
-              </v-row>
+              </v-row> -->
+              <h4 class="mt-1 mb-6">Pitch</h4>
+              <v-slider
+                v-model="newLocation.pitch"
+                max="85"
+                thumb-label
+              ></v-slider>
+              <h4 class="mt-1 mb-6">Bearing</h4>
+              <v-slider
+                v-model="newLocation.bearing"
+                max="360"
+                thumb-label
+              ></v-slider>
               <h4 class="mt-1 mb-6">Zoom</h4>
               <v-slider
                 v-model="newLocation.zoom"
-                min="0"
                 max="22"
                 thumb-label
               ></v-slider>
@@ -143,6 +154,7 @@
             :mapStyle="mapStyle"
             :center="currentCoords"
             :pitch="newLocation.pitch"
+            :bearing="newLocation.bearing"
             :zoom="currentZoom"
             :locations="locations"
             :draggable="true"
@@ -256,14 +268,15 @@ export default {
         name: "",
         isLandmark: false,
         isStartingPoint: false,
-        coords: "",
+        // coords: "",
         coordinates: null,
         pitch: 60,
+        bearing: 0,
         zoom: null,
         order: 0,
         image: "",
         marker: null,
-        draggable: true,
+        draggable: true
       },
       selectedLocation: null,
       selectedView: 0,
@@ -276,7 +289,7 @@ export default {
   components: { QuestMap },
   computed: {
     ...mapState({
-      markers: state => state.markers,
+      markers: state => state.markers
     }),
     filterByTerm() {
       let searchTerm = this.searchTerm.toLowerCase();
@@ -287,19 +300,22 @@ export default {
       });
     },
     currentCoords() {
-      if (this.selectedLocation == null) {
+      if (this.newLocation.coordinates == null) {
         return this.region.coordinates;
       } else {
-        return this.newLocation.coordinates;
+        return [
+          this.newLocation.coordinates.lat,
+          this.newLocation.coordinates.lng
+        ];
       }
     },
     currentZoom() {
-      if (this.selectedLocation == null) {
+      if (this.newLocation.zoom == 0) {
         return this.region.zoom;
       } else {
         return this.newLocation.zoom;
       }
-    },
+    }
     // orderItems() {
     //   const orderItems = [];
     //   var i;
@@ -311,38 +327,35 @@ export default {
     // }
   },
   watch: {
-    sortLocations(val) {
-      let locations = this.locations.slice();
-
-      if (val === "Alphabetically") {
-        // locations.sort((a, b) => (a.name > b.name ? 1 : -1));
-        // if (locations != this.locations) {
-        //   this.$store.commit("SET_LOCATIONS", locations);
-        // }
-      } else if (val === "Numerically") {
-        // locations.sort((a, b) => (a.order > b.order ? 1 : -1));
-        // if (locations != this.locations) {
-        //   this.$store.commit("SET_LOCATIONS", locations);
-        // }
-      }
-
-      this.clearLocation();
-    },
-    "newLocation.coords"(val, oldVal) {
-      const locationId = this.newLocation.locationId;
-      const index = this.findWithAttr(locationId);
-      // if (val) {
-        var coordinates = val.split(', ');
-      // } else {
-      //   var coordinates = oldVal.split(', ');
-      // }
-
-      if (coordinates.length == 2) {
-        this.newLocation.coordinates = [Number(coordinates[0]), Number(coordinates[1])];
-        // this.$store.commit("SET_COORDINATES", { coordinates, index });
-        // this.$refs.qMap.panTo(coordinates);
-      }
-    }
+    // sortLocations(val) {
+    //   let locations = this.locations.slice();
+    //   if (val === "Alphabetically") {
+    //     // locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+    //     // if (locations != this.locations) {
+    //     //   this.$store.commit("SET_LOCATIONS", locations);
+    //     // }
+    //   } else if (val === "Numerically") {
+    //     // locations.sort((a, b) => (a.order > b.order ? 1 : -1));
+    //     // if (locations != this.locations) {
+    //     //   this.$store.commit("SET_LOCATIONS", locations);
+    //     // }
+    //   }
+    //   this.clearLocation();
+    // }
+    // "newLocation.coords"(val, oldVal) {
+    //   const locationId = this.newLocation.locationId;
+    //   const index = this.findWithAttr(locationId);
+    //   // if (val) {
+    //     var coordinates = val.split(', ');
+    //   // } else {
+    //   //   var coordinates = oldVal.split(', ');
+    //   // }
+    //   if (coordinates.length == 2) {
+    //     this.newLocation.coordinates = [Number(coordinates[0]), Number(coordinates[1])];
+    //     // this.$store.commit("SET_COORDINATES", { coordinates, index });
+    //     // this.$refs.qMap.panTo(coordinates);
+    //   }
+    // }
   },
   methods: {
     ...mapActions([
@@ -355,7 +368,7 @@ export default {
     markLocation(location) {
       var locationArr = [location.latlng.lat, location.latlng.lng];
       this.clearLocation();
-      this.newLocation.coords = locationArr.toString(", ");
+      // this.newLocation.coords = locationArr.toString(", ");
     },
     addLocation() {
       this.$store.dispatch("addLocation", {
@@ -365,31 +378,33 @@ export default {
         isStartingPoint: this.newLocation.isStartingPoint,
         coordinates: this.newLocation.coordinates,
         pitch: this.newLocation.pitch,
+        bearing: this.newLocation.bearing,
         zoom: this.newLocation.zoom,
         order: this.newLocation.order,
         image: this.newLocation.image,
         marker: this.newLocation.marker,
-        draggable: this.newLocation.draggable,
+        draggable: this.newLocation.draggable
       });
       this.clearLocation();
     },
     selectLocation(e) {
-      console.log("select location")
-      console.log(e)
+      console.log("select location");
+      console.log(e);
       const index = this.findWithAttr(e.location.locationId);
       var location = this.locations[index];
 
-      console.log(index)
-      console.log(location)
+      console.log(index);
+      console.log(location);
 
       this.newLocation = {
         locationId: location.locationId,
         name: location.name,
         isLandmark: location.isLandmark,
         isStartingPoint: location.isStartingPoint,
-        coords: e.location.coordinates.lat + ", " + e.location.coordinates.lng,
+        // coords: e.location.coordinates.lat + ", " + e.location.coordinates.lng,
         coordinates: e.location.coordinates,
         pitch: e.location.pitch || 60,
+        bearing: e.location.bearing || 0,
         zoom: location.zoom,
         order: location.order,
         image: location.image,
@@ -398,7 +413,13 @@ export default {
       };
       this.selectedLocation = index;
       if (this.selectedView === 0) {
-        this.$refs.qMap.flyTo({ center: location.coordinates, zoom: location.zoom });
+        this.$refs.qMap.flyTo({
+          center: [
+            Number(location.coordinates[0]),
+            Number(location.coordinates[1])
+          ],
+          zoom: Number(location.zoom)
+        });
       }
     },
     moveLocation(e) {
@@ -407,7 +428,7 @@ export default {
       const coords = e.lngLat;
       const coordinates = [coords.lat, coords.lng];
 
-      this.newLocation.coords = coordinates.toString(", ");
+      // this.newLocation.coords = coordinates.toString(", ");
       this.newLocation.coordinates = coordinates;
       this.$store.commit("SET_COORDINATES", { coordinates, index });
     },
@@ -433,10 +454,11 @@ export default {
         name: "",
         isLandmark: false,
         isStartingPoint: false,
-        coords: "",
-        coordinates: null,
-        pitch: 60,
-        zoom: null,
+        // coords: "",
+        coordinates: this.newLocation.coordinates,
+        pitch: this.newLocation.pitch,
+        bearing: this.newLocation.bearing,
+        zoom: this.newLocation.zoom,
         order: 0,
         image: "",
         marker: null,

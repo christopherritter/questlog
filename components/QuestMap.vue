@@ -7,6 +7,7 @@
     :mapOptions.sync="mapOptions"
     :center="reverseCoords(center)"
     :pitch="pitch"
+    :bearing="bearing"
     :zoom="zoom"
     @load="onMapLoaded"
     @click="markLocation"
@@ -100,6 +101,7 @@ export default {
   props: [
     "center",
     "pitch",
+    "bearing",
     "zoom",
     "locations",
     "mapStyle",

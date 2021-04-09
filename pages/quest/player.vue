@@ -94,6 +94,7 @@
           :mapOptions="mapOptions"
           :center="center"
           :pitch="pitch"
+          :bearing="bearing"
           :zoom="zoom"
           :locations="locations"
           @select-location="viewLocation($event)"
@@ -189,6 +190,7 @@ export default {
       selectedLocation: {},
       center: {},
       pitch: 60,
+      bearing: 0,
       zoom: 19,
       showSidebar: false,
       showLegend: false,
@@ -277,7 +279,10 @@ export default {
       window.scrollTo(0, 0);
 
       this.$refs.qMap.redrawMap();
-      this.$nextTick().then(() => this.$refs.qMap.panTo([location.coordinates[1], location.coordinates[0]]));
+      this.$nextTick().then(() => this.$refs.qMap.panTo({
+        center: [location.coordinates[1], location.coordinates[0]],
+        zoom: location.zoom,
+      }));
     },
     clearLocation() {
       this.selectedLocation = {};
