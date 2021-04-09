@@ -261,19 +261,17 @@ export default {
       this.isLoaded = true;
     },
     beginQuest() {
-      // this.$nextTick(() => {
-      //   this.$refs.qMap.locatePlayer();
-      // });
+      this.$refs.qMap.triggerGeolocate();
     },
     positionChanged(e) {
       this.currentPosition = e;
     },
     async viewLocation(e) {
-      console.log("view location")
+      console.log("view location");
       const locationIndex = await this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
 
-      console.log( [location.coordinates[1], location.coordinates[0]])
+      console.log([location.coordinates[1], location.coordinates[0]]);
 
       this.selectedLocation = location;
       this.bearing = location.bearing;
@@ -284,10 +282,12 @@ export default {
       window.scrollTo(0, 0);
 
       this.$refs.qMap.redrawMap();
-      this.$nextTick().then(() => this.$refs.qMap.flyTo({
-        center: [location.coordinates[1], location.coordinates[0]],
-        zoom: location.zoom,
-      }));
+      this.$nextTick().then(() =>
+        this.$refs.qMap.flyTo({
+          center: [location.coordinates[1], location.coordinates[0]],
+          zoom: location.zoom
+        })
+      );
     },
     clearLocation() {
       this.selectedLocation = {};
@@ -303,25 +303,19 @@ export default {
       return -1;
     },
     previewLocation({ location }) {
-      console.log("preview location")
+      console.log("preview location");
       var currentLocation = [
         this.selectedLocation.coordinates[1],
         this.selectedLocation.coordinates[0]
       ];
-      var targetLocation = [
-        location.coordinates[1],
-        location.coordinates[0]
-      ];
+      var targetLocation = [location.coordinates[1], location.coordinates[0]];
 
       this.preview = true;
 
       window.scrollTo(0, 0);
 
       this.hideSidebar();
-      this.$refs.qMap.fitBounds([
-        currentLocation,
-        targetLocation
-      ]);
+      this.$refs.qMap.fitBounds([currentLocation, targetLocation]);
     },
     findEntry(entryId) {
       const array = this.entries;
@@ -361,10 +355,7 @@ export default {
           // this.showLocation = false;
 
           this.$nextTick(() => {
-            this.$refs.qMap.fitBounds([
-              currentLocation,
-              targetLocation
-            ]);
+            this.$refs.qMap.fitBounds([currentLocation, targetLocation]);
           });
           break;
         case "take":
@@ -396,20 +387,22 @@ export default {
       return "100vw";
     },
     hideSidebar() {
-      var latlng, zoom;
-      if (this.preview) {
-        latlng = this.quest.region.coordinates;
-        zoom = this.quest.region.zoom;
-        // this.preview = true;
-      } else {
-        latlng = this.currentPosition;
-        zoom = this.selectedLocation.zoom;
-        // this.preview = false;
-      }
+      // var latlng, zoom;
+      // if (this.preview) {
+      //   latlng = this.quest.region.coordinates;
+      //   zoom = this.quest.region.zoom;
+      //   // this.preview = true;
+      // } else {
+      //   latlng = this.currentPosition;
+      //   zoom = this.selectedLocation.zoom;
+      //   // this.preview = false;
+      // }
       this.showSidebar = false;
       this.showLocation = false;
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.flyTo({ center: latlng, zoom: zoom });
+      this.$nextTick(() => {
+        this.$refs.qMap.triggerGeolocate();
+      });
     },
     toggleLegend() {
       var lngLat, zoom;
@@ -419,10 +412,7 @@ export default {
         zoom = this.quest.region.zoom;
         this.preview = true;
       } else {
-        lngLat = [
-          this.currentPosition.lng,
-          this.currentPosition.lat
-        ];
+        lngLat = [this.currentPosition.lng, this.currentPosition.lat];
         zoom = 18;
         this.preview = false;
       }
@@ -444,16 +434,18 @@ export default {
       this.$refs.qMap.redrawMap();
     },
     popupClose() {
-      var latlng, zoom;
-      if (this.preview) {
-        latlng = this.quest.region.coordinates;
-        zoom = this.quest.region.zoom;
-      } else {
-        latlng = this.currentPosition;
-        zoom = this.selectedLocation.zoom;
-      }
+      // var latlng, zoom;
+      // if (this.preview) {
+      //   latlng = this.quest.region.coordinates;
+      //   zoom = this.quest.region.zoom;
+      // } else {
+      //   latlng = this.currentPosition;
+      //   zoom = this.selectedLocation.zoom;
+      // }
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.flyTo({ center: latlng, zoom: zoom });
+      this.$nextTick(() => {
+        this.$refs.qMap.triggerGeolocate();
+      });
     },
     restartQuest() {
       this.dialog = false;

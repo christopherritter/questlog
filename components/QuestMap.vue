@@ -14,12 +14,12 @@
   >
     <MglGeolocateControl
       v-if="$route.name === 'quest-player'"
+      ref="GeolocateControl"
       position="bottom-right"
       :positionOptions="geolocateOptions.positionOptions"
       :fitBoundsOptions="{ linear: true, maxZoom: 22 }"
       :trackUserLocation="true"
       @geolocate="geolocate"
-      @trackuserlocationstart="geolocateStart"
     />
     <MglMarker
       v-if="$route.name === 'editor' && tab === 'region'"
@@ -179,6 +179,8 @@ export default {
       this.$refs.QuestMap.actions.panTo(e);
     },
     flyTo(e) {
+      console.log("fly to")
+      console.log(e)
       this.$refs.QuestMap.actions.flyTo(e);
     },
     hoverLocation() {
@@ -239,9 +241,10 @@ export default {
       }
       return -1;
     },
-    geolocateStart(e) {
-      console.log("start geolocation tracking");
-      console.log(e);
+    triggerGeolocate() {
+      this.$nextTick(() => {
+        this.$refs.GeolocateControl.trigger();
+      });
     },
     geolocate(e) {
       if (e.mapboxEvent.coords) {
