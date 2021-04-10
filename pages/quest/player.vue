@@ -270,24 +270,17 @@ export default {
       this.currentPosition = e;
     },
     async viewLocation(e) {
-      console.log("view location");
-
       const locationIndex = await this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
 
       var currentPosition = this.currentPosition;
       var targetLocation = [location.coordinates[1], location.coordinates[0]];
 
-      console.log(currentPosition);
-      console.log(targetLocation);
-
       var from = point(currentPosition);
       var to = point(targetLocation);
       var options = { units: "miles" };
 
       var totalDistance = distance(from, to, options);
-
-      console.log("distance: " + totalDistance + " miles");
 
       if (totalDistance > this.minimumDistance) {
         this.previewLocation({ location });
@@ -446,7 +439,6 @@ export default {
       this.$refs.qMap.redrawMap();
     },
     async showAllLocations() {
-      console.log("show all locations");
       var allLocations = [];
 
       this.locations.forEach(location => {

@@ -264,8 +264,6 @@ export default {
       }
     },
     fitBounds(e) {
-      console.log("fit bounds")
-      console.log(e)
       this.$refs.QuestMap.map.fitBounds(e, {
         padding: { top: 48, bottom: 48, left: 48, right: 48 }
       });
