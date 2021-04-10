@@ -20,6 +20,7 @@
       :fitBoundsOptions="{ linear: true, maxZoom: 22 }"
       :trackUserLocation="true"
       @geolocate="geolocate"
+      @load="onGeolocateLoaded"
     />
     <MglMarker
       v-if="$route.name === 'editor' && tab === 'region'"
@@ -112,13 +113,16 @@ export default {
   methods: {
     ...mapMutations(["SET_COORDINATES"]),
     onMapLoaded(e) {
+      this.map = Mapbox;
       this.canvas = e.map.getCanvasContainer();
       this.fetchFeatures();
-      this.$emit("loaded");
-      this.map = Mapbox;
     },
     onDataLoaded(e) {
       console.log("data loaded " + e.isSourceLoaded)
+      console.log(e)
+    },
+    onGeolocateLoaded(e) {
+      console.log("geolocate loaded")
       console.log(e)
     },
     fetchFeatures() {
@@ -146,6 +150,7 @@ export default {
       });
 
       this.geoJsonSource.data.features = features;
+      this.$emit("loaded");
     },
     onMove(e) {
       var coords = e.lngLat,
@@ -259,6 +264,8 @@ export default {
       }
     },
     fitBounds(e) {
+      console.log("fit bounds")
+      console.log(e)
       this.$refs.QuestMap.map.fitBounds(e, {
         padding: { top: 48, bottom: 48, left: 48, right: 48 }
       });

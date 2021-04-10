@@ -100,6 +100,7 @@
           @select-location="viewLocation($event)"
           @preview-location="previewLocation($event)"
           @clear-location="clearLocation()"
+          @position-changed="positionChanged($event)"
           @popupclose="
             preview = false;
             popupClose();
@@ -179,8 +180,8 @@ import QuestJournal from "@/components/quest/QuestJournal.vue";
 import QuestBackpack from "@/components/quest/QuestBackpack.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
 import QuestMap from "@/components/QuestMap.vue";
-import { point } from '@turf/helpers';
-import distance from '@turf/distance';
+import { point } from "@turf/helpers";
+import distance from "@turf/distance";
 
 export default {
   name: "QuestPlayer",
@@ -250,6 +251,7 @@ export default {
     ...mapMutations(["SET_OBJECTIVE", "SET_OWNED"]),
     onLoad() {
       this.beginQuest();
+      this.isLoaded = true;
     },
     questHelpers() {
       this.center = this.quest.region.coordinates;
@@ -260,10 +262,12 @@ export default {
         this.showJournal = true;
         this.showBackpack = true;
       }
-      this.isLoaded = true;
     },
     beginQuest() {
       this.$refs.qMap.triggerGeolocate();
+    },
+    positionChanged(e) {
+      this.currentPosition = e;
     },
     async viewLocation(e) {
       console.log("view location");
@@ -272,18 +276,18 @@ export default {
       const location = this.locations[locationIndex];
 
       var currentPosition = this.currentPosition;
-      var targetLocation = [location.coordinates[1], location.coordinates[0]]
+      var targetLocation = [location.coordinates[1], location.coordinates[0]];
 
-      console.log(currentPosition)
+      console.log(currentPosition);
       console.log(targetLocation);
 
       var from = point(currentPosition);
       var to = point(targetLocation);
-      var options = {units: 'miles'};
+      var options = { units: "miles" };
 
       var totalDistance = distance(from, to, options);
 
-      console.log("distance: " + totalDistance + " miles")
+      console.log("distance: " + totalDistance + " miles");
 
       if (totalDistance > this.minimumDistance) {
         this.previewLocation({ location });
@@ -304,7 +308,6 @@ export default {
           })
         );
       }
-
     },
     clearLocation() {
       this.selectedLocation = {};
@@ -320,11 +323,6 @@ export default {
       return -1;
     },
     previewLocation({ location }) {
-      console.log("preview location");
-      var currentLocation = [
-        this.selectedLocation.coordinates[1],
-        this.selectedLocation.coordinates[0]
-      ];
       var targetLocation = [location.coordinates[1], location.coordinates[0]];
 
       this.preview = true;
@@ -332,7 +330,7 @@ export default {
       window.scrollTo(0, 0);
 
       // this.hideSidebar();
-      this.$refs.qMap.fitBounds([currentLocation, targetLocation]);
+      this.$refs.qMap.fitBounds([this.currentPosition, targetLocation]);
     },
     findEntry(entryId) {
       const array = this.entries;
@@ -404,53 +402,67 @@ export default {
       return "100vw";
     },
     hideSidebar() {
-      // var latlng, zoom;
-      // if (this.preview) {
-      //   latlng = this.quest.region.coordinates;
-      //   zoom = this.quest.region.zoom;
-      //   // this.preview = true;
-      // } else {
-      //   latlng = this.currentPosition;
-      //   zoom = this.selectedLocation.zoom;
-      //   // this.preview = false;
-      // }
       this.showSidebar = false;
       this.showLocation = false;
       this.$refs.qMap.redrawMap();
-      if (this.preview == false) {
+
+      if (this.preview) {
+        this.showAllLocations();
+      } else {
         this.$nextTick(() => {
           this.$refs.qMap.triggerGeolocate();
         });
       }
     },
     toggleLegend() {
-      var lngLat, zoom;
       this.showLegend = !this.showLegend;
-      if (this.showLegend || !this.showLocation) {
-        lngLat = this.quest.region.coordinates;
-        zoom = this.quest.region.zoom;
-        this.preview = true;
-      } else {
-        lngLat = [this.currentPosition.lng, this.currentPosition.lat];
-        zoom = 18;
-        this.preview = false;
-      }
       this.showJournal = false;
       this.showBackpack = false;
+
       this.$refs.qMap.redrawMap();
-      // this.$refs.qMap.flyTo(lngLat, zoom);
+
+      if (this.showLegend) {
+        this.showAllLocations();
+        this.preview = true;
+      } else {
+        this.$nextTick(() => {
+          this.$refs.qMap.triggerGeolocate();
+        });
+        this.preview = false;
+      }
     },
     toggleJournal() {
       this.showLegend = false;
       this.showJournal = !this.showJournal;
       this.showBackpack = false;
+
       this.$refs.qMap.redrawMap();
     },
     toggleBackpack() {
       this.showLegend = false;
       this.showJournal = false;
       this.showBackpack = !this.showBackpack;
+
       this.$refs.qMap.redrawMap();
+    },
+    async showAllLocations() {
+      console.log("show all locations");
+      var allLocations = [];
+
+      this.locations.forEach(location => {
+        var coords = [location.coordinates[1], location.coordinates[0]];
+        allLocations.push(coords);
+      });
+
+      var latLngBounds = await new this.$refs.qMap.map.LngLatBounds(
+        allLocations[0].coordinates,
+        allLocations[0].coordinates
+      );
+      var bounds = allLocations.reduce((bounds, coord) => {
+        return bounds.extend(coord);
+      }, latLngBounds);
+
+      this.$refs.qMap.fitBounds(bounds);
     },
     popupClose() {
       // var latlng, zoom;

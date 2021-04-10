@@ -240,6 +240,7 @@ export default {
     ...mapMutations(["SET_OBJECTIVE", "SET_OWNED"]),
     onLoad() {
       this.beginQuest();
+      this.isLoaded = true;
     },
     questHelpers() {
       this.center = this.quest.region.coordinates;
@@ -250,7 +251,6 @@ export default {
         this.showJournal = true;
         this.showBackpack = true;
       }
-      this.isLoaded = true;
     },
     beginQuest() {
       if (this.quest.startingPoint && this.quest.startingPoint.length > 0) {
