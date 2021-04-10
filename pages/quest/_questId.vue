@@ -157,7 +157,6 @@ export default {
   components: { QuestHeader, QuestMap },
   created() {
     this.fetchQuest();
-    console.log(this.$config.mapboxToken)
   },
   watch: {
     // call again the method if the route changes
