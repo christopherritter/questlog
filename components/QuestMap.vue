@@ -2,7 +2,7 @@
   <MglMap
     id="MapBoxMap"
     ref="QuestMap"
-    :accessToken="accessToken"
+    :accessToken="$config.mapboxPublicToken"
     :mapStyle.sync="mapStyle"
     :mapOptions.sync="mapOptions"
     :center="reverseCoords(center)"
@@ -56,11 +56,15 @@ import {
 
 export default {
   name: "QuestMap",
+  async asyncData({ $config: { mapboxPublicToken } }) {
+    const token = $config.mapboxPublicToken;
+    return { token };
+  },
   data() {
     return {
       map: null,
       canvas: null,
-      accessToken: process.env.MAPBOX_ACCESS_TOKEN,
+      accessToken: this.$config.mapboxToken,
       geoJsonSource: {
         type: "geojson",
         data: {
@@ -118,12 +122,12 @@ export default {
       this.fetchFeatures();
     },
     onDataLoaded(e) {
-      console.log("data loaded " + e.isSourceLoaded)
-      console.log(e)
+      console.log("data loaded " + e.isSourceLoaded);
+      console.log(e);
     },
     onGeolocateLoaded(e) {
-      console.log("geolocate loaded")
-      console.log(e)
+      console.log("geolocate loaded");
+      console.log(e);
     },
     fetchFeatures() {
       var features = [];
@@ -265,7 +269,7 @@ export default {
       this.$refs.QuestMap.map.fitBounds(e, {
         padding: { top: 48, bottom: 48, left: 48, right: 48 }
       });
-    },
+    }
   }
 };
 </script>

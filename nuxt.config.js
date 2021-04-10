@@ -144,11 +144,16 @@ export default {
     id: process.env.GOOGLE_ANALYTICS_ID,
   },
 
-  // publicRuntimeConfig: {
-  //   googleAnalytics: {
-  //     id: process.env.GOOGLE_ANALYTICS_ID
-  //   }
-  // },
+  publicRuntimeConfig: {
+    // googleAnalytics: {
+    //   id: process.env.GOOGLE_ANALYTICS_ID
+    // }
+    mapboxPublicToken: process.env.MAPBOX_PUBLIC_TOKEN
+  },
+
+  privateRuntimeConfig: {
+    mapboxToken: process.env.MAPBOX_ACCESS_TOKEN
+  },
 
   firebase: {
     config: {
