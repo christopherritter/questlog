@@ -398,7 +398,7 @@ export default {
         isLandmark: location.isLandmark,
         isStartingPoint: location.isStartingPoint,
         // coords: location.coordinates.lat + ", " + location.coordinates.lng,
-        coordinates: [location.coordinates[1], location.coordinates[0]],
+        coordinates: [ Number(location.coordinates[1]), Number(location.coordinates[0]) ],
         pitch: location.pitch || 0,
         bearing: location.bearing || 0,
         zoom: location.zoom || 0,
