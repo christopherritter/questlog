@@ -188,8 +188,6 @@ export default {
       this.$refs.QuestMap.actions.panTo(e);
     },
     flyTo(e) {
-      console.log("fly to")
-      console.log(e)
       this.$refs.QuestMap.actions.flyTo(e);
     },
     hoverLocation() {

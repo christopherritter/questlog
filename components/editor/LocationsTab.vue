@@ -389,13 +389,8 @@ export default {
       this.clearLocation();
     },
     selectLocation(e) {
-      console.log("select location");
-      console.log(e);
       const index = this.findWithAttr(e.location.locationId);
       var location = this.locations[index];
-
-      console.log(index);
-      console.log(location);
 
       this.newLocation = {
         locationId: location.locationId,
