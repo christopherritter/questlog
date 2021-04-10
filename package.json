@@ -9,6 +9,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/firebase": "^7.4.1",
     "@turf/distance": "^6.3.0",
     "@turf/helpers": "^6.3.0",
