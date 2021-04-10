@@ -117,6 +117,10 @@ export default {
       this.$emit("loaded");
       this.map = Mapbox;
     },
+    onDataLoaded(e) {
+      console.log("data loaded " + e.isSourceLoaded)
+      console.log(e)
+    },
     fetchFeatures() {
       var features = [];
 
@@ -258,7 +262,7 @@ export default {
       this.$refs.QuestMap.map.fitBounds(e, {
         padding: { top: 48, bottom: 48, left: 48, right: 48 }
       });
-    }
+    },
   }
 };
 </script>

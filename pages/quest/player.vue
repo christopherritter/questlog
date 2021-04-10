@@ -100,7 +100,6 @@
           @select-location="viewLocation($event)"
           @preview-location="previewLocation($event)"
           @clear-location="clearLocation()"
-          @position-changed="positionChanged($event)"
           @popupclose="
             preview = false;
             popupClose();
@@ -180,6 +179,8 @@ import QuestJournal from "@/components/quest/QuestJournal.vue";
 import QuestBackpack from "@/components/quest/QuestBackpack.vue";
 import QuestDialog from "@/components/quest/QuestDialog.vue";
 import QuestMap from "@/components/QuestMap.vue";
+import { point } from '@turf/helpers';
+import distance from '@turf/distance';
 
 export default {
   name: "QuestPlayer",
@@ -202,6 +203,7 @@ export default {
       mapOptions: {
         trackResize: true
       },
+      minimumDistance: 0.01,
       dialog: false,
       error: null
     };
@@ -263,31 +265,46 @@ export default {
     beginQuest() {
       this.$refs.qMap.triggerGeolocate();
     },
-    positionChanged(e) {
-      this.currentPosition = e;
-    },
     async viewLocation(e) {
       console.log("view location");
+
       const locationIndex = await this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
 
-      console.log([location.coordinates[1], location.coordinates[0]]);
+      var currentPosition = this.currentPosition;
+      var targetLocation = [location.coordinates[1], location.coordinates[0]]
 
-      this.selectedLocation = location;
-      this.bearing = location.bearing;
-      this.pitch = location.pitch;
-      this.showSidebar = true;
-      this.showLocation = true;
+      console.log(currentPosition)
+      console.log(targetLocation);
 
-      window.scrollTo(0, 0);
+      var from = point(currentPosition);
+      var to = point(targetLocation);
+      var options = {units: 'miles'};
 
-      this.$refs.qMap.redrawMap();
-      this.$nextTick().then(() =>
-        this.$refs.qMap.flyTo({
-          center: [location.coordinates[1], location.coordinates[0]],
-          zoom: location.zoom
-        })
-      );
+      var totalDistance = distance(from, to, options);
+
+      console.log("distance: " + totalDistance + " miles")
+
+      if (totalDistance > this.minimumDistance) {
+        this.previewLocation({ location });
+      } else {
+        this.selectedLocation = location;
+        this.bearing = location.bearing;
+        this.pitch = location.pitch;
+        this.showSidebar = true;
+        this.showLocation = true;
+
+        window.scrollTo(0, 0);
+
+        this.$refs.qMap.redrawMap();
+        this.$nextTick().then(() =>
+          this.$refs.qMap.flyTo({
+            center: [location.coordinates[1], location.coordinates[0]],
+            zoom: location.zoom
+          })
+        );
+      }
+
     },
     clearLocation() {
       this.selectedLocation = {};
@@ -314,7 +331,7 @@ export default {
 
       window.scrollTo(0, 0);
 
-      this.hideSidebar();
+      // this.hideSidebar();
       this.$refs.qMap.fitBounds([currentLocation, targetLocation]);
     },
     findEntry(entryId) {
@@ -400,9 +417,11 @@ export default {
       this.showSidebar = false;
       this.showLocation = false;
       this.$refs.qMap.redrawMap();
-      this.$nextTick(() => {
-        this.$refs.qMap.triggerGeolocate();
-      });
+      if (this.preview == false) {
+        this.$nextTick(() => {
+          this.$refs.qMap.triggerGeolocate();
+        });
+      }
     },
     toggleLegend() {
       var lngLat, zoom;
@@ -419,7 +438,7 @@ export default {
       this.showJournal = false;
       this.showBackpack = false;
       this.$refs.qMap.redrawMap();
-      this.$refs.qMap.flyTo(lngLat, zoom);
+      // this.$refs.qMap.flyTo(lngLat, zoom);
     },
     toggleJournal() {
       this.showLegend = false;
