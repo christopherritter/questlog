@@ -126,7 +126,6 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
-    '@nuxtjs/dotenv',
     '@nuxtjs/google-analytics'
   ],
 
@@ -148,7 +147,7 @@ export default {
     // googleAnalytics: {
     //   id: process.env.GOOGLE_ANALYTICS_ID
     // }
-    mapboxPublicToken: process.env.MAPBOX_PUBLIC_TOKEN
+    mapboxPublicToken: process.env.MAPBOX_PUBLIC_TOKEN,
   },
 
   privateRuntimeConfig: {
