@@ -2,7 +2,7 @@
   <MglMap
     id="MapBoxMap"
     ref="QuestMap"
-    :accessToken="$config.mapboxPublicToken"
+    :accessToken="$config.mapboxToken"
     :mapStyle.sync="mapStyle"
     :mapOptions.sync="mapOptions"
     :center="reverseCoords(center)"
@@ -56,8 +56,8 @@ import {
 
 export default {
   name: "QuestMap",
-  async asyncData({ $config: { mapboxPublicToken } }) {
-    const token = $config.mapboxPublicToken;
+  async asyncData({ $config: { mapboxToken } }) {
+    const token = $config.mapboxToken;
     return { token };
   },
   data() {
