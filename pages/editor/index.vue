@@ -36,7 +36,7 @@
               Items
             </v-tab>
 
-            <v-tab-item value="details">
+            <v-tab-item value="details" touchless>
               <DetailsTab
                 :quest="quest"
                 :locations="locations"
@@ -44,7 +44,7 @@
                 @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
-            <v-tab-item value="region">
+            <v-tab-item value="region" touchless>
               <RegionTab
                 :region="quest.region"
                 :tab="tab"
@@ -52,14 +52,14 @@
                 @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
-            <v-tab-item value="objectives">
+            <v-tab-item value="objectives" touchless>
               <ObjectivesTab
                 :objectives="objectives"
                 @change-tab="changeTab($event)"
                 @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
-            <v-tab-item value="locations">
+            <v-tab-item value="locations" touchless>
               <LocationsTab
                 :region="quest.region"
                 :locations="locations"
@@ -67,7 +67,7 @@
                 @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
-            <v-tab-item value="entries">
+            <v-tab-item value="entries" touchless>
               <EntriesTab
                 :objectives="objectives"
                 :locations="locations"
@@ -77,7 +77,7 @@
                 @delete-quest="dialogDelete = true"
               />
             </v-tab-item>
-            <v-tab-item value="items">
+            <v-tab-item value="items" touchless>
               <ItemsTab
                 :objectives="objectives"
                 :locations="locations"

@@ -254,6 +254,7 @@ export default {
       this.isLoaded = true;
     },
     questHelpers() {
+      console.log("set region coords")
       this.center = this.quest.region.coordinates;
       this.zoom = this.quest.region.zoom;
       // this.dialog = true;
@@ -264,12 +265,17 @@ export default {
       }
     },
     beginQuest() {
+      console.log("trigger geolocate")
       this.$refs.qMap.triggerGeolocate();
     },
     positionChanged(e) {
+      console.log("position changed")
+      console.log(e)
       this.currentPosition = e;
     },
     async viewLocation(e) {
+      console.log("view location")
+      console.log(e)
       const locationIndex = await this.findLocation(e.location.locationId);
       const location = this.locations[locationIndex];
 

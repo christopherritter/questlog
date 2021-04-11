@@ -20,7 +20,6 @@
       :fitBoundsOptions="{ linear: true, maxZoom: 22 }"
       :trackUserLocation="true"
       @geolocate="geolocate"
-      @load="onGeolocateLoaded"
     />
     <MglMarker
       v-if="$route.name === 'editor' && tab === 'region'"
@@ -123,10 +122,6 @@ export default {
     },
     onDataLoaded(e) {
       console.log("data loaded " + e.isSourceLoaded);
-      console.log(e);
-    },
-    onGeolocateLoaded(e) {
-      console.log("geolocate loaded");
       console.log(e);
     },
     fetchFeatures() {
@@ -258,6 +253,8 @@ export default {
       });
     },
     geolocate(e) {
+      console.log("last known position")
+      console.log(e)
       if (e.mapboxEvent.coords) {
         this.$emit("position-changed", [
           e.mapboxEvent.coords.longitude,
