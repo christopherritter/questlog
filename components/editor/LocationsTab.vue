@@ -421,8 +421,8 @@ export default {
     moveLocation(e) {
       const locationId = this.newLocation.locationId;
       const index = this.findWithAttr(locationId);
-      const coords = e.lngLat;
-      const coordinates = [coords.lat, coords.lng];
+      // const coords = e.lngLat;
+      const coordinates = [e[1], e[0]];
 
       // this.newLocation.coords = coordinates.toString(", ");
       this.newLocation.coordinates = coordinates;

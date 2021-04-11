@@ -91,7 +91,8 @@ export default {
         },
         trackUserLocation: true
       },
-      selectedFeature: null
+      selectedFeature: null,
+      isMoving: false,
     };
   },
   created() {
@@ -158,11 +159,12 @@ export default {
 
       // Set a UI indicator for dragging.
       this.canvas.style.cursor = "grabbing";
+      this.isMoving = true;
 
       geojson.features[index].geometry.coordinates = [coords.lng, coords.lat];
       this.$refs.QuestMap.map.getSource("geojsonData").setData(geojson);
     },
-    onUp() {
+    onUp(e) {
       if (this.$route.name === "editor") {
         // reset cursor style
         this.canvas.style.cursor = "";
@@ -170,6 +172,11 @@ export default {
         // Unbind mouse/touch events
         this.$refs.QuestMap.map.off("mousemove", this.onMove);
         this.$refs.QuestMap.map.off("touchmove", this.onMove);
+
+        if (this.isMoving == true) {
+          this.moveLocation(e);
+          this.isMoving = false;
+        }
 
         this.selectedFeature = null;
       }
@@ -233,8 +240,15 @@ export default {
       }
     },
     moveLocation(e) {
-      var lngLat = e.marker.getLngLat();
-      this.panTo([lngLat.lng, lngLat.lat]);
+      console.log("move location")
+      var lngLat;
+      if (e.hasOwnProperty('marker')) {
+        lngLat = e.marker.getLngLat();
+      } else {
+        lngLat = e.lngLat;
+      }
+      console.log(lngLat)
+      // this.panTo([lngLat.lng, lngLat.lat]);
       this.$emit("move-location", [lngLat.lng, lngLat.lat]);
     },
     findWithAttr(value) {

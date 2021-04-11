@@ -28,7 +28,7 @@
                   ></v-text-field>
                 </v-col>
               </v-row> -->
-              <v-row>
+              <!-- <v-row>
                 <v-col cols="12">
                   <v-text-field
                     v-model="newRegion.coords"
@@ -36,7 +36,7 @@
                     outlined
                   ></v-text-field>
                 </v-col>
-              </v-row>
+              </v-row> -->
               <h4 class="mt-1 mb-6">Zoom</h4>
               <v-slider
                 v-model="newRegion.zoom"
@@ -111,7 +111,7 @@ export default {
     return {
       newRegion: {
         name: "",
-        coords: "",
+        // coords: "",
         coordinates: [39.828175, -98.5795],
         pitch: 60,
         bearing: 0,
@@ -128,29 +128,32 @@ export default {
     this.fetchRegion();
   },
   components: { QuestMap },
-  watch: {
-    "newRegion.coords"(val) {
-      var coordsArr = val.split(', ');
-      this.newRegion.coordinates = [Number(coordsArr[0]), Number(coordsArr[1])];
-    }
-  },
+  // watch: {
+  //   "newRegion.coords"(val) {
+  //     var coordsArr = val.split(', ');
+  //     this.newRegion.coordinates = [Number(coordsArr[0]), Number(coordsArr[1])];
+  //   }
+  // },
   methods: {
     ...mapActions(["publishQuest"]),
     ...mapMutations(["SET_REGION"]),
     fetchRegion() {
       Object.assign(this.newRegion, {
         name: this.region.name,
-        coords: this.region.coordinates.join(', '),
+        // coords: this.region.coordinates.join(', '),
+        coordinates: this.region.coordinates,
         zoom: this.region.zoom,
       });
     },
     markLocation(e) {
       var latLng = [e.mapboxEvent.lngLat.lat, e.mapboxEvent.lngLat.lng];
-      this.newRegion.coords = latLng.join(', ');
+      // this.newRegion.coords = latLng.join(', ');
+      this.newRegion.coordinates = latLng;
     },
     moveLocation(e) {
       var latLng = [e[1], e[0]];
-      this.newRegion.coords = latLng.join(', ');
+      // this.newRegion.coords = latLng;
+      this.newRegion.coordinates = latLng;
     },
     updateRegion() {
       this.$store.commit("SET_REGION", this.newRegion);
