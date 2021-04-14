@@ -211,18 +211,20 @@
             </v-col>
           </v-row>
           <v-row class="my-2 mx-0 align-end justify-end">
-            <v-btn outlined dark @click="$emit('change-tab', 'locations')">
-              Back
-            </v-btn>
-            <v-btn
-              outlined
-              dark
-              class="ml-2"
-              @click="$emit('change-tab', 'items')"
-            >
-              Next
-            </v-btn>
-            <v-spacer></v-spacer>
+            <span v-if="$vuetify.breakpoint.mdAndUp">
+              <v-btn outlined dark @click="$emit('change-tab', 'locations')">
+                Back
+              </v-btn>
+              <v-btn
+                outlined
+                dark
+                class="ml-2"
+                @click="$emit('change-tab', 'items')"
+              >
+                Next
+              </v-btn>
+              <v-spacer></v-spacer>
+            </span>
             <v-btn dark class="mr-2" @click="$emit('delete-quest')" color="danger">
               Delete
             </v-btn>

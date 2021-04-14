@@ -53,7 +53,7 @@
                     >Update</v-btn
                   >
                   <v-spacer></v-spacer>
-                  <v-btn dark outlined @click="resetRegion()">Reset</v-btn>
+                  <!-- <v-btn dark outlined @click="resetRegion()">Reset</v-btn> -->
                 </v-col>
               </v-row>
             </v-col>
@@ -76,18 +76,20 @@
             @move-location="moveLocation($event)"
           />
           <div class="d-flex">
-            <v-btn outlined dark @click="$emit('change-tab', 'about')">
-              Back
-            </v-btn>
-            <v-btn
-              outlined
-              dark
-              class="ml-2"
-              @click="$emit('change-tab', 'objectives')"
-            >
-              Next
-            </v-btn>
-            <v-spacer></v-spacer>
+            <span v-if="$vuetify.breakpoint.mdAndUp">
+              <v-btn outlined dark @click="$emit('change-tab', 'about')">
+                Back
+              </v-btn>
+              <v-btn
+                outlined
+                dark
+                class="ml-2"
+                @click="$emit('change-tab', 'objectives')"
+              >
+                Next
+              </v-btn>
+              <v-spacer></v-spacer>
+            </span>
             <v-btn dark class="mr-2" @click="$emit('delete-quest')" color="danger">
               Delete
             </v-btn>

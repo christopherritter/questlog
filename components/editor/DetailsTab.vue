@@ -54,28 +54,30 @@
         <v-btn outlined dark @click="updateDetails()" v-if="questSaved">
           Update
         </v-btn>
-        <v-btn
+        <!-- <v-btn
           dark
           outlined
           class="ml-2"
           @click="resetDetails()"
           v-if="questSaved"
           >Reset</v-btn
-        >
+        > -->
         <v-spacer></v-spacer>
-        <v-btn outlined dark disabled v-if="questSaved">
-          Back
-        </v-btn>
-        <v-btn
-          outlined
-          dark
-          class="ml-2"
-          @click="$emit('change-tab', 'region')"
-          v-if="questSaved"
-        >
-          Next
-        </v-btn>
-        <v-spacer></v-spacer>
+        <span v-if="$vuetify.breakpoint.mdAndUp">
+          <v-btn outlined dark disabled v-if="questSaved">
+            Back
+          </v-btn>
+          <v-btn
+            outlined
+            dark
+            class="ml-2"
+            @click="$emit('change-tab', 'region')"
+            v-if="questSaved"
+          >
+            Next
+          </v-btn>
+          <v-spacer></v-spacer>
+        </span>
         <v-btn
           v-if="questSaved"
           dark
@@ -158,9 +160,9 @@ export default {
           categories: [],
           startingPoint: "",
           questId: ""
-        }
+        };
         this.fetchDetails();
-        this.$emit('change-tab', 'details')
+        this.$emit("change-tab", "details");
       } else if (val.questId.length > 0 && val.questId != oldVal.questId) {
         this.newDetails.questId = val.questId;
       }

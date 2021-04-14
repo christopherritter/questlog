@@ -3,36 +3,47 @@
     <v-row>
       <v-col>
         <h1 class="pt-6 pb-2">Quest Editor</h1>
-        <p v-if="questSaved">
-          Build your own quest using the sections below. Once you're finished
-          you can publish it to share with other adventurers.
-        </p>
-        <p v-else>
-          Fill out the form below then click on the create button to start
-          building your quest.
-        </p>
+        <span v-if="$vuetify.breakpoint.mdAndUp">
+          <p v-if="questSaved">
+            Build your own quest using the sections below. Once you're finished
+            you can publish it to share with other adventurers.
+          </p>
+          <p v-else>
+            Fill out the form below then click on the create button to start
+            building your quest.
+          </p>
+        </span>
+        <span v-else>
+          <v-select
+            v-model="tab"
+            :items="tabs"
+            label="View"
+            solo
+            hide-details
+          ></v-select>
+        </span>
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">
         <v-form>
           <v-tabs vertical v-model="tab">
-            <v-tab href="#details" v-if="questSaved">
+            <v-tab href="#details" v-show="questSaved && $vuetify.breakpoint.mdAndUp">
               Quest
             </v-tab>
-            <v-tab href="#region" v-if="questSaved">
+            <v-tab href="#region" v-show="questSaved && $vuetify.breakpoint.mdAndUp">
               Region
             </v-tab>
-            <v-tab href="#objectives" v-if="questSaved">
+            <v-tab href="#objectives" v-show="questSaved && $vuetify.breakpoint.mdAndUp">
               Objectives
             </v-tab>
-            <v-tab href="#locations" v-if="questSaved">
+            <v-tab href="#locations" v-show="questSaved && $vuetify.breakpoint.mdAndUp">
               Locations
             </v-tab>
-            <v-tab href="#entries" v-if="questSaved">
+            <v-tab href="#entries" v-show="questSaved && $vuetify.breakpoint.mdAndUp">
               Entries
             </v-tab>
-            <v-tab href="#items" v-if="questSaved">
+            <v-tab href="#items" v-show="questSaved && $vuetify.breakpoint.mdAndUp">
               Items
             </v-tab>
 
@@ -127,6 +138,32 @@ export default {
       tab: "details",
       updatedQuest: false,
       dialogDelete: false,
+      tabs: [
+        {
+          text: "Show Details",
+          value: "details",
+        },
+        {
+          text: "Show Region",
+          value: "region",
+        },
+        {
+          text: "Show Objectives",
+          value: "objectives",
+        },
+        {
+          text: "Show Locations",
+          value: "locations",
+        },
+        {
+          text: "Show Entries",
+          value: "entries",
+        },
+        {
+          text: "Show Items",
+          value: "items",
+        },
+      ],
     };
   },
   components: {
@@ -136,6 +173,11 @@ export default {
     LocationsTab,
     EntriesTab,
     ItemsTab
+  },
+  watch: {
+    selectedTab(val) {
+      this.tab = val.value
+    }
   },
   computed: {
     ...mapState({

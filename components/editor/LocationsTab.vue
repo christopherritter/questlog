@@ -104,7 +104,7 @@
                     >Update</v-btn
                   >
                   <v-spacer></v-spacer>
-                  <v-btn dark color="red" outlined disabled>Reset</v-btn>
+                  <!-- <v-btn dark color="red" outlined disabled>Reset</v-btn> -->
                 </v-col>
               </v-row>
             </v-col>
@@ -224,18 +224,20 @@
             </v-col>
           </v-row>
           <v-row class="my-2 mx-0">
-            <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
-              Back
-            </v-btn>
-            <v-btn
-              outlined
-              dark
-              class="ml-2"
-              @click="$emit('change-tab', 'entries')"
-            >
-              Next
-            </v-btn>
-            <v-spacer></v-spacer>
+            <span v-if="$vuetify.breakpoint.mdAndUp">
+              <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
+                Back
+              </v-btn>
+              <v-btn
+                outlined
+                dark
+                class="ml-2"
+                @click="$emit('change-tab', 'entries')"
+              >
+                Next
+              </v-btn>
+              <v-spacer></v-spacer>
+            </span>
             <v-btn
               dark
               class="mr-2"
