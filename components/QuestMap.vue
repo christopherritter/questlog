@@ -16,6 +16,7 @@
       v-if="$route.name === 'quest-player'"
       ref="GeolocateControl"
       position="bottom-right"
+      :auto="true"
       :positionOptions="geolocateOptions.positionOptions"
       :fitBoundsOptions="{ linear: true, maxZoom: 22 }"
       :trackUserLocation="true"
@@ -267,8 +268,6 @@ export default {
       });
     },
     geolocate(e) {
-      console.log("last known position")
-      console.log(e)
       if (e.mapboxEvent.coords) {
         this.$emit("position-changed", [
           e.mapboxEvent.coords.longitude,
