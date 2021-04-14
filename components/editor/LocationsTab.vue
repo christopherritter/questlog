@@ -112,7 +112,7 @@
         </v-col>
         <v-col cols="8">
           <v-row class="mt-4 mb-3 mx-0 align-center">
-            <v-btn
+            <!-- <v-btn
               text
               dark
               @click="editLocation()"
@@ -122,7 +122,7 @@
                 mdi-pencil
               </v-icon>
               Edit
-            </v-btn>
+            </v-btn> -->
             <v-btn
               text
               dark
