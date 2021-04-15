@@ -376,8 +376,6 @@ export default {
     ]),
     ...mapMutations(["UPDATE_LOCATION", "SET_COORDINATES", "SET_LOCATIONS"]),
     markLocation(e) {
-      console.log("mark location")
-      console.log(e)
       if (this.newLocation.locationId === null) {
         var latLng = [e.mapboxEvent.lngLat.lat, e.mapboxEvent.lngLat.lng];
         this.newLocation.coordinates = latLng;
