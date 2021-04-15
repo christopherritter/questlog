@@ -13,14 +13,18 @@
     @click="markLocation"
   >
     <MglGeocoderControl
+      id="geocoder"
       v-if="$route.name === 'editor'"
       :accessToken="accessToken"
       :options="geocoderOptions"
+      :mapboxgl="map"
+      :marker="false"
       :input="defaultInput"
-      @results="handleSearch"
+      @result="searchResult"
     />
     <MglGeolocateControl
       v-if="$route.name === 'quest-player'"
+      id="geolocate"
       ref="GeolocateControl"
       position="bottom-right"
       :auto="true"
@@ -30,7 +34,8 @@
       @geolocate="geolocate"
     />
     <MglMarker
-      v-if="$route.name === 'editor' && tab === 'region'"
+      v-if="showMarker == true"
+      id="marker"
       ref="regionMarker"
       color="#ff392e"
       :coordinates="reverseCoords(center)"
@@ -38,7 +43,6 @@
       @dragend="moveLocation($event)"
     />
     <MglGeojsonLayer
-      v-else
       :sourceId="geoJsonSource.data.id"
       :source="geoJsonSource"
       layerId="geojsonLocations"
@@ -107,7 +111,7 @@ export default {
       },
       selectedFeature: null,
       isMoving: false,
-      defaultInput: ""
+      defaultInput: "",
     };
   },
   created() {
@@ -128,7 +132,8 @@ export default {
     "locations",
     "mapOptions",
     "draggable",
-    "tab"
+    "tab",
+    "showMarker"
   ],
   methods: {
     ...mapMutations(["SET_COORDINATES"]),
@@ -295,8 +300,10 @@ export default {
         padding: { top: 48, bottom: 48, left: 48, right: 48 }
       });
     },
-    handleSearch(event) {
-      console.log(event);
+    searchResult(e) {
+      this.$refs.QuestMap.map.setZoom(10);
+      this.setCenter(e.result.center)
+      this.$emit('update-marker', e.result.center);
     }
   }
 };

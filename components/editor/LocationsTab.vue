@@ -158,6 +158,7 @@
             :zoom="currentZoom"
             :locations="locations"
             :draggable="true"
+            :showMarker="showMarker"
             @select-location="selectLocation($event)"
             @mark-location="markLocation($event)"
             @move-location="moveLocation($event)"
@@ -293,6 +294,12 @@ export default {
     ...mapState({
       markers: state => state.markers
     }),
+    showMarker() {
+      if (this.newLocation.locationId === null) {
+        return true;
+      }
+      return false;
+    },
     filterByTerm() {
       let searchTerm = this.searchTerm.toLowerCase();
       let locations = this.locations.slice();

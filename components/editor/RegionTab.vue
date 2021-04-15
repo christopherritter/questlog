@@ -71,9 +71,11 @@
             :locations="[newRegion]"
             :mapStyle="mapStyle"
             :mapOptions="mapOptions"
+            :showMarker="true"
             :tab="tab"
-            @mark-location="markLocation($event)"
-            @move-location="moveLocation($event)"
+            @mark-location="markLocation"
+            @move-location="moveLocation"
+            @update-marker="updateMarker"
           />
           <div class="d-flex">
             <span v-if="$vuetify.breakpoint.mdAndUp">
@@ -146,6 +148,10 @@ export default {
         coordinates: this.region.coordinates,
         zoom: this.region.zoom,
       });
+    },
+    updateMarker(e) {
+      var latLng = [e[1], e[0]];
+      this.newRegion.coordinates = latLng;
     },
     markLocation(e) {
       var latLng = [e.mapboxEvent.lngLat.lat, e.mapboxEvent.lngLat.lng];
