@@ -375,10 +375,13 @@ export default {
       "publishQuest"
     ]),
     ...mapMutations(["UPDATE_LOCATION", "SET_COORDINATES", "SET_LOCATIONS"]),
-    markLocation(location) {
-      var locationArr = [location.latlng.lat, location.latlng.lng];
-      this.clearLocation();
-      // this.newLocation.coords = locationArr.toString(", ");
+    markLocation(e) {
+      console.log("mark location")
+      console.log(e)
+      if (this.newLocation.locationId === null) {
+        var latLng = [e.mapboxEvent.lngLat.lat, e.mapboxEvent.lngLat.lng];
+        this.newLocation.coordinates = latLng;
+      }
     },
     addLocation() {
       this.$store.dispatch("addLocation", {

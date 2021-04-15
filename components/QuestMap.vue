@@ -39,7 +39,7 @@
       ref="regionMarker"
       color="#ff392e"
       :coordinates="reverseCoords(center)"
-      :draggable="true"
+      :draggable="false"
       @dragend="moveLocation($event)"
     />
     <MglGeojsonLayer
@@ -62,10 +62,10 @@ import {
   MglMap,
   MglMarker,
   MglGeojsonLayer,
-  MglGeolocateControl,
+  MglGeolocateControl
 } from "vue-mapbox";
 
-import MglGeocoderControl from 'vue-mapbox-geocoder'
+import MglGeocoderControl from "vue-mapbox-geocoder";
 
 export default {
   name: "QuestMap",
@@ -106,12 +106,11 @@ export default {
         trackUserLocation: true
       },
       geocoderOptions: {
-        mapboxgl: this.map,
-
+        mapboxgl: this.map
       },
       selectedFeature: null,
       isMoving: false,
-      defaultInput: "",
+      defaultInput: ""
     };
   },
   created() {
@@ -256,9 +255,7 @@ export default {
       console.log(e);
     },
     markLocation(e) {
-      if (this.$route.name === "editor" && this.tab === "region") {
-        this.$emit("mark-location", e);
-      }
+      this.$emit("mark-location", e);
     },
     moveLocation(e) {
       console.log("move location");
@@ -302,8 +299,8 @@ export default {
     },
     searchResult(e) {
       this.$refs.QuestMap.map.setZoom(10);
-      this.setCenter(e.result.center)
-      this.$emit('update-marker', e.result.center);
+      this.setCenter(e.result.center);
+      this.$emit("update-marker", e.result.center);
     }
   }
 };
