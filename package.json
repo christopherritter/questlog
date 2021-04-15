@@ -9,6 +9,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-geocoder": "^4.7.0",
     "@nuxtjs/firebase": "^7.4.1",
     "@turf/distance": "^6.3.0",
     "@turf/helpers": "^6.3.0",
@@ -18,7 +19,8 @@
     "nuxt": "^2.14.12",
     "nuxt-gmaps": "^1.2.10",
     "nuxt-leaflet": "^0.0.25",
-    "vue-mapbox": "^0.4.1"
+    "vue-mapbox": "^0.4.1",
+    "vue-mapbox-geocoder": "^0.2.0"
   },
   "devDependencies": {
     "@nuxtjs/google-analytics": "^2.4.0",

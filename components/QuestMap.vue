@@ -12,6 +12,13 @@
     @load="onMapLoaded"
     @click="markLocation"
   >
+    <MglGeocoderControl
+      v-if="$route.name === 'editor'"
+      :accessToken="accessToken"
+      :options="geocoderOptions"
+      :input="defaultInput"
+      @results="handleSearch"
+    />
     <MglGeolocateControl
       v-if="$route.name === 'quest-player'"
       ref="GeolocateControl"
@@ -51,8 +58,10 @@ import {
   MglMap,
   MglMarker,
   MglGeojsonLayer,
-  MglGeolocateControl
+  MglGeolocateControl,
 } from "vue-mapbox";
+
+import MglGeocoderControl from 'vue-mapbox-geocoder'
 
 export default {
   name: "QuestMap",
@@ -92,8 +101,13 @@ export default {
         },
         trackUserLocation: true
       },
+      geocoderOptions: {
+        mapboxgl: this.map,
+
+      },
       selectedFeature: null,
       isMoving: false,
+      defaultInput: ""
     };
   },
   created() {
@@ -103,7 +117,8 @@ export default {
     MglMap,
     MglMarker,
     MglGeojsonLayer,
-    MglGeolocateControl
+    MglGeolocateControl,
+    MglGeocoderControl
   },
   props: [
     "center",
@@ -241,14 +256,14 @@ export default {
       }
     },
     moveLocation(e) {
-      console.log("move location")
+      console.log("move location");
       var lngLat;
-      if (e.hasOwnProperty('marker')) {
+      if (e.hasOwnProperty("marker")) {
         lngLat = e.marker.getLngLat();
       } else {
         lngLat = e.lngLat;
       }
-      console.log(lngLat)
+      console.log(lngLat);
       // this.panTo([lngLat.lng, lngLat.lat]);
       this.$emit("move-location", [lngLat.lng, lngLat.lat]);
     },
@@ -279,6 +294,9 @@ export default {
       this.$refs.QuestMap.map.fitBounds(e, {
         padding: { top: 48, bottom: 48, left: 48, right: 48 }
       });
+    },
+    handleSearch(event) {
+      console.log(event);
     }
   }
 };

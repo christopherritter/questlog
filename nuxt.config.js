@@ -14,8 +14,7 @@ export default {
     htmlAttrs: {
       lang: 'en'
     },
-    meta: [
-      {
+    meta: [{
         charset: 'utf-8'
       },
       {
@@ -79,15 +78,21 @@ export default {
       },
     ],
     link: [{
-      rel: 'icon',
-      type: 'image/x-icon',
-      href: '/favicon.ico'
-    },
-    {
-      href: "https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css",
-      rel: "stylesheet",
-      type: "text/css"
-    }]
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico'
+      },
+      {
+        href: "https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css",
+        rel: "stylesheet",
+        type: "text/css"
+      },
+      {
+        href: "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css",
+        rel: "stylesheet",
+        type: "text/css"
+      }
+    ]
   },
 
   hooks: {
