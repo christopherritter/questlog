@@ -92,18 +92,36 @@
                   >Update</v-btn
                 >
                 <v-spacer></v-spacer>
-                <v-btn dark outlined disabled>Reset</v-btn>
+                <!-- <v-btn dark outlined disabled>Reset</v-btn> -->
+                <v-btn
+                  text
+                  dark
+                  v-if="$vuetify.breakpoint.smAndDown"
+                  :disabled="selectedItem === 'null'"
+                  @click="removeItem()"
+                >
+                  <v-icon class="mr-2">
+                    mdi-delete
+                  </v-icon>
+                  Remove
+                </v-btn>
               </div>
             </v-col>
           </v-row>
         </v-col>
         <v-col cols="12" md="7" lg="8">
           <v-row class="mt-5 mb-4 align-center">
-            <v-btn text dark :disabled="!selectedItem" @click="removeItem()">
+            <v-btn
+              text
+              dark
+              v-if="$vuetify.breakpoint.mdAndUp"
+              :disabled="selectedItem === 'null'"
+              @click="removeItem()"
+            >
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
-              Delete
+              Remove
             </v-btn>
           </v-row>
           <v-row>
@@ -223,9 +241,14 @@
               >
                 Next
               </v-btn>
-              <v-spacer></v-spacer>
             </span>
-            <v-btn dark class="mr-2" @click="$emit('delete-quest')" color="danger">
+            <v-spacer></v-spacer>
+            <v-btn
+              dark
+              class="mr-2"
+              @click="$emit('delete-quest')"
+              color="danger"
+            >
               Delete
             </v-btn>
             <v-btn dark @click="publishQuest()" color="primary" class="ml-2">
@@ -307,11 +330,7 @@ export default {
   },
   methods: {
     ...mapActions(["addItem", "publishQuest", "findWithAttr"]),
-    ...mapMutations([
-      "ADD_ACTION",
-      "UPDATE_ACTION",
-      "REMOVE_ACTION"
-    ]),
+    ...mapMutations(["ADD_ACTION", "UPDATE_ACTION", "REMOVE_ACTION"]),
     addItem() {
       this.$store.dispatch("addItem", this.newItem);
       this.clearItem();
@@ -358,7 +377,7 @@ export default {
         this.$store.commit("UPDATE_ACTION", {
           itemIndex: itemIndex,
           actionIndex: event.index,
-          action: event.action,
+          action: event.action
         });
       } else {
         Object.assign(this.newItem.actions[event.index], event.action);
