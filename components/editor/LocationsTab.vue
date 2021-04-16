@@ -190,7 +190,7 @@
                     v-model="selectedLocation"
                     color="light-blue darken-1"
                   >
-                    <v-list width="100%" :max-height="listHeight" style="overflow-y: auto;">
+                    <v-list width="100%" :max-height="595" style="overflow-y: auto;">
                       <v-list-item
                         v-for="location in filterByTerm"
                         :key="location.locationId"
@@ -294,9 +294,6 @@ export default {
     ...mapState({
       markers: state => state.markers
     }),
-    listHeight() {
-      return 595
-    },
     showMarker() {
       if (this.newLocation.locationId === null) {
         return true;

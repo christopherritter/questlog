@@ -138,7 +138,7 @@
             </v-card>
           </div> -->
           <v-row>
-            <v-col>
+            <v-col style="max-height: 758px; overflow-y: auto;">
               <v-list
                 span
                 v-for="location in sortedEntries"
@@ -224,9 +224,14 @@
               >
                 Next
               </v-btn>
-              <v-spacer></v-spacer>
             </span>
-            <v-btn dark class="mr-2" @click="$emit('delete-quest')" color="danger">
+            <v-spacer></v-spacer>
+            <v-btn
+              dark
+              class="mr-2"
+              @click="$emit('delete-quest')"
+              color="danger"
+            >
               Delete
             </v-btn>
             <v-btn dark @click="publishQuest()" color="primary" class="ml-2">
@@ -307,11 +312,7 @@ export default {
   },
   methods: {
     ...mapActions(["addEntry", "publishQuest", "findWithAttr"]),
-    ...mapMutations([
-      "ADD_ACTION",
-      "UPDATE_ACTION",
-      "REMOVE_ACTION"
-    ]),
+    ...mapMutations(["ADD_ACTION", "UPDATE_ACTION", "REMOVE_ACTION"]),
     addEntry() {
       this.$store.dispatch("addEntry", this.newEntry);
       this.clearEntry();
@@ -357,7 +358,7 @@ export default {
         this.$store.commit("UPDATE_ACTION", {
           entryIndex: entryIndex,
           actionIndex: event.index,
-          action: event.action,
+          action: event.action
         });
       } else {
         Object.assign(this.newEntry.actions[event.index], event.action);
