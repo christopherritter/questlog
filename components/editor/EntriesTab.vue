@@ -93,6 +93,7 @@
                   >Update</v-btn
                 >
                 <v-spacer></v-spacer>
+                <!-- <v-btn dark outlined disabled>Reset</v-btn> -->
                 <v-btn
                   v-if="$vuetify.breakpoint.smAndDown"
                   text

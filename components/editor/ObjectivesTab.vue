@@ -28,6 +28,7 @@
                 v-model="newObjective.description"
                 label="Description"
                 outlined
+                hide-details
               ></v-textarea>
               <v-checkbox
                 v-model="newObjective.isPrimary"
@@ -53,6 +54,18 @@
                 >
                 <v-spacer></v-spacer>
                 <!-- <v-btn dark outlined disabled>Reset</v-btn> -->
+                <v-btn
+                  text
+                  dark
+                  v-if="$vuetify.breakpoint.smAndDown"
+                  :disabled="currentObjective === null"
+                  @click="deleteObjective()"
+                >
+                  <v-icon class="mr-2">
+                    mdi-delete
+                  </v-icon>
+                  Remove
+                </v-btn>
               </div>
             </v-col>
           </v-row>
@@ -62,19 +75,20 @@
             <v-btn
               text
               dark
-              :disabled="currentObjective < 0"
+              v-if="$vuetify.breakpoint.mdAndUp"
+              :disabled="currentObjective === null"
               @click="deleteObjective()"
             >
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
-              Delete
+              Remove
             </v-btn>
           </div>
           <div v-if="objectives.length <= 0">
             <v-card outlined>
               <v-card-text>
-                Add objectives to your quest with the form on the left.
+                Add objectives to your quest.
               </v-card-text>
             </v-card>
           </div>
@@ -102,7 +116,12 @@
               </v-btn>
               <v-spacer></v-spacer>
             </span>
-            <v-btn dark class="mr-2" @click="$emit('delete-quest')" color="danger">
+            <v-btn
+              dark
+              class="mr-2"
+              @click="$emit('delete-quest')"
+              color="danger"
+            >
               Delete
             </v-btn>
             <v-btn dark @click="publishQuest()" color="primary" class="ml-2">
@@ -126,7 +145,7 @@ export default {
         name: "",
         description: "",
         isPrimary: false,
-        isComplete: false,
+        isComplete: false
       },
       currentObjective: null
     };
@@ -144,7 +163,7 @@ export default {
         name: objective.name,
         description: objective.description,
         isPrimary: objective.isPrimary,
-        isComplete: objective.isComplete,
+        isComplete: objective.isComplete
       };
     },
     updateObjective() {
@@ -155,7 +174,7 @@ export default {
       this.clearObjective();
     },
     deleteObjective() {
-      this.$store.dispatch("deleteObjective", this.currentObjective)
+      this.$store.dispatch("deleteObjective", this.currentObjective);
       this.clearObjective();
     },
     clearObjective() {
@@ -163,7 +182,7 @@ export default {
         name: "",
         description: "",
         isPrimary: false,
-        isComplete: false,
+        isComplete: false
       };
       this.currentObjective = null;
     },
