@@ -93,18 +93,35 @@
                   >Update</v-btn
                 >
                 <v-spacer></v-spacer>
-                <!-- <v-btn dark outlined disabled>Reset</v-btn> -->
+                <v-btn
+                  v-if="$vuetify.breakpoint.smAndDown"
+                  text
+                  dark
+                  :disabled="selectedEntry === 'undefined'"
+                  @click="removeEntry()"
+                >
+                  <v-icon class="mr-2">
+                    mdi-delete
+                  </v-icon>
+                  Remove
+                </v-btn>
               </div>
             </v-col>
           </v-row>
         </v-col>
         <v-col cols="12" md="7" lg="8">
           <v-row class="mt-5 mb-4 align-center">
-            <v-btn text dark :disabled="!selectedEntry" @click="removeEntry()">
+            <v-btn
+              v-if="$vuetify.breakpoint.mdAndUp"
+              text
+              dark
+              :disabled="selectedEntry === 'undefined'"
+              @click="removeEntry()"
+            >
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
-              Delete
+              Remove
             </v-btn>
           </v-row>
           <v-row>

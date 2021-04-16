@@ -132,7 +132,7 @@
               <v-icon class="mr-2">
                 mdi-delete
               </v-icon>
-              Delete
+              Remove
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn-toggle dense borderless group v-model="selectedView">
