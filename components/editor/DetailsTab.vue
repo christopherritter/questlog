@@ -172,20 +172,20 @@ export default {
     ...mapActions(["publishQuest"]),
     ...mapMutations(["SET_QUEST"]),
     fetchDetails() {
-      // this.newDetails.title = this.quest.title;
+      this.newDetails.title = this.quest.title;
       if (this.quest.isAnonymous || this.user.name.length <= 0) {
         this.newDetails.author = "Anonymous";
       } else {
         this.newDetails.author = this.user.name;
       }
-      // this.newDetails.isAnonymous = this.quest.isAnonymous;
+      this.newDetails.isAnonymous = this.quest.isAnonymous || false;
       this.newDetails.authorId = this.user.userId;
-      // this.newDetails.isFeatured = this.quest.isFeatured;
-      // this.newDetails.description = this.quest.description;
-      // this.newDetails.image = this.quest.image;
-      // this.newDetails.categories = this.quest.categories;
-      // this.newDetails.startingPoint = this.quest.startingPoint;
-      // this.newDetails.questId = this.quest.questId;
+      this.newDetails.isFeatured = this.quest.isFeatured || false;
+      this.newDetails.description = this.quest.description;
+      this.newDetails.image = this.quest.image || "";
+      this.newDetails.categories = this.quest.categories || [];
+      this.newDetails.startingPoint = this.quest.startingPoint || [];
+      this.newDetails.questId = this.quest.questId || "";
     },
     toggleAnonymous(newVal) {
       if (newVal) {
