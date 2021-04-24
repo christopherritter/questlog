@@ -97,6 +97,8 @@
           :bearing="bearing"
           :zoom="zoom"
           :locations="locations"
+          :showUserLocation="true"
+          :showAccuracyCircle="false"
           @select-location="viewLocation($event)"
           @preview-location="previewLocation($event)"
           @clear-location="clearLocation()"

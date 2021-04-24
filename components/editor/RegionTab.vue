@@ -72,6 +72,8 @@
             :mapStyle="mapStyle"
             :showMarker="true"
             :tab="tab"
+            :showUserLocation="true"
+            :showAccuracyCircle="false"
             @mark-location="markLocation"
             @move-location="moveLocation"
             @update-marker="updateMarker"
@@ -113,7 +115,7 @@ export default {
   data() {
     return {
       newRegion: {
-        name: "",
+        // name: "",
         // coords: "",
         coordinates: [39.828175, -98.5795],
         pitch: 60,
@@ -141,7 +143,7 @@ export default {
     ...mapMutations(["SET_REGION"]),
     fetchRegion() {
       Object.assign(this.newRegion, {
-        name: this.region.name,
+        // name: this.region.name,
         // coords: this.region.coordinates.join(', '),
         coordinates: this.region.coordinates,
         zoom: this.region.zoom,
@@ -161,15 +163,21 @@ export default {
       // this.newRegion.coords = latLng;
       this.newRegion.coordinates = latLng;
     },
+    // positionChanged(e) {
+    //   var latLng = [];
+    //   latLng = [e[1], e[0]];
+    //   this.newRegion.coordinates = latLng;
+    // },
     updateRegion() {
-      this.$store.commit("SET_REGION", this.newRegion);
+      var newRegion = Object.assign({}, this.newRegion);
+      this.$store.commit("SET_REGION", newRegion);
     },
     resetRegion() {
       this.fetchRegion();
     },
     publishQuest() {
       this.$store.commit("SET_REGION", {
-        name: this.region.name,
+        // name: this.region.name,
         coordinates: this.region.coordinates,
         zoom: this.region.zoom,
       });

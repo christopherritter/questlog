@@ -22,10 +22,12 @@
       @result="searchResult"
     />
     <MglGeolocateControl
-      v-if="$route.name === 'quest-player'"
+      v-if="$route.name === 'editor' || $route.name === 'quest-player'"
       id="geolocate"
       ref="GeolocateControl"
       position="bottom-right"
+      :showAccuracyCircle="showAccuracyCircle"
+      :showUserLocation="showUserLocation"
       :auto="true"
       :positionOptions="geolocateOptions.positionOptions"
       :fitBoundsOptions="{ linear: true, maxZoom: 22 }"
@@ -130,7 +132,9 @@ export default {
     "locations",
     "draggable",
     "tab",
-    "showMarker"
+    "showMarker",
+    "showUserLocation",
+    "showAccuracyCircle"
   ],
   methods: {
     ...mapMutations(["SET_COORDINATES"]),

@@ -159,6 +159,8 @@
             :locations="locations"
             :draggable="true"
             :showMarker="showMarker"
+            :showUserLocation="false"
+            :showAccuracyCircle="false"
             @select-location="selectLocation($event)"
             @mark-location="markLocation($event)"
             @move-location="moveLocation($event)"
