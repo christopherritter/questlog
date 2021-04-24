@@ -28,7 +28,7 @@
       </v-card-actions>
     </v-card>
     <v-card v-else>
-      <v-img v-if="quest.image" :src="quest.image" aspect-ratio="2.5"></v-img>
+      <v-img v-if="quest.image" :src="quest.image" aspect-ratio="2"></v-img>
       <v-card-title>{{ quest.title }}</v-card-title>
       <v-card-text v-if="isQuestComplete">
         Congratulations! You've completed all the objectives and finished the
@@ -68,7 +68,8 @@
           Restart Quest
         </v-btn>
         <v-btn color="green darken-3" text @click="$emit('close-dialog')">
-          Keep Playing
+          <span v-if="this.$route.name == 'player'">Keep Playing</span>
+          <span v-else>Keep Reading</span>
         </v-btn>
       </v-card-actions>
       <v-card-actions v-else>
@@ -77,7 +78,8 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn color="green darken-3" text @click="$emit('start-quest')">
-          Start Playing
+          <span v-if="this.$route.name == 'player'">Start Playing</span>
+          <span v-else>Start Reading</span>
         </v-btn>
       </v-card-actions>
 
