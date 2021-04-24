@@ -225,6 +225,7 @@
             </v-col>
           </v-row>
           <v-row class="my-2 mx-0">
+
             <span v-if="$vuetify.breakpoint.mdAndUp">
               <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
                 Back

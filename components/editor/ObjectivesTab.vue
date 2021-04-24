@@ -114,8 +114,8 @@
               >
                 Next
               </v-btn>
-              <v-spacer></v-spacer>
             </span>
+            <v-spacer></v-spacer>
             <v-btn
               dark
               class="mr-2"

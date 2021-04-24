@@ -76,8 +76,8 @@
           >
             Next
           </v-btn>
-          <v-spacer></v-spacer>
         </span>
+        <v-spacer></v-spacer>
         <v-btn
           v-if="questSaved"
           dark
@@ -179,7 +179,7 @@ export default {
         this.newDetails.author = this.user.name;
       }
       // this.newDetails.isAnonymous = this.quest.isAnonymous;
-      // this.newDetails.authorId = this.user.userId;
+      this.newDetails.authorId = this.user.userId;
       // this.newDetails.isFeatured = this.quest.isFeatured;
       // this.newDetails.description = this.quest.description;
       // this.newDetails.image = this.quest.image;
