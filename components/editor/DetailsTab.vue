@@ -151,16 +151,16 @@ export default {
   watch: {
     quest(val, oldVal) {
       if (!val.questId) {
-        this.newDetails = {
-          title: "",
-          isAnonymous: false,
-          isFeatured: false,
-          description: "",
-          image: "",
-          categories: [],
-          startingPoint: "",
-          questId: ""
-        };
+        // this.newDetails = {
+        //   title: "",
+        //   isAnonymous: false,
+        //   isFeatured: false,
+        //   description: "",
+        //   image: "",
+        //   categories: [],
+        //   startingPoint: "",
+        //   questId: ""
+        // };
         this.fetchDetails();
         this.$emit("change-tab", "details");
       } else if (val.questId.length > 0 && val.questId != oldVal.questId) {
