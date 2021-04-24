@@ -68,7 +68,7 @@
           Restart Quest
         </v-btn>
         <v-btn color="green darken-3" text @click="$emit('close-dialog')">
-          <span v-if="this.$route.name == 'player'">Keep Playing</span>
+          <span v-if="this.$route.name == 'quest-player'">Keep Playing</span>
           <span v-else>Keep Reading</span>
         </v-btn>
       </v-card-actions>
@@ -78,7 +78,7 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn color="green darken-3" text @click="$emit('start-quest')">
-          <span v-if="this.$route.name == 'player'">Start Playing</span>
+          <span v-if="this.$route.name == 'quest-player'">Start Playing</span>
           <span v-else>Start Reading</span>
         </v-btn>
       </v-card-actions>
