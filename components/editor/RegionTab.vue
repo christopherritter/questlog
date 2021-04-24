@@ -70,7 +70,6 @@
             :zoom="newRegion.zoom"
             :locations="[newRegion]"
             :mapStyle="mapStyle"
-            :mapOptions="mapOptions"
             :showMarker="true"
             :tab="tab"
             @mark-location="markLocation"
@@ -122,7 +121,6 @@ export default {
         zoom: 18,
       },
       mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
-      mapOptions: {},
       loading: false,
       error: null,
     };

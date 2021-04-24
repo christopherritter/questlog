@@ -92,7 +92,6 @@
             height: $vuetify.breakpoint.mdAndUp ? '100%' : mapHeight
           }"
           :mapStyle="mapStyle"
-          :mapOptions="mapOptions"
           :center="center"
           :pitch="pitch"
           :bearing="bearing"
@@ -202,9 +201,6 @@ export default {
       showLocation: false,
       preview: false,
       mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
-      mapOptions: {
-        trackResize: true
-      },
       minimumDistance: 0.01,
       dialog: false,
       error: null

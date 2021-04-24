@@ -4,7 +4,6 @@
     ref="QuestMap"
     :accessToken="accessToken"
     :mapStyle.sync="mapStyle"
-    :mapOptions.sync="mapOptions"
     :center="reverseCoords(center)"
     :pitch="pitch"
     :bearing="bearing"
@@ -129,7 +128,6 @@ export default {
     "bearing",
     "zoom",
     "locations",
-    "mapOptions",
     "draggable",
     "tab",
     "showMarker"
@@ -139,6 +137,14 @@ export default {
     onMapLoaded(e) {
       this.map = Mapbox;
       this.canvas = e.map.getCanvasContainer();
+
+      if (this.$route.name == "quest-questId") {
+        this.$refs.QuestMap.map.scrollZoom.disable();
+        this.$refs.QuestMap.map.dragPan.disable();
+        this.$refs.QuestMap.map.dragRotate.disable();
+        this.$refs.QuestMap.map.touchPitch.disable();
+      }
+
       this.fetchFeatures();
     },
     onDataLoaded(e) {

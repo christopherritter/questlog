@@ -139,17 +139,6 @@ export default {
       entries: [],
       items: [],
       mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
-      mapOptions: {
-        dragging: false,
-        touchZoom: false,
-        doubleClickZoom: false,
-        scrollWheelZoom: false,
-        boxZoom: false,
-        keyboard: false,
-        tap: false,
-        minZoom: 16,
-        maxZoom: 18,
-      },
       loading: false,
       error: null
     };
