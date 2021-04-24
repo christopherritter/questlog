@@ -7,6 +7,7 @@
         :objectives="objectives"
         @open-dialog="dialog = true"
         @close-dialog="dialog = false"
+        @start-quest="beginQuest()"
         @restart-quest="restartQuest()"
       />
 
@@ -250,8 +251,7 @@ export default {
     ...mapActions(["findWithAttr", "setObjective"]),
     ...mapMutations(["SET_OBJECTIVE", "SET_OWNED"]),
     onLoad() {
-      this.beginQuest();
-      this.isLoaded = true;
+      this.dialog = true;
     },
     questHelpers() {
       this.center = this.quest.region.coordinates;
@@ -265,6 +265,7 @@ export default {
     },
     beginQuest() {
       this.$refs.qMap.triggerGeolocate();
+      this.dialog = false;
     },
     positionChanged(e) {
       this.currentPosition = e;
@@ -489,7 +490,7 @@ export default {
           bool: false
         });
       }
-    }
+    },
   }
 };
 </script>

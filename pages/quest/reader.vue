@@ -7,6 +7,7 @@
         :objectives="objectives"
         @open-dialog="dialog = true"
         @close-dialog="dialog = false"
+        @start-quest="beginQuest()"
         @restart-quest="restartQuest()"
       />
 
@@ -179,7 +180,6 @@ export default {
   data() {
     return {
       map: null,
-      isLoaded: false,
       selectedLocation: {},
       center: {},
       bearing: 0,
@@ -239,8 +239,7 @@ export default {
     ...mapActions(["findWithAttr", "setObjective"]),
     ...mapMutations(["SET_OBJECTIVE", "SET_OWNED"]),
     onLoad() {
-      this.beginQuest();
-      this.isLoaded = true;
+      this.dialog = true;
     },
     questHelpers() {
       this.center = this.quest.region.coordinates;
@@ -259,6 +258,7 @@ export default {
           location: { locationId: this.quest.startingPoint }
         });
       }
+      this.dialog = false;
     },
     async viewLocation(e) {
       const locationIndex = await this.findLocation(e.location.locationId);
