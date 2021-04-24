@@ -143,6 +143,7 @@ export default {
         this.$refs.QuestMap.map.dragPan.disable();
         this.$refs.QuestMap.map.dragRotate.disable();
         this.$refs.QuestMap.map.touchPitch.disable();
+        this.$refs.QuestMap.map.doubleClickZoom.disable();
       }
 
       this.fetchFeatures();
