@@ -20,10 +20,15 @@
             <v-row>
               <v-col cols="12">
                 <v-row>
-                  <v-col col="auto">
+                  <v-col col="auto" v-if="quest">
                     <h2 class="pt-8 pb-4">Description</h2>
 
-                    <p v-if="quest">{{ quest.description }}</p>
+                    <p
+                      v-for="(line, index) in quest.description.split('\n')"
+                      :key="index"
+                    >
+                      {{ line }}
+                    </p>
 
                     <!-- <v-chip
                       label
@@ -156,8 +161,8 @@ export default {
       categories: state => state.categories
     }),
     primaryObjectives() {
-      let primaryObjectives = this.objectives.filter(function (e) {
-          return e.isPrimary == true;
+      let primaryObjectives = this.objectives.filter(function(e) {
+        return e.isPrimary == true;
       });
       return primaryObjectives;
     }

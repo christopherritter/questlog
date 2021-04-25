@@ -38,7 +38,11 @@
     </v-layout>
 
     <div v-for="(entry, index) in localEntries" :key="index">
-      <v-card-text>{{ entry.text }}</v-card-text>
+      <v-card-text>
+        <p v-for="(line, index) in entry.text.split('\n\n')" :key="index">
+          {{ line }}
+        </p>
+      </v-card-text>
     </div>
 
     <v-list>
