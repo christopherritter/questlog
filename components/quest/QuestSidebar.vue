@@ -2,7 +2,7 @@
   <v-sheet>
     <v-img v-if="location.image" height="240" :src="location.image"></v-img>
 
-    <v-row no-gutters>
+    <v-row no-gutters class="d-flex flex-nowrap">
       <v-card-title>
         {{ location.name }}
       </v-card-title>
@@ -205,3 +205,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.v-card__title,
+.v-card__subtitle {
+  word-break: normal;
+}
+</style>
