@@ -28,7 +28,7 @@
       </v-card-actions>
     </v-card>
     <v-card v-else>
-      <v-img v-if="quest.image" :src="quest.image" aspect-ratio="2"></v-img>
+      <v-img v-if="quest.image" :src="quest.image" aspect-ratio="1.25"></v-img>
       <v-card-title>{{ quest.title }}</v-card-title>
       <v-card-text v-if="isQuestComplete">
         Congratulations! You've completed all the objectives and finished the
