@@ -152,10 +152,10 @@ export default {
 
       this.fetchFeatures();
     },
-    onDataLoaded(e) {
-      console.log("data loaded " + e.isSourceLoaded);
-      console.log(e);
-    },
+    // onDataLoaded(e) {
+    //   console.log("data loaded " + e.isSourceLoaded);
+    //   console.log(e);
+    // },
     fetchFeatures() {
       var features = [];
 
@@ -261,22 +261,20 @@ export default {
         }
       });
     },
-    releaseLocation(e) {
-      console.log("release location");
-      console.log(e);
-    },
+    // releaseLocation(e) {
+    //   console.log("release location");
+    //   console.log(e);
+    // },
     markLocation(e) {
       this.$emit("mark-location", e);
     },
     moveLocation(e) {
-      console.log("move location");
       var lngLat;
       if (e.hasOwnProperty("marker")) {
         lngLat = e.marker.getLngLat();
       } else {
         lngLat = e.lngLat;
       }
-      console.log(lngLat);
       // this.panTo([lngLat.lng, lngLat.lat]);
       this.$emit("move-location", [lngLat.lng, lngLat.lat]);
     },
