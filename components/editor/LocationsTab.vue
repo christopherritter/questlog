@@ -33,14 +33,14 @@
               <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="newLocation.coordinates[0]"
+                    v-model="newLocation.latitude"
                     label="Latitude"
                     outlined
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="newLocation.coordinates[1]"
+                    v-model="newLocation.longitude"
                     label="Longitude"
                     outlined
                   ></v-text-field>
@@ -268,14 +268,17 @@ export default {
   name: "LocationsTab",
   data() {
     return {
-      mapStyle: "mapbox://styles/christopherritter/ckn6i5asn0ck517pntqzp6nye",
+      // mapStyle: "mapbox://styles/christopherritter/ckn6i5asn0ck517pntqzp6nye",
+      mapStyle: "mapbox://styles/mapbox/satellite-v9",
       newLocation: {
         locationId: null,
         name: "",
         isLandmark: false,
         isStartingPoint: false,
         // coords: "",
-        coordinates: [0,0],
+        latitude: 0,
+        longitude: 0,
+        coordinates: [],
         pitch: 60,
         bearing: 0,
         zoom: null,
@@ -312,14 +315,14 @@ export default {
       });
     },
     currentCoords() {
-      if (this.newLocation.coordinates == null) {
+      if (this.newLocation.coordinates.length == 0) {
         return this.region.coordinates;
       } else {
         // return [
         //   this.newLocation.coordinates.lat,
         //   this.newLocation.coordinates.lng
         // ];
-        return this.newLocation.coordinates
+        return this.newLocation.coordinates;
       }
     },
     currentZoom() {
@@ -412,6 +415,8 @@ export default {
         isStartingPoint: location.isStartingPoint,
         // coords: location.coordinates.lat + ", " + location.coordinates.lng,
         coordinates: [ Number(location.coordinates[0]), Number(location.coordinates[1]) ],
+        longitude: Number(location.coordinates[1]),
+        latitude: Number(location.coordinates[0]),
         pitch: location.pitch || 0,
         bearing: location.bearing || 0,
         zoom: location.zoom || 0,

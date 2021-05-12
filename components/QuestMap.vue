@@ -79,7 +79,7 @@ export default {
       map: null,
       canvas: null,
       accessToken: this.$config.mapboxPublicToken,
-      mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
+      // mapStyle: "mapbox://styles/christopherritter/ckn2kmn541b8f17pilbsk7pk3",
       geoJsonSource: {
         type: "geojson",
         data: {
@@ -132,6 +132,7 @@ export default {
     "locations",
     "draggable",
     "tab",
+    "mapStyle",
     "showMarker",
     "showUserLocation",
     "showAccuracyCircle"
