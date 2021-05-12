@@ -100,7 +100,7 @@ export default {
       categories: state => state.categories
     }),
     featuredQuest() {
-      const featuredQuestArr = this.quests.filter(quest => quest.questId === 'lNVAf14Ngq3JBSwaK0IA');
+      const featuredQuestArr = this.quests.filter(quest => quest.questId === 'qVRMBx1inD6UFQbyMQ8r');
       return featuredQuestArr[0];
     },
     featuredQuests() {
