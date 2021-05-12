@@ -5,7 +5,8 @@
     </v-btn>
     <span
       v-if="
-        quest && Object.keys(quest).length !== 0 &&
+        quest &&
+          Object.keys(quest).length !== 0 &&
           (this.$route.name === 'quest-player' ||
             this.$route.name === 'quest-reader' ||
             this.$route.name === 'editor')
@@ -24,7 +25,7 @@
         quest.title
       }}</v-btn>
     </span>
-    <span v-else class="hidden-sm-and-down">
+    <span v-else-if="$store.state.authUser" class="hidden-sm-and-down">
       <v-btn v-show="false" plain nuxt to="/quests">Find a Quest</v-btn>
       <v-btn plain @click="questEditor()">Build your Own!</v-btn>
     </span>
@@ -90,11 +91,11 @@
         </v-list>
       </v-menu>
     </span>
-    <span v-else>
+    <!-- <span v-else>
       <v-btn plain nuxt to="/login">
         SignUp / LogIn
       </v-btn>
-    </span>
+    </span> -->
   </v-app-bar>
 </template>
 
