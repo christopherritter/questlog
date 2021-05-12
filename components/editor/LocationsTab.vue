@@ -29,7 +29,7 @@
                 v-model="newLocation.isLandmark"
                 label="Landmark Location"
               ></v-checkbox>
-              <!-- <h4 class="mt-1 mb-6">Coordinates</h4>
+              <h4 class="mt-1 mb-6">Coordinates</h4>
               <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
@@ -45,7 +45,7 @@
                     outlined
                   ></v-text-field>
                 </v-col>
-              </v-row> -->
+              </v-row>
               <!-- <v-row>
                 <v-col cols="12">
                   <v-text-field
@@ -275,7 +275,7 @@ export default {
         isLandmark: false,
         isStartingPoint: false,
         // coords: "",
-        coordinates: null,
+        coordinates: [0,0],
         pitch: 60,
         bearing: 0,
         zoom: null,
