@@ -269,7 +269,7 @@ export default {
   data() {
     return {
       // mapStyle: "mapbox://styles/christopherritter/ckn6i5asn0ck517pntqzp6nye",
-      mapStyle: "mapbox://styles/mapbox/satellite-v9",
+      mapStyle: "mapbox://styles/christopherritter/ckn6i5asn0ck517pntqzp6nye",
       newLocation: {
         locationId: null,
         name: "",

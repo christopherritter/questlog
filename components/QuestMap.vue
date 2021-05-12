@@ -11,16 +11,16 @@
     @load="onMapLoaded"
     @click="markLocation"
   >
-    <MglGeocoderControl
+    <!-- <MglGeocoderControl
       id="geocoder"
       v-if="$route.name === 'editor'"
       :accessToken="accessToken"
       :options="geocoderOptions"
       :mapboxgl="map"
-      :marker="false"
+      :marker="true"
       :input="defaultInput"
       @result="searchResult"
-    />
+    /> -->
     <MglGeolocateControl
       v-if="$route.name === 'editor' || $route.name === 'quest-player'"
       id="geolocate"
@@ -66,7 +66,7 @@ import {
   MglGeolocateControl
 } from "vue-mapbox";
 
-import MglGeocoderControl from "vue-mapbox-geocoder";
+// import MglGeocoderControl from "vue-mapbox-geocoder";
 
 export default {
   name: "QuestMap",
@@ -122,7 +122,7 @@ export default {
     MglMarker,
     MglGeojsonLayer,
     MglGeolocateControl,
-    MglGeocoderControl
+    // MglGeocoderControl
   },
   props: [
     "center",
