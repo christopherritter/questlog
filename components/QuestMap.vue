@@ -121,7 +121,7 @@ export default {
     MglMap,
     MglMarker,
     MglGeojsonLayer,
-    MglGeolocateControl,
+    MglGeolocateControl
     // MglGeocoderControl
   },
   props: [
@@ -178,7 +178,12 @@ export default {
             coordinates: [location.coordinates[1], location.coordinates[0]]
           }
         };
-        features.push(feature);
+        if (
+          (this.$route.name == "quest-questId" && location.isLandmark) ||
+          this.$route.name != "quest-questId"
+        ) {
+          features.push(feature);
+        }
       });
 
       this.geoJsonSource.data.features = features;
