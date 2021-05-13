@@ -99,7 +99,8 @@ export default {
   props: ["dialog", "quest", "objectives"],
   computed: {
     primaryObjectives() {
-      var primaryObjectives = this.objectives.filter((objective) => {
+      var objectives = this.objectives.slice();
+      var primaryObjectives = objectives.filter((objective) => {
         return objective.isPrimary == true;
       });
       return primaryObjectives;

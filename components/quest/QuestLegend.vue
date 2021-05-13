@@ -36,7 +36,8 @@ export default {
   props: ["locations"],
   computed: {
     landmarkLocations() {
-      var sortedLocations = this.locations.sort((a, b) => (Number(a.order) > Number(b.order)) ? 1 : -1);
+      var locations = this.locations.slice();
+      var sortedLocations = locations.sort((a, b) => (Number(a.order) > Number(b.order)) ? 1 : -1);
       var filteredLocations = sortedLocations.filter((location) =>
       {
         return location.isLandmark == true;
