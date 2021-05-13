@@ -192,7 +192,11 @@
                     v-model="selectedLocation"
                     color="light-blue darken-1"
                   >
-                    <v-list width="100%" :max-height="595" style="overflow-y: auto;">
+                    <v-list
+                      width="100%"
+                      :max-height="730"
+                      style="overflow-y: auto;"
+                    >
                       <v-list-item
                         v-for="location in filterByTerm"
                         :key="location.locationId"
@@ -227,7 +231,6 @@
             </v-col>
           </v-row>
           <v-row class="my-2 mx-0">
-
             <span v-if="$vuetify.breakpoint.mdAndUp">
               <v-btn outlined dark @click="$emit('change-tab', 'objectives')">
                 Back
@@ -308,11 +311,11 @@ export default {
     },
     filterByTerm() {
       let searchTerm = this.searchTerm.toLowerCase();
-      let locations = this.locations.slice();
-
-      return locations.filter(location => {
+      let filteredLocations = this.sortedLocations.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
+
+      return filteredLocations;
     },
     currentCoords() {
       if (this.newLocation.coordinates.length == 0) {
@@ -331,7 +334,7 @@ export default {
       } else {
         return this.newLocation.zoom;
       }
-    }
+    },
     // orderItems() {
     //   const orderItems = [];
     //   var i;
@@ -341,8 +344,21 @@ export default {
     //   orderItems.push(i + 1);
     //   return orderItems;
     // }
+    sortedLocations() {
+      var locations = this.locations.slice();
+      var sortBy = this.sortLocations;
+
+      if (sortBy == "Alphabetically") {
+        var sortedAlphabetically = locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+        return sortedAlphabetically;
+      } else if (sortBy == "Numerically") {
+        var sortedNumerically = locations.sort((a, b) => (Number(a.order) > Number(b.order) ? 1 : -1));
+        return sortedNumerically;
+      }
+      return locations;
+    }
   },
-  watch: {
+  // watch: {
     // sortLocations(val) {
     //   let locations = this.locations.slice();
     //   if (val === "Alphabetically") {
@@ -372,7 +388,7 @@ export default {
     //     // this.$refs.qMap.panTo(coordinates);
     //   }
     // }
-  },
+  // },
   methods: {
     ...mapActions([
       "addLocation",
@@ -416,7 +432,10 @@ export default {
         isLandmark: location.isLandmark,
         isStartingPoint: location.isStartingPoint,
         // coords: location.coordinates.lat + ", " + location.coordinates.lng,
-        coordinates: [ Number(location.coordinates[0]), Number(location.coordinates[1]) ],
+        coordinates: [
+          Number(location.coordinates[0]),
+          Number(location.coordinates[1])
+        ],
         longitude: Number(location.coordinates[1]),
         latitude: Number(location.coordinates[0]),
         pitch: location.pitch || 0,

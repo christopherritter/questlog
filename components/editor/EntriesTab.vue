@@ -229,7 +229,7 @@
               </v-list>
             </v-col>
           </v-row>
-          <v-row class="my-2 mx-0 align-end justify-end">
+          <v-row class="mx-0 py-4 align-end justify-end">
             <span v-if="$vuetify.breakpoint.mdAndUp">
               <v-btn outlined dark @click="$emit('change-tab', 'locations')">
                 Back
@@ -291,6 +291,7 @@ export default {
     sortedEntries() {
       var sortedEntries = [];
       var searchTerm = this.searchTerm.toLowerCase();
+      var sortBy = this.sortBy;
 
       this.locations.forEach(location => {
         var newLocation = Object.assign({}, location);
@@ -301,33 +302,43 @@ export default {
         sortedEntries.push(newLocation);
       });
 
+      if (sortBy === "Alphabetically") {
+        sortedEntries.sort((a, b) =>
+          a.name > b.name ? 1 : -1
+        );
+      } else if (sortBy === "Numerically") {
+        sortedEntries.sort((a, b) =>
+          Number(a.order) > Number(b.order) ? 1 : -1
+        );
+      }
+
       return sortedEntries.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
     }
   },
   components: { ActionsPanel },
-  watch: {
-    sortBy(val) {
-      let locations = this.locations.slice();
+  // watch: {
+  //   sortBy(val) {
+  //     let locations = this.locations.slice();
 
-      if (val === "Alphabetically") {
-        locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+  //     if (val === "Alphabetically") {
+  //       locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-        if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS", locations);
-        }
-      } else if (val === "Numerically") {
-        locations.sort((a, b) => (a.order > b.order ? 1 : -1));
+  //       if (locations != this.locations) {
+  //         this.$store.commit("SET_LOCATIONS", locations);
+  //       }
+  //     } else if (val === "Numerically") {
+  //       locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
-        if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS", locations);
-        }
-      }
+  //       if (locations != this.locations) {
+  //         this.$store.commit("SET_LOCATIONS", locations);
+  //       }
+  //     }
 
-      this.clearEntry();
-    }
-  },
+  //     this.clearEntry();
+  //   }
+  // },
   methods: {
     ...mapActions(["addEntry", "publishQuest", "findWithAttr"]),
     ...mapMutations(["ADD_ACTION", "UPDATE_ACTION", "REMOVE_ACTION"]),

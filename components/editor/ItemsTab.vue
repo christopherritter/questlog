@@ -155,7 +155,7 @@
             </v-card>
           </div> -->
           <v-row>
-            <v-col>
+            <v-col style="max-height: 758px; overflow-y: auto;">
               <v-list
                 span
                 v-for="location in sortedItems"
@@ -291,6 +291,7 @@ export default {
     sortedItems() {
       var sortedItems = [];
       let searchTerm = this.searchTerm.toLowerCase();
+      var sortBy = this.sortBy;
 
       this.locations.forEach(location => {
         var newLocation = Object.assign({}, location);
@@ -301,33 +302,43 @@ export default {
         sortedItems.push(newLocation);
       });
 
+      if (sortBy === "Alphabetically") {
+        sortedItems.sort((a, b) =>
+          a.name > b.name ? 1 : -1
+        );
+      } else if (sortBy === "Numerically") {
+        sortedItems.sort((a, b) =>
+          Number(a.order) > Number(b.order) ? 1 : -1
+        );
+      }
+
       return sortedItems.filter(location => {
         return location.name.toLowerCase().includes(searchTerm);
       });
     }
   },
   components: { ActionsPanel },
-  watch: {
-    sortBy(val) {
-      let locations = this.locations.slice();
+  // watch: {
+  //   sortBy(val) {
+  //     let locations = this.locations.slice();
 
-      if (val === "Alphabetically") {
-        locations.sort((a, b) => (a.name > b.name ? 1 : -1));
+  //     if (val === "Alphabetically") {
+  //       locations.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-        if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS", locations);
-        }
-      } else if (val === "Numerically") {
-        locations.sort((a, b) => (a.order > b.order ? 1 : -1));
+  //       if (locations != this.locations) {
+  //         this.$store.commit("SET_LOCATIONS", locations);
+  //       }
+  //     } else if (val === "Numerically") {
+  //       locations.sort((a, b) => (a.order > b.order ? 1 : -1));
 
-        if (locations != this.locations) {
-          this.$store.commit("SET_LOCATIONS", locations);
-        }
-      }
+  //       if (locations != this.locations) {
+  //         this.$store.commit("SET_LOCATIONS", locations);
+  //       }
+  //     }
 
-      this.clearItem();
-    }
-  },
+  //     this.clearItem();
+  //   }
+  // },
   methods: {
     ...mapActions(["addItem", "publishQuest", "findWithAttr"]),
     ...mapMutations(["ADD_ACTION", "UPDATE_ACTION", "REMOVE_ACTION"]),
