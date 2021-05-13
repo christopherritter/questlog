@@ -385,6 +385,8 @@ export default {
       if (this.newLocation.locationId === null) {
         var latLng = [e.mapboxEvent.lngLat.lat, e.mapboxEvent.lngLat.lng];
         this.newLocation.coordinates = latLng;
+        this.newLocation.latitude = e.mapboxEvent.lngLat.lat;
+        this.newLocation.longitude = e.mapboxEvent.lngLat.lng;
       }
     },
     addLocation() {
