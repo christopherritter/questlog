@@ -41,7 +41,7 @@
         <v-card-text class="py-0"><h3>Objectives</h3></v-card-text>
         <v-list>
           <v-list-item
-            v-for="objective in objectives"
+            v-for="objective in primaryObjectives"
             :key="objective.objectiveId"
           >
             <v-list-item-icon>
@@ -98,17 +98,23 @@ export default {
   },
   props: ["dialog", "quest", "objectives"],
   computed: {
+    primaryObjectives() {
+      var primaryObjectives = this.objectives.filter((objective) => {
+        return objective.isPrimary == true;
+      });
+      return primaryObjectives;
+    },
     isObjectiveComplete() {
-      if (this.objectives.length == 0) return false;
-      for (var i = 0; i < this.objectives.length; i++) {
-        if (this.objectives[i].isComplete) return true;
+      if (this.primaryObjectives.length == 0) return false;
+      for (var i = 0; i < this.primaryObjectives.length; i++) {
+        if (this.primaryObjectives[i].isComplete) return true;
       }
       return false;
     },
     isQuestComplete() {
-      if (this.objectives.length == 0) return false;
-      for (var i = 0; i < this.objectives.length; i++) {
-        if (!this.objectives[i].isComplete) return false;
+      if (this.primaryObjectives.length == 0) return false;
+      for (var i = 0; i < this.primaryObjectives.length; i++) {
+        if (!this.primaryObjectives[i].isComplete) return false;
       }
       return true;
     }
