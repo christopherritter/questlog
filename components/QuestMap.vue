@@ -104,7 +104,8 @@ export default {
         positionOptions: {
           enableHighAccuracy: true
         },
-        trackUserLocation: true
+        trackUserLocation: true,
+        showAccuracyCircle: false,
       },
       geocoderOptions: {
         mapboxgl: this.map
